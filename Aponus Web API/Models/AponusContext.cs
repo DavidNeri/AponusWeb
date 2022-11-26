@@ -36,12 +36,12 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.ProductId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .UseCollation("Modern_Spanish_CI_AS")
+                .UseCollation("Modern_Spanish_CI_AI")
                 .HasColumnName("PRODUCT_ID");
             entity.Property(e => e.CategoryId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .UseCollation("Modern_Spanish_CI_AS")
+                .UseCollation("Modern_Spanish_CI_AI")
                 .HasColumnName("CATEGORY_ID");
             entity.Property(e => e.Price)
                 .HasDefaultValueSql("((0))")
@@ -52,7 +52,7 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.ProductDescriptionName)
                 .HasMaxLength(100)
                 .IsUnicode(false)
-                .UseCollation("Modern_Spanish_CI_AS")
+                .UseCollation("Modern_Spanish_CI_AI")
                 .HasColumnName("PRODUCT_DESCRIPTION_NAME");
             entity.Property(e => e.ProductDescriptionOutsideDiameter).HasColumnName("PRODUCT_DESCRIPTION_OUTSIDE_DIAMETER");
             entity.Property(e => e.Quantity)
@@ -74,12 +74,12 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.CategoryId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .UseCollation("Modern_Spanish_CI_AS")
+                .UseCollation("Modern_Spanish_CI_AI")
                 .HasColumnName("CATEGORY_ID");
             entity.Property(e => e.CategoryDescription)
                 .HasMaxLength(100)
                 .IsUnicode(false)
-                .UseCollation("Modern_Spanish_CI_AS")
+                .UseCollation("Modern_Spanish_CI_AI")
                 .HasColumnName("CATEGORY_DESCRIPTION");
         });
 
