@@ -1,15 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "poSGE/yPgCESWVcIWDWFs94uiiuuhROzZLHB/aX3QdCpk2iGUmvBPSk8e+oTd5EeKxdLKak3YGDJvQ9Hp5fSig==",
+  "dgSpecHash": "/NPZFEK9V+CGwpsYdARaTb1vLUdheYUIgHFwD+KkG2+F445K8mZlePc6ArEC5mIt/CFb52NaEpAlEwHjw5sqfg==",
   "success": true,
-  "projectFilePath": "D:\\Aponus SA\\Aponus - Sistema\\Aponus - Sistema.csproj",
+  "projectFilePath": "D:\\Tesis\\AponusWeb\\Aponus - Sistema\\Aponus - Sistema.csproj",
   "expectedPackageFiles": [],
-  "logs": [
-    {
-      "code": "NU1803",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://api.nuget.org/v3/index.json'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
-    }
-  ]
+  "logs": []
 }
