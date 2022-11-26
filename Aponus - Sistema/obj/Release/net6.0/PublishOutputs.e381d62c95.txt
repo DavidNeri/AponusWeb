@@ -1,0 +1,12 @@
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\Aponus - Sistema.exe
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\aponus_sistema\package-lock.json
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\aponus_sistema\package.json
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\aponus_sistema\public\manifest.json
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\appsettings.json
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\package-lock.json
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\package.json
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\Aponus - Sistema.dll
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\Aponus - Sistema.deps.json
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\Aponus - Sistema.runtimeconfig.json
+D:\Aponus SA\Aponus - Sistema\obj\Release\net6.0\PubTmp\Out\Aponus - Sistema.pdb
