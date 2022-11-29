@@ -58,9 +58,18 @@ export const productSlice = createSlice({
             state.cart.forEach()
         },
 
-        deleteProductCart:(state,{payload})=>{
+        onDeleteProductCart:(state,{payload})=>{
 
-        }
+        },
+
+        onAddCartProduct:(state,{payload})=>{
+
+            const productExist = state.cart.filter(c => c.idProduct !== payload.idProduct);
+            state.cart = [...productExist,payload];
+
+        },
+
+
     }
 })
 
@@ -71,9 +80,11 @@ export const productSlice = createSlice({
         addCartProduct,
         getQuantityCart,
         startLoadingProduct, 
-        deleteProductCart,
+        OndeleteProductCart,
         onSetCategory,
         onSetProductActive,
-        onSetProductDiamater
+        onSetProductDiamater,
+        onAddCartProduct
+        
     
     } = productSlice.actions

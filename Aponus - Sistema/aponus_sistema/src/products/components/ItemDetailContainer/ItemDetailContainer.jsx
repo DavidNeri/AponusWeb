@@ -2,18 +2,22 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import { useProductStore } from '../../../hooks/useProductStore';
+import { ItemCounter } from '../ItemCounter/ItemCounter';
 
 export const ItemDetailContainer = () => {
 
     const {typeProductId} = useParams()
-    const {startOnSetProductDiamater,startOnSetProductActive,startOnSetProductNominal}= useProductStore();
 
-    const {productNominal,productActive,productDiameter} = useSelector(state => state.product);
+    const {startOnSetProductDiamater,startOnSetProductActive,startOnSetProductNominal,startOnAddCartProduct,
+            productNominal,productActive,productDiameter}= useProductStore();
+
 
     useEffect(() => {
         startOnSetProductNominal(typeProductId)
     
     }, [typeProductId])
+
+    
     
     const onchangeProductNominal =(e)=>{
         if(e.target.value === 'Seleccionar Nominal') return;
@@ -31,7 +35,14 @@ export const ItemDetailContainer = () => {
 
     const onAddQuantity = (quantity) => {
 
+        const productAdd = {
+            quantity,
+            ...productActive
+        }
+
+        startOnAddCartProduct(productAdd);
     }
+
 
 
   return (
@@ -70,6 +81,8 @@ export const ItemDetailContainer = () => {
             Precio y stock 
             {productActive?.price}{productActive?.quantity}
         </div>
+
+        <ItemCounter onAddQuantity={onAddQuantity}/>
     </>
   )
 }
