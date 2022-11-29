@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux"
 import { getCategory } from "../helpers/getCategory";
 import { getProducts } from "../helpers/getProducts";
-import { onAddCartProduct, onSetCategory, onSetProductActive, onSetProductDiamater, onSetproductNominal, onSetProducts } from "../store/products/productSlice";
+import { onAddCartProduct, OndeleteProductCart, onSetCategory, onSetProductActive, onSetProductDiamater, onSetproductNominal, onSetProducts } from "../store/products/productSlice";
 
 export const useProductStore = () => {
-    const {categorys,productNominal,productActive,productDiameter} = useSelector(state => state.product);
+    const {categorys,productNominal,productActive,productDiameter,cart} = useSelector(state => state.product);
 
     const dispatch = useDispatch();
 
@@ -34,6 +34,10 @@ export const useProductStore = () => {
         dispatch(onAddCartProduct(product));
     }
 
+    const startOnDeleteProduct = (id)=>{
+        dispatch(OndeleteProductCart(id));
+    }
+
     return{
 
         //Propiedades
@@ -41,12 +45,14 @@ export const useProductStore = () => {
         productNominal,
         productActive,
         productDiameter,
+        cart,
         //Metodos
         startOnSetProducts,
         startOnSetProductDiamater,
         startOnSetProductActive,
         startOnSetProductNominal,
         startOnAddCartProduct,
+        startOnDeleteProduct,
     }
     
 }

@@ -59,7 +59,7 @@ export const productSlice = createSlice({
         },
 
         onDeleteProductCart:(state,{payload})=>{
-
+            state.cart = state.cart.filter(c => c.idProduct !== payload);
         },
 
         onAddCartProduct:(state,{payload})=>{
