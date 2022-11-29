@@ -1,30 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj": {}
+    "D:\\Tesis\\AponusWeb\\Aponus Web API\\Aponus Web API.csproj": {}
   },
   "projects": {
-    "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj": {
+    "D:\\Tesis\\AponusWeb\\Aponus Web API\\Aponus Web API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj",
+        "projectUniqueName": "D:\\Tesis\\AponusWeb\\Aponus Web API\\Aponus Web API.csproj",
         "projectName": "Aponus Web API",
-        "projectPath": "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj",
-        "packagesPath": "C:\\Users\\David Neri\\.nuget\\packages\\",
-        "outputPath": "D:\\Aponus SA\\Aponus Web API\\obj\\",
+        "projectPath": "D:\\Tesis\\AponusWeb\\Aponus Web API\\Aponus Web API.csproj",
+        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+        "outputPath": "D:\\Tesis\\AponusWeb\\Aponus Web API\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\David Neri\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "http://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
@@ -76,7 +74,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
