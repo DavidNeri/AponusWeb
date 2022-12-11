@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { getCategory } from "../helpers/getCategory";
 import { getProducts } from "../helpers/getProducts";
-import { onAddCartProduct, OndeleteProductCart, onSetCategory, onSetProductActive, onSetProductDiamater, onSetproductNominal, onSetProducts } from "../store/products/productSlice";
+import { onAddCartProduct, onDeleteProductCart, onSetCategory, onSetProductActive, onSetProductDiamater, onSetproductNominal, onSetProducts } from "../store/products/productSlice";
 
 export const useProductStore = () => {
     const {categorys,productNominal,productActive,productDiameter,cart} = useSelector(state => state.product);
@@ -35,7 +35,7 @@ export const useProductStore = () => {
     }
 
     const startOnDeleteProduct = (id)=>{
-        dispatch(OndeleteProductCart(id));
+        dispatch(onDeleteProductCart(id));
     }
 
     return{
