@@ -3,7 +3,7 @@ export const productSlice = createSlice({
     name: 'product',
     initialState: {
         isLoading:false,
-        cart:null,
+        cart:[],
         products:[],
         categorys:[],
         productActive:null,
@@ -58,9 +58,22 @@ export const productSlice = createSlice({
             state.cart.forEach()
         },
 
-        deleteProductCart:(state,{payload})=>{
+        onDeleteProductCart:(state,{payload})=>{
+            state.cart = state.cart.filter(c => c.productId !== payload);
+        },
 
-        }
+        onAddCartProduct:(state,{payload})=>{
+            if(state.cart !== null){
+                console.log('entro');
+                const productExist = state.cart.filter(c => c.productId !== payload.productId);
+                state.cart = [...productExist,payload];
+            }else{
+                state.cart = payload;
+            }
+
+        },
+
+
     }
 })
 
@@ -71,9 +84,11 @@ export const productSlice = createSlice({
         addCartProduct,
         getQuantityCart,
         startLoadingProduct, 
-        deleteProductCart,
+        onDeleteProductCart,
         onSetCategory,
         onSetProductActive,
-        onSetProductDiamater
+        onSetProductDiamater,
+        onAddCartProduct
+        
     
     } = productSlice.actions

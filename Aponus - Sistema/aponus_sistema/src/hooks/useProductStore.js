@@ -1,9 +1,10 @@
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { getCategory } from "../helpers/getCategory";
 import { getProducts } from "../helpers/getProducts";
-import { onSetCategory, onSetProductActive, onSetProductDiamater, onSetproductNominal, onSetProducts } from "../store/products/productSlice";
+import { onAddCartProduct, onDeleteProductCart, onSetCategory, onSetProductActive, onSetProductDiamater, onSetproductNominal, onSetProducts } from "../store/products/productSlice";
 
 export const useProductStore = () => {
+    const {categorys,productNominal,productActive,productDiameter,cart} = useSelector(state => state.product);
 
     const dispatch = useDispatch();
 
@@ -22,7 +23,6 @@ export const useProductStore = () => {
     }
 
     const startOnSetProductDiamater = (search)=>{
-        console.log(search)
         dispatch(onSetProductDiamater(search));
     }
 
@@ -30,11 +30,29 @@ export const useProductStore = () => {
         dispatch(onSetProductActive(id));
     }
 
+    const startOnAddCartProduct = (product)=>{
+        dispatch(onAddCartProduct(product));
+    }
+
+    const startOnDeleteProduct = (id)=>{
+        dispatch(onDeleteProductCart(id));
+    }
+
     return{
+
+        //Propiedades
+        categorys,
+        productNominal,
+        productActive,
+        productDiameter,
+        cart,
+        //Metodos
         startOnSetProducts,
         startOnSetProductDiamater,
         startOnSetProductActive,
         startOnSetProductNominal,
+        startOnAddCartProduct,
+        startOnDeleteProduct,
     }
     
 }

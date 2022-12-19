@@ -1,8 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export const ItemCounter = ({onAddQuantity,initialValue=1,stock}) => {
 
 
+  const [counter, setCounter] = useState(initialValue)
+  
+  useEffect(() => {
+    setCounter(initialValue)
+  
+  }, [initialValue])
+  
+
+  const handleAdd = ()=>{
+    setCounter(counter + 1);
+  }
+
+  const handleDecrease = () => {
+    setCounter(counter - 1);
+  }
 
 
   return (
