@@ -18,10 +18,10 @@ namespace Aponus_Web_API.Controllers
         [Route("ListCategories")]
         public async Task<JsonResult> ListCategories(){
 
-            List<ProductCategory> CategoryList = await AponusDBContext.ProductCategories.OrderBy(x
-                => x.CategoryDescription).ToListAsync();
-            CategoryList.OrderBy(x => x.CategoryDescription);
-            return new JsonResult(CategoryList); 
+            List<ProductosTipo> Lista_Tipos = await AponusDBContext.ProductosTipos.OrderBy(x
+                => x.IdTipo).ToListAsync();
+            Lista_Tipos.OrderBy(x => x.DescripcionTipo);
+            return new JsonResult(Lista_Tipos); 
         }
         // GET: CategoriesController
         

@@ -24,3 +24,8 @@ D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\refint\Aponus - Sistema.dll
 D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\Aponus - Sistema.pdb
 D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\Aponus - Sistema.genruntimeconfig.cache
 D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\ref\Aponus - Sistema.dll
+D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\staticwebassets\msbuild.Aponus - Sistema.Microsoft.AspNetCore.StaticWebAssets.props
+D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\staticwebassets\msbuild.build.Aponus - Sistema.props
+D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.Aponus - Sistema.props
+D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.Aponus - Sistema.props
+D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\staticwebassets.pack.json

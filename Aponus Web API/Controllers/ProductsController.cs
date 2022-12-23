@@ -1,5 +1,7 @@
-﻿using Aponus_Web_API.Models;
+﻿using Aponus_Web_API.Business;
+using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -8,28 +10,32 @@ namespace Aponus_Web_API.Controllers
     [Route("Aponus/[Controller]")]
     public class ProductsController : Controller
     {
-        private readonly AponusContext AponusDBContext;
-
-        public ProductsController(AponusContext aponusDBContext)
-        {
-            AponusDBContext = aponusDBContext;
-        }
         [HttpGet]
-       [Route("ListProducts")]
-        public async Task<JsonResult> ListProducts()
-        {
-            List<Product> products = await AponusDBContext.Products.Include(x => x.Category).ToListAsync();
-            products.OrderBy(x => x.ProductDescriptionName);
-            return new JsonResult(products);
-
+        [Route("ListProducts")]
+        public async Task<JsonResult> ListProducts() {
+            try
+            {
+                return new BS_Products().ProductsByProductName();
+            }
+            catch (Exception e )
+            {
+                return Json(e);
+            }
         }
+
         [HttpGet]
-        [Route("ListProducts/{CategoryId}")]
-        public async Task<JsonResult> ListProducts(string? CategoryId)
+        [Route("ListProducts/{Type}")]
+        public async Task<JsonResult> ListProducts(string? Type)
         {
-            List<Product> products = await AponusDBContext.Products.Where(x => x.CategoryId.Equals(CategoryId)).ToListAsync();
-            products.OrderBy(x => x.ProductDescriptionName);
-            return new JsonResult(products);
+            try
+            {
+                return new BS_Products().ProductsByType(Type);
+            }
+            catch (Exception e)
+            {
+                return Json(e); 
+            }      
+
 
         }
     }
