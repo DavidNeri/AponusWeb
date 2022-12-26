@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using Microsoft.Build.Framework;
 
 namespace Aponus_Web_API.Business
 {
@@ -45,11 +46,16 @@ namespace Aponus_Web_API.Business
                {
                    IdDescripcion = x.IdDescripcion,
                    DescripcionProducto = x.DescripcionProducto,
-                   Productos = (ICollection<Producto>)x.Productos.Where(x => x.IdTipo == typeId)
+                   Productos = (ICollection<Producto>)x.Productos
+                                .Where(x => x.IdTipo == typeId)
+                                .OrderBy(x => x.DiametroNominal)
 
                }
-               );          
-               
+               ).AsEnumerable()
+               .Where(x => x.Productos.Count > 0);
+              
+
+         
 
 
             return new JsonResult(Products);
