@@ -18,7 +18,7 @@ namespace Aponus_Web_API.Controllers
                 return new BS_Products().ProductsByProductName();
             }
             catch (Exception e )
-            {
+            { 
                 return Json(e);
             }
         }
@@ -35,6 +35,22 @@ namespace Aponus_Web_API.Controllers
             {
                 return Json(e); 
             }      
+
+
+        }
+
+        [HttpGet]
+        [Route("ListParts/{ProductId}")]
+        public async Task<JsonResult> ListParts(string? ProductId)
+        {
+            try
+            {
+                return new BS_Products().ListParts(ProductId);
+            }
+            catch (Exception e)
+            {
+                return Json(e);
+            }
 
 
         }

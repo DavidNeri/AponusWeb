@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 namespace Aponus_Web_API.Business
 {
@@ -36,24 +37,50 @@ namespace Aponus_Web_API.Business
 
         }
 
-        public JsonResult ProductsByType(string typeId)
+        public JsonResult ProductsByType(string? typeId)
         {
-            var Products = AponusDBContext.ProductosTipos
+            var Products = AponusDBContext.ProductosDescripcions
                .Select(
-               x => new ProductosTipo
+               x => new ProductosDescripcion
                {
-                   IdTipo = x.IdTipo,
-                   DescripcionTipo = x.DescripcionTipo,
-                   Productos = x.Productos
+                   IdDescripcion = x.IdDescripcion,
+                   DescripcionProducto = x.DescripcionProducto,
+                   Productos = (ICollection<Producto>)x.Productos.Where(x => x.IdTipo == typeId)
 
-               }                                  
-               )
-               .Where(x=>x.IdTipo==typeId);
+               }
+               );          
+               
 
 
             return new JsonResult(Products);
 
         }
 
+        internal JsonResult ListParts(string? productId) {
+
+
+           // var InsumosProductos = AponusDBContext.ComponentesPesables
+                //                   .Include(C1 => C1..Select(x => x.Altura))
+                //                   .Include(C2=>C2.)
+                                   
+
+                  //                 .Select(x => x.Descripcion);
+
+
+
+            /*
+            var InsumosProducto = AponusDBContext.ComponentesDescripcions.Select(x => new InsumosProducto()
+            {
+                Insumo = x.Descripcion,
+                Medida = (IEnumerable<decimal>)x.PesablesDetalles.Select(x => x.Diametro),
+
+            }).Where<ComponentesPesable>(x=> x.);
+            
+           */
+
+            return null;
+            
+
+        }
     }
 }
