@@ -1,8 +1,10 @@
 ﻿using Aponus_Web_API.Business;
+using Aponus_Web_API.Mapping;
 using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace Aponus_Web_API.Controllers
@@ -15,7 +17,7 @@ namespace Aponus_Web_API.Controllers
         public async Task<JsonResult> ListProducts() {
             try
             {
-                return new BS_Products().ProductsByProductName();
+                return  new BS_Products().ListarProductos();
             }
             catch (Exception e )
             { 
@@ -25,11 +27,12 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListProducts/{Type}")]
-        public async Task<JsonResult> ListProducts(string? Type)
+        public async Task<JsonResult> ListProducts(string? TypeId)
         {
             try
             {
-                return new BS_Products().ProductsByType(Type);
+
+                return new BS_Products().ListarProductos(TypeId);
             }
             catch (Exception e)
             {
@@ -40,12 +43,14 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("ListParts/{ProductId}")]
+        [Route("ListParts/{productId}")]
         public async Task<JsonResult> ListParts(string? ProductId)
         {
             try
             {
-                return new BS_Products().ListParts(ProductId);
+                return new BS_Products().ListarInsumos(ProductId);
+                
+                //return Json(a, new Newtonsoft.Json.JsonSerializerSettings());
             }
             catch (Exception e)
             {
