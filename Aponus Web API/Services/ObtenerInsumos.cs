@@ -87,5 +87,207 @@ namespace Aponus_Web_API.Services
             }
             return LstInsumosPesables;
         }
+
+        public List<InsumosCuantitativos> ObtenterCuantitativos(string ProductId)
+        {
+            List<InsumosCuantitativos> LstInsumosCuantitativos= new List<InsumosCuantitativos>();
+            string _Descripcion;
+
+            var InsumosCuantitativos=
+
+                AponusDBContext.ComponentesCuantitativos
+                    .Join(AponusDBContext.CuantitativosDetalles,
+                        _ComponentesCuantitativos => _ComponentesCuantitativos.IdComponente,
+                        _CuantitativosDetalle => _CuantitativosDetalle.IdComponente,
+                        (_ComponentesCuantitativos, _CuantitativosDetalle) => new
+                        {
+                            _ComponentesCuantitativos.IdProducto,
+                            _ComponentesCuantitativos.Cantidad,
+                            _CuantitativosDetalle.IdDescripcion,
+                            _CuantitativosDetalle.IdComponente,
+                            _CuantitativosDetalle.Diametro,
+                            _CuantitativosDetalle.Altura,
+                            _CuantitativosDetalle.ToleranciaMinima,
+                            _CuantitativosDetalle.ToleranciaMaxima,
+
+                        })
+                    .Join(AponusDBContext.StockCuantitativos,
+                        _ComponentesCuantitativos_CuantitativosDetalle => _ComponentesCuantitativos_CuantitativosDetalle.IdComponente,
+                        _StockCuantitativos => _StockCuantitativos.IdComponente,
+                        (_ComponenetesCuantitativos_Cuantitativos_Detalle, _StockCuantitativos) => new
+                        {
+                            _ComponenetesCuantitativos_Cuantitativos_Detalle.IdProducto,
+                            _ComponenetesCuantitativos_Cuantitativos_Detalle.IdComponente,
+                            _ComponenetesCuantitativos_Cuantitativos_Detalle.IdDescripcion,
+                            _ComponenetesCuantitativos_Cuantitativos_Detalle.Cantidad,
+                            _ComponenetesCuantitativos_Cuantitativos_Detalle.Diametro,
+                            _ComponenetesCuantitativos_Cuantitativos_Detalle.Altura,
+                            _ComponenetesCuantitativos_Cuantitativos_Detalle.ToleranciaMinima,
+                            _ComponenetesCuantitativos_Cuantitativos_Detalle.ToleranciaMaxima,
+                            _StockCuantitativos.CantidadRecibido,
+                            _StockCuantitativos.CantidadPintura,
+                            _StockCuantitativos.CantidadProceso,
+                            _StockCuantitativos.CantidadGranallado
+                        })
+                    .Join(AponusDBContext.ComponentesDescripcions,
+                    _ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos => _ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.IdDescripcion,
+                    _ComponentesDescripcion => _ComponentesDescripcion.IdDescripcion,
+                    (_ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos, _ComponentesDescripcion) => new
+                    {
+                        _ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos,
+                        _ComponentesDescripcion
+                    })
+
+                    .Where(x => x._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.IdProducto == ProductId)
+                    .Select(
+                        Cuantitativos => new
+                        {
+                            Cuantitativos._ComponentesDescripcion.Descripcion,
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.Cantidad,
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.Diametro,
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.Altura,
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.ToleranciaMinima,
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.ToleranciaMaxima,
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadRecibido,
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadPintura,
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadProceso,
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadGranallado,
+                        }).ToList();
+
+
+            foreach (var queryResult in InsumosCuantitativos)
+            {
+                if (queryResult.Descripcion.Contains("brida")==true && queryResult.Descripcion!=null)
+                {
+                    _Descripcion = queryResult.Descripcion +
+                        " DN" +  String.Format("{0:####}", queryResult.Diametro) +' '+
+                        queryResult.ToleranciaMinima +
+                        '-' + queryResult.ToleranciaMaxima;
+
+                    
+                }
+                else
+                {
+                    _Descripcion = queryResult.Descripcion + " Ø" +
+                        String.Format("{0:####}", queryResult.Diametro) +' '+
+                        queryResult.ToleranciaMinima + '-' +
+                        queryResult.ToleranciaMaxima;
+                }
+          
+
+                LstInsumosCuantitativos.Add(new InsumosCuantitativos()
+                {
+                    NombreInsumo = _Descripcion,                    
+                    CantidadRequerida= queryResult.Cantidad,
+                    CantidadRecibida = queryResult.CantidadRecibido, 
+                    CantidadPintura = queryResult.CantidadPintura, 
+                    CantidadProceso = queryResult.CantidadProceso,
+                    CantidadGranallado = queryResult.CantidadGranallado
+                });
+            }
+            return LstInsumosCuantitativos;
+        }
+
+        public List<InsumosMensurables> ObtenterMensurables(string ProductId)
+        {
+            List<InsumosMensurables> LstInsumosMensurables = new List<InsumosMensurables>();
+            string _Descripcion;
+            string LargoRequerido;
+            string AlturaCuerpoPerfil;
+            string LargoStock;
+            string AnchoStock;
+
+            var InsumosMensurables =
+
+                AponusDBContext.ComponentesMensurables
+                    .Join(AponusDBContext.MensurablesDetalles,
+                        _ComponentesMensurables => _ComponentesMensurables.IdComponente,
+                        _MensurablesDetalle => _MensurablesDetalle.IdComponente,
+                        (_ComponentesMensurables, _MensurablesDetalle) => new
+                        {
+                            _ComponentesMensurables.IdProducto,
+                            LargoRequerido =_ComponentesMensurables.Largo,
+                            AlturaCuerpoPerfil =_ComponentesMensurables.Altura,                      
+
+                            _MensurablesDetalle.IdDescripcion,
+                            _MensurablesDetalle.IdComponente,
+                            LargoStock = _MensurablesDetalle.Largo,
+                            AnchoStock =_MensurablesDetalle.Ancho,
+                            _MensurablesDetalle.Espesor,
+                            _MensurablesDetalle.Perfil                           
+                            
+
+                        })
+                    .Join(AponusDBContext.StockMensurables,
+                        _ComponentesMensurables_MensurablesDetalle => _ComponentesMensurables_MensurablesDetalle.IdComponente,
+                        _StockMensurables => _StockMensurables.IdComponente,
+                        (_ComponenetesMensurables_Mensurables_Detalle, _StockMensurables) => new
+                        {
+                            _ComponenetesMensurables_Mensurables_Detalle.IdProducto,
+                            _ComponenetesMensurables_Mensurables_Detalle.IdComponente,
+                            _ComponenetesMensurables_Mensurables_Detalle.IdDescripcion,
+                            _ComponenetesMensurables_Mensurables_Detalle.AlturaCuerpoPerfil,
+                            _ComponenetesMensurables_Mensurables_Detalle.LargoRequerido,
+                            _ComponenetesMensurables_Mensurables_Detalle.LargoStock,
+                            _ComponenetesMensurables_Mensurables_Detalle.AnchoStock,
+                            _ComponenetesMensurables_Mensurables_Detalle.Espesor,
+                            _ComponenetesMensurables_Mensurables_Detalle.Perfil,
+                            _StockMensurables.CantidadRecibido
+                           
+                        })
+                    .Join(AponusDBContext.ComponentesDescripcions,
+                    _ComponentesMensurables_MensurablesDetalle_SotckMensurables => _ComponentesMensurables_MensurablesDetalle_SotckMensurables.IdDescripcion,
+                    _ComponentesDescripcion => _ComponentesDescripcion.IdDescripcion,
+                    (_ComponentesMensurables_MensurablesDetalle_SotckMensurables, _ComponentesDescripcion) => new
+                    {
+                        _ComponentesMensurables_MensurablesDetalle_SotckMensurables,
+                        _ComponentesDescripcion
+                    })
+
+                    .Where(x => x._ComponentesMensurables_MensurablesDetalle_SotckMensurables.IdProducto == ProductId)
+                    .Select(
+                        Mensurables => new
+                        {
+                            Mensurables._ComponentesDescripcion.Descripcion,
+                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.IdComponente,
+                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.AlturaCuerpoPerfil,
+                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.LargoRequerido,
+                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.LargoStock,
+                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.AnchoStock,
+                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.Espesor,
+                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.Perfil,
+                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.CantidadRecibido
+                        }).ToList();
+
+
+            foreach (var queryResult in InsumosMensurables)
+            {
+                if (queryResult.Descripcion.Contains("goma") == false && queryResult.Descripcion != null)
+                {
+                    _Descripcion = queryResult.Descripcion + ' ' + queryResult.Espesor;
+
+
+                }
+                else
+                {
+                    _Descripcion = queryResult.Descripcion;
+                }
+
+
+                LstInsumosMensurables.Add(new InsumosMensurables()
+                {
+                    NombreInsumo = _Descripcion,
+                    AlturaCuerpoPerfil = queryResult.AlturaCuerpoPerfil,
+                    LargoRequerido= queryResult.LargoRequerido,
+                    LargoStock= queryResult.LargoStock,
+                    Perfil= queryResult.Perfil,
+                    CantidadRecibido = queryResult.CantidadRecibido
+                    
+                });
+            }
+            return LstInsumosMensurables;
+        }
+
+
     }
 }

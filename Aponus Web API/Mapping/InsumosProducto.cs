@@ -6,8 +6,12 @@ namespace Aponus_Web_API.Mapping
         [JsonProperty(PropertyName = "pesables")]
         public List<InsumosPesables>? Pesables { get; set; }
 
+        [JsonProperty(PropertyName = "cuantitativos")]
+        public List<InsumosCuantitativos>? Cuantitativos { get; set; }
 
+        [JsonProperty(PropertyName = "mensurables")]
+        public List<InsumosMensurables>? Mensurables { get; set; }
     }
-
+    
 
 }

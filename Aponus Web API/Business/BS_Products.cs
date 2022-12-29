@@ -20,9 +20,15 @@ namespace Aponus_Web_API.Business
             try
             {
                 List<InsumosPesables> InusmoPesables = new ObtenerInsumos().ObtenterPesables(ProductId);
+                List<InsumosCuantitativos> InusmoCuantitativos= new ObtenerInsumos().ObtenterCuantitativos(ProductId);
+                List<InsumosMensurables> InusmoMensurables = new ObtenerInsumos().ObtenterMensurables(ProductId);
+
                 InsumosProducto _InsumosProducto = new InsumosProducto()
                 {
-                    Pesables = InusmoPesables
+                    Pesables = InusmoPesables,
+                    Cuantitativos= InusmoCuantitativos,
+                    Mensurables= InusmoMensurables
+
                 };
 
                 return new JsonResult(_InsumosProducto);

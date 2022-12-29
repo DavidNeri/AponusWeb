@@ -26,7 +26,7 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("ListProducts/{Type}")]
+        [Route("ListProducts/{TypeId}")]
         public async Task<JsonResult> ListProducts(string? TypeId)
         {
             try
