@@ -43,12 +43,12 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("ListParts/{productId}")]
-        public async Task<JsonResult> ListParts(string? ProductId)
+        [Route("ListParts/{productId}/{q}")]
+        public async Task<JsonResult> ListParts(string? ProductId,int Q)
         {
             try
             {
-                return new BS_Products().ListarInsumos(ProductId);
+                return new BS_Products().ListarInsumos(ProductId, Q);
                 
                 //return Json(a, new Newtonsoft.Json.JsonSerializerSettings());
             }

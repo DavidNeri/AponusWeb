@@ -14,14 +14,14 @@ namespace Aponus_Web_API.Business
 {
     public class BS_Products 
     {
-        public JsonResult ListarInsumos(string? ProductId)
+        public JsonResult ListarInsumos(string ProductId, int Cantidad)
         {
             
             try
             {
-                List<InsumosPesables> InusmoPesables = new ObtenerInsumos().ObtenterPesables(ProductId);
-                List<InsumosCuantitativos> InusmoCuantitativos= new ObtenerInsumos().ObtenterCuantitativos(ProductId);
-                List<InsumosMensurables> InusmoMensurables = new ObtenerInsumos().ObtenterMensurables(ProductId);
+                List<Insumos> InusmoPesables = new ObtenerInsumos().ObtenterPesables(ProductId, Cantidad);
+                List<Insumos> InusmoCuantitativos= new ObtenerInsumos().ObtenterCuantitativos(ProductId, Cantidad);
+                List<Insumos> InusmoMensurables = new ObtenerInsumos().ObtenterMensurables(ProductId, Cantidad);
 
                 InsumosProducto _InsumosProducto = new InsumosProducto()
                 {

@@ -1,5 +1,8 @@
 ﻿using Aponus_Web_API.Mapping;
 using Aponus_Web_API.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Aponus_Web_API.Services
 {
@@ -7,10 +10,10 @@ namespace Aponus_Web_API.Services
     {
         private readonly AponusContext AponusDBContext;
         public ObtenerInsumos() { AponusDBContext = new AponusContext(); }
-        public List<InsumosPesables> ObtenterPesables(string ProductId)
+        public  List<Insumos> ObtenterPesables(string ProductId,int Cantidad=1)
         {
-            List<InsumosPesables> LstInsumosPesables = new List<InsumosPesables>();
-            string _Descripcion;
+            List<Insumos> LstInsumosPesables = new List<Insumos>();
+            string? _Descripcion;
 
             var InsumosPesables = 
 
@@ -75,25 +78,28 @@ namespace Aponus_Web_API.Services
                 {
                     _Descripcion = queryResult.Descripcion + " " + String.Format("{0:####}", queryResult.Altura) + " mm";
                 }
-
-                LstInsumosPesables.Add(new InsumosPesables()
+                
+                LstInsumosPesables.Add(new Insumos()
                 {
-                    NombreInsumo = _Descripcion,
-                    PesoRequerido = queryResult.Peso + " Kg",
-                    CantidadRecibida = queryResult.CantidadRecibido + " Kg",
-                    CantidadPintura = queryResult.CantidadPintura + " Kg",
-                    CantidadProceso = queryResult.CantidadProceso + " Kg"
+                    Nombre = _Descripcion,
+                    Requerido = queryResult.Peso * Cantidad + " Kg",
+                    Recibido = queryResult.CantidadRecibido + " Kg",
+                    Pintura = queryResult.CantidadPintura + " Kg",
+                    Proceso = queryResult.CantidadProceso + " Kg",
+                    Total= queryResult.CantidadRecibido + queryResult.CantidadPintura+queryResult.CantidadProceso + "Kg"
+
+
                 });
             }
             return LstInsumosPesables;
         }
 
-        public List<InsumosCuantitativos> ObtenterCuantitativos(string ProductId)
+        public  List <Insumos> ObtenterCuantitativos(string ProductId, int Cantidad=1)
         {
-            List<InsumosCuantitativos> LstInsumosCuantitativos= new List<InsumosCuantitativos>();
+            List<Insumos> LstInsumosCuantitativos= new List<Insumos>();
             string _Descripcion;
 
-            var InsumosCuantitativos=
+            var InsumosCuantitativos= 
 
                 AponusDBContext.ComponentesCuantitativos
                     .Join(AponusDBContext.CuantitativosDetalles,
@@ -154,13 +160,12 @@ namespace Aponus_Web_API.Services
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadGranallado,
                         }).ToList();
 
-
             foreach (var queryResult in InsumosCuantitativos)
             {
                 if (queryResult.Descripcion.Contains("brida")==true && queryResult.Descripcion!=null)
                 {
                     _Descripcion = queryResult.Descripcion +
-                        " DN" +  String.Format("{0:####}", queryResult.Diametro) +' '+
+                        " DN " +  String.Format("{0:####}", queryResult.Diametro) +' '+
                         queryResult.ToleranciaMinima +
                         '-' + queryResult.ToleranciaMaxima;
 
@@ -169,28 +174,32 @@ namespace Aponus_Web_API.Services
                 else
                 {
                     _Descripcion = queryResult.Descripcion + " Ø" +
-                        String.Format("{0:####}", queryResult.Diametro) +' '+
+                        String.Format("{0:####}", queryResult.Diametro) +" Tolerancia: "+
                         queryResult.ToleranciaMinima + '-' +
                         queryResult.ToleranciaMaxima;
                 }
           
 
-                LstInsumosCuantitativos.Add(new InsumosCuantitativos()
+                LstInsumosCuantitativos.Add(new Insumos()
                 {
-                    NombreInsumo = _Descripcion,                    
-                    CantidadRequerida= queryResult.Cantidad,
-                    CantidadRecibida = queryResult.CantidadRecibido, 
-                    CantidadPintura = queryResult.CantidadPintura, 
-                    CantidadProceso = queryResult.CantidadProceso,
-                    CantidadGranallado = queryResult.CantidadGranallado
+                    Nombre = _Descripcion,                    
+                    Requerido= queryResult.Cantidad *Cantidad+ " U",
+                    Recibido = queryResult.CantidadRecibido + " U", 
+                    Pintura = queryResult.CantidadPintura + " U", 
+                    Proceso = queryResult.CantidadProceso + " U",
+                    Granallado = queryResult.CantidadGranallado+ " U",
+                    Total = queryResult.CantidadRecibido+
+                            queryResult.CantidadGranallado+
+                            queryResult.CantidadPintura+
+                            queryResult.CantidadProceso + " U"
                 });
             }
-            return LstInsumosCuantitativos;
+            return  LstInsumosCuantitativos;
         }
 
-        public List<InsumosMensurables> ObtenterMensurables(string ProductId)
+        public List<Insumos> ObtenterMensurables(string ProductId, int Cantidad=1)
         {
-            List<InsumosMensurables> LstInsumosMensurables = new List<InsumosMensurables>();
+            List<Insumos> LstInsumosMensurables = new List<Insumos>();
             string _Descripcion;
             string LargoRequerido;
             string AlturaCuerpoPerfil;
@@ -210,11 +219,11 @@ namespace Aponus_Web_API.Services
                             AlturaCuerpoPerfil =_ComponentesMensurables.Altura,                      
 
                             _MensurablesDetalle.IdDescripcion,
-                            _MensurablesDetalle.IdComponente,
-                            LargoStock = _MensurablesDetalle.Largo,
-                            AnchoStock =_MensurablesDetalle.Ancho,
+                            _MensurablesDetalle.IdComponente,                           
+                           // AnchoStock =_MensurablesDetalle.Ancho,
                             _MensurablesDetalle.Espesor,
-                            _MensurablesDetalle.Perfil                           
+                            _MensurablesDetalle.Perfil,
+                            LargoUnidad=_MensurablesDetalle.Largo,
                             
 
                         })
@@ -228,10 +237,12 @@ namespace Aponus_Web_API.Services
                             _ComponenetesMensurables_Mensurables_Detalle.IdDescripcion,
                             _ComponenetesMensurables_Mensurables_Detalle.AlturaCuerpoPerfil,
                             _ComponenetesMensurables_Mensurables_Detalle.LargoRequerido,
-                            _ComponenetesMensurables_Mensurables_Detalle.LargoStock,
-                            _ComponenetesMensurables_Mensurables_Detalle.AnchoStock,
+                            //_ComponenetesMensurables_Mensurables_Detalle.LargoStock,
+                            //_StockMensurables.AnchoStock,
+                            //LargoStock = _MensurablesDetalle.Largo,
                             _ComponenetesMensurables_Mensurables_Detalle.Espesor,
                             _ComponenetesMensurables_Mensurables_Detalle.Perfil,
+                            _ComponenetesMensurables_Mensurables_Detalle.LargoUnidad,
                             _StockMensurables.CantidadRecibido
                            
                         })
@@ -249,43 +260,66 @@ namespace Aponus_Web_API.Services
                         Mensurables => new
                         {
                             Mensurables._ComponentesDescripcion.Descripcion,
+                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.IdProducto,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.IdComponente,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.AlturaCuerpoPerfil,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.LargoRequerido,
-                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.LargoStock,
-                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.AnchoStock,
+                            //Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.LargoStock,
+                            Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.LargoUnidad,
+                           // Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.AnchoStock,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.Espesor,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.Perfil,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.CantidadRecibido
                         }).ToList();
+            string _Requerido;
+            string _Proceso;
 
 
-            foreach (var queryResult in InsumosMensurables)
+            try
             {
-                if (queryResult.Descripcion.Contains("goma") == false && queryResult.Descripcion != null)
+                foreach (var queryResult in InsumosMensurables)
                 {
-                    _Descripcion = queryResult.Descripcion + ' ' + queryResult.Espesor;
+                    _Requerido = "";
+                    _Proceso = "";
+
+                    if (queryResult.Descripcion.Contains("GOMA") == false && queryResult.Descripcion != null)
+                    {
+                        _Descripcion = queryResult.Descripcion + ' ' + queryResult.Espesor + " mm x " + (queryResult.LargoUnidad*queryResult.CantidadRecibido) / 1000 + " m - PERFIL " + queryResult.Perfil;
+                        _Requerido = "Perfil de " + queryResult.AlturaCuerpoPerfil + " mm x " + Cantidad + " U";
+                        _Proceso = queryResult.CantidadRecibido +" U de " + queryResult.LargoUnidad/1000 + " m/" + String.Format("{0:####}", (queryResult.LargoUnidad*queryResult.CantidadRecibido)/ queryResult.AlturaCuerpoPerfil) + " perfiles de " + (queryResult.AlturaCuerpoPerfil / 100) + " cm";
+                    }
+                    else
+                    {
+                        _Descripcion = queryResult.Descripcion + "PERFIL " + queryResult.Perfil;
+                        if (queryResult.IdProducto.Contains("ABT") == true)
+                        {
+                            _Requerido = ((queryResult.LargoRequerido * Cantidad) / 1000) + " m/" + Cantidad + " Junta(s) de " + (queryResult.LargoRequerido / 1000) + " cm";
+                        }
+                        else
+                        {
+                            _Requerido = ((queryResult.LargoRequerido * Cantidad * 2) / 1000) + "m/" + (Cantidad * 2) + " Junta(s) de " + (queryResult.LargoRequerido / 100) + " cm";
+                        }
+                        _Proceso = ((queryResult.LargoUnidad*queryResult.CantidadRecibido) / 1000) + " m/" + ((queryResult.LargoUnidad * queryResult.CantidadRecibido) / queryResult.LargoRequerido) + " Junta(s) de " + (queryResult.LargoRequerido / 100) + " cm";
+                    }
 
 
+                    LstInsumosMensurables.Add(new Insumos()
+                    {
+                        Nombre = _Descripcion,
+                        Requerido = _Requerido,
+                        Proceso = _Proceso,
+                        Total = (queryResult.LargoUnidad * queryResult.CantidadRecibido) / 1000 + " m"
+
+                    });
                 }
-                else
-                {
-                    _Descripcion = queryResult.Descripcion;
-                }
-
-
-                LstInsumosMensurables.Add(new InsumosMensurables()
-                {
-                    NombreInsumo = _Descripcion,
-                    AlturaCuerpoPerfil = queryResult.AlturaCuerpoPerfil,
-                    LargoRequerido= queryResult.LargoRequerido,
-                    LargoStock= queryResult.LargoStock,
-                    Perfil= queryResult.Perfil,
-                    CantidadRecibido = queryResult.CantidadRecibido
-                    
-                });
+                return LstInsumosMensurables;
             }
-            return LstInsumosMensurables;
+            catch (Exception e)
+            {
+
+                return new List<Insumos>();
+            }
+            
         }
 
 
