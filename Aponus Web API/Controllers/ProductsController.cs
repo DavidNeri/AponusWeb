@@ -43,8 +43,8 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("ListParts/{productId}/{q}")]
-        public async Task<JsonResult> ListParts(string? ProductId,int Q)
+        [Route("ListParts/{productId}/{q=1}")]
+        public async Task<JsonResult> ListParts(string? ProductId,int Q=1)
         {
             try
             {

@@ -10,7 +10,7 @@ namespace Aponus_Web_API.Services
     {
         private readonly AponusContext AponusDBContext;
         public ObtenerInsumos() { AponusDBContext = new AponusContext(); }
-        public  List<Insumos> ObtenterPesables(string ProductId,int Cantidad=1)
+        public  List<Insumos> ObtenterPesables(string ProductId,int Cantidad)
         {
             List<Insumos> LstInsumosPesables = new List<Insumos>();
             string? _Descripcion;
@@ -94,7 +94,7 @@ namespace Aponus_Web_API.Services
             return LstInsumosPesables;
         }
 
-        public  List <Insumos> ObtenterCuantitativos(string ProductId, int Cantidad=1)
+        public  List <Insumos> ObtenterCuantitativos(string ProductId, int Cantidad)
         {
             List<Insumos> LstInsumosCuantitativos= new List<Insumos>();
             string _Descripcion;
@@ -197,7 +197,7 @@ namespace Aponus_Web_API.Services
             return  LstInsumosCuantitativos;
         }
 
-        public List<Insumos> ObtenterMensurables(string ProductId, int Cantidad=1)
+        public List<Insumos> ObtenterMensurables(string ProductId, int Cantidad)
         {
             List<Insumos> LstInsumosMensurables = new List<Insumos>();
             string _Descripcion;
