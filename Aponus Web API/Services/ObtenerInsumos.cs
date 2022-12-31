@@ -14,6 +14,9 @@ namespace Aponus_Web_API.Services
         {
             List<Insumos> LstInsumosPesables = new List<Insumos>();
             string? _Descripcion;
+            decimal? Total;
+            decimal? _Requerido;
+            decimal? Faltantes;
 
             var InsumosPesables = 
 
@@ -78,15 +81,31 @@ namespace Aponus_Web_API.Services
                 {
                     _Descripcion = queryResult.Descripcion + " " + String.Format("{0:####}", queryResult.Altura) + " mm";
                 }
-                
+             
+
+                Total = queryResult.CantidadRecibido +
+                            queryResult.CantidadPintura +
+                            queryResult.CantidadProceso;
+
+                _Requerido = queryResult.Peso * Cantidad;
+                if (Total - _Requerido >= 0)
+                {
+                    Faltantes = 0;
+                }
+                else
+                {
+                    Faltantes = Total - _Requerido;
+                }
+
                 LstInsumosPesables.Add(new Insumos()
                 {
                     Nombre = _Descripcion,
-                    Requerido = queryResult.Peso * Cantidad + " Kg",
+                    Requerido = _Requerido + " Kg",
                     Recibido = queryResult.CantidadRecibido + " Kg",
                     Pintura = queryResult.CantidadPintura + " Kg",
                     Proceso = queryResult.CantidadProceso + " Kg",
-                    Total= queryResult.CantidadRecibido + queryResult.CantidadPintura+queryResult.CantidadProceso + "Kg"
+                    Total= queryResult.CantidadRecibido + queryResult.CantidadPintura+queryResult.CantidadProceso + "Kg",
+                    Faltantes=Faltantes+" Kg"
 
 
                 });
@@ -94,10 +113,13 @@ namespace Aponus_Web_API.Services
             return LstInsumosPesables;
         }
 
-        public  List <Insumos> ObtenterCuantitativos(string ProductId, int Cantidad)
+        public  List <Insumos> ObtenterCuantitativos(string ProductId, int Cantidad=1)
         {
             List<Insumos> LstInsumosCuantitativos= new List<Insumos>();
             string _Descripcion;
+            decimal? Total;
+            decimal? _Requerido;
+            decimal? Faltantes;
 
             var InsumosCuantitativos= 
 
@@ -178,21 +200,37 @@ namespace Aponus_Web_API.Services
                         queryResult.ToleranciaMinima + '-' +
                         queryResult.ToleranciaMaxima;
                 }
-          
+
+                
+                Total = queryResult.CantidadRecibido +
+                            queryResult.CantidadGranallado +
+                            queryResult.CantidadPintura +
+                            queryResult.CantidadProceso;
+
+                _Requerido = queryResult.Cantidad * Cantidad;
+                if (Total-_Requerido>=0)
+                {
+                    Faltantes = 0;
+                }
+                else
+                {
+                    Faltantes = Total - _Requerido;
+                }
 
                 LstInsumosCuantitativos.Add(new Insumos()
                 {
-                    Nombre = _Descripcion,                    
-                    Requerido= queryResult.Cantidad *Cantidad+ " U",
-                    Recibido = queryResult.CantidadRecibido + " U", 
-                    Pintura = queryResult.CantidadPintura + " U", 
+                    Nombre = _Descripcion,
+                    Requerido = _Requerido + " U",
+                    Recibido = queryResult.CantidadRecibido + " U",
+                    Pintura = queryResult.CantidadPintura + " U",
                     Proceso = queryResult.CantidadProceso + " U",
-                    Granallado = queryResult.CantidadGranallado+ " U",
-                    Total = queryResult.CantidadRecibido+
-                            queryResult.CantidadGranallado+
-                            queryResult.CantidadPintura+
-                            queryResult.CantidadProceso + " U"
-                });
+                    Granallado = queryResult.CantidadGranallado + " U",
+                    Total = queryResult.CantidadRecibido +
+                            queryResult.CantidadGranallado +
+                            queryResult.CantidadPintura +
+                            queryResult.CantidadProceso + " U",
+                    Faltantes = Faltantes+" U",
+                }) ;
             }
             return  LstInsumosCuantitativos;
         }
@@ -200,11 +238,10 @@ namespace Aponus_Web_API.Services
         public List<Insumos> ObtenterMensurables(string ProductId, int Cantidad)
         {
             List<Insumos> LstInsumosMensurables = new List<Insumos>();
-            string _Descripcion;
-            string LargoRequerido;
-            string AlturaCuerpoPerfil;
-            string LargoStock;
-            string AnchoStock;
+            string _Descripcion;       
+            decimal? Total;
+            decimal? Req;
+            decimal? Faltantes;
 
             var InsumosMensurables =
 
@@ -302,15 +339,38 @@ namespace Aponus_Web_API.Services
                         _Proceso = ((queryResult.LargoUnidad*queryResult.CantidadRecibido) / 1000) + " m/" + ((queryResult.LargoUnidad * queryResult.CantidadRecibido) / queryResult.LargoRequerido) + " Junta(s) de " + (queryResult.LargoRequerido / 100) + " cm";
                     }
 
+                   
+                    Req = ((queryResult.AlturaCuerpoPerfil * Cantidad) / (queryResult.LargoUnidad* queryResult.CantidadRecibido))/1000;
+
+                   // var Cuerpo=InsumosMensurables.Find(x => x.Descripcion.Contains("CU"));
+
+                    /*var CantidadCuerpos = AponusDBContext.StockCuantitativos.Find(Cuerpo.IdComponente);
+                    int? TotalCuerpos = CantidadCuerpos.CantidadGranallado +
+                        CantidadCuerpos.CantidadPintura +
+                        CantidadCuerpos.CantidadProceso +
+                        CantidadCuerpos.CantidadRecibido;
+                        */
+                    Total = (queryResult.LargoUnidad * queryResult.CantidadRecibido) / 1000;
+
+                      // decimal totalFinal = Total + CantidadCuerpos; SUMAR CUERPOS 
+
+                    if (Total-Req>=0)
+                    {
+                        Faltantes = 0;
+                    }
+                    else
+                    {
+                        Faltantes = Total - Req;
+                    }
 
                     LstInsumosMensurables.Add(new Insumos()
                     {
                         Nombre = _Descripcion,
                         Requerido = _Requerido,
                         Proceso = _Proceso,
-                        Total = (queryResult.LargoUnidad * queryResult.CantidadRecibido) / 1000 + " m"
-
-                    });
+                        Total = Total + " m",
+                        Faltantes = Faltantes+" U"
+                    }); ;
                 }
                 return LstInsumosMensurables;
             }

@@ -24,6 +24,9 @@ namespace Aponus_Web_API.Mapping
 
         [JsonProperty(PropertyName = "total")]
         public string? Total { get; set; }
+
+        [JsonProperty(PropertyName = "faltantes")]
+        public string? Faltantes { get; set; }
     }
 }
 
