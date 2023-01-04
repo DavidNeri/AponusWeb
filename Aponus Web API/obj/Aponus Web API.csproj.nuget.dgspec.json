@@ -10,21 +10,23 @@
         "projectUniqueName": "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj",
         "projectName": "Aponus Web API",
         "projectPath": "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj",
-        "packagesPath": "C:\\Users\\David Neri\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
         "outputPath": "D:\\Aponus SA\\Aponus Web API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\David Neri\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\David\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "http://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {

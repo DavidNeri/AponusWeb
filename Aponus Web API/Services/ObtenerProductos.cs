@@ -1,5 +1,12 @@
-﻿using Aponus_Web_API.Models;
+﻿using Aponus_Web_API.Business;
+using Aponus_Web_API.Mapping;
+using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+
 namespace Aponus_Web_API.Services
 {
     public class ObtenerProductos
@@ -42,6 +49,68 @@ namespace Aponus_Web_API.Services
             return new JsonResult(Products);
 
         }
+        public async Task<DatosProducto>Listar(string? typeId, int? DN)
+        {
+            try
+            {
 
+
+                var _DatosProducto = AponusDBContext.Productos
+                            .Join(AponusDBContext.ProductosDescripcions,
+                            _Productos => _Productos.IdDescripcion,
+                            _ProductosDescripcion => _ProductosDescripcion.IdDescripcion,
+                            (_Productos, _ProductosDescripcion) => new
+                            {
+                                _Productos.IdTipo,
+                                _Productos.DiametroNominal,
+                                _ProductosDescripcion.DescripcionProducto
+
+                            })
+                            .Where(x => x.IdTipo == typeId && x.DiametroNominal == DN)
+
+                            .Select(x => new
+                            {
+                                Descripcion = x.DescripcionProducto
+
+                            })
+                            .Distinct()
+                            .Single();
+             
+                List<EspecificacionesDatosProducto> _Especificaciones = await AponusDBContext.Productos
+                               .Where(x => x.IdTipo == typeId && x.DiametroNominal == DN)
+
+                               .Select(x => new EspecificacionesDatosProducto()
+                               {
+                                   IdProducto=x.IdProducto,
+                                   ToleranciaMaxima = x.ToleranciaMaxima,
+                                   ToleranciaMinima = x.ToleranciaMinima,
+                                   Stock = x.Cantidad
+
+                               }).ToListAsync();
+
+
+                DatosProducto _Producto = new DatosProducto() {
+                    Descripcion=_DatosProducto.Descripcion.ToString(),
+                    Especificaciones=_Especificaciones
+
+            };
+
+                _Producto.Especificaciones = _Especificaciones;
+
+
+                return _Producto;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            
+          
+
+
+
+        }
     }
 }

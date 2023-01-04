@@ -53,5 +53,9 @@ namespace Aponus_Web_API.Business
             return new ObtenerProductos().Listar();
         }
 
+        internal Task<DatosProducto> ListarProductos(string? typeId, int? dN)
+        {
+            return new ObtenerProductos().Listar(typeId, dN);
+        }
     }   
 }

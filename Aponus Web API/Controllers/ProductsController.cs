@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using NuGet.Protocol;
 using System.Linq;
 
 namespace Aponus_Web_API.Controllers
@@ -38,6 +39,23 @@ namespace Aponus_Web_API.Controllers
             {
                 return Json(e); 
             }      
+
+
+        }
+
+        [HttpGet]
+        [Route("ListProducts/{TypeId}/{DN}")]
+        public  Task<DatosProducto> ListProducts(string? TypeId,int?dN)
+        {
+            try
+            {
+
+                return new BS_Products().ListarProductos(TypeId, dN);
+            }
+            catch (Exception )
+            {
+                throw;
+            }
 
 
         }
