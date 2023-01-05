@@ -106,11 +106,19 @@ namespace Aponus_Web_API.Services
                 throw;
             }
 
-            
-          
+        }
+
+        public async Task<JsonResult> ListarDN(string typeId)
+        {
+            var DN = await AponusDBContext.Productos
+                .Where(x=>x.IdTipo==typeId)
+                .Select(x=>x.DiametroNominal)
+                .Distinct() .ToListAsync();
 
 
+            return new JsonResult(DN);
 
+                
         }
     }
 }

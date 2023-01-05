@@ -42,6 +42,11 @@ namespace Aponus_Web_API.Business
 
         }
 
+        internal  async Task<JsonResult> ListarDN(string? typeId)
+        {
+             return await new  ObtenerProductos().ListarDN(typeId);
+        }
+
         internal JsonResult ListarProductos(string? TypeId) {
 
             return new ObtenerProductos().Listar(TypeId);

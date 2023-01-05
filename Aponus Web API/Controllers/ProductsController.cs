@@ -77,5 +77,22 @@ namespace Aponus_Web_API.Controllers
 
 
         }
+
+        [HttpGet]
+        [Route("ListDN/{TypeId}")]
+        public async Task<JsonResult> ListarDN(string? TypeId)
+        {
+            try
+            {
+
+                return await new BS_Products().ListarDN(TypeId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
+        }
     }
 }
