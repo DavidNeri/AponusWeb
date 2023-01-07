@@ -76,7 +76,7 @@ namespace Aponus_Web_API.Services
                             .Distinct()
                             .Single();
              
-                List<EspecificacionesDatosProducto> _Especificaciones = await AponusDBContext.Productos
+                List<EspecificacionesDatosProducto> _EspecificacionesProducto = await AponusDBContext.Productos
                                .Where(x => x.IdTipo == typeId && x.DiametroNominal == DN)
 
                                .Select(x => new EspecificacionesDatosProducto()
@@ -84,18 +84,18 @@ namespace Aponus_Web_API.Services
                                    IdProducto=x.IdProducto,
                                    ToleranciaMaxima = x.ToleranciaMaxima,
                                    ToleranciaMinima = x.ToleranciaMinima,
-                                   Stock = x.Cantidad
+                                   Cantidad = x.Cantidad
 
                                }).ToListAsync();
 
 
                 DatosProducto _Producto = new DatosProducto() {
-                    Descripcion=_DatosProducto.Descripcion.ToString(),
-                    Especificaciones=_Especificaciones
+                    DescripcionProducto=_DatosProducto.Descripcion.ToString(),
+                    Producto=_EspecificacionesProducto
 
             };
 
-                _Producto.Especificaciones = _Especificaciones;
+                _Producto.Producto = _EspecificacionesProducto;
 
 
                 return _Producto;

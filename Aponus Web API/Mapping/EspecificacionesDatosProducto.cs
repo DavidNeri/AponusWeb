@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Mapping
         [JsonProperty(PropertyName = "toleranciaMinima")]
         public int? ToleranciaMinima { get; set; }
 
-        [JsonProperty(PropertyName = "stock")]
-        public int? Stock { get; set; }
+        [JsonProperty(PropertyName = "cantidad")]
+        public int? Cantidad { get; set; }
     }
 }

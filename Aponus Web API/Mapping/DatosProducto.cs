@@ -5,10 +5,10 @@ namespace Aponus_Web_API.Mapping
     { 
        
 
-        [JsonProperty(PropertyName = "descripcion")]
-        public string? Descripcion { get; set; } 
+        [JsonProperty(PropertyName = "descripcionProducto")]
+        public string? DescripcionProducto { get; set; } 
 
-        [JsonProperty(PropertyName = "especifiaciones")]
-        public List<EspecificacionesDatosProducto>? Especificaciones { get; set;}
+        [JsonProperty(PropertyName = "productos")]
+        public List<EspecificacionesDatosProducto>? Producto { get; set;}
     }
 }
