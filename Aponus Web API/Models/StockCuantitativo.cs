@@ -14,6 +14,8 @@ public partial class StockCuantitativo
     public int? CantidadPintura { get; set; }
 
     public int? CantidadProceso { get; set; }
+    public int? CantidadMoldeado { get; set; }
+
 
     public virtual ICollection<ComponentesCuantitativo> ComponentesCuantitativos { get; } = new List<ComponentesCuantitativo>();
 

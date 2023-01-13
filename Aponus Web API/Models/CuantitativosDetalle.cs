@@ -17,7 +17,11 @@ public partial class CuantitativosDetalle
 
     public int? ToleranciaMaxima { get; set; }
 
-    public virtual ICollection<ComponentesCuantitativo> ComponentesCuantitativos { get; } = new List<ComponentesCuantitativo>();
+    public decimal? Espesor { get; set; }
+
+    public int Perfil{ get; set; }
+
+    public virtual ICollection<ComponentesCuantitativo> ComponentesCuantitativos { get; set; } = new List<ComponentesCuantitativo>();
 
     public virtual ComponentesDescripcion? IdDescripcionNavigation { get; set; }
 

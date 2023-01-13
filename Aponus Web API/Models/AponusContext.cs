@@ -69,7 +69,7 @@ public partial class AponusContext : DbContext
 
             entity.HasOne(d => d.IdComponenteNavigation).WithMany(p => p.ComponentesCuantitativos)
                 .HasForeignKey(d => d.IdComponente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.ClientSetNull)                
                 .HasConstraintName("FK_COMPONENTES_CUANTITATIVOS_CUANTITATIVOS_DETALLE");
 
             entity.HasOne(d => d.IdComponente1).WithMany(p => p.ComponentesCuantitativos)
@@ -175,7 +175,14 @@ public partial class AponusContext : DbContext
                 .HasDefaultValueSql("((0))")
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("DIAMETRO");
+
+            entity.Property(e => e.Espesor)
+                .HasDefaultValueSql("((0))")
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("ESPESOR");
+
             entity.Property(e => e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
+            entity.Property(e => e.Perfil).HasColumnName("PERFIL");
             entity.Property(e => e.ToleranciaMaxima)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("TOLERANCIA_MAXIMA");
@@ -345,6 +352,8 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.CantidadRecibido)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("CANTIDAD_RECIBIDO");
+
+           
 
             entity.HasOne(d => d.IdComponenteNavigation).WithOne(p => p.StockCuantitativo)
                 .HasForeignKey<StockCuantitativo>(d => d.IdComponente)

@@ -4,6 +4,7 @@ using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20230111055216_AgregarPKPerfil_CampoDiametro_TablaCuantitativosDetalle_3")]
+    partial class AgregarPKPerfilCampoDiametroTablaCuantitativosDetalle3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,6 +177,8 @@ namespace AponusWebAPI.Migrations
                         .HasDefaultValueSql("((0))");
 
                     b.HasKey("IdComponente");
+
+                    b.HasAlternateKey("IdComponente", "Perfil");
 
                     b.HasIndex("IdDescripcion");
 

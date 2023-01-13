@@ -4,6 +4,7 @@ using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20230110001513_RemoverMoldeados")]
+    partial class RemoverMoldeados
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,19 +150,9 @@ namespace AponusWebAPI.Migrations
                         .HasColumnName("DIAMETRO")
                         .HasDefaultValueSql("((0))");
 
-                    b.Property<decimal?>("Espesor")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18, 2)")
-                        .HasColumnName("ESPESOR")
-                        .HasDefaultValueSql("((0))");
-
                     b.Property<int?>("IdDescripcion")
                         .HasColumnType("int")
                         .HasColumnName("ID_DESCRIPCION");
-
-                    b.Property<int>("Perfil")
-                        .HasColumnType("int")
-                        .HasColumnName("PERFIL");
 
                     b.Property<int?>("ToleranciaMaxima")
                         .ValueGeneratedOnAdd()
@@ -362,9 +355,6 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("CANTIDAD_GRANALLADO")
                         .HasDefaultValueSql("((0))");
-
-                    b.Property<int?>("CantidadMoldeado")
-                        .HasColumnType("int");
 
                     b.Property<int?>("CantidadPintura")
                         .ValueGeneratedOnAdd()

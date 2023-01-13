@@ -4,6 +4,7 @@ using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20230110020553_Agregar_CampoESPESOR_Tabla_CuantitativosDetalle")]
+    partial class AgregarCampoESPESORTablaCuantitativosDetalle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,18 +151,14 @@ namespace AponusWebAPI.Migrations
                         .HasDefaultValueSql("((0))");
 
                     b.Property<decimal?>("Espesor")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18, 2)")
-                        .HasColumnName("ESPESOR")
-                        .HasDefaultValueSql("((0))");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("IdDescripcion")
                         .HasColumnType("int")
                         .HasColumnName("ID_DESCRIPCION");
 
-                    b.Property<int>("Perfil")
-                        .HasColumnType("int")
-                        .HasColumnName("PERFIL");
+                    b.Property<string>("Perfil")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ToleranciaMaxima")
                         .ValueGeneratedOnAdd()

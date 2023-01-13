@@ -22,6 +22,9 @@ namespace Aponus_Web_API.Mapping
         [JsonProperty(PropertyName = "proceso")]   
         public string? Proceso { get; set; }
 
+        [JsonProperty(PropertyName = "moldeado")]
+        public string? Moldeado { get; set; }
+
         [JsonProperty(PropertyName = "total")]
         public string? Total { get; set; }
 

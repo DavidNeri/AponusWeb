@@ -138,7 +138,7 @@ namespace Aponus_Web_API.Services
                             _CuantitativosDetalle.ToleranciaMinima,
                             _CuantitativosDetalle.ToleranciaMaxima,
 
-                        })
+                        })                    
                     .Join(AponusDBContext.StockCuantitativos,
                         _ComponentesCuantitativos_CuantitativosDetalle => _ComponentesCuantitativos_CuantitativosDetalle.IdComponente,
                         _StockCuantitativos => _StockCuantitativos.IdComponente,
@@ -155,7 +155,8 @@ namespace Aponus_Web_API.Services
                             _StockCuantitativos.CantidadRecibido,
                             _StockCuantitativos.CantidadPintura,
                             _StockCuantitativos.CantidadProceso,
-                            _StockCuantitativos.CantidadGranallado
+                            _StockCuantitativos.CantidadGranallado,
+                           // _StockCuantitativos.CantidadMoldeado
                         })
                     .Join(AponusDBContext.ComponentesDescripcions,
                     _ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos => _ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.IdDescripcion,
@@ -165,7 +166,7 @@ namespace Aponus_Web_API.Services
                         _ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos,
                         _ComponentesDescripcion
                     })
-
+                    
                     .Where(x => x._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.IdProducto == ProductId)
                     .Select(
                         Cuantitativos => new
@@ -180,6 +181,7 @@ namespace Aponus_Web_API.Services
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadPintura,
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadProceso,
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadGranallado,
+                           // Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadMoldeado
                         }).ToList();
 
             foreach (var queryResult in InsumosCuantitativos)
@@ -225,6 +227,7 @@ namespace Aponus_Web_API.Services
                     Pintura = queryResult.CantidadPintura + " U",
                     Proceso = queryResult.CantidadProceso + " U",
                     Granallado = queryResult.CantidadGranallado + " U",
+                   // Moldeado = queryResult.CantidadMoldeado +" U",
                     Total = queryResult.CantidadRecibido +
                             queryResult.CantidadGranallado +
                             queryResult.CantidadPintura +
