@@ -352,8 +352,11 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.CantidadRecibido)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("CANTIDAD_RECIBIDO");
+            entity.Property(e => e.CantidadMoldeado)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("CANTIDAD_MOLDEADO");
 
-           
+
 
             entity.HasOne(d => d.IdComponenteNavigation).WithOne(p => p.StockCuantitativo)
                 .HasForeignKey<StockCuantitativo>(d => d.IdComponente)

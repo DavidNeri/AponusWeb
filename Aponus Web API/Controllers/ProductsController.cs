@@ -11,6 +11,7 @@ using System.Linq;
 namespace Aponus_Web_API.Controllers
 {
     [Route("Aponus/[Controller]")]
+    [ApiController]
     public class ProductsController : Controller
     {
         [HttpGet]
