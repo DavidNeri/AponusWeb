@@ -4,6 +4,7 @@ using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20230120185729_AgregarCampo_IdDescripcionTipo_Tablas_ComponentesTipos_ComponentesDescripcion")]
+    partial class AgregarCampoIdDescripcionTipoTablasComponentesTiposComponentesDescripcion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,12 +59,6 @@ namespace AponusWebAPI.Migrations
                         .HasColumnName("ID_DESCRIPCION")
                         .HasDefaultValueSql("((-1))");
 
-                    b.Property<int?>("ComponentesDescripcionIdDescripcion")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ComponentesTiposIdDescripcionTipo")
-                        .HasColumnType("int");
-
                     b.Property<string>("Descripcion")
                         .HasMaxLength(50)
                         .IsUnicode(false)
@@ -72,10 +69,6 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("IdDescripcion");
-
-                    b.HasIndex("ComponentesDescripcionIdDescripcion");
-
-                    b.HasIndex("ComponentesTiposIdDescripcionTipo");
 
                     b.ToTable("COMPONENTES_DESCRIPCION", (string)null);
                 });
@@ -496,17 +489,6 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("IdComponenteNavigation");
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Models.ComponentesDescripcion", b =>
-                {
-                    b.HasOne("Aponus_Web_API.Models.ComponentesDescripcion", null)
-                        .WithMany("ComponentesDescripcions")
-                        .HasForeignKey("ComponentesDescripcionIdDescripcion");
-
-                    b.HasOne("Aponus_Web_API.Models.ComponentesTipos", null)
-                        .WithMany("componentesDescripcions")
-                        .HasForeignKey("ComponentesTiposIdDescripcionTipo");
-                });
-
             modelBuilder.Entity("Aponus_Web_API.Models.ComponentesMensurable", b =>
                 {
                     b.HasOne("Aponus_Web_API.Models.MensurablesDetalle", "IdComponenteNavigation")
@@ -626,18 +608,11 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.ComponentesDescripcion", b =>
                 {
-                    b.Navigation("ComponentesDescripcions");
-
                     b.Navigation("CuantitativosDetalles");
 
                     b.Navigation("MensurablesDetalles");
 
                     b.Navigation("PesablesDetalles");
-                });
-
-            modelBuilder.Entity("Aponus_Web_API.Models.ComponentesTipos", b =>
-                {
-                    b.Navigation("componentesDescripcions");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.CuantitativosDetalle", b =>

@@ -9,7 +9,7 @@ namespace Aponus_Web_API.Controllers
     public class StocksController : Controller
     {
         [HttpGet]
-        [Route("/List/All")]
+        [Route("List/All")]
 
         public  async Task<List<TipoInsumos>> Listar() 
         {

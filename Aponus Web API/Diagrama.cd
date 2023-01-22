@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Aponus_Web_API.Mapping.DatosProducto">
+    <Position X="3.75" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\DatosProducto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Mapping.EspecificacionesDatosProducto">
+    <Position X="3.75" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAACGAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\EspecificacionesDatosProducto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Mapping.Insumos">
+    <Position X="0.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAkIAAAAAABoAAAAAAAQAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Mapping\Insumos.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Mapping.Insumos_Cuantitativos">
+    <Position X="9.5" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAgAAAEkIAEgEQAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Mapping\Insumos_Cuantitativos.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Mapping.Insumos_Mensurables">
+    <Position X="7.5" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgIAEAIQAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\Insumos_Mensurables.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Mapping.InsumosPesables">
+    <Position X="7.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABQAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\InsumosPesables.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Mapping.InsumosProducto">
+    <Position X="0.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACABAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\InsumosProducto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Mapping.TipoInsumos">
+    <Position X="7" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAARAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\TipoInsumos.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

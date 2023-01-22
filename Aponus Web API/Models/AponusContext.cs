@@ -40,6 +40,8 @@ public partial class AponusContext : DbContext
     public virtual DbSet<StockMensurable> StockMensurables { get; set; }
 
     public virtual DbSet<StockPesable> StockPesables { get; set; }
+    public virtual DbSet<ComponentesTipos> ComponentesTipos { get; set; }
+         
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -78,6 +80,26 @@ public partial class AponusContext : DbContext
                 .HasConstraintName("FK_COMPONENTES_CUANTITATIVOS_STOCK_CUANTITATIVOS");
         });
 
+        modelBuilder.Entity<ComponentesTipos>(entity =>
+        {
+            entity.HasKey(e => e.IdDescripcionTipo);
+            entity.ToTable("COMPONENTES_TIPOS");
+            entity.Property(e => e.IdDescripcionTipo)
+            .HasDefaultValueSql("((0))")
+            .HasColumnName("ID_DESCRIPCION_TIPO")
+            .IsUnicode(false);
+
+            entity.Property(e=>e.DescripcionTipo)
+            .HasDefaultValueSql("((0))")
+            .HasColumnName("DESCRIPCION_TIPO")
+            .IsUnicode(false);
+
+           
+
+
+
+        });
+
         modelBuilder.Entity<ComponentesDescripcion>(entity =>
         {
             entity.HasKey(e => e.IdDescripcion);
@@ -91,6 +113,7 @@ public partial class AponusContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPCION");
+
         });
 
         modelBuilder.Entity<ComponentesMensurable>(entity =>
@@ -412,6 +435,8 @@ public partial class AponusContext : DbContext
         });
 
         OnModelCreatingPartial(modelBuilder);
+
+       
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

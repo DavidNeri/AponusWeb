@@ -2,7 +2,7 @@
 
 namespace Aponus_Web_API.Mapping
 {
-    public class Insumos_Cuantitativos
+    public class DetalleCuantitativos
     {
         [JsonProperty(PropertyName = "idDescripcion"), JsonIgnore]
         public int? IdDescripcion { get; set; }

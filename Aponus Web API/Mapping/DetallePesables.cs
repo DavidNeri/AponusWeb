@@ -2,18 +2,17 @@
 
 namespace Aponus_Web_API.Mapping
 {
-    public class Insumos_Soportes
+    public class DetallePesables
+
     {
-       // [JsonProperty(PropertyName = "idComponente")]
-        //public string? IdComponente { get; set; }
+        [JsonProperty(PropertyName = "idDescripcion"), JsonIgnore]
 
-        [JsonProperty(PropertyName ="idDescripcion"), JsonIgnore]
-        public int? IdDescripcion { get; set; }
+        public int? IdDescripcion { get; set; }     
 
-        [JsonProperty(PropertyName ="diametro")]
+        [JsonProperty(PropertyName = "diametro")]
         public decimal? Diametro { get; set; }
 
-        [JsonProperty(PropertyName ="altura")]
+        [JsonProperty(PropertyName = "altura")]
         public decimal? Altura { get; set; }
 
         [JsonProperty(PropertyName = "recibido")]
@@ -24,7 +23,5 @@ namespace Aponus_Web_API.Mapping
 
         [JsonProperty(PropertyName = "proceso")]
         public decimal? Proceso { get; set; }
-
     }
-
 }

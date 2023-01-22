@@ -2,7 +2,7 @@
 
 namespace Aponus_Web_API.Mapping
 {
-    public class Insumos_Mensurables
+    public class DetalleMensurables
     {
         [JsonProperty(PropertyName = "idDescripcion"), JsonIgnore]
         public int? IdDescripcion { get; set; }
@@ -12,7 +12,6 @@ namespace Aponus_Web_API.Mapping
 
         [JsonProperty(PropertyName = "espesor")]
         public decimal? Espesor { get; set; }
-
 
         [JsonProperty(PropertyName = "perfil")]
         public int? Perfil { get; set; }

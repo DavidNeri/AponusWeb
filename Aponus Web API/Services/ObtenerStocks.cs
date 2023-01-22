@@ -1,9 +1,6 @@
 ﻿using Aponus_Web_API.Mapping;
 using Aponus_Web_API.Models;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Aponus_Web_API.Services
 {
@@ -13,41 +10,154 @@ namespace Aponus_Web_API.Services
         public ObtenerStocks() { AponusDBContext = new AponusContext(); }
         public async  Task<List<TipoInsumos>>Listar() 
         {
-            List<TipoInsumos> _Insumos = await AponusDBContext.ComponentesDescripcions
-               .Select(x => new TipoInsumos
-               {
-                   IdDescripcion = x.IdDescripcion,
-                   Descripcion = x.Descripcion
-               }).ToListAsync();
 
-            List <Insumos_Soportes> _Insumos_Soportes  =  await
-            AponusDBContext.PesablesDetalles
-               .Join(AponusDBContext.StockPesables,
-               _PesablesDetalle => _PesablesDetalle.IdComponente,
-               _StockPesables => _StockPesables.IdComponente,
-               (_PesablesDetalle, _StockPesables) => new
-               {
-                  // _PesablesDetalle.IdComponente,
-                   _PesablesDetalle.IdDescripcion,
-                   _PesablesDetalle.Diametro,
-                   _PesablesDetalle.Altura,
-                   _StockPesables.CantidadRecibido,
-                   _StockPesables.CantidadPintura,
-                   _StockPesables.CantidadProceso
-               })
+            try
+            {
+                List<TipoInsumos> Stocks = await
+           AponusDBContext.ComponentesDescripcions
                .Select(
-                x=> new Insumos_Soportes { 
-                    IdDescripcion=x.IdDescripcion,                    
-                    Diametro=x.Diametro,
-                    Altura=x.Altura,
-                    Recibido=x.CantidadRecibido,
-                    Pintura=x.CantidadPintura,
-                    Proceso=x.CantidadProceso
+                x => new TipoInsumos
+                {
+                    IdDescripcion = x.IdDescripcion,
+                    Descripcion = x.Descripcion,
+                }
+               )
+               .ToListAsync();
+
+                List<DetallePesables> pesables = await AponusDBContext.PesablesDetalles
+                    .Join(AponusDBContext.StockPesables,
+                    PD=>PD.IdComponente,SP=>SP.IdComponente,
+                    (PD,SP)=> new
+                    {
+                        PD.IdDescripcion,
+                        PD.Diametro,
+                        PD.Altura,
+                        SP.CantidadRecibido,
+                        SP.CantidadPintura,
+                        SP.CantidadProceso
+                    }).Select(x=> new DetallePesables { 
+                        IdDescripcion=x.IdDescripcion,
+                        Altura=x.Altura,    
+                        Diametro=x.Diametro,    
+                        Pintura=x.CantidadPintura,
+                        Proceso=x.CantidadProceso,
+                        Recibido=x.CantidadRecibido,
+                    }).ToListAsync();
+
+                List<DetalleCuantitativos> cuantitativos = await AponusDBContext.CuantitativosDetalles
+                  .Join(AponusDBContext.StockCuantitativos,
+                  CD => CD.IdComponente, SC => SC.IdComponente,
+                  (CD, SC) => new
+                  {
+                      CD.IdDescripcion,
+                      CD.Diametro,
+                      CD.Altura,
+                      CD.ToleranciaMaxima,
+                      CD.ToleranciaMinima,
+                      CD.Perfil,
+                      CD.Espesor,                      
+                      SC.CantidadRecibido,
+                      SC.CantidadGranallado,
+                      SC.CantidadPintura,
+                      SC.CantidadMoldeado,
+                      SC.CantidadProceso
+                  }).Select(x => new DetalleCuantitativos
+                  {
+                      IdDescripcion = x.IdDescripcion,
+                      Diametro = x.Diametro,
+                      Altura = x.Altura,
+                      ToleranciaMimina = x.ToleranciaMinima,
+                      ToleranciaMaxima = x.ToleranciaMaxima,
+                      Perfil=x.Perfil,
+                      Espesor = x.Espesor,
+                      Recibido = x.CantidadRecibido,
+                      Granallado = x.CantidadGranallado,
+                      Pintura = x.CantidadPintura,
+                      Moldeado=x.CantidadMoldeado,  
+                      Proceso = x.CantidadProceso,
+
+                  }).ToListAsync();
+
+                List<DetalleMensurables> Mensurables = await AponusDBContext.MensurablesDetalles
+                  .Join(AponusDBContext.StockCuantitativos,
+                  MD => MD.IdComponente, SM => SM.IdComponente,
+                  (MD, SM) => new
+                  {
+                      MD.IdDescripcion,
+                      MD.Largo,                   
+                      MD.Espesor,
+                      MD.Perfil,
+                      SM.CantidadRecibido, 
+                      SM.CantidadProceso
+                  }).Select(x => new DetalleMensurables
+                  {
+                      IdDescripcion = x.IdDescripcion,
+                      Espesor= x.Espesor,
+                      Largo= x.Largo,   
+                      Perfil= x.Perfil,
+                      Proceso= x.CantidadProceso,   
+                      Recibido= x.CantidadRecibido,
+                     
+
+                  }).ToListAsync();
+
+                foreach (TipoInsumos _Insumos in Stocks) 
+                {
+                    foreach (DetallePesables _Pesables in pesables)
+                    {
+                        if (_Pesables.IdDescripcion == _Insumos.IdDescripcion  )
+                        {
+                            if (_Insumos.Pesables == null)
+                            {
+                                _Insumos.Pesables = new List<DetallePesables>();
+                            }                           
+
+                            _Insumos.Pesables.Add(_Pesables);
+                        }
+                    }
+
+                    foreach (DetalleCuantitativos _Cuantitativos in cuantitativos)
+                    {
+                        if (_Cuantitativos.IdDescripcion == _Insumos.IdDescripcion)
+                        {
+                            if (_Insumos.Cuantitativos == null)
+                            {
+                                _Insumos.Cuantitativos = new List<DetalleCuantitativos>();
+                            }
+
+                            _Insumos.Cuantitativos.Add(_Cuantitativos);
+                        }
+                    }
+
+                    foreach (DetalleMensurables _Mensurables in Mensurables)
+                    {
+                        if (_Mensurables.IdDescripcion == _Insumos.IdDescripcion)
+                        {
+                            if (_Insumos.Mensurables == null)
+                            {
+                                _Insumos.Mensurables = new List<DetalleMensurables>();
+                            }
+
+                            _Insumos.Mensurables.Add(_Mensurables);
+                        }
+                    }
+
 
                 }
-               ).ToListAsync();
+                
+                return Stocks;
+            }
+            catch (Exception)
+            {
 
-            List<Insumos_Cuantitativos> _Insumos_Cuantitativos = await AponusDBContext.CuantitativosDetalles
+                throw;
+            }
+            
+
+            //List <InsumosPesables> _InsumosPesables  =
+            
+
+            List<DetalleCuantitativos> _Insumos_Cuantitativos = await AponusDBContext.CuantitativosDetalles
                 .Join(AponusDBContext.StockCuantitativos,
                 _CuantitativosDetalle=>_CuantitativosDetalle.IdComponente,
                 _StockCuantitativos=>_StockCuantitativos.IdComponente,
@@ -67,7 +177,7 @@ namespace Aponus_Web_API.Services
                     _StockCuantitativos.CantidadMoldeado,
                     _StockCuantitativos.CantidadProceso
                 })
-                .Select(x=> new Insumos_Cuantitativos 
+                .Select(x=> new DetalleCuantitativos 
                 {
                     IdDescripcion=x.IdDescripcion,
                     Diametro=x.Diametro,
@@ -84,7 +194,7 @@ namespace Aponus_Web_API.Services
 
                 }).ToListAsync();
 
-            List<Insumos_Mensurables> _Insumos_Mensurables= await AponusDBContext.MensurablesDetalles
+            List<DetalleMensurables> _Insumos_Mensurables= await AponusDBContext.MensurablesDetalles
                .Join(AponusDBContext.StockMensurables,
                _MensurablesDetalle => _MensurablesDetalle.IdComponente,
                _StockMensurables => _StockMensurables.IdComponente,
@@ -97,7 +207,7 @@ namespace Aponus_Web_API.Services
                    _StockMensurables.CantidadRecibido,
                    _StockMensurables.CantidadProceso,
                })
-               .Select(x => new Insumos_Mensurables
+               .Select(x => new DetalleMensurables
                {
                    IdDescripcion = x.IdDescripcion,
                    Largo = x.Largo,
@@ -109,15 +219,15 @@ namespace Aponus_Web_API.Services
                }).ToListAsync();
 
 
-            foreach (TipoInsumos tipo in _Insumos)
+          /*  foreach (TipoInsumos tipo in _TipoInsumos)
             {
 
-                foreach (Insumos_Soportes _insumos_Soportes in _Insumos_Soportes)
+                foreach (InsumosPesables _insumos_Soportes in _InsumosPesables)
                 {
                     if (_insumos_Soportes.IdDescripcion==tipo.IdDescripcion)
                     {
-                        tipo.DetalleSoportes = new List<Insumos_Soportes>();
-                        tipo.DetalleSoportes.AddRange(_Insumos_Soportes.Where(x => x.IdDescripcion == tipo.IdDescripcion));
+                        tipo.Pesables = new List<InsumosPesables>();
+                        tipo.Pesables.AddRange(_InsumosPesables.Where(x => x.IdDescripcion == tipo.IdDescripcion));
                     }
                  
 
@@ -145,8 +255,8 @@ namespace Aponus_Web_API.Services
 
 
             }
-
-            return _Insumos;
+          */
+           
 
         }
     }
