@@ -204,6 +204,12 @@ public partial class AponusContext : DbContext
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("ESPESOR");
 
+            entity.Property(e => e.Perfil)
+            .IsRequired(false)
+            .HasDefaultValueSql("null")
+            .HasColumnName("PERFIL");          
+
+
             entity.Property(e => e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
             entity.Property(e => e.Perfil).HasColumnName("PERFIL");
             entity.Property(e => e.ToleranciaMaxima)

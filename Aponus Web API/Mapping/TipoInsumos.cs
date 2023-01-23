@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Aponus_Web_API.Mapping
 {
-    public class TipoInsumos
+    public class TipoInsumos : EspecificacionesComponentes
     {
 
         [JsonProperty(PropertyName = "idDescripcion")]
@@ -13,14 +13,9 @@ namespace Aponus_Web_API.Mapping
         [JsonProperty(PropertyName = "descripcion")]
         public string? Descripcion { get; set; }
 
-        [JsonProperty(PropertyName = "pesables", NullValueHandling =NullValueHandling.Ignore)]
-        public List<DetallePesables>? Pesables { get; set; } = null;
-
-        [JsonProperty(PropertyName = "cuantitativos", NullValueHandling = NullValueHandling.Ignore)]
-        public List<DetalleCuantitativos>? Cuantitativos { get; set; }  =null ;
-
-        [JsonProperty(PropertyName = "mensurables", NullValueHandling = NullValueHandling.Ignore)]
-        public List<DetalleMensurables>? Mensurables { get; set; } = null;
+        [JsonProperty(PropertyName = "especificaciones", NullValueHandling =NullValueHandling.Ignore)]
+        public List<EspecificacionesComponentes>? Especificaciones { get; set; } = null;
+      
 
         
     }

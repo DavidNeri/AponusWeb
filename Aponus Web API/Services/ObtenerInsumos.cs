@@ -156,7 +156,7 @@ namespace Aponus_Web_API.Services
                             _StockCuantitativos.CantidadPintura,
                             _StockCuantitativos.CantidadProceso,
                             _StockCuantitativos.CantidadGranallado,
-                           // _StockCuantitativos.CantidadMoldeado
+                            _StockCuantitativos.CantidadMoldeado
                         })
                     .Join(AponusDBContext.ComponentesDescripcions,
                     _ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos => _ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.IdDescripcion,
@@ -181,7 +181,7 @@ namespace Aponus_Web_API.Services
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadPintura,
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadProceso,
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadGranallado,
-                           // Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadMoldeado
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadMoldeado
                         }).ToList();
 
             foreach (var queryResult in InsumosCuantitativos)
@@ -203,11 +203,21 @@ namespace Aponus_Web_API.Services
                         queryResult.ToleranciaMaxima;
                 }
 
-                
-                Total = queryResult.CantidadRecibido +
-                            queryResult.CantidadGranallado +
-                            queryResult.CantidadPintura +
-                            queryResult.CantidadProceso;
+                if (queryResult.CantidadMoldeado !=null)
+                {
+                    Total = queryResult.CantidadRecibido +
+                           queryResult.CantidadGranallado +
+                           queryResult.CantidadPintura +
+                           queryResult.CantidadProceso + queryResult.CantidadMoldeado;
+                }
+                else
+                {
+                    Total = queryResult.CantidadRecibido +
+                           queryResult.CantidadGranallado +
+                           queryResult.CantidadPintura +
+                           queryResult.CantidadProceso;
+                }
+
 
                 _Requerido = queryResult.Cantidad * Cantidad;
                 if (Total-_Requerido>=0)
@@ -218,7 +228,11 @@ namespace Aponus_Web_API.Services
                 {
                     Faltantes = Total - _Requerido;
                 }
-
+                    string? _Moldeado =null;
+                if (queryResult.CantidadMoldeado!= null)
+                {
+                    _Moldeado = queryResult.CantidadMoldeado + " U";
+                }
                 LstInsumosCuantitativos.Add(new Insumos()
                 {
                     Nombre = _Descripcion,
@@ -227,7 +241,7 @@ namespace Aponus_Web_API.Services
                     Pintura = queryResult.CantidadPintura + " U",
                     Proceso = queryResult.CantidadProceso + " U",
                     Granallado = queryResult.CantidadGranallado + " U",
-                   // Moldeado = queryResult.CantidadMoldeado +" U",
+                    Moldeado = _Moldeado,
                     Total = queryResult.CantidadRecibido +
                             queryResult.CantidadGranallado +
                             queryResult.CantidadPintura +
@@ -263,8 +277,7 @@ namespace Aponus_Web_API.Services
                            // AnchoStock =_MensurablesDetalle.Ancho,
                             _MensurablesDetalle.Espesor,
                             _MensurablesDetalle.Perfil,
-                            LargoUnidad=_MensurablesDetalle.Largo,
-                            
+                            LargoUnidad=_MensurablesDetalle.Largo,                            
 
                         })
                     .Join(AponusDBContext.StockMensurables,
@@ -330,7 +343,7 @@ namespace Aponus_Web_API.Services
                     }
                     else
                     {
-                        _Descripcion = queryResult.Descripcion + "PERFIL " + queryResult.Perfil;
+                        _Descripcion = queryResult.Descripcion + " PERFIL " + queryResult.Perfil;
                         if (queryResult.IdProducto.Contains("ABT") == true)
                         {
                             _Requerido = ((queryResult.LargoRequerido * Cantidad) / 1000) + " m/" + Cantidad + " Junta(s) de " + (queryResult.LargoRequerido / 1000) + " cm";
