@@ -1,35 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="Aponus_Web_API.Mapping.DatosProducto">
-    <Position X="0.5" Y="3.75" Width="2.25" />
-    <AssociationLine Name="Producto" Type="Aponus_Web_API.Mapping.EspecificacionesDatosProducto">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.132" Y="-0.372" />
-      </MemberNameLabel>
-    </AssociationLine>
+    <Position X="0.5" Y="5.75" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
       <FileName>Mapping\DatosProducto.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Producto" />
-    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Aponus_Web_API.Mapping.EspecificacionesDatosProducto">
-    <Position X="3.75" Y="4" Width="3" />
+    <Position X="4.75" Y="5.75" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAAACGAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Mapping\EspecificacionesDatosProducto.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Aponus_Web_API.Mapping.Insumos">
-    <Position X="4" Y="2" Width="1.5" />
+    <Position X="1" Y="3.75" Width="5" />
     <InheritanceLine Type="Aponus_Web_API.Mapping.Stocks" ManuallyRouted="true" FixedFromPoint="true">
       <Path>
-        <Point X="7.75" Y="4.563" />
-        <Point X="7.375" Y="4.563" />
-        <Point X="7.375" Y="2.675" />
-        <Point X="5.5" Y="2.675" />
+        <Point X="8.75" Y="5.063" />
+        <Point X="8.375" Y="5.063" />
+        <Point X="8.375" Y="4.366" />
+        <Point X="6" Y="4.366" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -38,65 +30,36 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Aponus_Web_API.Mapping.InsumosProducto">
-    <Position X="0.75" Y="0.75" Width="1.5" />
-    <AssociationLine Name="Cuantitativos" Type="Aponus_Web_API.Mapping.Insumos" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="0.75" Y="1.188" />
-        <Point X="0.375" Y="1.188" />
-        <Point X="0.375" Y="2.875" />
-        <Point X="4" Y="2.875" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="Mensurables" Type="Aponus_Web_API.Mapping.Insumos" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="1.438" Y="1.618" />
-        <Point X="1.438" Y="1.868" />
-        <Point X="4.75" Y="1.868" />
-        <Point X="4.75" Y="2" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="1.052" Y="-0.417" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <AssociationLine Name="Pesables" Type="Aponus_Web_API.Mapping.Insumos" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="1.5" Y="0.75" />
-        <Point X="1.5" Y="0.375" />
-        <Point X="5.539" Y="0.375" />
-        <Point X="5.539" Y="1.464" />
-        <Point X="4.875" Y="1.464" />
-        <Point X="4.875" Y="2" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.343" Y="1.113" />
-      </MemberNameLabel>
-    </AssociationLine>
+    <Position X="0.75" Y="0.75" Width="3.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAACABAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Mapping\InsumosProducto.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Cuantitativos" />
-      <Property Name="Mensurables" />
-      <Property Name="Pesables" />
-    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Aponus_Web_API.Mapping.TipoInsumos">
     <Position X="6.25" Y="0.5" Width="4.25" />
+    <InheritanceLine Type="Aponus_Web_API.Mapping.EspecificacionesComponentes" FixedToPoint="true">
+      <Path>
+        <Point X="12" Y="0.5" />
+        <Point X="12" Y="0.125" />
+        <Point X="8.625" Y="0.125" />
+        <Point X="8.625" Y="0.5" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAEAAAAAAAABAAAAAAgAAAAAAAAAAAA=</HashCode>
       <FileName>Mapping\TipoInsumos.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Aponus_Web_API.Mapping.Stocks">
-    <Position X="7.75" Y="3.75" Width="1.75" />
+    <Position X="8.75" Y="4.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAgAAAAkIAAAAAABIAAAAAAAQAAAAAAAAAAAAAE=</HashCode>
       <FileName>Mapping\Stocks.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Aponus_Web_API.Mapping.EspecificacionesComponentes">
-    <Position X="11.75" Y="1.75" Width="2.5" />
+    <Position X="10.75" Y="0.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAACAAAEBAAEgMQAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Mapping\EspecificacionesComponentes.cs</FileName>

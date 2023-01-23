@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 namespace Aponus_Web_API.Mapping
 {
-    public class InsumosProducto
+    public class InsumosProducto : Insumos
     {
         [JsonProperty(PropertyName = "pesables")]
         public List<Insumos>? Pesables { get; set; }
