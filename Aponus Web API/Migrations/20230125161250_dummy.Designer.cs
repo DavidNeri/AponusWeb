@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    [Migration("20230120202206_AgregarRelacion_ComponentesTipos_ComponentesDescripcion")]
-    partial class AgregarRelacionComponentesTiposComponentesDescripcion
+    [Migration("20230125161250_dummy")]
+    partial class dummy
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,23 +62,18 @@ namespace AponusWebAPI.Migrations
                     b.Property<int?>("ComponentesDescripcionIdDescripcion")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ComponentesTiposIdDescripcionTipo")
-                        .HasColumnType("int");
-
                     b.Property<string>("Descripcion")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.Property<int>("IdDescripcionTipo")
+                    b.Property<int?>("IdDescripcionTipo")
                         .HasColumnType("int");
 
                     b.HasKey("IdDescripcion");
 
                     b.HasIndex("ComponentesDescripcionIdDescripcion");
-
-                    b.HasIndex("ComponentesTiposIdDescripcionTipo");
 
                     b.ToTable("COMPONENTES_DESCRIPCION", (string)null);
                 });
@@ -143,22 +138,6 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("COMPONENTES_PESABLES", (string)null);
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Models.ComponentesTipos", b =>
-                {
-                    b.Property<int>("IdDescripcionTipo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDescripcionTipo"));
-
-                    b.Property<string>("DescripcionTipo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdDescripcionTipo");
-
-                    b.ToTable("ComponentesTipos");
-                });
-
             modelBuilder.Entity("Aponus_Web_API.Models.CuantitativosDetalle", b =>
                 {
                     b.Property<string>("IdComponente")
@@ -189,9 +168,11 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID_DESCRIPCION");
 
-                    b.Property<int>("Perfil")
+                    b.Property<int?>("Perfil")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("PERFIL");
+                        .HasColumnName("PERFIL")
+                        .HasDefaultValueSql("null");
 
                     b.Property<int?>("ToleranciaMaxima")
                         .ValueGeneratedOnAdd()
@@ -494,6 +475,12 @@ namespace AponusWebAPI.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_COMPONENTES_CUANTITATIVOS_STOCK_CUANTITATIVOS");
 
+                    b.HasOne("Aponus_Web_API.Models.Producto", null)
+                        .WithMany("ComponentesCuantitativos")
+                        .HasForeignKey("IdProducto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("IdComponente1");
 
                     b.Navigation("IdComponenteNavigation");
@@ -504,10 +491,6 @@ namespace AponusWebAPI.Migrations
                     b.HasOne("Aponus_Web_API.Models.ComponentesDescripcion", null)
                         .WithMany("ComponentesDescripcions")
                         .HasForeignKey("ComponentesDescripcionIdDescripcion");
-
-                    b.HasOne("Aponus_Web_API.Models.ComponentesTipos", null)
-                        .WithMany("componentesDescripcions")
-                        .HasForeignKey("ComponentesTiposIdDescripcionTipo");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ComponentesMensurable", b =>
@@ -638,11 +621,6 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("PesablesDetalles");
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Models.ComponentesTipos", b =>
-                {
-                    b.Navigation("componentesDescripcions");
-                });
-
             modelBuilder.Entity("Aponus_Web_API.Models.CuantitativosDetalle", b =>
                 {
                     b.Navigation("ComponentesCuantitativos");
@@ -660,6 +638,11 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("ComponentesPesables");
 
                     b.Navigation("StockPesable");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.Producto", b =>
+                {
+                    b.Navigation("ComponentesCuantitativos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosDescripcion", b =>

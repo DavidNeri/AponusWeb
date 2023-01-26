@@ -9,5 +9,6 @@ public partial class ProductosTipo
 
     public string? DescripcionTipo { get; set; }
 
-    public virtual ICollection<Producto> Productos { get; set; } = new List<Producto>();
+    public ICollection<Producto> Productos{ get; set;} = new List<Producto>();
+
 }

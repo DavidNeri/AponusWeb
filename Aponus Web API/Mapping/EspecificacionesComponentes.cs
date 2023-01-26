@@ -7,8 +7,8 @@ namespace Aponus_Web_API.Mapping
         [JsonProperty(PropertyName = "idDescripcion"), JsonIgnore]
         public int? IdDescripcion { get; set; }
 
-        [JsonProperty(PropertyName = "idInsumo" , NullValueHandling = NullValueHandling.Ignore)]
-        public string? Idinsumo { get; set; }
+        [JsonProperty(PropertyName = "idComponente" , NullValueHandling = NullValueHandling.Ignore)]
+        public string? idComponente { get; set; }
 
         [JsonProperty(PropertyName = "largo" , NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Largo { get; set; }

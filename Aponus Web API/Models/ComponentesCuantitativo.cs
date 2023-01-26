@@ -14,4 +14,6 @@ public partial class ComponentesCuantitativo
     public virtual StockCuantitativo IdComponente1 { get; set; } = null!;
 
     public virtual CuantitativosDetalle IdComponenteNavigation { get; set; } = null!;
+
+
 }

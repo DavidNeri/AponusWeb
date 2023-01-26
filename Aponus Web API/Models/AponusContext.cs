@@ -40,7 +40,6 @@ public partial class AponusContext : DbContext
     public virtual DbSet<StockMensurable> StockMensurables { get; set; }
 
     public virtual DbSet<StockPesable> StockPesables { get; set; }
-    public virtual DbSet<ComponentesTipos> ComponentesTipos { get; set; }
          
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -78,27 +77,12 @@ public partial class AponusContext : DbContext
                 .HasForeignKey(d => d.IdComponente)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_COMPONENTES_CUANTITATIVOS_STOCK_CUANTITATIVOS");
+
+            
         });
 
-        modelBuilder.Entity<ComponentesTipos>(entity =>
-        {
-            entity.HasKey(e => e.IdDescripcionTipo);
-            entity.ToTable("COMPONENTES_TIPOS");
-            entity.Property(e => e.IdDescripcionTipo)
-            .HasDefaultValueSql("((0))")
-            .HasColumnName("ID_DESCRIPCION_TIPO")
-            .IsUnicode(false);
 
-            entity.Property(e=>e.DescripcionTipo)
-            .HasDefaultValueSql("((0))")
-            .HasColumnName("DESCRIPCION_TIPO")
-            .IsUnicode(false);
-
-           
-
-
-
-        });
+        
 
         modelBuilder.Entity<ComponentesDescripcion>(entity =>
         {
@@ -326,6 +310,7 @@ public partial class AponusContext : DbContext
                 .HasForeignKey(d => d.IdTipo)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PRODUCTOS_PRODUCTOS_TIPOS");
+
         });
 
         modelBuilder.Entity<ProductosDescripcion>(entity =>

@@ -26,4 +26,5 @@ public partial class Producto
     public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }  = null!;
 
     public virtual ProductosTipo IdTipoNavigation { get; set; } = null!;
+    public virtual ICollection<ComponentesCuantitativo>? ComponentesCuantitativos { get; set;} = new List<ComponentesCuantitativo>();
 }
