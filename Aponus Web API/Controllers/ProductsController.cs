@@ -75,8 +75,6 @@ namespace Aponus_Web_API.Controllers
             {
                 return Json(e);
             }
-
-
         }
 
         [HttpGet]

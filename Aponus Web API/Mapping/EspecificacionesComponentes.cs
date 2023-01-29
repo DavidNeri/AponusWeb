@@ -7,7 +7,7 @@ namespace Aponus_Web_API.Mapping
         [JsonProperty(PropertyName = "idDescripcion"), JsonIgnore]
         public int? IdDescripcion { get; set; }
 
-        [JsonProperty(PropertyName = "idComponente" , NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "IdComponente" , NullValueHandling = NullValueHandling.Ignore)]
         public string? idComponente { get; set; }
 
         [JsonProperty(PropertyName = "largo" , NullValueHandling = NullValueHandling.Ignore)]
@@ -30,5 +30,8 @@ namespace Aponus_Web_API.Mapping
 
         [JsonProperty(PropertyName = "toleranciaMaxima" , NullValueHandling = NullValueHandling.Ignore)]
         public int? ToleranciaMaxima { get; set; }
+
+
+
     }
 }

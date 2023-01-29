@@ -102,7 +102,7 @@ namespace Aponus_Web_API.Services
                       Proceso = x.CantidadProceso.ToString(),
 
                   }).ToListAsync();
-
+                
                 List<EspecificacionesComponentes> ComponentesMensurables = await AponusDBContext.MensurablesDetalles
                   .Join(AponusDBContext.StockMensurables,
                   MD => MD.IdComponente, SM => SM.IdComponente,
@@ -140,7 +140,14 @@ namespace Aponus_Web_API.Services
                             }                           
 
                             _Insumos.Especificaciones.Add(_Pesables);
+
+                            ColumnasInsumosPesables _ColumnasPesables = new ColumnasInsumosPesables();
+
+                           // new ColumnasJson().setColumnasPesbles(_ColumnasPesables);
+                            _Insumos.ColumnasPesables = _ColumnasPesables;
+
                         }
+
                     }
 
                     foreach (EspecificacionesComponentes _Cuantitativos in ComponentesCuantitativos)
@@ -153,7 +160,9 @@ namespace Aponus_Web_API.Services
                             }
 
                             _Insumos.Especificaciones.Add(_Cuantitativos);
-                        }
+                            ColumnasInsumosCuantitativos _ColumnasCuantitativos =  new ColumnasInsumosCuantitativos();
+                            _Insumos.ColumnasCuantitativos = _ColumnasCuantitativos;
+                        } 
                     }
 
                     foreach (EspecificacionesComponentes _Mensurables in ComponentesMensurables)
@@ -166,6 +175,8 @@ namespace Aponus_Web_API.Services
                             }
 
                             _Insumos.Especificaciones.Add(_Mensurables);
+                            ColumnasInsumosMensurables _ColumnasMensurables= new ColumnasInsumosMensurables();
+                            _Insumos.ColumnasMensurables = _ColumnasMensurables;
                         }
                     }
 
@@ -260,7 +271,9 @@ namespace Aponus_Web_API.Services
                             }
 
                             _Insumos.Especificaciones.Add(_Cuantitativos);
+
                         }
+                        //_Insumos.Columnas.Add()
                     }
 
 
