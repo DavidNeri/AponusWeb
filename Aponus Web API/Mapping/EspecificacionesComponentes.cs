@@ -13,6 +13,9 @@ namespace Aponus_Web_API.Mapping
         [JsonProperty(PropertyName = "largo" , NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Largo { get; set; }
 
+        [JsonProperty(PropertyName = "ancho", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? Ancho { get; set; }
+
         [JsonProperty(PropertyName = "espesor" , NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Espesor { get; set; }
 

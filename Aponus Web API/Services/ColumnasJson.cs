@@ -14,8 +14,6 @@ namespace Aponus_Web_API.Services
         {
         }
 
-        
-
         public  object setColumnas(
         ColumnasInsumosPesables? _CIP = null,
         ColumnasInsumosCuantitativos? _CIC = null,
