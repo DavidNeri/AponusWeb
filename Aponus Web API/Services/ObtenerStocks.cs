@@ -126,8 +126,7 @@ namespace Aponus_Web_API.Services
                       Largo= x.Largo,
                       Ancho= x.Ancho,
                       Perfil= x.Perfil,
-                      Proceso= x.CantidadProceso.ToString(),   
-                      Recibido= x.CantidadRecibido.ToString(),
+                      Proceso= x.CantidadProceso.ToString()
                      
 
                   }).ToListAsync();

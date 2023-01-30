@@ -9,7 +9,7 @@ namespace Aponus_Web_API.Mapping
         public string? Diametro { get; set; } = "Largo (cm)";
 
         [JsonProperty(PropertyName = "ancho", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Ancho { get; set; } = "Ancho";
+        public string? Ancho { get; set; } = "Ancho (mm)";
        
 
         [JsonProperty(PropertyName = "Perfil", NullValueHandling = NullValueHandling.Ignore)]
