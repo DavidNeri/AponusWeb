@@ -14,21 +14,17 @@ namespace Aponus_Web_API.Mapping
 
         [JsonProperty(PropertyName = "recibido", NullValueHandling = NullValueHandling.Ignore)]
 
-        public string? KgRecibido { get; set; } = "Cant. Recibida (Kg)";
+        public string? Recibido { get; set; } = "Cant. Recibida (Kg)";
        
 
         [JsonProperty(PropertyName = "pintura", NullValueHandling = NullValueHandling.Ignore)]
-        public string? KgPintura { get; set; } = "Cant. Pintura (Kg)";
+        public string? Pintura { get; set; } = "Cant. Pintura (Kg)";
 
      
         [JsonProperty(PropertyName = "proceso", NullValueHandling = NullValueHandling.Ignore)]
-        public string? KgPoceso { get; set; } = "Cant. Proceso (Kg)";      
+        public string? Poceso { get; set; } = "Cant. Proceso (Kg)";      
        
-        [JsonProperty(PropertyName = "total", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Total { get; set; } = "Total (Kg)";
-
-        [JsonProperty(PropertyName = "faltantes", NullValueHandling = NullValueHandling.Ignore)]
-        public string? UFaltantes { get; set; } = "Faltantes (Kg)";
+     
     }
 }
 

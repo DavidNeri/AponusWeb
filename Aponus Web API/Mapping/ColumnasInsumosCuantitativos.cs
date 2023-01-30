@@ -23,22 +23,22 @@ namespace Aponus_Web_API.Mapping
         public string? ToleranciaMaxima { get; set; } = "Tolerancia máxima";
 
         [JsonProperty(PropertyName = "requerido", NullValueHandling = NullValueHandling.Ignore)]
-        public string? URequerido { get; set; } = "Cant. Requerida (Ud.)";
+        public string? Requerido { get; set; } = "Cant. Requerida (Ud.)";
 
         [JsonProperty(PropertyName = "recibido", NullValueHandling = NullValueHandling.Ignore)]
-        public string? URecibido { get; set; } = "Cant. Recibida (Ud.)";
+        public string? Recibido { get; set; } = "Cant. Recibida (Ud.)";
 
         [JsonProperty(PropertyName = "granallado", NullValueHandling = NullValueHandling.Ignore)]
-        public string? UGranallado { get; set; } = "Cant. Granallado (Ud.)";
+        public string? Granallado { get; set; } = "Cant. Granallado (Ud.)";
 
         [JsonProperty(PropertyName = "pintura", NullValueHandling = NullValueHandling.Ignore)]
-        public string? UPintura { get; set; } = "Cant. Pintura (Ud.)";
+        public string? Pintura { get; set; } = "Cant. Pintura (Ud.)";
 
         [JsonProperty(PropertyName = "moldeado", NullValueHandling = NullValueHandling.Ignore)]
-        public string? UMoldeado { get; set; } = "Cant. Moldeada (Ud.)";
+        public string? Moldeado { get; set; } = "Cant. Moldeada (Ud.)";
 
         [JsonProperty(PropertyName = "proceso", NullValueHandling = NullValueHandling.Ignore)]
-        public string? UPoceso { get; set; } = "Cant. Proceso (Ud)";
+        public string? Poceso { get; set; } = "Cant. Proceso (Ud)";
 
     }
 }

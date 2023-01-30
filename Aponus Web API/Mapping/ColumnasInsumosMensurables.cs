@@ -16,7 +16,7 @@ namespace Aponus_Web_API.Mapping
         public string? Espesor { get; set; } = "Perfil";
 
         [JsonProperty(PropertyName = "proceso", NullValueHandling = NullValueHandling.Ignore)]
-        public string? UPoceso { get; set; } = "Cant. Proceso (m)";
+        public string? Poceso { get; set; } = "Cant. Proceso (m)";
 
 
 

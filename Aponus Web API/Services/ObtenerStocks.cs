@@ -2,6 +2,8 @@
 using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
+using System.Linq;
 
 namespace Aponus_Web_API.Services
 {
@@ -140,13 +142,10 @@ namespace Aponus_Web_API.Services
                             }                           
 
                             _Insumos.Especificaciones.Add(_Pesables);
+                           
+                            _Insumos.Columnas = new ColumnasJson().setColumnas(new ColumnasInsumosPesables());
 
-                            ColumnasInsumosPesables _ColumnasPesables = new ColumnasInsumosPesables();
-
-                           // new ColumnasJson().setColumnasPesbles(_ColumnasPesables);
-                            _Insumos.ColumnasPesables = _ColumnasPesables;
-
-                        }
+                        }   
 
                     }
 
@@ -160,8 +159,12 @@ namespace Aponus_Web_API.Services
                             }
 
                             _Insumos.Especificaciones.Add(_Cuantitativos);
-                            ColumnasInsumosCuantitativos _ColumnasCuantitativos =  new ColumnasInsumosCuantitativos();
-                            _Insumos.ColumnasCuantitativos = _ColumnasCuantitativos;
+
+
+                            _Insumos.Columnas = new ColumnasJson().setColumnas(null,new ColumnasInsumosCuantitativos());
+
+
+
                         } 
                     }
 
@@ -175,8 +178,8 @@ namespace Aponus_Web_API.Services
                             }
 
                             _Insumos.Especificaciones.Add(_Mensurables);
-                            ColumnasInsumosMensurables _ColumnasMensurables= new ColumnasInsumosMensurables();
-                            _Insumos.ColumnasMensurables = _ColumnasMensurables;
+                    
+                            _Insumos.Columnas = new ColumnasJson().setColumnas(null,null, new ColumnasInsumosMensurables());
                         }
                     }
 
