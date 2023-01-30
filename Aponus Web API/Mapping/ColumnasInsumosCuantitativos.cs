@@ -9,7 +9,7 @@ namespace Aponus_Web_API.Mapping
 
         [JsonProperty(PropertyName = "perfil", NullValueHandling = NullValueHandling.Ignore)]
         public string? Perfil { get; set; } = "Perfil";
-
+                
         [JsonProperty(PropertyName = "diametro", NullValueHandling = NullValueHandling.Ignore)]
         public string? Diametro { get; set; } = "Diámetro";
 

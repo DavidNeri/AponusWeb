@@ -143,8 +143,31 @@ namespace Aponus_Web_API.Services
                             }                           
 
                             _Insumos.Especificaciones.Add(_Pesables);
-                           
-                            _Insumos.Columnas = new ColumnasJson().setColumnas(new ColumnasInsumosPesables());
+                            EspecificacionesComponentes especificaciones =
+                                ComponentesPesables.Where(especificaciones => especificaciones.IdDescripcion
+                                == _Pesables.IdDescripcion).Select(x => new EspecificacionesComponentes
+                                {
+                                    IdDescripcion = x.IdDescripcion,
+                                    Moldeado = x.Moldeado,
+                                    Proceso = x.Proceso,
+                                    Pintura = x.Pintura,
+                                    Altura = x.Altura,
+                                    Ancho = x.Ancho,
+                                    Diametro = x.Diametro,
+                                    Espesor = x.Espesor,
+                                    Faltantes = x.Faltantes,
+                                    Granallado = x.Granallado,
+                                    idComponente = x.idComponente,
+                                    Largo = x.Largo,
+                                    Perfil = x.Perfil,
+                                    Recibido = x.Recibido,
+                                    Requerido = x.Requerido,
+                                    ToleranciaMaxima = x.ToleranciaMaxima,
+                                    ToleranciaMinina = x.ToleranciaMinina,
+                                    Total = x.Total
+                                }).First();
+
+                            _Insumos.Columnas = new ColumnasJson().setColumnas(new ColumnasInsumosPesables(),null,null,especificaciones);
 
                         }   
 
@@ -162,7 +185,32 @@ namespace Aponus_Web_API.Services
                             _Insumos.Especificaciones.Add(_Cuantitativos);
 
 
-                            _Insumos.Columnas = new ColumnasJson().setColumnas(null,new ColumnasInsumosCuantitativos());
+                            EspecificacionesComponentes especificaciones =
+                                ComponentesCuantitativos.Where(especificaciones => especificaciones.IdDescripcion
+                                == _Cuantitativos.IdDescripcion).Select(x => new EspecificacionesComponentes
+                                {
+                                    IdDescripcion = x.IdDescripcion,
+                                    Moldeado = x.Moldeado,
+                                    Proceso = x.Proceso,
+                                    Pintura = x.Pintura,
+                                    Altura = x.Altura,
+                                    Ancho = x.Ancho,
+                                    Diametro = x.Diametro,
+                                    Espesor = x.Espesor,
+                                    Faltantes = x.Faltantes,
+                                    Granallado = x.Granallado,
+                                    idComponente = x.idComponente,
+                                    Largo = x.Largo,
+                                    Perfil = x.Perfil,
+                                    Recibido = x.Recibido,
+                                    Requerido = x.Requerido,
+                                    ToleranciaMaxima = x.ToleranciaMaxima,
+                                    ToleranciaMinina = x.ToleranciaMinina,
+                                    Total = x.Total
+                                }).First();
+                            
+                            _Insumos.Columnas = new ColumnasJson().setColumnas(
+                                null,new ColumnasInsumosCuantitativos(),null, especificaciones);
 
 
 
@@ -179,8 +227,33 @@ namespace Aponus_Web_API.Services
                             }
 
                             _Insumos.Especificaciones.Add(_Mensurables);
+
+                            EspecificacionesComponentes especificaciones = ComponentesMensurables
+                                .Where(x => x.IdDescripcion==_Mensurables.IdDescripcion)
+                                .Select(x => new EspecificacionesComponentes 
+                                {
+                                    IdDescripcion = x.IdDescripcion,
+                                    Moldeado = x.Moldeado,
+                                    Proceso = x.Proceso,
+                                    Pintura = x.Pintura,
+                                    Altura = x.Altura,
+                                    Ancho = x.Ancho,
+                                    Diametro = x.Diametro,
+                                    Espesor = x.Espesor,
+                                    Faltantes = x.Faltantes,
+                                    Granallado = x.Granallado,
+                                    idComponente = x.idComponente,
+                                    Largo = x.Largo,
+                                    Perfil = x.Perfil,
+                                    Recibido = x.Recibido,
+                                    Requerido = x.Requerido,
+                                    ToleranciaMaxima = x.ToleranciaMaxima,
+                                    ToleranciaMinina = x.ToleranciaMinina,
+                                    Total = x.Total
+
+                                }).First(); 
                     
-                            _Insumos.Columnas = new ColumnasJson().setColumnas(null,null, new ColumnasInsumosMensurables());
+                            _Insumos.Columnas = new ColumnasJson().setColumnas(null,null, new ColumnasInsumosMensurables(),especificaciones);
                         }
                     }
 

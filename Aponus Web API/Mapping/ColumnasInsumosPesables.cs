@@ -22,7 +22,7 @@ namespace Aponus_Web_API.Mapping
 
      
         [JsonProperty(PropertyName = "proceso", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Poceso { get; set; } = "Cant. Proceso (Kg)";      
+        public string? Proceso { get; set; } = "Cant. Proceso (Kg)";      
        
      
     }
