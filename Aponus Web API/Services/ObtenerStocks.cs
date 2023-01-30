@@ -123,7 +123,7 @@ namespace Aponus_Web_API.Services
                       IdDescripcion = x.IdDescripcion,
                       idComponente=x.IdComponente,
                       Espesor= x.Espesor,
-                      Largo= x.Largo,
+                      Largo=  Decimal.Round((decimal)(x.Largo/1000),2,MidpointRounding.AwayFromZero),
                       Ancho= x.Ancho,
                       Perfil= x.Perfil,
                       Proceso= x.CantidadProceso.ToString()
@@ -184,7 +184,6 @@ namespace Aponus_Web_API.Services
 
                             _Insumos.Especificaciones.Add(_Cuantitativos);
 
-
                             EspecificacionesComponentes especificaciones =
                                 ComponentesCuantitativos.Where(especificaciones => especificaciones.IdDescripcion
                                 == _Cuantitativos.IdDescripcion).Select(x => new EspecificacionesComponentes
@@ -208,13 +207,14 @@ namespace Aponus_Web_API.Services
                                     ToleranciaMinina = x.ToleranciaMinina,
                                     Total = x.Total
                                 }).First();
-                            
+
                             _Insumos.Columnas = new ColumnasJson().setColumnas(
-                                null,new ColumnasInsumosCuantitativos(),null, especificaciones);
+                                null, new ColumnasInsumosCuantitativos(), null, especificaciones);
 
 
+                        }
 
-                        } 
+                        
                     }
 
                     foreach (EspecificacionesComponentes _Mensurables in ComponentesMensurables)

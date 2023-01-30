@@ -18,7 +18,8 @@ namespace Aponus_Web_API.Services
         
         ColumnasInsumosPesables? _CIP = null,
         ColumnasInsumosCuantitativos? _CIC = null,
-        ColumnasInsumosMensurables? _CIM = null, EspecificacionesComponentes? especificaciones = null
+        ColumnasInsumosMensurables? _CIM = null, 
+        EspecificacionesComponentes? especificaciones = null
         )
         
         {
