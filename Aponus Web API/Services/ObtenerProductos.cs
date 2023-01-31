@@ -82,6 +82,7 @@ namespace Aponus_Web_API.Services
                                .Select(x => new EspecificacionesDatosProducto()
                                {
                                    IdProducto=x.IdProducto,
+                                   DiametroNominal = x.DiametroNominal,
                                    ToleranciaMaxima = x.ToleranciaMaxima,
                                    ToleranciaMinima = x.ToleranciaMinima,
                                    Cantidad = x.Cantidad
