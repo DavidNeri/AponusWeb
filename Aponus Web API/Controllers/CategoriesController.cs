@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aponus_Web_API.Controllers
 {
-    [Route("Aponus/[controller]")]
+     [Route("Aponus/[controller]")]
+   // [Route("/*")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {

@@ -38,7 +38,7 @@ namespace Aponus_Web_API.Mapping
         public string? Moldeado { get; set; } = "Cant. Moldeada (Ud.)";
 
         [JsonProperty(PropertyName = "proceso", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Poceso { get; set; } = "Cant. Proceso (Ud)";
+        public string? Proceso { get; set; } = "Cant. Proceso (Ud)";
 
     }
 }

@@ -15,7 +15,7 @@ namespace Aponus_Web_API.Mapping
 
         [JsonProperty(PropertyName = "especificaciones", NullValueHandling =NullValueHandling.Ignore)]
         public List<EspecificacionesComponentes>? Especificaciones { get; set; } = null;
-        public object? Columnas { get; set; }
+        public string[]? Columnas { get; set; }
 
     }
 }

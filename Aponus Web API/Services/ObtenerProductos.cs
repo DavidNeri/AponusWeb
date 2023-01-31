@@ -67,7 +67,7 @@ namespace Aponus_Web_API.Services
 
                             })
                             .Where(x => x.IdTipo == typeId && x.DiametroNominal == DN)
-
+                            .OrderBy(x=>x.DescripcionProducto)
                             .Select(x => new
                             {
                                 Descripcion = x.DescripcionProducto
@@ -75,7 +75,6 @@ namespace Aponus_Web_API.Services
                             })
                             .Distinct()
                             .Single();
-             
                 List<EspecificacionesDatosProducto> _EspecificacionesProducto = await AponusDBContext.Productos
                                .Where(x => x.IdTipo == typeId && x.DiametroNominal == DN)
 
@@ -88,7 +87,7 @@ namespace Aponus_Web_API.Services
                                    Cantidad = x.Cantidad
 
                                }).ToListAsync();
-
+                _EspecificacionesProducto.OrderBy(X => X.DiametroNominal).ThenBy(x => x.ToleranciaMinima).ThenBy(x => x.ToleranciaMaxima);
 
                 DatosProducto _Producto = new DatosProducto() {
                     DescripcionProducto=_DatosProducto.Descripcion.ToString(),
@@ -97,7 +96,7 @@ namespace Aponus_Web_API.Services
             };
 
                 _Producto.Producto = _EspecificacionesProducto;
-
+                
 
                 return _Producto;
             }
