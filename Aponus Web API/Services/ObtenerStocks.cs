@@ -357,12 +357,8 @@ namespace Aponus_Web_API.Services
 
                 }
 
-                Stocks.OrderBy(x => x.Descripcion)
-                    .ThenBy(x => x.Diametro)
-                    .ThenBy(x => x.ToleranciaMinina)
-                    .ThenBy(x => x.ToleranciaMaxima)
-                    .ThenBy(x => x.Perfil)
-                    .ThenBy(x => x.Largo);
+                Stocks.OrderBy(x => x.Descripcion);
+                    
 
                 return Stocks;
             }
@@ -475,6 +471,7 @@ namespace Aponus_Web_API.Services
            var Diametros = await AponusDBContext.CuantitativosDetalles 
                   .Where(x=>x.IdDescripcion==IdDescripcion)
                   .OrderBy(x => x.Diametro)
+                  .Distinct()
                   .Select(x => x.Diametro +" mm")
                   .ToListAsync();
 
