@@ -470,9 +470,9 @@ namespace Aponus_Web_API.Services
 
            var Diametros = await AponusDBContext.CuantitativosDetalles 
                   .Where(x=>x.IdDescripcion==IdDescripcion)
-                  .OrderBy(x => x.Diametro)
-                  .Distinct()
+                  .OrderBy(x => x.Diametro)                 
                   .Select(x => x.Diametro +" mm")
+                  .Distinct()
                   .ToListAsync();
 
                 return new JsonResult(Diametros);
