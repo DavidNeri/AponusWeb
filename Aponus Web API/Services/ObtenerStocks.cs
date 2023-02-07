@@ -349,9 +349,34 @@ namespace Aponus_Web_API.Services
                             }
 
                             _Insumos.Especificaciones.Add(_Cuantitativos);
+                            EspecificacionesComponentes especificaciones =
+                               ComponentesCuantitativos.Where(especificaciones => especificaciones.IdDescripcion
+                               == _Cuantitativos.IdDescripcion).Select(x => new EspecificacionesComponentes
+                               {
+                                   IdDescripcion = x.IdDescripcion,
+                                   Moldeado = x.Moldeado,
+                                   Proceso = x.Proceso,
+                                   Pintura = x.Pintura,
+                                   Altura = x.Altura,
+                                   Ancho = x.Ancho,
+                                   Diametro = x.Diametro,
+                                   Espesor = x.Espesor,
+                                   Faltantes = x.Faltantes,
+                                   Granallado = x.Granallado,
+                                   idComponente = x.idComponente,
+                                   Largo = x.Largo,
+                                   Perfil = x.Perfil,
+                                   Recibido = x.Recibido,
+                                   Requerido = x.Requerido,
+                                   ToleranciaMaxima = x.ToleranciaMaxima,
+                                   ToleranciaMinina = x.ToleranciaMinina,
+                                   Total = x.Total
+                               }).First();
 
+                            _Insumos.Columnas = new ColumnasJson().setColumnas(
+                                null, new ColumnasInsumosCuantitativos(), null, especificaciones);
                         }
-                        //_Insumos.Columnas.Add()
+                        
                     }
 
 
