@@ -264,7 +264,6 @@ public partial class AponusContext : DbContext
                 .HasColumnName("ALTURA");
             entity.Property(e => e.Diametro)
                 .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
                 .HasColumnName("DIAMETRO");
             entity.Property(e => e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
 
