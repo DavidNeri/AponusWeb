@@ -179,8 +179,7 @@ public partial class AponusContext : DbContext
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("ALTURA");
             entity.Property(e => e.Diametro)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
+                .HasDefaultValueSql("((0))")                
                 .HasColumnName("DIAMETRO");
 
             entity.Property(e => e.Espesor)

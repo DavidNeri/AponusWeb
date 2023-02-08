@@ -9,7 +9,7 @@ public partial class CuantitativosDetalle
 
     public int? IdDescripcion { get; set; }
 
-    public decimal? Diametro { get; set; }
+    public int? Diametro { get; set; }
 
     public decimal? Altura { get; set; }
 
