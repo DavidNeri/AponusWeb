@@ -1,12 +1,6 @@
 ﻿using Aponus_Web_API.Business;
 using Aponus_Web_API.Mapping;
-using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using NuGet.Protocol;
-using System.Linq;
 
 namespace Aponus_Web_API.Controllers
 {

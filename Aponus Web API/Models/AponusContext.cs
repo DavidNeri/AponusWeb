@@ -40,7 +40,9 @@ public partial class AponusContext : DbContext
     public virtual DbSet<StockMensurable> StockMensurables { get; set; }
 
     public virtual DbSet<StockPesable> StockPesables { get; set; }
-         
+    public virtual DbSet<Usuarios> Usuarios { get; set; }
+
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -422,6 +424,31 @@ public partial class AponusContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_STOCK_PESABLES_PESABLES_DETALLE");
         });
+
+        modelBuilder.Entity<Usuarios>(entity =>
+        {
+            entity.HasKey(e => e.Usuario);
+
+            entity.Property(e => e.Usuario)
+            .HasColumnName("USUARIO")
+            .HasColumnType("varchar(50)");
+
+            entity.Property(e => e.IdPerfil)
+            .HasColumnName("ID_PERFIL")
+            .HasColumnType("int");
+            
+
+            entity.Property(e => e.correo)
+            .HasColumnName("CORREO")
+            .HasColumnType("varchar(50)");
+
+            entity.Property(e => e.Contraseña)
+            .HasColumnName("CONTRASEÑA")
+            .HasColumnType("varchar(50)");
+
+
+        });
+
 
         OnModelCreatingPartial(modelBuilder);
 

@@ -30,7 +30,7 @@ namespace Aponus_Web_API.Controllers
 
         public async Task<List<TipoInsumos>> Listar(int? idDescription, int? Dn)
         {
-            return await new BS_Stocks().Listar(idDescription, Dn);
+            return await new BS_Stocks().Listar (idDescription, Dn);
 
         }
 
