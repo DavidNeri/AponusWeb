@@ -10,10 +10,12 @@ namespace Aponus_Web_API.Controllers
     public class UsersController :ControllerBase
     {
         [HttpGet]
-        [Route("Validation/{Usuario}/{Contraseña}")]
-        public UsuariosMapping? ValiadarUsuario(string Usuario, string Contraseña) 
+        [Route("Validation")]
+        public UsuariosMapping? ValiadarUsuario(UsuariosMapping Usuario) 
         {
-            return new Validaciones().ValidarUsuario(Usuario, Contraseña);
+            return new Validaciones().ValidarUsuario(Usuario);
         }
+
+        
     }
 }

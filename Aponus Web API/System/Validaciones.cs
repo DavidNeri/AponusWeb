@@ -6,11 +6,9 @@ namespace Aponus_Web_API.System
 {
     public class Validaciones
     {
-        internal UsuariosMapping? ValidarUsuario(string Usuario, string Contraseña)
+        internal UsuariosMapping? ValidarUsuario(UsuariosMapping Usuario )
         {
-            UsuariosMapping _Usuario = new UsuariosMapping() { Usuario = Usuario, Contraseña = Contraseña };
-
-            return new Login().Validar(_Usuario);
+            return new Login().Validar(Usuario);
 
         }
     }
