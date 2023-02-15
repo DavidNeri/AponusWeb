@@ -4,7 +4,7 @@ namespace Aponus_Web_API.Mapping
 {
     public class EspecificacionesComponentes : Stocks
     {
-        [JsonProperty(PropertyName = "idDescripcion"), JsonIgnore]
+        [JsonProperty(PropertyName = "idDescripcion", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdDescripcion { get; set; }
 
         [JsonProperty(PropertyName = "IdComponente" , NullValueHandling = NullValueHandling.Ignore)]
