@@ -10,5 +10,6 @@ namespace Aponus_Web_API.Mapping
 
         [JsonProperty(PropertyName = "productos")]
         public List<EspecificacionesDatosProducto>? Producto { get; set;}
+
     }
 }

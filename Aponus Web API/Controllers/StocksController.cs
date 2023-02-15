@@ -2,6 +2,7 @@
 using Aponus_Web_API.Business;
 using Aponus_Web_API.Mapping;
 
+
 namespace Aponus_Web_API.Controllers
 {
     [Route("Aponus/[Controller]")]
@@ -20,7 +21,7 @@ namespace Aponus_Web_API.Controllers
         [HttpGet]
         [Route("List/Types")]
 
-        public async Task<List<TipoInsumos>> ListarTipoInsumos() 
+        public async Task<List<TipoInsumos>> ListarTipoInsumos()
         {
             return await new BS_Stocks().ListarTipoInsumos();
         }
@@ -30,7 +31,7 @@ namespace Aponus_Web_API.Controllers
 
         public async Task<List<TipoInsumos>> Listar(int? idDescription, int? Dn)
         {
-            return await new BS_Stocks().Listar (idDescription, Dn);
+            return await new BS_Stocks().Listar(idDescription, Dn);
 
         }
 
@@ -50,6 +51,46 @@ namespace Aponus_Web_API.Controllers
         {
             return await new BS_Stocks().ListarDiametros(idDescription);
 
+        }
+
+        [HttpPost]
+        [Route("update")]
+        public IActionResult Actualizar(ActualizarStock Actualizacion) {
+
+            try
+            {
+                new BS_Stocks().Actualizar(Actualizacion);
+
+                return StatusCode(200);
+
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500);
+            }
+
+
+        }
+
+        [HttpGet]
+        [Route("qFields/{typeElement}/{id}")]
+
+        public JsonResult Actualizar(int Tipo, string Id)
+        {
+
+            try
+            {
+                new BS_Stocks().ObtenerCampos(Tipo, Id);
+
+                return new JsonResult(StatusCode(200));
+
+            }
+            catch (Exception)
+            {
+
+                return new JsonResult(StatusCode(500));
+            }
         }
     }
 }
