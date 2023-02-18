@@ -122,7 +122,6 @@ namespace Aponus_Web_API.Services
             decimal? Faltantes;
 
             var InsumosCuantitativos= 
-
                 AponusDBContext.ComponentesCuantitativos
                     .Join(AponusDBContext.CuantitativosDetalles,
                         _ComponentesCuantitativos => _ComponentesCuantitativos.IdComponente,
@@ -270,11 +269,10 @@ namespace Aponus_Web_API.Services
                         {
                             _ComponentesMensurables.IdProducto,
                             LargoRequerido =_ComponentesMensurables.Largo,
-                            AlturaCuerpoPerfil =_ComponentesMensurables.Altura,                      
+                            AlturaCuerpoPerfil =_ComponentesMensurables.Altura,                     
 
                             _MensurablesDetalle.IdDescripcion,
                             _MensurablesDetalle.IdComponente,                           
-                           // AnchoStock =_MensurablesDetalle.Ancho,
                             _MensurablesDetalle.Espesor,
                             _MensurablesDetalle.Perfil,
                             LargoUnidad=_MensurablesDetalle.Largo,                            
@@ -289,10 +287,7 @@ namespace Aponus_Web_API.Services
                             _ComponenetesMensurables_Mensurables_Detalle.IdComponente,
                             _ComponenetesMensurables_Mensurables_Detalle.IdDescripcion,
                             _ComponenetesMensurables_Mensurables_Detalle.AlturaCuerpoPerfil,
-                            _ComponenetesMensurables_Mensurables_Detalle.LargoRequerido,
-                            //_ComponenetesMensurables_Mensurables_Detalle.LargoStock,
-                            //_StockMensurables.AnchoStock,
-                            //LargoStock = _MensurablesDetalle.Largo,
+                            _ComponenetesMensurables_Mensurables_Detalle.LargoRequerido,                            
                             _ComponenetesMensurables_Mensurables_Detalle.Espesor,
                             _ComponenetesMensurables_Mensurables_Detalle.Perfil,
                             _ComponenetesMensurables_Mensurables_Detalle.LargoUnidad,
@@ -317,9 +312,7 @@ namespace Aponus_Web_API.Services
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.IdComponente,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.AlturaCuerpoPerfil,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.LargoRequerido,
-                            //Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.LargoStock,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.LargoUnidad,
-                           // Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.AnchoStock,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.Espesor,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.Perfil,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.CantidadRecibido
@@ -354,21 +347,10 @@ namespace Aponus_Web_API.Services
                         }
                         _Proceso = ((queryResult.LargoUnidad*queryResult.CantidadRecibido) / 1000) + " m/" + ((queryResult.LargoUnidad * queryResult.CantidadRecibido) / queryResult.LargoRequerido) + " Junta(s) de " + (queryResult.LargoRequerido / 100) + " cm";
                     }
-
                    
-                    Req = ((queryResult.AlturaCuerpoPerfil * Cantidad) / (queryResult.LargoUnidad* queryResult.CantidadRecibido))/1000;
-
-                   // var Cuerpo=InsumosMensurables.Find(x => x.Descripcion.Contains("CU"));
-
-                    /*var CantidadCuerpos = AponusDBContext.StockCuantitativos.Find(Cuerpo.IdComponente);
-                    int? TotalCuerpos = CantidadCuerpos.CantidadGranallado +
-                        CantidadCuerpos.CantidadPintura +
-                        CantidadCuerpos.CantidadProceso +
-                        CantidadCuerpos.CantidadRecibido;
-                        */
+                    Req = ((queryResult.AlturaCuerpoPerfil * Cantidad) / (queryResult.LargoUnidad* queryResult.CantidadRecibido))/1000;                   
                     Total = (queryResult.LargoUnidad * queryResult.CantidadRecibido) / 1000;
 
-                      // decimal totalFinal = Total + CantidadCuerpos; SUMAR CUERPOS 
 
                     if (Total-Req>=0)
                     {

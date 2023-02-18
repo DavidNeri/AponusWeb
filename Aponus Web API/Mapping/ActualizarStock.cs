@@ -2,7 +2,7 @@
 
 namespace Aponus_Web_API.Mapping
 {
-    public class ActualizarStock
+    public class ActualizacionStock
     {
         [JsonProperty(PropertyName = "idExistencia", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdExistencia{ get; set; }
@@ -22,6 +22,11 @@ namespace Aponus_Web_API.Mapping
         [JsonProperty(PropertyName = "valor", NullValueHandling = NullValueHandling.Ignore)]
         public int? Valor{ get;set; }
 
+        [JsonProperty(PropertyName = "idJuntaPerfil", NullValueHandling = NullValueHandling.Ignore)]
+        public string? IdJuntaPerfil { get; set; }
+
+        [JsonProperty(PropertyName = "idBulon", NullValueHandling = NullValueHandling.Ignore)]
+        public string? IdBulon { get; set; }
 
 
     }

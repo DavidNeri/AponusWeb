@@ -67,7 +67,8 @@ public partial class AponusContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("ID_COMPONENTE");
             entity.Property(e => e.Cantidad)
-                .HasColumnType("decimal(18, 1)")
+                .HasColumnType("int")
+                .HasDefaultValueSql("((0))")
                 .HasColumnName("CANTIDAD");
 
             entity.HasOne(d => d.IdComponenteNavigation).WithMany(p => p.ComponentesCuantitativos)

@@ -12,7 +12,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
         decimal? ValorAnteriorDec=null;
 
        //Incrementar
-        internal void IncrementarRecibidos(ActualizarStock Actualizacion)
+        internal void IncrementarRecibidos(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -60,7 +60,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
         }
 
-        internal void IncrementarGranallado(ActualizarStock Actualizacion)
+        internal void IncrementarGranallado(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
 
@@ -80,7 +80,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
 
         }
-        internal void IncrementarPintura(ActualizarStock Actualizacion)
+        internal void IncrementarPintura(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -115,7 +115,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         }
 
-        internal void IncrementarProceso(ActualizarStock Actualizacion)
+        internal void IncrementarProceso(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -163,7 +163,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
         }
 
-        internal void IncrementarMoldeado(ActualizarStock Actualizacion)
+        internal void IncrementarMoldeado(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -185,7 +185,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         }
         //-----------Descontar-------
-        internal void DescontarRecibidos(ActualizarStock Actualizacion)
+        internal void DescontarRecibidos(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -233,7 +233,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
         }
 
-        internal void DescontarGranallado(ActualizarStock Actualizacion)
+        internal void DescontarGranallado(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
 
@@ -253,7 +253,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
 
         }
-        internal void DescontarPintura(ActualizarStock Actualizacion)
+        internal void DescontarPintura(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -288,7 +288,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         }
 
-        internal void DescontarProceso(ActualizarStock Actualizacion)
+        internal void DescontarProceso(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -336,7 +336,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
         }
 
-        internal void DescontarMoldeado(ActualizarStock Actualizacion)
+        internal void DescontarMoldeado(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -361,7 +361,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         //-----SET----------
 
-        internal void SetRecibidos(ActualizarStock Actualizacion)
+        internal void SetRecibidos(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -409,7 +409,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
         }
 
-        internal void SetGranallado(ActualizarStock Actualizacion)
+        internal void SetGranallado(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
 
@@ -429,7 +429,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
 
         }
-        internal void SetPintura(ActualizarStock Actualizacion)
+        internal void SetPintura(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -464,7 +464,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         }
 
-        internal void SetProceso(ActualizarStock Actualizacion)
+        internal void SetProceso(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -512,7 +512,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
         }
 
-        internal void SetMoldeado(ActualizarStock Actualizacion)
+        internal void SetMoldeado(ActualizacionStock Actualizacion)
         {
             ValorAnteriorInt = null;
             ValorAnteriorDec = null;
@@ -534,9 +534,116 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         }
 
-        internal void ObtenerCamposInsumo(string id)
+        internal void ObtenerComponentes (ActualizacionStock Actualizacion)
         {
-            
+            List<ComponentesProducto>? ListadoComponentes = new List<ComponentesProducto>();
+
+            //Actualizar Insumos Cuantitativos
+            ListadoComponentes = null;
+            ListadoComponentes = new List<ComponentesProducto>();
+
+            ListadoComponentes = AponusDBContext.ComponentesCuantitativos
+                       .Where(x => x.IdProducto == Actualizacion.IdExistencia)
+                       .Select(x => new ComponentesProducto
+                       {
+                           IdComponente = x.IdComponente,
+                           Cantidad = x.Cantidad * Actualizacion.Valor
+                       })
+                       .ToList();
+
+            foreach (ComponentesProducto Componentes in ListadoComponentes)
+            {
+
+                AponusDBContext.StockCuantitativos
+                    .Where(x => x.IdComponente == Componentes.IdComponente)
+                    .ExecuteUpdate(x => x.SetProperty(x => x.CantidadProceso,
+                    AponusDBContext.StockCuantitativos
+                    .Where(x => x.IdComponente == Componentes.IdComponente)
+                    .Select(x => x.CantidadProceso).SingleOrDefault() - Componentes.Cantidad));
+            }
+            if (Actualizacion.IdBulon == null)
+            {
+
+                //Actualiazr Insumos Pesables
+                ListadoComponentes = null;
+                ListadoComponentes = new List<ComponentesProducto>();
+
+                ListadoComponentes = AponusDBContext.ComponentesPesables
+                            .Where(x => x.IdProducto == Actualizacion.IdExistencia)
+                            .Select(x => new ComponentesProducto
+                            {
+                                IdComponente = x.IdComponente,
+                                Peso = x.Peso * Actualizacion.Valor
+                            })
+                            .ToList();
+
+                foreach (ComponentesProducto Componentes in ListadoComponentes)
+                {
+
+                    AponusDBContext.StockPesables
+                        .Where(x => x.IdComponente == Componentes.IdComponente)
+                        .ExecuteUpdate(x => x.SetProperty(x => x.CantidadProceso,
+                        AponusDBContext.StockPesables
+                        .Where(x => x.IdComponente == Componentes.IdComponente)
+                        .Select(x => x.CantidadProceso).SingleOrDefault() - Componentes.Peso));
+                }
+
+            }
+            //Actualizar Insumos Mensurables
+            ListadoComponentes = null;
+            ListadoComponentes = new List<ComponentesProducto>();
+
+            if (Actualizacion.IdJuntaPerfil != null)
+            {
+                ListadoComponentes = AponusDBContext.ComponentesMensurables
+                       .Where(x => x.IdProducto == Actualizacion.IdExistencia && x.IdComponente == Actualizacion.IdJuntaPerfil)
+                       .Select(x => new ComponentesProducto
+                       {
+                           IdComponente = x.IdComponente,
+                           Largo = x.Largo * Actualizacion.Valor
+                       })
+                       .ToList();
+
+                foreach (ComponentesProducto Componentes in ListadoComponentes)
+                {
+
+                    AponusDBContext.StockMensurables
+                        .Where(x => x.IdComponente == Componentes.IdComponente)
+                        .ExecuteUpdate(x => x.SetProperty(x => x.CantidadProceso,
+                        AponusDBContext.StockMensurables
+                        .Where(x => x.IdComponente == Componentes.IdComponente)
+                        .Select(x => x.CantidadProceso).SingleOrDefault() - Componentes.Largo));
+                }
+            }
+
+            else if (Actualizacion.IdBulon != null) //Completar peso del bulon especificado
+            {
+                //Actualiazr Insumos Pesables
+                ListadoComponentes = null;
+                ListadoComponentes = new List<ComponentesProducto>();
+
+                ListadoComponentes = AponusDBContext.ComponentesPesables
+                            .Where(x => x.IdProducto == Actualizacion.IdExistencia && x.IdComponente.Contains("BUL")==false)
+                            .Select(x => new ComponentesProducto
+                            {
+                                IdComponente = x.IdComponente,
+                                Peso = x.Peso * Actualizacion.Valor
+                            })
+                            .ToList();
+
+
+                foreach (ComponentesProducto Componentes in ListadoComponentes)
+                {
+
+                    AponusDBContext.StockPesables
+                        .Where(x => x.IdComponente == Componentes.IdComponente)
+                        .ExecuteUpdate(x => x.SetProperty(x => x.CantidadProceso,
+                        AponusDBContext.StockPesables
+                        .Where(x => x.IdComponente == Componentes.IdComponente)
+                        .Select(x => x.CantidadProceso).SingleOrDefault() - Componentes.Peso));
+                }
+
+            }    
 
         }
     }

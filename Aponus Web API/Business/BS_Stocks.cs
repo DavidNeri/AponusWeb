@@ -33,7 +33,7 @@ namespace Aponus_Web_API.Business
             return await new ObtenerStocks().ListarTipoInsumos();
         }
 
-        internal IActionResult Actualizar(ActualizarStock Actualizacion)
+        internal IActionResult ActualizarStock(ActualizacionStock Actualizacion)
         {
             try
             {
@@ -44,26 +44,37 @@ namespace Aponus_Web_API.Business
                         {
                             case "+":
                                 new ModificacionesStocks().ActualizarInsumo_Aumentar(Actualizacion);
-                                break;
+                                return new JsonResult(new StatusCodeResult(200));                                
                             case "-":
                                 new ModificacionesStocks().ActualizarInsumo_Descontar(Actualizacion);
-                                break;
+                                return new JsonResult(new StatusCodeResult(200));
                             case "=":
                                 new ModificacionesStocks().ActualizarInsumo_NuevoValor(Actualizacion);
-                                break;
-                            default:
-                                break;
+                                return new JsonResult(new StatusCodeResult(200));
+                           
                         }
                         break;
 
                     case 1:
-                        new ModificacionesStocks().ActualizarProducto(Actualizacion);
+
+                        switch (Actualizacion.Operador)
+                        {
+                            case "+":
+                                new ModificacionesStocks().ActualizarProducto_Agregar(Actualizacion);
+                                return new JsonResult(new StatusCodeResult(200));
+                            case "-":
+                                new ModificacionesStocks().ActualizarProducto_Descontar(Actualizacion);
+                                return new JsonResult(new StatusCodeResult(200));
+                            case "=":
+                                new ModificacionesStocks().ActualizarProducto_NuevoValor(Actualizacion);
+                                return new JsonResult(new StatusCodeResult(200));                           
+                        }
                         break;
 
-                    default:
-                        break;
+                    
                 }
-                return new JsonResult(new StatusCodeResult(200));                
+                return new JsonResult(new StatusCodeResult(200));
+
             }
             catch (Exception)
             {
@@ -79,11 +90,16 @@ namespace Aponus_Web_API.Business
             switch (tipo)
             {
                 case 0:
-                    new OperacionesStocks().ObtenerCamposInsumo(id);
+                    //new OperacionesStocks().ObtenerCamposInsumo(id);
                     break;
                 default:
                     break;
             }
+        }
+
+        internal void ActualizarProducto(ActualizacionStock actualizacion)
+        {
+            throw new NotImplementedException();
         }
     }
 }

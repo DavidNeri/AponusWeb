@@ -10,7 +10,7 @@ namespace Aponus_Web_API.Services
     public class ModificacionesStocks : OperacionesStocks
     {
       
-        internal void ActualizarInsumo_Aumentar(ActualizarStock Actualizacion)
+        internal void ActualizarInsumo_Aumentar(ActualizacionStock Actualizacion)
         {
             switch (Actualizacion.Destino)
             {
@@ -131,7 +131,7 @@ namespace Aponus_Web_API.Services
             }
 
         }
-        internal void ActualizarInsumo_Descontar(ActualizarStock Actualizacion)
+        internal void ActualizarInsumo_Descontar(ActualizacionStock Actualizacion)
         {
             switch (Actualizacion.Destino)
             {
@@ -264,24 +264,46 @@ namespace Aponus_Web_API.Services
                 
         }
 
-
-
-        internal void ActualizarInsumo_NuevoValor(ActualizarStock actualizacion)
+        internal void ActualizarInsumo_NuevoValor(ActualizacionStock Actualizacion)
         {
-            switch (actualizacion.Operador)
+            switch (Actualizacion.Destino)
             {
-                case "=":
-                    
+                case "Recibido":
+                    SetRecibidos(Actualizacion);
+                    break;
+                case "Granallado":
+                    SetGranallado (Actualizacion);
+                    break;
+                case "Pintura":
+                    SetPintura (Actualizacion);
+                    break;
+                case "Proceso":
+                    SetProceso (Actualizacion);
+                    break;
+                case "Moldeado":
+                    SetMoldeado(Actualizacion);
+                    break;
+
                 default:
                     break;
             }
         }
 
-        internal void ActualizarProducto(ActualizarStock actualizacion)
+
+        internal void ActualizarProducto_Agregar(ActualizacionStock Actualizacion)
+        {
+            new OperacionesStocks().ObtenerComponentes(Actualizacion);
+        }
+
+        internal void ActualizarProducto_Descontar(ActualizacionStock actualizacion)
         {
             throw new NotImplementedException();
         }
 
+        internal void ActualizarProducto_NuevoValor(ActualizacionStock actualizacion)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

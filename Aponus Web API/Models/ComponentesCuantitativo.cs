@@ -9,7 +9,7 @@ public partial class ComponentesCuantitativo
 
     public string IdComponente { get; set; } = null!;
 
-    public decimal Cantidad { get; set; }
+    public int Cantidad { get; set; }
 
     public virtual StockCuantitativo IdComponente1 { get; set; } = null!;
 
