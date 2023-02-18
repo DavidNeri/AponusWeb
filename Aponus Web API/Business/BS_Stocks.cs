@@ -78,18 +78,10 @@ namespace Aponus_Web_API.Business
             }
             catch (Exception)
             {
-
                 return new JsonResult(new StatusCodeResult(400));
-
 
             }
         }
-
-      
-
-        internal void ActualizarProducto(ActualizacionStock actualizacion)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

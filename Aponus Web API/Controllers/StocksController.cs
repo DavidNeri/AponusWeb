@@ -54,8 +54,8 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpPost]
-        [Route("supplyUpdate")]
-        public IActionResult ActualizarInsumo(ActualizacionStock Actualizacion) {
+        [Route("StockUpdate")]
+        public IActionResult ActualizarStock(ActualizacionStock Actualizacion) {
 
             try
             {
@@ -72,47 +72,6 @@ namespace Aponus_Web_API.Controllers
 
 
         }
-
-        [HttpGet]
-        [Route("qFields/{typeElement}/{id}")]
-
-        public JsonResult ObtenerCamposActualizar(int Tipo, string Id)
-        {
-
-            try
-            {
-                new BS_Stocks().ObtenerCampos(Tipo, Id);
-
-                return new JsonResult(StatusCode(200));
-
-            }
-            catch (Exception)
-            {
-
-                return new JsonResult(StatusCode(500));
-            }
-        }
-
-
-        [HttpPost]
-        [Route("productUpdate")]
-        public IActionResult ActualizarProducto(ActualizacionStock Actualizacion)
-        {
-
-            try
-            {
-                new BS_Stocks().ActualizarProducto(Actualizacion);
-
-                return StatusCode(200);
-
-            }
-            catch (Exception)
-            {
-
-                return StatusCode(500);
-            }
-
-
-        }
+        
     }
 }
