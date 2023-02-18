@@ -292,17 +292,45 @@ namespace Aponus_Web_API.Services
 
         internal void ActualizarProducto_Agregar(ActualizacionStock Actualizacion)
         {
-            new OperacionesStocks().ObtenerComponentes(Actualizacion);
+            try
+            {
+                new OperacionesStocks().ObtenerComponentes(Actualizacion);
+                new OperacionesStocks().AgregarProducto(Actualizacion);
+            }
+            catch (Exception)
+            {
+
+               
+            }
+           
         }
 
-        internal void ActualizarProducto_Descontar(ActualizacionStock actualizacion)
+        internal void ActualizarProducto_Descontar(ActualizacionStock Actualizacion)
         {
-            throw new NotImplementedException();
+            try
+            {
+                new OperacionesStocks().RestarProducto(Actualizacion);
+            }
+            catch (Exception)
+            {
+
+                
+            }
+           
         }
 
-        internal void ActualizarProducto_NuevoValor(ActualizacionStock actualizacion)
+        internal void ActualizarProducto_NuevoValor(ActualizacionStock Actualizacion)
         {
-            throw new NotImplementedException();
+            try
+            {
+                new OperacionesStocks().SetCantidadProducto(Actualizacion);
+            }
+            catch (Exception)
+            {
+
+                
+            }
+            
         }
     }
 

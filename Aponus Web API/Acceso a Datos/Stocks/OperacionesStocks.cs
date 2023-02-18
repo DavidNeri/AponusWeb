@@ -646,5 +646,32 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }    
 
         }
+
+        internal void AgregarProducto(ActualizacionStock Actualizacion)
+        {
+            AponusDBContext.Productos
+                .Where(x => x.IdProducto == Actualizacion.IdExistencia)
+                .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,
+                AponusDBContext.Productos.
+                Where(x => x.IdProducto == Actualizacion.IdExistencia).
+                Select(x => x.Cantidad).SingleOrDefault() + Actualizacion.Valor));
+        }
+
+        internal void RestarProducto(ActualizacionStock Actualizacion)
+        {
+            AponusDBContext.Productos
+                .Where(x => x.IdProducto == Actualizacion.IdExistencia)
+                .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,
+                AponusDBContext.Productos.
+                Where(x => x.IdProducto == Actualizacion.IdExistencia).
+                Select(x => x.Cantidad).SingleOrDefault() - Actualizacion.Valor));
+        }
+
+        internal void SetCantidadProducto(ActualizacionStock Actualizacion)
+        {
+            AponusDBContext.Productos
+                .Where(x => x.IdProducto == Actualizacion.IdExistencia)
+                .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,Actualizacion.Valor));
+        }
     }
 }

@@ -85,17 +85,7 @@ namespace Aponus_Web_API.Business
             }
         }
 
-        internal void ObtenerCampos(int tipo, string id)
-        {
-            switch (tipo)
-            {
-                case 0:
-                    //new OperacionesStocks().ObtenerCamposInsumo(id);
-                    break;
-                default:
-                    break;
-            }
-        }
+      
 
         internal void ActualizarProducto(ActualizacionStock actualizacion)
         {
