@@ -673,5 +673,33 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 .Where(x => x.IdProducto == Actualizacion.IdExistencia)
                 .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,Actualizacion.Valor));
         }
+
+        internal async Task<List<Insumos>> ListarBulones()
+        {
+            List<Insumos> Bulones= new List<Insumos>();
+            Bulones = await AponusDBContext.PesablesDetalles
+                .Where(x=>x.IdComponente.Contains("BUL")==true)
+                .Select(x=>new Insumos
+                {
+                    IdInsumo = x.IdComponente,
+                    Nombre = x.Altura.ToString(),
+                }).ToListAsync();
+
+            return Bulones;
+        }
+
+        internal async Task<List<Insumos>> ListarPerfilesJuntas()
+        {
+            List<Insumos> PerfilesJuntas = new List<Insumos>();
+            PerfilesJuntas = await AponusDBContext.MensurablesDetalles
+                .Where(x => x.IdComponente.Contains("JUN") == true)
+                .Select(x => new Insumos
+                {
+                    IdInsumo = x.IdComponente,
+                    Nombre = x.Perfil.ToString(),
+                }).ToListAsync();
+
+            return PerfilesJuntas;
+        }
     }
 }

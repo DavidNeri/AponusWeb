@@ -70,8 +70,25 @@ namespace Aponus_Web_API.Controllers
                 return StatusCode(500);
             }
 
-
         }
-        
+
+        [HttpGet]
+        [Route("List/Bolts")]
+        public async Task<List<Insumos>> ListarBulones()
+        {
+            return await new BS_Stocks().ListarBulones();
+        }
+
+        [HttpGet]
+        [Route("List/GasketsProfiles")]
+        public async Task<List<Insumos>> ListarPerfilesJuntas()
+        {
+            return await new BS_Stocks().LIstarPerfilesJuntas();
+        }
+
+
+
+
+
     }
 }

@@ -82,6 +82,16 @@ namespace Aponus_Web_API.Business
 
             }
         }
-        
+
+        internal Task<List<Insumos>> ListarBulones()
+        {
+            return new OperacionesStocks().ListarBulones();
+        }
+
+        internal Task<List<Insumos>> LIstarPerfilesJuntas()
+        {
+            return new OperacionesStocks().ListarPerfilesJuntas();
+
+        }
     }
 }
