@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="Aponus_Web_API.Mapping.DatosProducto">
-    <Position X="0.5" Y="5.75" Width="3" />
+    <Position X="14.5" Y="0.75" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
       <FileName>Mapping\DatosProducto.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Aponus_Web_API.Mapping.EspecificacionesDatosProducto">
-    <Position X="4.75" Y="5.75" Width="3" />
+    <Position X="14.25" Y="3.5" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAAACGAAAAAgAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Mapping\EspecificacionesDatosProducto.cs</FileName>
@@ -18,8 +18,8 @@
     <Position X="1" Y="3.75" Width="5" />
     <InheritanceLine Type="Aponus_Web_API.Mapping.Stocks" ManuallyRouted="true" FixedFromPoint="true">
       <Path>
-        <Point X="8.75" Y="5.063" />
-        <Point X="8.375" Y="5.063" />
+        <Point X="8.25" Y="4.563" />
+        <Point X="8.375" Y="4.563" />
         <Point X="8.375" Y="4.366" />
         <Point X="6" Y="4.366" />
       </Path>
@@ -52,7 +52,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Aponus_Web_API.Mapping.Stocks">
-    <Position X="8.75" Y="4.25" Width="1.75" />
+    <Position X="8.25" Y="3.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAgAAAAkIAAAAAABIAAAAAAAQAAAAAAAAAAAAAE=</HashCode>
       <FileName>Mapping\Stocks.cs</FileName>
@@ -66,38 +66,217 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Aponus_Web_API.Acceso_a_Datos.Stocks.OperacionesStocks">
-    <Position X="10" Y="7.75" Width="4" />
+    <Position X="0.5" Y="16.75" Width="4" />
     <TypeIdentifier>
       <HashCode>AAAAACAAAAQAEAAQCtABAAARQgIAIgABAAELAAAAAAM=</HashCode>
       <FileName>Acceso a Datos\Stocks\OperacionesStocks.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="AponusDBContext" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="Aponus_Web_API.Services.ModificacionesStocks">
-    <Position X="5.75" Y="8" Width="3.5" />
+    <Position X="0.75" Y="14" Width="3.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACIEAAAEAAQBAAAAA=</HashCode>
       <FileName>Services\ModificacionesStocks.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Aponus_Web_API.Services.ObtenerProductos">
-    <Position X="0.5" Y="11.25" Width="4.5" />
+    <Position X="4.75" Y="10.5" Width="4" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAEAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAE=</HashCode>
       <FileName>Services\ObtenerProductos.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="AponusDBContext" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="Aponus_Web_API.Services.ObtenerInsumos">
-    <Position X="0.75" Y="8.75" Width="4" />
+    <Position X="4.75" Y="12.75" Width="4" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAQAAAAAAQBAAAAAAAAAEAAAAAAAAA=</HashCode>
       <FileName>Services\ObtenerInsumos.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="AponusDBContext" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="Aponus_Web_API.Services.ObtenerStocks">
-    <Position X="4" Y="13.75" Width="4.5" />
+    <Position X="0.5" Y="11.5" Width="4" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAEAAAAAAABAAAAABAgAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Services\ObtenerStocks.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="AponusDBContext" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Aponus_Web_API.Acceso_a_Datos.Validaciones.Login">
+    <Position X="13.75" Y="8" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Acceso a Datos\Validaciones\Login.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="AponusDBContext" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Aponus_Web_API.Business.BS_Products">
+    <Position X="4.75" Y="8.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AABAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Business\BS_Products.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Business.BS_Stocks">
+    <Position X="0.5" Y="9" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEhAAAAAAJAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Business\BS_Stocks.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Controllers.CategoriesController">
+    <Position X="9" Y="6.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Controllers\CategoriesController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="AponusDBContext" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Aponus_Web_API.Controllers.ProductsController">
+    <Position X="4.75" Y="6.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>ACIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Controllers\ProductsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Controllers.StocksController">
+    <Position X="0.5" Y="6.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAEBAAAAAAJAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\StocksController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Controllers.UsersController">
+    <Position X="13.25" Y="6.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\UsersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.System.Validaciones">
+    <Position X="13.25" Y="10.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>System\Validaciones.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.AponusContext">
+    <Position X="18.5" Y="8" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAQgQgAABQAAAABAAEAAIAAAAAAADBAAAAoQ=</HashCode>
+      <FileName>Models\AponusContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.ComponentesCuantitativo">
+    <Position X="32" Y="4.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAACEAAAAQAAAAAAAAAAIAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ComponentesCuantitativo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.ComponentesDescripcion">
+    <Position X="22.75" Y="2.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEBAAAAABABAAAIIAAAAAACAAAAAAA=</HashCode>
+      <FileName>Models\ComponentesDescripcion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.Producto">
+    <Position X="31.25" Y="13.5" Width="4.75" />
+    <TypeIdentifier>
+      <HashCode>AAIEACGAAAQAgAEiAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Producto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.ProductosDescripcion">
+    <Position X="37" Y="13.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAQAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ProductosDescripcion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.ComponentesMensurable">
+    <Position X="32.25" Y="8.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAEQAAAAIAAAAAIAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ComponentesMensurable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.ComponentesPesable">
+    <Position X="32.25" Y="1" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAABQAAAAAAAAAAIAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ComponentesPesable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.CuantitativosDetalle">
+    <Position X="26.5" Y="4" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAACAAAEAAAEiEQAAAAAAAAAAAAEAAAABAAAAAAA=</HashCode>
+      <FileName>Models\CuantitativosDetalle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.MensurablesDetalle">
+    <Position X="26.5" Y="8" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAEQAAECIQAAAAAAAAAAAAEAAAAAAAAAAIA=</HashCode>
+      <FileName>Models\MensurablesDetalle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.PesablesDetalle">
+    <Position X="26.75" Y="1" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAkAAAECEAAAAAAIAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\PesablesDetalle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.ProductosTipo">
+    <Position X="37" Y="15.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAQAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Models\ProductosTipo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.StockCuantitativo">
+    <Position X="37.25" Y="4" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAIIAAAAAAEQAAAAAgAAAAAAAAAABEEAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\StockCuantitativo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.StockMensurable">
+    <Position X="37" Y="8.75" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAAAABAEABAAAAAAAAIA=</HashCode>
+      <FileName>Models\StockMensurable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.StockPesable">
+    <Position X="37.25" Y="1" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAkQAAAAAAAAAAAAAAAABAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\StockPesable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Models.Usuarios">
+    <Position X="26.75" Y="13.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAIAAAAAAAAAAAAAAACAAAAEAAAAAAA=</HashCode>
+      <FileName>Models\Usuarios.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
