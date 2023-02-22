@@ -44,13 +44,13 @@ namespace Aponus_Web_API.Business
                         {
                             case "+":
                                 new ModificacionesStocks().ActualizarInsumo_Aumentar(Actualizacion);
-                                return new JsonResult(new StatusCodeResult(200));                                
+                                break;                                
                             case "-":
                                 new ModificacionesStocks().ActualizarInsumo_Descontar(Actualizacion);
-                                return new JsonResult(new StatusCodeResult(200));
+                                break;
                             case "=":
                                 new ModificacionesStocks().ActualizarInsumo_NuevoValor(Actualizacion);
-                                return new JsonResult(new StatusCodeResult(200));
+                                break;
                            
                         }
                         break;
@@ -61,13 +61,13 @@ namespace Aponus_Web_API.Business
                         {
                             case "+":
                                 new ModificacionesStocks().ActualizarProducto_Agregar(Actualizacion);
-                                return new JsonResult(new StatusCodeResult(200));
+                                break;
                             case "-":
                                 new ModificacionesStocks().ActualizarProducto_Descontar(Actualizacion);
-                                return new JsonResult(new StatusCodeResult(200));
+                                break;
                             case "=":
                                 new ModificacionesStocks().ActualizarProducto_NuevoValor(Actualizacion);
-                                return new JsonResult(new StatusCodeResult(200));                           
+                                break;
                         }
                         break;
 

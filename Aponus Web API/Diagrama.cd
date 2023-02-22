@@ -25,7 +25,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAABAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Mapping\Insumos.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -66,17 +66,38 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Aponus_Web_API.Acceso_a_Datos.Stocks.OperacionesStocks">
-    <Position X="9.5" Y="8.25" Width="1.5" />
+    <Position X="10" Y="7.75" Width="4" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAAAAQAEAAACgEAAAARQkAAIggAAAACAAACAAA=</HashCode>
+      <HashCode>AAAAACAAAAQAEAAQCtABAAARQgIAIgABAAELAAAAAAM=</HashCode>
       <FileName>Acceso a Datos\Stocks\OperacionesStocks.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Aponus_Web_API.Services.ModificacionesStocks">
-    <Position X="6" Y="8.75" Width="1.5" />
+    <Position X="5.75" Y="8" Width="3.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAIAAAAAAQAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACIEAAAEAAQBAAAAA=</HashCode>
       <FileName>Services\ModificacionesStocks.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Services.ObtenerProductos">
+    <Position X="0.5" Y="11.25" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Services\ObtenerProductos.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Services.ObtenerInsumos">
+    <Position X="0.75" Y="8.75" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAQBAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Services\ObtenerInsumos.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aponus_Web_API.Services.ObtenerStocks">
+    <Position X="4" Y="13.75" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAABAAAAABAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\ObtenerStocks.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

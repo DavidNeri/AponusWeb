@@ -9,7 +9,7 @@ namespace Aponus_Web_API.Controllers
 
     public class UsersController :ControllerBase
     {
-        [HttpGet]
+        [HttpPost]
         [Route("Validation")]
         public UsuariosMapping? ValiadarUsuario(UsuariosMapping Usuario) 
         {
