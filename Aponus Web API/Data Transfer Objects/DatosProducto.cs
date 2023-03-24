@@ -1,5 +1,5 @@
 ﻿using  Newtonsoft.Json;
-namespace Aponus_Web_API.Mapping
+namespace Aponus_Web_API.Data_Transfer_objects
 {
     public class DatosProducto :EspecificacionesDatosProducto
     { 

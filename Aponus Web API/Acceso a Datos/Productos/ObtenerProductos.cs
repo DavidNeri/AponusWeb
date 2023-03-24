@@ -6,8 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Aponus_Web_API.Data_Transfer_objects;
 
-namespace Aponus_Web_API.Services
+
+
+namespace Aponus_Web_API.Acceso_a_Datos.Productos
 {
     public class ObtenerProductos
     {
@@ -49,7 +52,7 @@ namespace Aponus_Web_API.Services
             return new JsonResult(Products);
 
         }
-        public async Task<DatosProducto>Listar(string? typeId, int? DN)
+        public async Task<DatosProducto> Listar(string? typeId, int? DN)
         {
             try
             {
@@ -67,7 +70,7 @@ namespace Aponus_Web_API.Services
 
                             })
                             .Where(x => x.IdTipo == typeId && x.DiametroNominal == DN)
-                            .OrderBy(x=>x.DescripcionProducto)
+                            .OrderBy(x => x.DescripcionProducto)
                             .Select(x => new
                             {
                                 Descripcion = x.DescripcionProducto
@@ -80,7 +83,7 @@ namespace Aponus_Web_API.Services
 
                                .Select(x => new EspecificacionesDatosProducto()
                                {
-                                   IdProducto=x.IdProducto,
+                                   IdProducto = x.IdProducto,
                                    DiametroNominal = x.DiametroNominal,
                                    ToleranciaMaxima = x.ToleranciaMaxima,
                                    ToleranciaMinima = x.ToleranciaMinima,
@@ -89,14 +92,15 @@ namespace Aponus_Web_API.Services
                                }).ToListAsync();
                 _EspecificacionesProducto.OrderBy(X => X.DiametroNominal).ThenBy(x => x.ToleranciaMinima).ThenBy(x => x.ToleranciaMaxima);
 
-                DatosProducto _Producto = new DatosProducto() {
-                    DescripcionProducto=_DatosProducto.Descripcion.ToString(),
-                    Producto=_EspecificacionesProducto
+                DatosProducto _Producto = new DatosProducto()
+                {
+                    DescripcionProducto = _DatosProducto.Descripcion.ToString(),
+                    Producto = _EspecificacionesProducto
 
-            };
+                };
 
                 _Producto.Producto = _EspecificacionesProducto;
-                
+
 
                 return _Producto;
             }
@@ -111,14 +115,14 @@ namespace Aponus_Web_API.Services
         public async Task<JsonResult> ListarDN(string typeId)
         {
             var DN = await AponusDBContext.Productos
-                .Where(x=>x.IdTipo==typeId)
-                .Select(x=>x.DiametroNominal)
-                .Distinct() .ToListAsync();
+                .Where(x => x.IdTipo == typeId)
+                .Select(x => x.DiametroNominal)
+                .Distinct().ToListAsync();
 
 
             return new JsonResult(DN);
 
-                
+
         }
     }
 }

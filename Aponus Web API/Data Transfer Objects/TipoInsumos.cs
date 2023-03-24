@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace Aponus_Web_API.Mapping
+namespace Aponus_Web_API.Data_Transfer_objects
 {
     public class TipoInsumos : EspecificacionesComponentes
     {
@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Mapping
         [JsonProperty(PropertyName = "descripcion")]
         public string? Descripcion { get; set; }
 
-        [JsonProperty(PropertyName = "especificaciones", NullValueHandling =NullValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "especificaciones", NullValueHandling = NullValueHandling.Ignore)]
         public List<EspecificacionesComponentes>? Especificaciones { get; set; } = null;
         public string[]? Columnas { get; set; }
 

@@ -1,15 +1,15 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Stocks;
-using Aponus_Web_API.Mapping;
+using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace Aponus_Web_API.Services
+namespace Aponus_Web_API.Business
 {
     public class ModificacionesStocks : OperacionesStocks
     {
-      
+
         internal void ActualizarInsumo_Aumentar(ActualizacionStock Actualizacion)
         {
             switch (Actualizacion.Destino)
@@ -34,8 +34,8 @@ namespace Aponus_Web_API.Services
 
                         default:
                             break;
-                    }  
-                    break;  
+                    }
+                    break;
 
                 case "Granallado":
                     IncrementarGranallado(Actualizacion);
@@ -56,19 +56,19 @@ namespace Aponus_Web_API.Services
 
                         default:
                             break;
-                    }                                        
-                    break;  
+                    }
+                    break;
 
                 case "Pintura":
                     IncrementarPintura(Actualizacion);
                     switch (Actualizacion.Origen)
                     {
-                        case"Recibido":
+                        case "Recibido":
                             DescontarRecibidos(Actualizacion);
                             break;
                         case "Granallado":
                             DescontarGranallado(Actualizacion);
-                            break;  
+                            break;
                         case "Proceso":
                             DescontarProceso(Actualizacion);
                             break;
@@ -78,7 +78,7 @@ namespace Aponus_Web_API.Services
 
                         default:
                             break;
-                    }                   
+                    }
                     break;
 
                 case "Proceso":
@@ -101,7 +101,7 @@ namespace Aponus_Web_API.Services
 
                         default:
                             break;
-                    }                    
+                    }
                     break;
 
                 case "Moldeado":
@@ -123,7 +123,7 @@ namespace Aponus_Web_API.Services
                             break;
                         default:
                             break;
-                    }                    
+                    }
                     break;
 
                 default:
@@ -155,7 +155,7 @@ namespace Aponus_Web_API.Services
 
                         default:
                             break;
-                    }                   
+                    }
                     break;
 
                 case "Granallado":
@@ -181,7 +181,7 @@ namespace Aponus_Web_API.Services
 
                         default:
                             break;
-                    }                    
+                    }
                     break;
 
                 case "Pintura":
@@ -194,7 +194,7 @@ namespace Aponus_Web_API.Services
 
                         case "Granallado":
                             IncrementarGranallado(Actualizacion);
-                            break;  
+                            break;
                         case "Proceso":
                             IncrementarProceso(Actualizacion);
                             break;
@@ -214,7 +214,7 @@ namespace Aponus_Web_API.Services
                     {
                         case "Recibido":
                             IncrementarRecibidos(Actualizacion);
-                            break;  
+                            break;
 
                         case "Granallado":
                             IncrementarGranallado(Actualizacion);
@@ -261,7 +261,7 @@ namespace Aponus_Web_API.Services
                 default:
                     break;
             }
-                
+
         }
 
         internal void ActualizarInsumo_NuevoValor(ActualizacionStock Actualizacion)
@@ -272,13 +272,13 @@ namespace Aponus_Web_API.Services
                     SetRecibidos(Actualizacion);
                     break;
                 case "Granallado":
-                    SetGranallado (Actualizacion);
+                    SetGranallado(Actualizacion);
                     break;
                 case "Pintura":
-                    SetPintura (Actualizacion);
+                    SetPintura(Actualizacion);
                     break;
                 case "Proceso":
-                    SetProceso (Actualizacion);
+                    SetProceso(Actualizacion);
                     break;
                 case "Moldeado":
                     SetMoldeado(Actualizacion);
@@ -300,9 +300,9 @@ namespace Aponus_Web_API.Services
             catch (Exception)
             {
 
-               
+
             }
-           
+
         }
 
         internal void ActualizarProducto_Descontar(ActualizacionStock Actualizacion)
@@ -314,9 +314,9 @@ namespace Aponus_Web_API.Services
             catch (Exception)
             {
 
-                
+
             }
-           
+
         }
 
         internal void ActualizarProducto_NuevoValor(ActualizacionStock Actualizacion)
@@ -328,9 +328,9 @@ namespace Aponus_Web_API.Services
             catch (Exception)
             {
 
-                
+
             }
-            
+
         }
     }
 

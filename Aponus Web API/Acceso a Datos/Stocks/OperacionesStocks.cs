@@ -1,4 +1,4 @@
-﻿using Aponus_Web_API.Mapping;
+﻿using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -674,12 +674,12 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,Actualizacion.Valor));
         }
 
-        internal async Task<List<Insumos>> ListarBulones()
+        internal async Task<List<Data_Transfer_objects.Insumos>> ListarBulones()
         {
-            List<Insumos> Bulones= new List<Insumos>();
+            List<Data_Transfer_objects.Insumos> Bulones= new List<Data_Transfer_objects.Insumos>();
             Bulones = await AponusDBContext.PesablesDetalles
                 .Where(x=>x.IdComponente.Contains("BUL")==true)
-                .Select(x=>new Insumos
+                .Select(x=>new Data_Transfer_objects.Insumos
                 {
                     IdInsumo = x.IdComponente,
                     Nombre = x.Altura.ToString(),
@@ -688,12 +688,12 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             return Bulones;
         }
 
-        internal async Task<List<Insumos>> ListarPerfilesJuntas()
+        internal async Task<List<Data_Transfer_objects.Insumos>> ListarPerfilesJuntas()
         {
-            List<Insumos> PerfilesJuntas = new List<Insumos>();
+            List<Data_Transfer_objects.Insumos> PerfilesJuntas = new List<Data_Transfer_objects.Insumos>();
             PerfilesJuntas = await AponusDBContext.MensurablesDetalles
                 .Where(x => x.IdComponente.Contains("JUN") == true)
-                .Select(x => new Insumos
+                .Select(x => new Data_Transfer_objects.Insumos
                 {
                     IdInsumo = x.IdComponente,
                     Nombre = x.Perfil.ToString(),

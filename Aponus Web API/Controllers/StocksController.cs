@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Aponus_Web_API.Business;
-using Aponus_Web_API.Mapping;
-
+using Aponus_Web_API.Data_Transfer_objects;
 
 namespace Aponus_Web_API.Controllers
 {
-    [Route("Aponus/[Controller]")]
-    [ApiController]
+        [Route("Aponus/[Controller]")]
+        [ApiController]
     public class StocksController : Controller
     {
         [HttpGet]

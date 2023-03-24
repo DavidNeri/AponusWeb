@@ -155,6 +155,9 @@ public partial class AponusContext : DbContext
                 .HasDefaultValueSql("((0))")
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("PESO");
+            entity.Property(e => e.Cantidad)
+            .HasColumnName("CANTIDAD")
+            .HasDefaultValueSql("NULL");
 
             entity.HasOne(d => d.IdComponenteNavigation).WithMany(p => p.ComponentesPesables)
                 .HasForeignKey(d => d.IdComponente)

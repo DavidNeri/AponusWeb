@@ -1,24 +1,25 @@
-﻿using Aponus_Web_API.Mapping;
-using Aponus_Web_API.Models;
+﻿using Aponus_Web_API.Models;
+using Aponus_Web_API.Data_Transfer_objects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
-namespace Aponus_Web_API.Services
+namespace Aponus_Web_API.Acceso_a_Datos.Insumos
 {
     public class ObtenerInsumos
     {
         private readonly AponusContext AponusDBContext;
         public ObtenerInsumos() { AponusDBContext = new AponusContext(); }
-        public  List<Insumos> ObtenterPesables(string ProductId,int Cantidad)
+        public List<Data_Transfer_objects.Insumos> ObtenterPesables(string ProductId, int Cantidad)
         {
-            List<Insumos> LstInsumosPesables = new List<Insumos>();
+            List<Data_Transfer_objects.Insumos> LstInsumosPesables = new List<Data_Transfer_objects.Insumos>();
             string? _Descripcion;
             decimal? Total;
             decimal? _Requerido;
             decimal? Faltantes;
+            decimal? _Disponibles;
 
-            var InsumosPesables = 
+            var InsumosPesables =
 
                 AponusDBContext.ComponentesPesables
                     .Join(AponusDBContext.PesablesDetalles,
@@ -79,15 +80,19 @@ namespace Aponus_Web_API.Services
                 }
                 else
                 {
-                    _Descripcion = queryResult.Descripcion + " " + String.Format("{0:####}", queryResult.Altura) + " mm";
+                    _Descripcion = queryResult.Descripcion + " " + string.Format("{0:####}", queryResult.Altura) + " mm";
                 }
-             
 
-                Total = queryResult.CantidadRecibido +
-                            queryResult.CantidadPintura +
-                            queryResult.CantidadProceso;
 
+                Total = queryResult.CantidadRecibido + queryResult.CantidadPintura + queryResult.CantidadProceso;
                 _Requerido = queryResult.Peso * Cantidad;
+
+                if (true)
+                {
+
+                }
+                _Disponibles = Total / _Requerido;
+
                 if (Total - _Requerido >= 0)
                 {
                     Faltantes = 0;
@@ -97,15 +102,17 @@ namespace Aponus_Web_API.Services
                     Faltantes = Total - _Requerido;
                 }
 
-                LstInsumosPesables.Add(new Insumos()
+                LstInsumosPesables.Add(new Data_Transfer_objects.Insumos()
                 {
                     Nombre = _Descripcion,
                     Requerido = _Requerido + " Kg",
                     Recibido = queryResult.CantidadRecibido + " Kg",
                     Pintura = queryResult.CantidadPintura + " Kg",
                     Proceso = queryResult.CantidadProceso + " Kg",
-                    Total= queryResult.CantidadRecibido + queryResult.CantidadPintura+queryResult.CantidadProceso + "Kg",
-                    Faltantes=Faltantes+" Kg"
+                    Total = queryResult.CantidadRecibido + queryResult.CantidadPintura + queryResult.CantidadProceso + "Kg",
+                    Faltantes = Faltantes + " Kg",
+                    Disponibles = string.Format("{0:0.##}", _Disponibles) + " U"
+
 
 
                 });
@@ -113,15 +120,21 @@ namespace Aponus_Web_API.Services
             return LstInsumosPesables;
         }
 
-        public  List <Insumos> ObtenterCuantitativos(string ProductId, int Cantidad=1)
+        public List<Data_Transfer_objects.Insumos> ObtenterCuantitativos(string ProductId, int Cantidad = 1)
         {
-            List<Insumos> LstInsumosCuantitativos= new List<Insumos>();
+            List<Data_Transfer_objects.Insumos> LstInsumosCuantitativos = new List<Data_Transfer_objects.Insumos>();
             string _Descripcion;
             decimal? Total;
             decimal? _Requerido;
             decimal? Faltantes;
+            decimal? _Disponibles;
+            string? _Moldeado = null;
+            string? Pintura = null;
+            string? Recibido = null;
+            string? Granallado = null;
+            string? Proceso = null;
 
-            var InsumosCuantitativos= 
+            var InsumosCuantitativos =
                 AponusDBContext.ComponentesCuantitativos
                     .Join(AponusDBContext.CuantitativosDetalles,
                         _ComponentesCuantitativos => _ComponentesCuantitativos.IdComponente,
@@ -137,7 +150,7 @@ namespace Aponus_Web_API.Services
                             _CuantitativosDetalle.ToleranciaMinima,
                             _CuantitativosDetalle.ToleranciaMaxima,
 
-                        })                    
+                        })
                     .Join(AponusDBContext.StockCuantitativos,
                         _ComponentesCuantitativos_CuantitativosDetalle => _ComponentesCuantitativos_CuantitativosDetalle.IdComponente,
                         _StockCuantitativos => _StockCuantitativos.IdComponente,
@@ -165,7 +178,7 @@ namespace Aponus_Web_API.Services
                         _ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos,
                         _ComponentesDescripcion
                     })
-                    
+
                     .Where(x => x._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.IdProducto == ProductId)
                     .Select(
                         Cuantitativos => new
@@ -185,41 +198,74 @@ namespace Aponus_Web_API.Services
 
             foreach (var queryResult in InsumosCuantitativos)
             {
-                if (queryResult.Descripcion.Contains("brida")==true && queryResult.Descripcion!=null)
+                if (queryResult.Descripcion.Contains("brida") == true && queryResult.Descripcion != null)
                 {
                     _Descripcion = queryResult.Descripcion +
-                        " DN " +  String.Format("{0:####}", queryResult.Diametro) +' '+
+                        " DN " + string.Format("{0:####}", queryResult.Diametro) + ' ' +
                         queryResult.ToleranciaMinima +
                         '-' + queryResult.ToleranciaMaxima;
 
-                    
+
                 }
                 else
                 {
                     _Descripcion = queryResult.Descripcion + " Ø" +
-                        String.Format("{0:####}", queryResult.Diametro) +" Tolerancia: "+
+                        string.Format("{0:####}", queryResult.Diametro) + " Tolerancia: " +
                         queryResult.ToleranciaMinima + '-' +
                         queryResult.ToleranciaMaxima;
                 }
 
-                if (queryResult.CantidadMoldeado !=null)
+                if (queryResult.CantidadMoldeado != null)
                 {
                     Total = queryResult.CantidadRecibido +
                            queryResult.CantidadGranallado +
                            queryResult.CantidadPintura +
                            queryResult.CantidadProceso + queryResult.CantidadMoldeado;
+
+                    _Disponibles = Total / (queryResult.Cantidad * Cantidad);
                 }
                 else
                 {
-                    Total = queryResult.CantidadRecibido +
-                           queryResult.CantidadGranallado +
-                           queryResult.CantidadPintura +
-                           queryResult.CantidadProceso;
+                    if (queryResult.CantidadRecibido == null && queryResult.CantidadGranallado == null && queryResult.CantidadPintura == null && queryResult.CantidadMoldeado == null)
+                    {
+
+                        Total = queryResult.CantidadProceso;
+                        Pintura = null;
+                        Recibido = null;
+                        Granallado = null;
+                        Proceso = null;
+
+                    }
+                    else if (queryResult.CantidadRecibido != null && queryResult.CantidadGranallado == null
+                        && queryResult.CantidadPintura == null && queryResult.CantidadMoldeado == null && queryResult.CantidadProceso == null)
+                    {
+                        Total = queryResult.CantidadRecibido;
+                        Pintura = null;
+                        _Moldeado = null;
+                        Granallado = null;
+                        Proceso = null;
+
+
+                    }
+                    else
+                    {
+                        Total = queryResult.CantidadRecibido + queryResult.CantidadGranallado + queryResult.CantidadPintura + queryResult.CantidadProceso;
+                        Pintura = queryResult.CantidadPintura.ToString() + " U";
+                        Recibido = queryResult.CantidadRecibido.ToString() + " U";
+                        Granallado = queryResult.CantidadGranallado.ToString() + " U";
+                        _Moldeado = queryResult.CantidadMoldeado + " U";
+                        Proceso = queryResult.CantidadProceso + "U";
+
+
+                    }
+
+                    _Moldeado = null;
+                    _Disponibles = Total / (queryResult.Cantidad * Cantidad);
                 }
 
 
                 _Requerido = queryResult.Cantidad * Cantidad;
-                if (Total-_Requerido>=0)
+                if (Total - _Requerido >= 0)
                 {
                     Faltantes = 0;
                 }
@@ -227,37 +273,36 @@ namespace Aponus_Web_API.Services
                 {
                     Faltantes = Total - _Requerido;
                 }
-                    string? _Moldeado =null;
-                if (queryResult.CantidadMoldeado!= null)
-                {
-                    _Moldeado = queryResult.CantidadMoldeado + " U";
-                }
-                LstInsumosCuantitativos.Add(new Insumos()
+
+
+
+                LstInsumosCuantitativos.Add(new Data_Transfer_objects.Insumos()
                 {
                     Nombre = _Descripcion,
-                    Requerido = _Requerido + " U",
-                    Recibido = queryResult.CantidadRecibido + " U",
-                    Pintura = queryResult.CantidadPintura + " U",
-                    Proceso = queryResult.CantidadProceso + " U",
-                    Granallado = queryResult.CantidadGranallado + " U",
+                    Requerido = _Requerido.ToString() + " U",
+                    Recibido = Recibido,
+                    Pintura = Pintura,
+                    Proceso = Proceso,
+                    Granallado = Granallado,
                     Moldeado = _Moldeado,
-                    Total = queryResult.CantidadRecibido +
-                            queryResult.CantidadGranallado +
-                            queryResult.CantidadPintura +
-                            queryResult.CantidadProceso + " U",
-                    Faltantes = Faltantes+" U",
-                }) ;
+                    Total = Total.ToString() + " U",
+                    Faltantes = Faltantes.ToString() + " U",
+                    Disponibles = _Disponibles.ToString()
+                });
             }
-            return  LstInsumosCuantitativos;
+            return LstInsumosCuantitativos;
         }
 
-        public List<Insumos> ObtenterMensurables(string ProductId, int Cantidad)
+        public List<Data_Transfer_objects.Insumos> ObtenterMensurables(string ProductId, int Cantidad)
         {
-            List<Insumos> LstInsumosMensurables = new List<Insumos>();
-            string _Descripcion;       
+            List<Data_Transfer_objects.Insumos> LstInsumosMensurables = new List<Data_Transfer_objects.Insumos>();
+            string _Descripcion;
             decimal? Total;
             decimal? Req;
             decimal? Faltantes;
+            decimal? _Disponibles;
+            string _Requerido;
+            string _Proceso;
 
             var InsumosMensurables =
 
@@ -268,14 +313,14 @@ namespace Aponus_Web_API.Services
                         (_ComponentesMensurables, _MensurablesDetalle) => new
                         {
                             _ComponentesMensurables.IdProducto,
-                            LargoRequerido =_ComponentesMensurables.Largo,
-                            AlturaCuerpoPerfil =_ComponentesMensurables.Altura,                     
+                            LargoRequerido = _ComponentesMensurables.Largo,
+                            AlturaCuerpoPerfil = _ComponentesMensurables.Altura,
 
                             _MensurablesDetalle.IdDescripcion,
-                            _MensurablesDetalle.IdComponente,                           
+                            _MensurablesDetalle.IdComponente,
                             _MensurablesDetalle.Espesor,
                             _MensurablesDetalle.Perfil,
-                            LargoUnidad=_MensurablesDetalle.Largo,                            
+                            LargoUnidad = _MensurablesDetalle.Largo,
 
                         })
                     .Join(AponusDBContext.StockMensurables,
@@ -287,12 +332,12 @@ namespace Aponus_Web_API.Services
                             _ComponenetesMensurables_Mensurables_Detalle.IdComponente,
                             _ComponenetesMensurables_Mensurables_Detalle.IdDescripcion,
                             _ComponenetesMensurables_Mensurables_Detalle.AlturaCuerpoPerfil,
-                            _ComponenetesMensurables_Mensurables_Detalle.LargoRequerido,                            
+                            _ComponenetesMensurables_Mensurables_Detalle.LargoRequerido,
                             _ComponenetesMensurables_Mensurables_Detalle.Espesor,
                             _ComponenetesMensurables_Mensurables_Detalle.Perfil,
                             _ComponenetesMensurables_Mensurables_Detalle.LargoUnidad,
                             _StockMensurables.CantidadRecibido
-                           
+
                         })
                     .Join(AponusDBContext.ComponentesDescripcions,
                     _ComponentesMensurables_MensurablesDetalle_SotckMensurables => _ComponentesMensurables_MensurablesDetalle_SotckMensurables.IdDescripcion,
@@ -317,67 +362,69 @@ namespace Aponus_Web_API.Services
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.Perfil,
                             Mensurables._ComponentesMensurables_MensurablesDetalle_SotckMensurables.CantidadRecibido
                         }).ToList();
-            string _Requerido;
-            string _Proceso;
 
 
-            try
+            if (InsumosMensurables.Count > 0)
             {
-                foreach (var queryResult in InsumosMensurables)
+                try
                 {
-                    _Requerido = "";
-                    _Proceso = "";
+                    foreach (var queryResult in InsumosMensurables)
+                    {
+                        _Requerido = "";
+                        _Proceso = "";
 
-                    if (queryResult.Descripcion.Contains("GOMA") == false && queryResult.Descripcion != null)
-                    {
-                        _Descripcion = queryResult.Descripcion + ' ' + queryResult.Espesor + " mm x " + (queryResult.LargoUnidad*queryResult.CantidadRecibido) / 1000 + " m - PERFIL " + queryResult.Perfil;
-                        _Requerido = "Perfil de " + queryResult.AlturaCuerpoPerfil + " mm x " + Cantidad + " U";
-                        _Proceso = queryResult.CantidadRecibido +" U de " + queryResult.LargoUnidad/1000 + " m/" + String.Format("{0:####}", (queryResult.LargoUnidad*queryResult.CantidadRecibido)/ queryResult.AlturaCuerpoPerfil) + " perfiles de " + (queryResult.AlturaCuerpoPerfil / 100) + " cm";
-                    }
-                    else
-                    {
-                        _Descripcion = queryResult.Descripcion + " PERFIL " + queryResult.Perfil;
-                        if (queryResult.IdProducto.Contains("ABT") == true)
+                        if (queryResult.Descripcion.Contains("GOMA") == false && queryResult.Descripcion != null)
                         {
-                            _Requerido = ((queryResult.LargoRequerido * Cantidad) / 1000) + " m/" + Cantidad + " Junta(s) de " + (queryResult.LargoRequerido / 1000) + " cm";
+                            _Descripcion = queryResult.Descripcion + ' ' + queryResult.Espesor + " mm x " + queryResult.LargoUnidad * queryResult.CantidadRecibido / 1000 + " m - PERFIL " + queryResult.Perfil;
+                            _Requerido = "Perfil de " + queryResult.AlturaCuerpoPerfil + " mm x " + Cantidad + " U";
+                            _Proceso = queryResult.CantidadRecibido + " U de " + queryResult.LargoUnidad / 1000 + " m/" + string.Format("{0:####}", queryResult.LargoUnidad * queryResult.CantidadRecibido / queryResult.AlturaCuerpoPerfil) + " perfiles de " + queryResult.AlturaCuerpoPerfil / 100 + " cm";
                         }
                         else
                         {
-                            _Requerido = ((queryResult.LargoRequerido * Cantidad * 2) / 1000) + "m/" + (Cantidad * 2) + " Junta(s) de " + (queryResult.LargoRequerido / 100) + " cm";
+                            _Descripcion = queryResult.Descripcion + " PERFIL " + queryResult.Perfil;
+                            if (queryResult.IdProducto.Contains("ABT") == true)
+                            {
+                                _Requerido = queryResult.LargoRequerido * Cantidad / 1000 + " m/" + Cantidad + " Junta(s) de " + queryResult.LargoRequerido / 1000 + " cm";
+                            }
+                            else
+                            {
+                                _Requerido = queryResult.LargoRequerido * Cantidad * 2 / 1000 + "m/" + Cantidad * 2 + " Junta(s) de " + queryResult.LargoRequerido / 100 + " cm";
+                            }
+                            _Proceso = queryResult.LargoUnidad * queryResult.CantidadRecibido / 1000 + " m/" + queryResult.LargoUnidad * queryResult.CantidadRecibido / queryResult.LargoRequerido + " Junta(s) de " + queryResult.LargoRequerido / 100 + " cm";
                         }
-                        _Proceso = ((queryResult.LargoUnidad*queryResult.CantidadRecibido) / 1000) + " m/" + ((queryResult.LargoUnidad * queryResult.CantidadRecibido) / queryResult.LargoRequerido) + " Junta(s) de " + (queryResult.LargoRequerido / 100) + " cm";
-                    }
-                   
-                    Req = ((queryResult.AlturaCuerpoPerfil * Cantidad) / (queryResult.LargoUnidad* queryResult.CantidadRecibido))/1000;                   
-                    Total = (queryResult.LargoUnidad * queryResult.CantidadRecibido) / 1000;
 
+                        Req = queryResult.AlturaCuerpoPerfil * Cantidad / (queryResult.LargoUnidad * queryResult.CantidadRecibido) / 1000;
+                        Total = queryResult.LargoUnidad * queryResult.CantidadRecibido / 1000;
+                        _Disponibles = Total / (queryResult.LargoRequerido * Cantidad);
 
-                    if (Total-Req>=0)
-                    {
-                        Faltantes = 0;
-                    }
-                    else
-                    {
-                        Faltantes = Total - Req;
-                    }
+                        if (Total - Req >= 0)
+                        {
+                            Faltantes = 0;
+                        }
+                        else
+                        {
+                            Faltantes = Total - Req;
+                        }
 
-                    LstInsumosMensurables.Add(new Insumos()
-                    {
-                        Nombre = _Descripcion,
-                        Requerido = _Requerido,
-                        Proceso = _Proceso,
-                        Total = Total + " m",
-                        Faltantes = Faltantes+" U"
-                    }); ;
+                        LstInsumosMensurables.Add(new Data_Transfer_objects.Insumos()
+                        {
+                            Nombre = _Descripcion,
+                            Requerido = _Requerido,
+                            Proceso = _Proceso,
+                            Total = Total + " m",
+                            Faltantes = Faltantes + " U",
+                            Disponibles = _Disponibles + " U"
+                        }); ;
+                    }
+                    return LstInsumosMensurables;
                 }
-                return LstInsumosMensurables;
+                catch (Exception e)
+                {
+                    return null;
+                }
             }
-            catch (Exception e)
-            {
+            return null;
 
-                return new List<Insumos>();
-            }
-            
         }
 
 

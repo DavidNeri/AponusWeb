@@ -4,6 +4,7 @@ using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20230320233148_agregar CampoCantidad_en_ComponentesPesables")]
+    partial class agregarCampoCantidadenComponentesPesables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,10 +128,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnName("ID_COMPONENTE");
 
                     b.Property<int?>("Cantidad")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("CANTIDAD")
-                        .HasDefaultValueSql("NULL");
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("Peso")
                         .ValueGeneratedOnAdd()

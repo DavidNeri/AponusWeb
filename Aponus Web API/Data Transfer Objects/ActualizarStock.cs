@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace Aponus_Web_API.Mapping
+namespace Aponus_Web_API.Data_Transfer_objects
 {
     public class ActualizacionStock
     {
         [JsonProperty(PropertyName = "idExistencia", NullValueHandling = NullValueHandling.Ignore)]
-        public string? IdExistencia{ get; set; }
+        public string? IdExistencia { get; set; }
 
         [JsonProperty(PropertyName = "idTipoExistencia", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdTipoExistencia { get; set; }
@@ -17,10 +17,10 @@ namespace Aponus_Web_API.Mapping
         public string? Destino { get; set; }
 
         [JsonProperty(PropertyName = "operador", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Operador{ get; set; }
-      
+        public string? Operador { get; set; }
+
         [JsonProperty(PropertyName = "valor", NullValueHandling = NullValueHandling.Ignore)]
-        public int? Valor{ get;set; }
+        public int? Valor { get; set; }
 
         [JsonProperty(PropertyName = "idJuntaPerfil", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdJuntaPerfil { get; set; }

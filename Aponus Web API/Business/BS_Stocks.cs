@@ -1,5 +1,5 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Stocks;
-using Aponus_Web_API.Mapping;
+using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
