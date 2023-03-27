@@ -15,6 +15,8 @@ namespace Aponus_Web_API.Data_Transfer_objects
 
         [JsonProperty(PropertyName = "especificaciones", NullValueHandling = NullValueHandling.Ignore)]
         public List<EspecificacionesComponentes>? Especificaciones { get; set; } = null;
+
+        [JsonProperty(PropertyName = "columnas", NullValueHandling = NullValueHandling.Ignore)]
         public string[]? Columnas { get; set; }
 
     }

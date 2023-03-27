@@ -76,8 +76,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                       CD.IdComponente,
                       CD.Diametro,
                       CD.Altura,
-                      CD.ToleranciaMaxima,
-                      CD.ToleranciaMinima,
+                      CD.Tolerancia,
                       CD.Perfil,
                       CD.Espesor,
                       SC.CantidadRecibido,
@@ -94,8 +93,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                       idComponente = x.IdComponente,
                       Diametro = x.Diametro,
                       Altura = x.Altura,
-                      ToleranciaMinina = x.ToleranciaMinima,
-                      ToleranciaMaxima = x.ToleranciaMaxima,
+                      Tolerancia = x.Tolerancia,
                       Perfil = x.Perfil,
                       Espesor = x.Espesor,
                       Recibido = x.CantidadRecibido.ToString(),
@@ -163,8 +161,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     Perfil = x.Perfil,
                                     Recibido = x.Recibido,
                                     Requerido = x.Requerido,
-                                    ToleranciaMaxima = x.ToleranciaMaxima,
-                                    ToleranciaMinina = x.ToleranciaMinina,
+                                    Tolerancia=x.Tolerancia,
                                     Total = x.Total
                                 }).First();
 
@@ -204,9 +201,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     Perfil = x.Perfil,
                                     Recibido = x.Recibido,
                                     Requerido = x.Requerido,
-                                    ToleranciaMaxima = x.ToleranciaMaxima,
-                                    ToleranciaMinina = x.ToleranciaMinina,
-                                    Total = x.Total
+                                    Total = x.Total,
+                                    Tolerancia= x.Tolerancia,
+                                    
                                 }).First();
 
                             _Insumos.Columnas = new ColumnasJson().setColumnas(
@@ -248,8 +245,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     Perfil = x.Perfil,
                                     Recibido = x.Recibido,
                                     Requerido = x.Requerido,
-                                    ToleranciaMaxima = x.ToleranciaMaxima,
-                                    ToleranciaMinina = x.ToleranciaMinina,
+                                    Tolerancia=x.Tolerancia,
                                     Total = x.Total
 
                                 }).First();
@@ -263,8 +259,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 }
                 Stocks.OrderBy(x => x.Descripcion)
                     .ThenBy(x => x.Diametro)
-                    .ThenBy(x => x.ToleranciaMinina)
-                    .ThenBy(x => x.ToleranciaMaxima)
+                    .ThenBy(x => x.Tolerancia)
                     .ThenBy(x => x.Perfil)
                     .ThenBy(x => x.Largo);
 
@@ -305,8 +300,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                       CD.IdComponente,
                       CD.Diametro,
                       CD.Altura,
-                      CD.ToleranciaMaxima,
-                      CD.ToleranciaMinima,
+                      CD.Tolerancia,                      
                       CD.Perfil,
                       CD.Espesor,
                       SC.CantidadRecibido,
@@ -323,8 +317,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                       idComponente = x.IdComponente,
                       Diametro = x.Diametro,
                       Altura = x.Altura,
-                      ToleranciaMinina = x.ToleranciaMinima,
-                      ToleranciaMaxima = x.ToleranciaMaxima,
+                      Tolerancia = x.Tolerancia,
                       Perfil = x.Perfil,
                       Espesor = x.Espesor,
                       Recibido = x.CantidadRecibido.ToString(),
@@ -369,8 +362,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                    Perfil = x.Perfil,
                                    Recibido = x.Recibido,
                                    Requerido = x.Requerido,
-                                   ToleranciaMaxima = x.ToleranciaMaxima,
-                                   ToleranciaMinina = x.ToleranciaMinina,
+                                   Tolerancia = x.Tolerancia,
                                    Total = x.Total
                                }).First();
 
@@ -444,8 +436,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                       CD.IdComponente,
                       CD.Diametro,
                       CD.Altura,
-                      CD.ToleranciaMaxima,
-                      CD.ToleranciaMinima,
+                      CD.Tolerancia,
                       CD.Perfil,
                       CD.Espesor,
                       SC.CantidadRecibido,
@@ -462,8 +453,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                       idComponente = x.IdComponente,
                       Diametro = x.Diametro,
                       Altura = x.Altura,
-                      ToleranciaMinina = x.ToleranciaMinima,
-                      ToleranciaMaxima = x.ToleranciaMaxima,
+                      Tolerancia = x.Tolerancia,
                       Perfil = x.Perfil,
                       Espesor = x.Espesor,
                       Recibido = x.CantidadRecibido.ToString(),
@@ -531,8 +521,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     Perfil = x.Perfil,
                                     Recibido = x.Recibido,
                                     Requerido = x.Requerido,
-                                    ToleranciaMaxima = x.ToleranciaMaxima,
-                                    ToleranciaMinina = x.ToleranciaMinina,
+                                    Tolerancia = x.Tolerancia,
                                     Total = x.Total
                                 }).First();
 
@@ -572,8 +561,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                    Perfil = x.Perfil,
                                    Recibido = x.Recibido,
                                    Requerido = x.Requerido,
-                                   ToleranciaMaxima = x.ToleranciaMaxima,
-                                   ToleranciaMinina = x.ToleranciaMinina,
+                                   Tolerancia = x.Tolerancia,
                                    Total = x.Total
                                }).First();
 
@@ -612,8 +600,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     Perfil = x.Perfil,
                                     Recibido = x.Recibido,
                                     Requerido = x.Requerido,
-                                    ToleranciaMaxima = x.ToleranciaMaxima,
-                                    ToleranciaMinina = x.ToleranciaMinina,
+                                    Tolerancia = x.Tolerancia,
                                     Total = x.Total
 
                                 }).First();
@@ -629,8 +616,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                 Stocks.OrderBy(x => x.Descripcion)
                     .ThenBy(x => x.Diametro)
-                    .ThenBy(x => x.ToleranciaMinina)
-                    .ThenBy(x => x.ToleranciaMaxima)
+                    .ThenBy(x => x.Tolerancia)
                     .ThenBy(x => x.Perfil)
                     .ThenBy(x => x.Largo);
 

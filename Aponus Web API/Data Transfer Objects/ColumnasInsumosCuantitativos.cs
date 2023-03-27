@@ -16,11 +16,8 @@ namespace Aponus_Web_API.Data_Transfer_objects
         [JsonProperty(PropertyName = "altura", NullValueHandling = NullValueHandling.Ignore)]
         public string? Altura { get; set; } = "Altura";
 
-        [JsonProperty(PropertyName = "toleranciaMinima", NullValueHandling = NullValueHandling.Ignore)]
-        public string? ToleranciaMinina { get; set; } = "Tolerancia mínima";
-
-        [JsonProperty(PropertyName = "toleranciaMaxima", NullValueHandling = NullValueHandling.Ignore)]
-        public string? ToleranciaMaxima { get; set; } = "Tolerancia máxima";
+        [JsonProperty(PropertyName = "tolerancia", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Tolerancia{ get; set; } = "Tolerancia";
 
         [JsonProperty(PropertyName = "requerido", NullValueHandling = NullValueHandling.Ignore)]
         public string? Requerido { get; set; } = "Cant. Requerida (Ud.)";

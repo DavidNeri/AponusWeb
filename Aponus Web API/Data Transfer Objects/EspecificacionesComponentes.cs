@@ -27,12 +27,9 @@ namespace Aponus_Web_API.Data_Transfer_objects
 
         [JsonProperty(PropertyName = "Altura" , NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Altura { get; set; }
-
-        [JsonProperty(PropertyName = "toleranciaMinima" , NullValueHandling = NullValueHandling.Ignore)]
-        public int? ToleranciaMinina { get; set; }
-
-        [JsonProperty(PropertyName = "toleranciaMaxima" , NullValueHandling = NullValueHandling.Ignore)]
-        public int? ToleranciaMaxima { get; set; }
+       
+        [JsonProperty(PropertyName = "tolerancia", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Tolerancia{ get; set; }
 
 
 

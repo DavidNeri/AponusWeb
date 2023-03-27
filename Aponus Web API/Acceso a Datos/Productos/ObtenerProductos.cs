@@ -85,12 +85,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                                {
                                    IdProducto = x.IdProducto,
                                    DiametroNominal = x.DiametroNominal,
-                                   ToleranciaMaxima = x.ToleranciaMaxima,
-                                   ToleranciaMinima = x.ToleranciaMinima,
+                                   Tolerancia=x.Tolerancia,
                                    Cantidad = x.Cantidad
 
                                }).ToListAsync();
-                _EspecificacionesProducto.OrderBy(X => X.DiametroNominal).ThenBy(x => x.ToleranciaMinima).ThenBy(x => x.ToleranciaMaxima);
+                _EspecificacionesProducto.OrderBy(X => X.DiametroNominal).ThenBy(x => x.Tolerancia);
 
                 DatosProducto _Producto = new DatosProducto()
                 {

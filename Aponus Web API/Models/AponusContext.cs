@@ -200,13 +200,9 @@ public partial class AponusContext : DbContext
 
 
             entity.Property(e => e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
-            entity.Property(e => e.Perfil).HasColumnName("PERFIL");
-            entity.Property(e => e.ToleranciaMaxima)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("TOLERANCIA_MAXIMA");
-            entity.Property(e => e.ToleranciaMinima)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("TOLERANCIA_MINIMA");
+            entity.Property(e => e.Perfil).HasColumnName("PERFIL");            
+            entity.Property(e => e.Tolerancia)
+            .HasColumnName("TOLERANCIA");
 
             entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.CuantitativosDetalles)
                 .HasForeignKey(d => d.IdDescripcion)
@@ -301,8 +297,7 @@ public partial class AponusContext : DbContext
                 .HasDefaultValueSql("((0))")
                 .HasColumnType("money")
                 .HasColumnName("PRECIO");
-            entity.Property(e => e.ToleranciaMaxima).HasColumnName("TOLERANCIA_MAXIMA");
-            entity.Property(e => e.ToleranciaMinima).HasColumnName("TOLERANCIA_MINIMA");
+            entity.Property(e => e.Tolerancia).HasColumnName("TOLERANCIA");
 
             entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.Productos)
                  
@@ -330,6 +325,7 @@ public partial class AponusContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPCION");
+           
         });
 
         modelBuilder.Entity<ProductosTipo>(entity =>

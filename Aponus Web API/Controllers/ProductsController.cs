@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aponus_Web_API.Controllers
 {
     [Route("Aponus/[Controller]")]
-    [ApiController]
+    //[ApiController]
     public class ProductsController : Controller
     {
         [HttpGet]
@@ -87,6 +87,21 @@ namespace Aponus_Web_API.Controllers
             }
 
 
+        }
+
+        [HttpPost]
+        [Route("SaveProduct")]
+        public IActionResult GuardarProducto(DatosProducto Producto, List<ComponentesProducto> Componentes)
+        {
+            try
+            {
+                return new BS_Products().GuardarProducto(Producto, Componentes);
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
         }
     }
 }

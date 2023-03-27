@@ -1,10 +1,13 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Insumos;
 using Aponus_Web_API.Data_Transfer_objects;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Business
 {
     public class BS_TablasInsumos
     {
+       
+
         internal int? ObtenerTablaInsumo(Insumos Insumo)
         {
 

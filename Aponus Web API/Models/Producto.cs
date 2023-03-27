@@ -14,9 +14,7 @@ public partial class Producto
 
     public int? DiametroNominal { get; set; }
 
-    public int? ToleranciaMinima { get; set; }
-
-    public int? ToleranciaMaxima { get; set; }
+    public string? Tolerancia { get; set; }
 
     public int? Cantidad { get; set; }
 

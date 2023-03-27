@@ -14,34 +14,34 @@ namespace Aponus_Web_API.Acceso_a_Datos.Insumos
         public int? ObtenerTabla(Data_Transfer_objects.Insumos Insumo)
         {
             int? IdTabla = null;
-            string? _Componente;
+            string? _IdComponente;
 
-            _Componente = AponusDBContext.StockPesables
-                .Where(x=>x.IdComponente==Insumo.Nombre)
+            _IdComponente = AponusDBContext.StockPesables
+                .Where(x=>x.IdComponente==Insumo.IdInsumo)
                 .Select(x=>x.IdComponente)
                 .FirstOrDefault();
 
-            if (_Componente != null)
+            if (_IdComponente != null)
             {
                 IdTabla = 0;
 
             }else
             {
-                 _Componente = AponusDBContext.StockCuantitativos
-                .Where(x => x.IdComponente == Insumo.Nombre)
+                 _IdComponente = AponusDBContext.StockCuantitativos
+                .Where(x => x.IdComponente == Insumo.IdInsumo)
                 .Select(x => x.IdComponente)
                 .FirstOrDefault();
 
-                if (_Componente != null) { IdTabla= 1; }
+                if (_IdComponente != null) { IdTabla= 1; }
             }
-            if (_Componente == null)
+            if (_IdComponente == null)
             {
-                _Componente = AponusDBContext.StockMensurables
-               .Where(x => x.IdComponente == Insumo.Nombre)
+                _IdComponente = AponusDBContext.StockMensurables
+               .Where(x => x.IdComponente == Insumo.IdInsumo)
                .Select(x => x.IdComponente)
                .FirstOrDefault();
 
-                if (_Componente != null) { IdTabla= 2; }
+                if (_IdComponente != null) { IdTabla= 2; }
             }
 
 

@@ -59,8 +59,7 @@ namespace Aponus_Web_API.Services
                 if (especificaciones.Perfil == null) { _CIC.Perfil = null; };
                 if (especificaciones.Diametro == null) { _CIC.Diametro = null; };
                 if (especificaciones.Altura == null) { _CIC.Altura = null; };
-                if (especificaciones.ToleranciaMinina == null) { _CIC.ToleranciaMinina = null; };
-                if (especificaciones.ToleranciaMaxima == null) { _CIC.ToleranciaMaxima = null; };
+                if (especificaciones.Tolerancia== null) { _CIC.Tolerancia= null; };
                 if (especificaciones.Requerido == null) { _CIC.Requerido = null; };
                 if (especificaciones.Recibido == null) { _CIC.Recibido = null; };
                 if (especificaciones.Granallado == null) { _CIC.Granallado = null; };
@@ -75,8 +74,7 @@ namespace Aponus_Web_API.Services
                     _CIC.Perfil,
                     _CIC.Diametro,
                     _CIC.Altura,
-                    _CIC.ToleranciaMinina,
-                    _CIC.ToleranciaMaxima,
+                    _CIC.Tolerancia,
                     _CIC.Requerido,
                     _CIC.Recibido,
                     _CIC.Granallado,

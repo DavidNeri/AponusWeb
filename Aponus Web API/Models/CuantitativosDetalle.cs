@@ -12,10 +12,8 @@ public partial class CuantitativosDetalle
     public int? Diametro { get; set; }
 
     public decimal? Altura { get; set; }
-
-    public int? ToleranciaMinima { get; set; }
-
-    public int? ToleranciaMaxima { get; set; }
+ 
+    public string? Tolerancia { get; set; }
 
     public decimal? Espesor { get; set; }
 

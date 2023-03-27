@@ -147,8 +147,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Insumos
                             _CuantitativosDetalle.IdComponente,
                             _CuantitativosDetalle.Diametro,
                             _CuantitativosDetalle.Altura,
-                            _CuantitativosDetalle.ToleranciaMinima,
-                            _CuantitativosDetalle.ToleranciaMaxima,
+                            _CuantitativosDetalle.Tolerancia,
 
                         })
                     .Join(AponusDBContext.StockCuantitativos,
@@ -162,8 +161,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Insumos
                             _ComponenetesCuantitativos_Cuantitativos_Detalle.Cantidad,
                             _ComponenetesCuantitativos_Cuantitativos_Detalle.Diametro,
                             _ComponenetesCuantitativos_Cuantitativos_Detalle.Altura,
-                            _ComponenetesCuantitativos_Cuantitativos_Detalle.ToleranciaMinima,
-                            _ComponenetesCuantitativos_Cuantitativos_Detalle.ToleranciaMaxima,
+                            _ComponenetesCuantitativos_Cuantitativos_Detalle.Tolerancia,
                             _StockCuantitativos.CantidadRecibido,
                             _StockCuantitativos.CantidadPintura,
                             _StockCuantitativos.CantidadProceso,
@@ -187,8 +185,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Insumos
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.Cantidad,
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.Diametro,
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.Altura,
-                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.ToleranciaMinima,
-                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.ToleranciaMaxima,
+                            Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.Tolerancia,
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadRecibido,
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadPintura,
                             Cuantitativos._ComponentesCuantitativos_CuantitativosDetalle_SotckCuantitativos.CantidadProceso,
@@ -202,8 +199,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Insumos
                 {
                     _Descripcion = queryResult.Descripcion +
                         " DN " + string.Format("{0:####}", queryResult.Diametro) + ' ' +
-                        queryResult.ToleranciaMinima +
-                        '-' + queryResult.ToleranciaMaxima;
+                        queryResult.Tolerancia;
 
 
                 }
@@ -211,8 +207,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Insumos
                 {
                     _Descripcion = queryResult.Descripcion + " Ø" +
                         string.Format("{0:####}", queryResult.Diametro) + " Tolerancia: " +
-                        queryResult.ToleranciaMinima + '-' +
-                        queryResult.ToleranciaMaxima;
+                        queryResult.Tolerancia;
                 }
 
                 if (queryResult.CantidadMoldeado != null)

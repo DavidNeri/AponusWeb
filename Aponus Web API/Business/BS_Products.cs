@@ -45,6 +45,47 @@ namespace Aponus_Web_API.Business
 
         }
 
+        internal IActionResult GuardarProducto(DatosProducto producto, List<ComponentesProducto> Componentes)
+        {
+            
+            TablaInsumo _ObtenerTabla = new TablaInsumo();
+
+            try
+            {
+                foreach (ComponentesProducto Componente in Componentes)
+                { 
+
+                    switch (_ObtenerTabla.ObtenerTabla(new Insumos { IdInsumo = Componente.IdComponente }))
+                    {
+                        case 0:
+
+                            break;
+                        case 1:
+                            break;
+
+                        case 2:
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+                
+
+            }
+            catch (Exception)
+            {
+
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+
+           
+           
+            return null;
+
+        }
+
         internal  async Task<JsonResult> ListarDN(string? typeId)
         {
              return await new  ObtenerProductos().ListarDN(typeId);
