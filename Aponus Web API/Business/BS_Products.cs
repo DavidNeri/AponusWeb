@@ -47,27 +47,31 @@ namespace Aponus_Web_API.Business
 
         internal IActionResult GuardarProducto(DatosProducto producto, List<ComponentesProducto> Componentes)
         {
-            
-            TablaInsumo _ObtenerTabla = new TablaInsumo();
+            OperacionesProductos operacionesProductos = new OperacionesProductos();
 
             try
             {
+                operacionesProductos.GuardarProducto(producto);
+
                 foreach (ComponentesProducto Componente in Componentes)
                 { 
 
-                    switch (_ObtenerTabla.ObtenerTabla(new Insumos { IdInsumo = Componente.IdComponente }))
+                    switch (new TablaInsumo().ObtenerTabla(new Insumos { IdInsumo = Componente.IdComponente }))
                     {
                         case 0:
-
+                            operacionesProductos.GuardarComponententesPesables(producto,Componente);
                             break;
                         case 1:
+                            operacionesProductos.GuardarComponententesCuantitativos(producto, Componente);
                             break;
 
                         case 2:
+                            operacionesProductos.GuardarComponententesMensurables(producto, Componente);
                             break;
                         default:
                             break;
                     }
+
 
                 }
 
@@ -76,13 +80,18 @@ namespace Aponus_Web_API.Business
             }
             catch (Exception)
             {
+                operacionesProductos.EliminarComponententesPesables(producto, Componentes);
+                operacionesProductos.EliminarComponententesCuantitativos(producto, Componentes);
+                operacionesProductos.EliminarComponententesMensurables(producto, Componentes);
+                operacionesProductos.EliminarProducto(producto);
+
 
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
-           
-           
-            return null;
+
+
+            return new StatusCodeResult(StatusCodes.Status200OK);
 
         }
 

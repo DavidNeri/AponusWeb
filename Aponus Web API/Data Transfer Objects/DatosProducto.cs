@@ -5,10 +5,10 @@ namespace Aponus_Web_API.Data_Transfer_objects
     { 
        
 
-        [JsonProperty(PropertyName = "descripcionProducto")]
-        public string? DescripcionProducto { get; set; } 
+        [JsonProperty(PropertyName = "descripcionProducto",NullValueHandling =NullValueHandling.Ignore)]
+        public string? DescripcionProducto { get; set; }
 
-        [JsonProperty(PropertyName = "productos")]
+        [JsonProperty(PropertyName = "productos", NullValueHandling = NullValueHandling.Ignore)]
         public List<EspecificacionesDatosProducto>? Producto { get; set;}
 
     }

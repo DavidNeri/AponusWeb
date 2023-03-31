@@ -85,7 +85,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                                {
                                    IdProducto = x.IdProducto,
                                    DiametroNominal = x.DiametroNominal,
-                                   Tolerancia=x.Tolerancia,
+                                   Tolerancia = x.Tolerancia,
                                    Cantidad = x.Cantidad
 
                                }).ToListAsync();
@@ -123,5 +123,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
 
 
         }
+       
+
     }
+    
+
 }

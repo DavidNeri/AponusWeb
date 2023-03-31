@@ -35,6 +35,8 @@ public partial class AponusContext : DbContext
 
     public virtual DbSet<ProductosTipo> ProductosTipos { get; set; }
 
+    //public virtual DbSet<Productos_Tipos_Descripcion> Producto_Tipo_Descripcion { get; set; }
+
     public virtual DbSet<StockCuantitativo> StockCuantitativos { get; set; }
 
     public virtual DbSet<StockMensurable> StockMensurables { get; set; }
