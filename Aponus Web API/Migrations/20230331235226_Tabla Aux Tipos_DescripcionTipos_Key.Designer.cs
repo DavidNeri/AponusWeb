@@ -4,6 +4,7 @@ using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20230331235226_Tabla Aux Tipos_DescripcionTipos_Key")]
+    partial class TablaAuxTiposDescripcionTiposKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -361,22 +364,11 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("ID_TIPO");
 
-                    b.Property<int?>("IdDescripcion")
+                    b.Property<int?>("idDescripcion")
                         .HasColumnType("int")
                         .HasColumnName("ID_DESCRIPCION");
 
-                    b.Property<int>("DescripcionIdDescripcion")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdTipoNavigationIdTipo")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("IdTipo", "IdDescripcion");
-
-                    b.HasIndex("DescripcionIdDescripcion");
-
-                    b.HasIndex("IdTipoNavigationIdTipo");
+                    b.HasKey("IdTipo", "idDescripcion");
 
                     b.ToTable("Producto_Tipo_Descripcion");
                 });
@@ -632,25 +624,6 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("IdTipoNavigation");
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Models.Productos_Tipos_Descripcion", b =>
-                {
-                    b.HasOne("Aponus_Web_API.Models.ProductosDescripcion", "Descripcion")
-                        .WithMany("Producto_Tipo_Descripcione")
-                        .HasForeignKey("DescripcionIdDescripcion")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Aponus_Web_API.Models.ProductosTipo", "IdTipoNavigation")
-                        .WithMany("Producto_Tipo_Descripcione")
-                        .HasForeignKey("IdTipoNavigationIdTipo")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Descripcion");
-
-                    b.Navigation("IdTipoNavigation");
-                });
-
             modelBuilder.Entity("Aponus_Web_API.Models.StockCuantitativo", b =>
                 {
                     b.HasOne("Aponus_Web_API.Models.CuantitativosDetalle", "IdComponenteNavigation")
@@ -710,15 +683,11 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosDescripcion", b =>
                 {
-                    b.Navigation("Producto_Tipo_Descripcione");
-
                     b.Navigation("Productos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosTipo", b =>
                 {
-                    b.Navigation("Producto_Tipo_Descripcione");
-
                     b.Navigation("Productos");
                 });
 

@@ -1,6 +1,7 @@
 ﻿using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Productos
 {
@@ -106,25 +107,21 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
             try
             {
 
-                if (producto.IdDescripcion!=null) //Nuncadeberia ser null, me la pasa franco
-                {
+              
                     AponusDBContext.Productos
                    .Add(new Producto
                    {
-                       IdProducto = producto.IdProducto,//Generar ID_Producto
+                       IdProducto = GenerarIdProd(producto),
                        IdDescripcion = (int)producto.IdDescripcion,
                        IdTipo = producto.IdTipo,
                        DiametroNominal = producto.DiametroNominal,
                        Cantidad = producto.Cantidad,
-                       Precio=producto.Precio,
+                       Precio = producto.Precio,
                        Tolerancia = producto.Tolerancia,
 
                    });
-                }
-                else
-                {
-                    //Agregar Descripcion en tabla Descripciion_Prodcutos
-                }
+                
+               
 
                
             }
@@ -133,6 +130,24 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
 
 
             }
+        }
+
+        private string GenerarIdProd(DatosProducto Producto)
+        {
+            string IdProducto = "";
+
+            try
+            {
+                string Tolerancia = Regex.Replace(IdProducto, "-/", "-");
+                IdProducto = Producto.IdTipo + "_" + Producto.IdDescripcion + "_" + Producto.DiametroNominal + "_" + Tolerancia;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+
+            return  IdProducto;
         }
     }
 }

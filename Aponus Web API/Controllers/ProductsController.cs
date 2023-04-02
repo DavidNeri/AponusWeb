@@ -86,7 +86,6 @@ namespace Aponus_Web_API.Controllers
                 throw;
             }
 
-
         }
 
         [HttpPost]
@@ -95,6 +94,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
+                //return null;
                 return new BS_Products().GuardarProducto(Producto, Componentes);
             }
             catch (Exception)

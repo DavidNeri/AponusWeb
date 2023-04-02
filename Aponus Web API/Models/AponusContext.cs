@@ -35,7 +35,7 @@ public partial class AponusContext : DbContext
 
     public virtual DbSet<ProductosTipo> ProductosTipos { get; set; }
 
-    //public virtual DbSet<Productos_Tipos_Descripcion> Producto_Tipo_Descripcion { get; set; }
+    public virtual DbSet<Productos_Tipos_Descripcion> Producto_Tipo_Descripcion { get; set; }
 
     public virtual DbSet<StockCuantitativo> StockCuantitativos { get; set; }
 
@@ -344,7 +344,18 @@ public partial class AponusContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPCION");
+
+            
         });
+        modelBuilder.Entity<Productos_Tipos_Descripcion>(entity =>
+        {
+            entity.ToTable("PRODUCTOS_TIPOS_DESCRIPCION");
+            entity.Property(e=>e.IdTipo).HasColumnName("ID_TIPO");
+            entity.Property(e=>e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
+            entity.HasKey(Key => new { Key.IdTipo, Key.IdDescripcion });
+
+        });
+
 
         modelBuilder.Entity<StockCuantitativo>(entity =>
         {

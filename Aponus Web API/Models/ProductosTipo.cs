@@ -11,4 +11,8 @@ public partial class ProductosTipo
 
     public ICollection<Producto> Productos{ get; set;} = new List<Producto>();
 
+    //Navigation Propertires
+
+    public ICollection<Productos_Tipos_Descripcion> Producto_Tipo_Descripcione { get; set; }
+
 }
