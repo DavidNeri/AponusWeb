@@ -99,11 +99,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
 
         internal void GuardarProducto(DatosProducto producto)
         {
-            //Crear tabla unir tipos y descripcion
-            //generar id tipo
-            //Guardar TIPO PROD
-            //guardar descripcion
-            //GuardarProd
+           
             try
             {
 

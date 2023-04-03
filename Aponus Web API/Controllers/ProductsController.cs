@@ -1,12 +1,13 @@
 ﻿using Aponus_Web_API.Business;
 using Aponus_Web_API.Data_Transfer_objects;
+using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Mapping;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
 {
     [Route("Aponus/[Controller]")]
-    //[ApiController]
+   [ApiController]
     public class ProductsController : Controller
     {
         [HttpGet]
@@ -90,12 +91,12 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("SaveProduct")]
-        public IActionResult GuardarProducto(DatosProducto Producto, List<ComponentesProducto> Componentes)
+        public IActionResult GuardarProducto(GuardarProducto Producto)
         {
             try
             {
                 //return null;
-                return new BS_Products().GuardarProducto(Producto, Componentes);
+                return new BS_Products().GuardarProducto(Producto);
             }
             catch (Exception)
             {
