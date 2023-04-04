@@ -3,6 +3,8 @@ using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Mapping;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -95,13 +97,13 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                //return null;
-                return new BS_Products().GuardarProducto(Producto);
+                new BS_Products().GuardarProducto(Producto);
+                return new StatusCodeResult(StatusCodes.Status200OK); 
             }
-            catch (Exception)
+            catch (DbUpdateException e ) 
             {
-
-                return null;
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
             }
         }
     }

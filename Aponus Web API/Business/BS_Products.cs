@@ -12,6 +12,7 @@ using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Acceso_a_Datos.Productos;
 using Aponus_Web_API.Acceso_a_Datos.Insumos;
 using Aponus_Web_API.Data_Transfer_Objects;
+using Microsoft.Data.SqlClient;
 
 namespace Aponus_Web_API.Business
 {
@@ -45,53 +46,87 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal IActionResult GuardarProducto(GuardarProducto producto)
+        internal void GuardarProducto(GuardarProducto producto)
         {
             OperacionesProductos operacionesProductos = new OperacionesProductos();
 
-            try
+           // try
+           // {
+                producto.Producto.IdProducto= operacionesProductos.GenerarIdProd(producto); //Coorejir
+
+               // operacionesProductos.GuardarProducto(producto);
+            foreach (ComponentesProducto Componente in producto.Componentes)
             {
-                operacionesProductos.GuardarProducto(producto.Producto);
 
-                foreach (ComponentesProducto Componente in producto.Componentes)
-                { 
+                switch (new TablaInsumo().ObtenerTabla(new Insumos { IdInsumo = Componente.IdComponente }))
+                {
+                    case 0:
+                        Componente.IdProducto = producto.Producto.IdProducto;
+                        operacionesProductos.GuardarComponententesPesables(Componente);
 
-                    switch (new TablaInsumo().ObtenerTabla(new Insumos { IdInsumo = Componente.IdComponente }))
-                    {
-                        case 0:
-                            operacionesProductos.GuardarComponententesPesables(producto.Producto,Componente);
-                            break;
-                        case 1:
-                            operacionesProductos.GuardarComponententesCuantitativos(producto.Producto, Componente);
-                            break;
+                        break;
+                    case 1:
+                        Componente.IdProducto = producto.Producto.IdProducto;
 
-                        case 2:
-                            operacionesProductos.GuardarComponententesMensurables(producto.Producto, Componente);
-                            break;
-                        default:
-                            break;
-                    }
+                        operacionesProductos.GuardarComponententesCuantitativos(Componente);
+                        break;
 
-
+                    case 2:
+                        Componente.IdProducto = producto.Producto.IdProducto;
+                        operacionesProductos.GuardarComponententesMensurables(Componente);
+                        break;
+                    default:
+                        break;
                 }
-
-                
-
-            }
-            catch (Exception)
-            {
-               // operacionesProductos.EliminarComponententesPesables(producto, Componentes);
-               // operacionesProductos.EliminarComponententesCuantitativos(producto, Componentes);
-                //operacionesProductos.EliminarComponententesMensurables(producto, Componentes);
-                //operacionesProductos.EliminarProducto(producto);
-
-
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
+            /*   foreach (ComponentesProducto Componente in producto.Componentes)
+               { 
+
+                   switch (new TablaInsumo().ObtenerTabla(new Insumos { IdInsumo = Componente.IdComponente }))
+                   {
+                       case 0:
+                           Componente.IdProducto = producto.Producto.IdProducto;
+                           operacionesProductos.GuardarComponententesPesables(Componente);
+
+                           break;
+                       case 1:
+                           Componente.IdProducto = producto.Producto.IdProducto;
+
+                           operacionesProductos.GuardarComponententesCuantitativos(Componente);
+                           break;
+
+                       case 2:
+                           Componente.IdProducto = producto.Producto.IdProducto;
+                           operacionesProductos.GuardarComponententesMensurables(Componente);
+                           break;
+                       default:
+                           break;
+                   }
 
 
-            return new StatusCodeResult(StatusCodes.Status200OK);
+               }
+               return new StatusCodeResult(StatusCodes.Status200OK);*/
+
+
+            // }
+            //  catch (DbUpdateException e)
+            //  {
+            //    string Mensaje = e.Message;
+            //
+            //    return new ForbidResult(Mensaje);
+
+            // operacionesProductos.EliminarComponententesPesables(producto, Componentes);
+            // operacionesProductos.EliminarComponententesCuantitativos(producto, Componentes);
+            //operacionesProductos.EliminarComponententesMensurables(producto, Componentes);
+            //operacionesProductos.EliminarProducto(producto);
+
+
+            // }
+
+
+
+
 
         }
 

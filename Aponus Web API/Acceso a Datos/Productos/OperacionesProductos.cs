@@ -1,5 +1,9 @@
 ﻿using Aponus_Web_API.Data_Transfer_objects;
+using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
@@ -30,112 +34,78 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
             throw new NotImplementedException();
         }
 
-        internal void GuardarComponententesCuantitativos(DatosProducto producto, ComponentesProducto componente)
+        internal void GuardarComponententesCuantitativos(ComponentesProducto componente)
         {
-            try
-            {
-                if (componente.Cantidad!=null)
-                {
-                    componente.Cantidad = 0;
-
-                }
-
-                AponusDBContext.ComponentesCuantitativos
-                       .Add(new ComponentesCuantitativo
-                       {
-                           IdProducto = producto.IdProducto,
-                           IdComponente = componente.IdComponente,
-                           Cantidad = (int)componente.Cantidad
-                           
-                       });
-
-            }
-            catch (Exception)
-            {
-
-
-            }
-        }
-
-        internal void GuardarComponententesMensurables(DatosProducto producto, ComponentesProducto componente)
-        {
-            try
-            {
-                AponusDBContext.ComponentesMensurables
-                    .Add(new ComponentesMensurable
-                    {
-                        IdProducto = producto.IdProducto,                        
-                        IdComponente = componente.IdComponente,
-                        Largo=componente.Largo,
-                        
-                    });
-            }
-            catch (Exception)
-            {
-
-
-            }
-        }
-
-        internal void GuardarComponententesPesables(DatosProducto producto, ComponentesProducto componente)
-        {
-            try
-            {
-                AponusDBContext.ComponentesPesables
-                    .Add(new ComponentesPesable
-                    {
-                        IdProducto = producto.IdProducto,
-                        IdComponente = componente.IdComponente,
-                        Cantidad = componente.Cantidad,
-                        Peso = componente.Peso
-                    });
-            }
-            catch (Exception)
-            {
-
-                
-            }
-        }
-
-        internal void GuardarProducto(DatosProducto producto)
-        {
-           
-            try
-            {
-
-              
-                    AponusDBContext.Productos
-                   .Add(new Producto
+            AponusDBContext.ComponentesCuantitativos
+                   .Add(new ComponentesCuantitativo
                    {
-                       IdProducto = GenerarIdProd(producto),
-                       IdDescripcion = (int)producto.IdDescripcion,
-                       IdTipo = producto.IdTipo,
-                       DiametroNominal = producto.DiametroNominal,
-                       Cantidad = producto.Cantidad,
-                       Precio = producto.Precio,
-                       Tolerancia = producto.Tolerancia,
+                       IdProducto = componente.IdProducto,
+                       IdComponente = componente.IdComponente,
+                       Cantidad = (int)componente.Cantidad
 
                    });
-                
-               
 
-               
-            }
-            catch (Exception)
-            {
-
-
-            }
+            AponusDBContext.SaveChanges();
+                      
         }
 
-        private string GenerarIdProd(DatosProducto Producto)
+        internal void GuardarComponententesMensurables(ComponentesProducto componente)
+        {
+            AponusDBContext.ComponentesMensurables
+                .Add(new ComponentesMensurable
+                {
+                    IdProducto = componente.IdProducto,
+                    IdComponente = componente.IdComponente,
+                    Largo = componente.Largo,
+
+                });
+            AponusDBContext.SaveChanges(); 
+        }
+
+        internal void GuardarComponententesPesables(ComponentesProducto componente)
+        {
+
+            AponusDBContext.ComponentesPesables
+                   .Add(new ComponentesPesable
+                   {
+                       IdProducto = componente.IdProducto,
+                       IdComponente = componente.IdComponente,
+                       Cantidad = componente.Cantidad,
+                       Peso = componente.Peso
+                   });
+            AponusDBContext.SaveChanges();
+
+        }
+
+        internal void GuardarProducto(GuardarProducto producto)
+        {
+
+            AponusDBContext.Productos
+             .Add(new Producto
+             {
+                 IdProducto = producto.Producto.IdProducto,
+                 IdDescripcion = (int)producto.Producto.IdDescripcion,
+                 IdTipo = producto.Producto.IdTipo,
+                 DiametroNominal = producto.Producto.DiametroNominal,
+                 Cantidad = producto.Producto.Cantidad,
+                 Precio = producto.Producto.Precio,
+                 Tolerancia = producto.Producto.Tolerancia,
+
+             });
+
+            AponusDBContext.SaveChanges();
+        }
+
+        public string GenerarIdProd(GuardarProducto Producto)
         {
             string IdProducto = "";
 
             try
             {
-                string Tolerancia = Regex.Replace(IdProducto, "-/", "-");
-                IdProducto = Producto.IdTipo + "_" + Producto.IdDescripcion + "_" + Producto.DiametroNominal + "_" + Tolerancia;
+                string Tolerancia = Producto.Producto.Tolerancia.Replace("-", "_").Replace("/","_");
+                IdProducto = Producto.Producto.IdTipo + "_" +
+                    Producto.Producto.IdDescripcion + "_" +
+                    Producto.Producto.DiametroNominal + "_" + Tolerancia;
             }
             catch (Exception)
             {
@@ -143,7 +113,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                 return null;
             }
 
-            return  IdProducto;
+            return IdProducto;
         }
     }
 }
