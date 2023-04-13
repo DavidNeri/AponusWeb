@@ -101,7 +101,7 @@ namespace Aponus_Web_API.Controllers
                 return new StatusCodeResult(StatusCodes.Status200OK); 
             }
             catch (DbUpdateException e ) 
-            {
+            {   
                 string Mensaje = e.InnerException.Message;
                 return new JsonResult(Mensaje);
             }

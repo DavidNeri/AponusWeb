@@ -378,7 +378,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasIndex("IdTipoNavigationIdTipo");
 
-                    b.ToTable("Producto_Tipo_Descripcion");
+                    b.ToTable("Producto_Tipo_Descripcion", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.StockCuantitativo", b =>
@@ -502,7 +502,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("Usuario");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ComponentesCuantitativo", b =>

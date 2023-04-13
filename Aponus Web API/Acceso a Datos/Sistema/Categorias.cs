@@ -10,9 +10,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
         private readonly AponusContext AponusDBContext;
         public Categorias() { AponusDBContext = new AponusContext(); }
 
-        internal List<Descripciones> ListarDescripciones(string idTipo)
+      
+
+        internal List<DTODescripciones> ListarDescripciones(string idTipo)
         {
-            List<Descripciones> Descripciones = AponusDBContext.ProductosDescripcions
+            List<DTODescripciones> Descripciones = AponusDBContext.ProductosDescripcions
                 .Join(AponusDBContext.Producto_Tipo_Descripcion,
                 _Descripciones => _Descripciones.IdDescripcion, _Tipo => _Tipo.IdDescripcion,
                 (_Descripciones, _Tipo) => new {
@@ -21,10 +23,52 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
                     _Descripciones.DescripcionProducto
                 })
                 .Where(Tipo=>Tipo._idTipo==idTipo)
-                .Select(x=> new Descripciones { IdDescripcion=x.IdDescripcion,Descripcion=x.DescripcionProducto })
+                .Select(x=> new DTODescripciones { IdDescripcion=x.IdDescripcion,Descripcion=x.DescripcionProducto })
                 .ToList();
 
             return Descripciones ;
+
+        }
+
+        internal int? NuevaDescripcion(DTOCategorias nuevaCategoria)
+        {
+
+            AponusDBContext.ProductosDescripcions
+                .Add(new ProductosDescripcion {
+                            IdDescripcion = null,
+                            DescripcionProducto = nuevaCategoria.Descripcion });
+            AponusDBContext.SaveChanges();
+
+
+            int? IdDescripcion = AponusDBContext.ProductosDescripcions
+                .Where(x => x.DescripcionProducto == nuevaCategoria.DescripcionTipo)
+                .Select(x => x.IdDescripcion).FirstOrDefault();
+            return IdDescripcion;
+
+
+        }
+
+        internal void NuevoTipo(DTOCategorias NuevaCategoria)
+        {
+            AponusDBContext.ProductosTipos.
+                Add(new ProductosTipo{
+                    IdTipo = NuevaCategoria.IdTipo,
+                    DescripcionTipo = NuevaCategoria.DescripcionTipo
+                });
+
+            AponusDBContext.SaveChanges();
+                
+        }
+
+        internal void VincularCatgorias(DTOCategorias nuevaCategoria)
+        {
+            AponusDBContext.Producto_Tipo_Descripcion
+                .Add(new Productos_Tipos_Descripcion
+                {
+                    IdTipo = nuevaCategoria.IdTipo,
+                    IdDescripcion = nuevaCategoria.IdDescripcion
+                });
+            AponusDBContext.SaveChanges();
 
         }
     }

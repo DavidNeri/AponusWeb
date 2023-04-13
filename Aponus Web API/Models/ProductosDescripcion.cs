@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Models;
 
 public partial class ProductosDescripcion
 {
-    public int IdDescripcion { get; set; }
+    public int? IdDescripcion { get; set; }
 
     public string? DescripcionProducto { get; set; }
 

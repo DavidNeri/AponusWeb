@@ -31,14 +31,49 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListDescriptions/{idTipo}")]
-        public List<Descripciones> ListarDescripciones(string IdTipo)
+        public List<DTODescripciones> ListarDescripciones(string IdTipo)
         {
             
-                return new Categorias().ListarDescripciones(IdTipo);
+                return new Acceso_a_Datos.Sistema.Categorias().ListarDescripciones(IdTipo);
             
-             
+        }
+
+
+        [HttpPost]
+        [Route("Types/new/{Tipo}")]
+        public IActionResult AgregarTipo_Descripcion(DTOCategorias NuevaCategoria)
+        {
+            try
+            {
+                return new CategoriesServices().AgregarTipo(NuevaCategoria);
+            }
+            catch (DbUpdateException e)
+            {
+
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
+            }
            
-            
+
+        }
+
+
+        [HttpPost]
+        [Route("Descriptions/new/{Descripcion}")]
+        public IActionResult AgregarDescripcion( DTOCategorias NuevaCategoria)
+        {
+            try
+            {
+                return new CategoriesServices().AgregarDescripcion(NuevaCategoria);
+            }
+            catch (DbUpdateException e)
+            {
+
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
+            }
+
+
         }
 
 
