@@ -2,6 +2,7 @@
 using Aponus_Web_API.Data_Transfer_Objects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Aponus_Web_API.Services
 {
@@ -14,9 +15,11 @@ namespace Aponus_Web_API.Services
             {
                 Categorias categorias = new Categorias();
 
+                //Inserta la Descripcion y obtiene el id
                 NuevaCategoria.IdDescripcion= categorias.NuevaDescripcion(NuevaCategoria);
-                categorias.VincularCatgorias(NuevaCategoria);
 
+
+                categorias.VincularCatgorias(NuevaCategoria);
                 return new StatusCodeResult(StatusCodes.Status200OK);
 
             }
@@ -36,9 +39,7 @@ namespace Aponus_Web_API.Services
             {
                 NuevaCategoria.IdTipo = GenerarIdTipo(NuevaCategoria.DescripcionTipo);                
                 NuevaCategoria.DescripcionTipo = NuevaCategoria.DescripcionTipo.ToUpper();
-                NuevaCategoria.Descripcion = NuevaCategoria.Descripcion.ToUpper();
 
-             
                 new Categorias().NuevoTipo(NuevaCategoria);
 
 
@@ -52,6 +53,10 @@ namespace Aponus_Web_API.Services
 
             }
             
+        }
+        internal List<DTODescripciones> ListarDescripciones(string IdTipo)
+        {
+            return new Categorias().ListarDescripciones(IdTipo);
         }
 
         private string GenerarIdTipo(string tipo)

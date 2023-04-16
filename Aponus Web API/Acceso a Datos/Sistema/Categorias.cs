@@ -30,6 +30,8 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
 
         }
 
+
+
         internal int? NuevaDescripcion(DTOCategorias nuevaCategoria)
         {
 

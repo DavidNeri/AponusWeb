@@ -34,13 +34,13 @@ namespace Aponus_Web_API.Controllers
         public List<DTODescripciones> ListarDescripciones(string IdTipo)
         {
             
-                return new Acceso_a_Datos.Sistema.Categorias().ListarDescripciones(IdTipo);
+                return new CategoriesServices().ListarDescripciones(IdTipo);
             
         }
 
 
         [HttpPost]
-        [Route("Types/new/{Tipo}")]
+        [Route("Types/new")]
         public IActionResult AgregarTipo_Descripcion(DTOCategorias NuevaCategoria)
         {
             try
@@ -59,7 +59,7 @@ namespace Aponus_Web_API.Controllers
 
 
         [HttpPost]
-        [Route("Descriptions/new/{Descripcion}")]
+        [Route("Descriptions/new")]
         public IActionResult AgregarDescripcion( DTOCategorias NuevaCategoria)
         {
             try
