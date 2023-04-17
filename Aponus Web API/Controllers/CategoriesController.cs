@@ -41,17 +41,16 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Types/new")]
-        public IActionResult AgregarTipo_Descripcion(DTOCategorias NuevaCategoria)
+        public string? AgregarTipo_Descripcion(DTOCategorias NuevaCategoria)
         {
             try
             {
-                return new CategoriesServices().AgregarTipo(NuevaCategoria);
+                 string? Id_Tipo = new CategoriesServices().AgregarTipo(NuevaCategoria);
+                return Id_Tipo;
             }
-            catch (DbUpdateException e)
+            catch 
             {
-
-                string Mensaje = e.InnerException.Message;
-                return new JsonResult(Mensaje);
+                return null;
             }
            
 

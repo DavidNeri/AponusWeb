@@ -33,7 +33,7 @@ namespace Aponus_Web_API.Services
 
         }
 
-        internal IActionResult AgregarTipo(DTOCategorias NuevaCategoria)
+        internal string? AgregarTipo(DTOCategorias NuevaCategoria)
         {
             try
             {
@@ -43,13 +43,12 @@ namespace Aponus_Web_API.Services
                 new Categorias().NuevoTipo(NuevaCategoria);
 
 
-                return new StatusCodeResult(StatusCodes.Status200OK);
+                return NuevaCategoria.IdTipo;
 
             }
-            catch (DbUpdateException e )
-            {
-                string Mensaje = e.InnerException.Message;
-                return new JsonResult(Mensaje);
+            catch 
+            {                
+                return null;
 
             }
             
