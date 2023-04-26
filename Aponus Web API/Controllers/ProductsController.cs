@@ -27,37 +27,75 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListProducts/{TypeId}")]
-        public async Task<JsonResult> ListProducts(string? TypeId)
+        public  Task<JsonResult> ListProducts(string? TypeId)
         {
             try
             {
 
                 return new BS_Products().ListarProductos(TypeId);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return Json(e); 
+                throw; 
             }      
 
 
         }
-
+        //Reemplazar por estos
         [HttpGet]
-        [Route("ListProducts/{TypeId}/{DN}")]
-        public  Task<DatosProducto> ListProducts(string? TypeId,int?dN)
+        [Route("ListProducts/{TypeId}/{IdDescription}")]
+        public Task<JsonResult> ListProducts(string? TypeId, int? IdDescription)
         {
             try
             {
 
-                return new BS_Products().ListarProductos(TypeId, dN);
+                return new BS_Products().ListarProductos(TypeId, IdDescription);
             }
-            catch (Exception )
+            catch (Exception)
             {
                 throw;
             }
 
 
         }
+
+        [HttpGet]
+        [Route("ListProducts/{TypeId}/{IdDescription}/{dn}")]
+        public Task<JsonResult> ListProducts(string? TypeId, int? IdDescription, int Dn)
+        {
+            try
+            {
+
+                return new BS_Products().ListarProductos(TypeId, IdDescription, Dn);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
+        }
+        //Reemplazar por estos
+
+        //Ver y eliminar
+        /* [HttpGet]
+         [Route("ListProducts/{TypeId}/{DN}")]
+         public  Task<DatosProducto> ListProducts(string? TypeId,int?dN)
+         {
+             try
+             {
+
+                 return new BS_Products().ListarProductos(TypeId, dN);
+             }
+             catch (Exception )
+             {
+                 throw;
+             }
+
+
+         }*/
+
+        //Ver y eliminar
 
         [HttpGet]
         [Route("ListParts/{productId}/{q=1}")]
@@ -75,6 +113,7 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
+        //Ver y eliminar
         [HttpGet]
         [Route("ListDN/{TypeId}")]
         public async Task<JsonResult> ListarDN(string? TypeId)
@@ -90,6 +129,26 @@ namespace Aponus_Web_API.Controllers
             }
 
         }
+        //Ver y eliminar
+
+        //Reemplazar por este
+        [HttpGet]
+        [Route("ListDN/{TypeId}/{IdDescription}")]
+        public async Task<JsonResult> ListarDN(string? TypeId, int?IdDescription)
+        {
+            try
+            {
+
+                return await new BS_Products().ListarDN(TypeId, IdDescription);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+        //Reemplazar por este
+
 
         [HttpPost]
         [Route("SaveProduct")]

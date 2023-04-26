@@ -135,7 +135,12 @@ namespace Aponus_Web_API.Business
              return await new  ObtenerProductos().ListarDN(typeId);
         }
 
-        internal JsonResult ListarProductos(string? TypeId) {
+        internal async Task<JsonResult> ListarDN(string? typeId, int? idDescription)
+        {
+            return await new ObtenerProductos().ListarDN(typeId, idDescription);
+        }
+
+        internal Task<JsonResult> ListarProductos(string? TypeId) {
 
             return new ObtenerProductos().Listar(TypeId);
 
@@ -146,9 +151,16 @@ namespace Aponus_Web_API.Business
             return new ObtenerProductos().Listar();
         }
 
-        internal Task<DatosProducto> ListarProductos(string? typeId, int? dN)
+        internal Task<JsonResult> ListarProductos(string? typeId, int? IdDescription)
         {
-            return new ObtenerProductos().Listar(typeId, dN);
+            return new ObtenerProductos().Listar(typeId, IdDescription);
+        }
+
+        internal Task<JsonResult> ListarProductos(string? typeId, int? IdDescription, int? Dn)
+        {
+
+            return new ObtenerProductos().Listar(typeId, IdDescription, Dn);
+
         }
     }   
 }

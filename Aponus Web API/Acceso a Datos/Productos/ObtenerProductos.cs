@@ -7,8 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Aponus_Web_API.Data_Transfer_objects;
-
-
+using System.Data.Common;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Productos
 {
@@ -33,7 +32,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
 
         }
 
-        public JsonResult Listar(string? typeId)
+
+
+        public async Task<JsonResult> Listar(string? typeId)
         {
             var Products = AponusDBContext.ProductosDescripcions
                .Select(
@@ -52,61 +53,64 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
             return new JsonResult(Products);
 
         }
-        public async Task<DatosProducto> Listar(string? typeId, int? DN)
+        public async Task<JsonResult> Listar(string? typeId, int? IdDescription)
         {
             try
             {
 
+                var Products = AponusDBContext.ProductosDescripcions
+              .Select(
+              x => new ProductosDescripcion
+              {
+                  DescripcionProducto = x.DescripcionProducto,
 
-                var _DatosProducto = AponusDBContext.Productos
-                            .Join(AponusDBContext.ProductosDescripcions,
-                            _Productos => _Productos.IdDescripcion,
-                            _ProductosDescripcion => _ProductosDescripcion.IdDescripcion,
-                            (_Productos, _ProductosDescripcion) => new
-                            {
-                                _Productos.IdTipo,
-                                _Productos.DiametroNominal,
-                                _ProductosDescripcion.DescripcionProducto
+                  Productos = (ICollection<Producto>)x.Productos
+                               .Where(x => x.IdTipo == typeId && x.IdDescripcion==IdDescription)
+                               .OrderBy(x => x.DiametroNominal)
 
-                            })
-                            .Where(x => x.IdTipo == typeId && x.DiametroNominal == DN)
-                            .OrderBy(x => x.DescripcionProducto)
-                            .Select(x => new
-                            {
-                                Descripcion = x.DescripcionProducto
+              }
+              ).AsEnumerable()
+              .Where(x => x.Productos.Count > 0);
 
-                            })
-                            .Distinct()
-                            .Single();
-                List<EspecificacionesDatosProducto> _EspecificacionesProducto = await AponusDBContext.Productos
-                               .Where(x => x.IdTipo == typeId && x.DiametroNominal == DN)
-
-                               .Select(x => new EspecificacionesDatosProducto()
-                               {
-                                   IdProducto = x.IdProducto,
-                                   DiametroNominal = x.DiametroNominal,
-                                   Tolerancia = x.Tolerancia,
-                                   Cantidad = x.Cantidad
-
-                               }).ToListAsync();
-                _EspecificacionesProducto.OrderBy(X => X.DiametroNominal).ThenBy(x => x.Tolerancia);
-
-                DatosProducto _Producto = new DatosProducto()
-                {
-                    DescripcionProducto = _DatosProducto.Descripcion.ToString(),
-                    Producto = _EspecificacionesProducto
-
-                };
-
-                _Producto.Producto = _EspecificacionesProducto;
+                return new JsonResult(Products);
 
 
-                return _Producto;
             }
-            catch (Exception)
+            catch (DbException e)
             {
 
-                throw;
+                return new JsonResult(e.Message);
+            }
+
+        }
+
+        public async Task<JsonResult> Listar(string? typeId, int? IdDescription, int?Dn)
+        {
+            try
+            {
+
+                var Products = AponusDBContext.ProductosDescripcions
+              .Select(
+              x => new ProductosDescripcion
+              {
+                  DescripcionProducto = x.DescripcionProducto,
+
+                  Productos = (ICollection<Producto>)x.Productos
+                               .Where(x => x.IdTipo == typeId && x.IdDescripcion == IdDescription&&x.DiametroNominal==Dn)
+                               .OrderBy(x => x.DiametroNominal)
+
+              }
+              ).AsEnumerable()
+              .Where(x => x.Productos.Count > 0);
+
+                return new JsonResult(Products);
+
+
+            }
+            catch (DbException e)
+            {
+
+                return new JsonResult(e.Message);
             }
 
         }
@@ -123,8 +127,18 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
 
 
         }
-       
 
+        internal async Task<JsonResult> ListarDN(string? typeId, int? idDescription)
+        {
+
+            var DN = await AponusDBContext.Productos
+                .Where(x => x.IdTipo == typeId && x.IdDescripcion==idDescription)
+                .Select(x => x.DiametroNominal)
+                .Distinct().ToListAsync();
+
+
+            return new JsonResult(DN);
+        }
     }
     
 
