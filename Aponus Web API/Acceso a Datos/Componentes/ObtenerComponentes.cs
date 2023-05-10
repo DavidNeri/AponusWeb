@@ -1,7 +1,18 @@
 ﻿using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Services;
+using Microsoft.AspNetCore.JsonPatch.Adapters;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Collections;
+using System.Data;
+using System.Data.Entity.Infrastructure;
+using System.Drawing;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 {
@@ -9,63 +20,146 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
     {
         private readonly AponusContext AponusDBContext;
         public ObtenerComponentes() { AponusDBContext = new AponusContext(); }
-        internal async Task<List<EspecificacionesComponentes>>? ListarComponentes(int? IdDescripcion)
+        internal JsonResult? ListarProp(EspecificacionesComponentes? Especificaciones)
         {
-            try
+            var propiedadesNulas = new string[0];
+            List<(string Nombre, string Valor)> propiedadesNoNulas = new List<(string, string)>();
+            var propiedades = typeof(EspecificacionesComponentes).GetProperties();
+
+            foreach (var propiedad in propiedades)
             {
-                List<EspecificacionesComponentes> Componentes;
-
-
-
-               Componentes = await AponusDBContext.PesablesDetalles                
-                   .Where(x => x.IdDescripcion == IdDescripcion)
-                   .Select(x => new EspecificacionesComponentes
-                   {
-                       Altura = x.Altura,
-                       Diametro = x.Diametro
-                  
-                   }).ToListAsync();
-
-                if (Componentes.Count==0)
+                var valor = propiedad.GetValue(Especificaciones);
+                bool propiedadExiste = typeof(Insumos_Detalle).GetProperty(propiedad.Name) != null;
+                if (valor == null && propiedad.Name != "idComponente" && propiedadExiste)
                 {
-                    Componentes = await AponusDBContext.CuantitativosDetalles
-
-                 .Where(x => x.IdDescripcion == IdDescripcion)
-                 .Select(x => new EspecificacionesComponentes
-                 {
-                     Diametro = x.Diametro,
-                     Altura = x.Altura,
-                     Tolerancia = x.Tolerancia,
-                     Perfil = x.Perfil,
-                     Espesor = x.Espesor
-                 }).ToListAsync();
+                    Array.Resize(ref propiedadesNulas, propiedadesNulas.Length + 1);
+                    propiedadesNulas[propiedadesNulas.Length - 1] = propiedad.Name;
                 }
-                if (Componentes.Count == 0)
+                else if (valor != null)
                 {
-                    Componentes = await AponusDBContext.MensurablesDetalles
-                                    .Where(x => x.IdDescripcion == IdDescripcion)
-                                    .Select(x => new EspecificacionesComponentes
-                                    {
-                                        Perfil = x.Perfil                                        
-
-
-                                    }).ToListAsync();
+                    string _valor = valor.ToString();
+                    propiedadesNoNulas.Add((propiedad.Name, _valor));
+                   
                 }
-
-
-
-                return Componentes;
-
-
-
             }
-            catch (Exception)
+
+            var dbContext = AponusDBContext;
+            var query = dbContext.Insumos_Detalles.AsQueryable().Where(x => true);
+
+            foreach ((string Nombre, string Valor) propiedad in propiedadesNoNulas)
+                {
+                // Obtener el valor de la propiedad
+                var valor = propiedad.Valor;
+                int valorNumeroEntero;
+                decimal numeroDecimal;
+
+                // Si la propiedad tiene un valor, agregarla al Where
+                if (valor != null)
+                    {
+                        var nombre = propiedad.Nombre;
+                        var propertyType = typeof(Insumos_Detalle).GetProperty(nombre)?.PropertyType;
+
+                    if (int.TryParse(valor, out valorNumeroEntero))
+                    {
+                        var parameter = Expression.Parameter(typeof(Insumos_Detalle), "x");
+                        var property = Expression.Property(parameter, nombre);
+
+                        try
+                        {
+                            var constant = Expression.Constant(valorNumeroEntero, typeof(int?));
+                            var equals = Expression.Equal(property, constant);
+                            var lambda = Expression.Lambda<Func<Insumos_Detalle, bool>>(equals, parameter);
+                            query = query.Where(lambda);
+
+                        }
+                        catch (InvalidOperationException )
+                        {
+                            var constant = Expression.Constant(valorNumeroEntero, typeof(int));
+                            var equals = Expression.Equal(property, constant);
+                            var lambda = Expression.Lambda<Func<Insumos_Detalle, bool>>(equals, parameter);
+                            query = query.Where(lambda);
+                        }
+
+                    }
+                    else if (decimal.TryParse(valor, out numeroDecimal))
+                    {
+                        var parameter = Expression.Parameter(typeof(Insumos_Detalle), "x");
+                        var property = Expression.Property(parameter, nombre);
+                        var constant = Expression.Constant(numeroDecimal, typeof(decimal?));
+                        var equals = Expression.Equal(property, constant);
+                        var lambda = Expression.Lambda<Func<Insumos_Detalle, bool>>(equals, parameter);
+                        query = query.Where(lambda);
+                    }
+                    else
+                    {
+                        var typedValue = Convert.ChangeType(valor, propertyType);
+                        var parameter = Expression.Parameter(typeof(Insumos_Detalle), "x");
+                        var property = Expression.Property(parameter, nombre);
+
+
+                        // Agregar la condición al Where
+                        if (property != null)
+                        {
+                            var value = Expression.Constant(typedValue);
+                            var equals = Expression.Equal(property, value);
+                            var lambda = Expression.Lambda<Func<Insumos_Detalle, bool>>(equals, parameter);
+
+                            // Agregar la condición al Where
+                            query = query.Where(lambda);
+                        }
+                    }
+
+                }
+            }
+
+            JsonResult? jsonResult= null;
+            int i = 0;
+
+            do
             {
+                var propertyType = typeof(Insumos_Detalle).GetProperty(propiedadesNulas[i]).PropertyType;
 
-                throw;
+                // Crear la expresión lambda para la propiedad a seleccionar
+                var parameter = Expression.Parameter(typeof(Insumos_Detalle), "x");
+                var property = Expression.Property(parameter, propiedadesNulas[i]);
+                Expression<Func<Insumos_Detalle, object>> lambda = null;
+
+                // Agregar comprobación para manejar valores nulos
+                var defaultValue = propertyType.IsValueType ? Activator.CreateInstance(propertyType) : null;
+                var propertyOrDefault = Expression.Coalesce(property, Expression.Constant(defaultValue, propertyType));
+
+                lambda = Expression.Lambda<Func<Insumos_Detalle, object>>(
+                          Expression.Convert(propertyOrDefault, typeof(object)),
+                          parameter);
+
+                var resultados = query.Select(lambda).Distinct().ToArray();
+
+                var Valores = resultados.Where(x => x != null && !string.IsNullOrEmpty(x.ToString()));
+
+                if (Valores.Count()>0)                    
+                {
+                    var Columna = AponusDBContext.Set<Insumos_Detalle>()
+                        .Select(e => typeof(Insumos_Detalle).GetProperty(propiedadesNulas[i]))
+                        .First()
+                        .Name;
+
+                    var ResultadosTotales = new { Valores , Columna };
+                    jsonResult = new JsonResult(ResultadosTotales);
+                }      
+
+                i++;
+            } while (jsonResult == null && i < propiedadesNulas.Length);
+
+
+            if (jsonResult==null)
+            {
+                jsonResult = new JsonResult(null);
             }
+
+            return jsonResult;
 
         }
+
 
     }
 }

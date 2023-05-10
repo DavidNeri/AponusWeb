@@ -1,5 +1,6 @@
 ﻿using Aponus_Web_API.Business;
 using Aponus_Web_API.Data_Transfer_objects;
+using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
@@ -25,14 +26,16 @@ namespace Aponus_Web_API.Controllers
             
         }
 
-        [HttpGet]
-        [Route("List/{idDescription}")]
+        [HttpPost]
+        [Route("ListProp")]
 
-        public async Task<List<EspecificacionesComponentes>>? Listar(int? idDescription)
+        public JsonResult? Listar(EspecificacionesComponentes Especificaciones)
         {
-            return await new BS_Components().ListarComponentes(idDescription);
+            return  new BS_Components().DeterminarProp(Especificaciones);
 
         }
+
+       
 
        /* [HttpGet]
         [Route("List/{idDescription}")]

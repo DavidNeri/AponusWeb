@@ -190,6 +190,46 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("CUANTITATIVOS_DETALLE", (string)null);
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.Insumos_Detalle", b =>
+                {
+                    b.Property<string>("Id_Insumo")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_INSUMO");
+
+                    b.Property<decimal?>("Altura")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("ALTURA");
+
+                    b.Property<decimal?>("Diametro")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("DIAMETRO");
+
+                    b.Property<decimal?>("Espesor")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("ESPESOR");
+
+                    b.Property<int>("Id_Descripcion")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_DESCRIPCION");
+
+                    b.Property<decimal?>("Longitud")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("LONGITUD");
+
+                    b.Property<int?>("Perfil")
+                        .HasColumnType("int")
+                        .HasColumnName("PERFIL");
+
+                    b.Property<string>("Tolerancia")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("TOLERANCIA");
+
+                    b.HasKey("Id_Insumo")
+                        .HasName("PK_ID_INSUMO");
+
+                    b.ToTable("COMPONENTES_DETALLE", (string)null);
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.MensurablesDetalle", b =>
                 {
                     b.Property<string>("IdComponente")
@@ -320,7 +360,7 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosDescripcion", b =>
                 {
-                    b.Property<int>("IdDescripcion")
+                    b.Property<int?>("IdDescripcion")
                         .HasColumnType("int")
                         .HasColumnName("ID_DESCRIPCION");
 
@@ -355,6 +395,34 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("PRODUCTOS_TIPOS", (string)null);
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.Productos_Componentes", b =>
+                {
+                    b.Property<string>("IdProducto")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_PRODUCTO");
+
+                    b.Property<string>("IdComponente")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_COMPONENTE");
+
+                    b.Property<int?>("Cantidad")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD");
+
+                    b.Property<decimal?>("Longitud")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("LONGITUD");
+
+                    b.Property<decimal?>("Peso")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("PESO");
+
+                    b.HasKey("IdProducto", "IdComponente")
+                        .HasName("PK_PRODUCTOS_COMPONENTES");
+
+                    b.ToTable("PRODUCTOS_COMPONENTES", (string)null);
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.Productos_Tipos_Descripcion", b =>
                 {
                     b.Property<string>("IdTipo")
@@ -378,7 +446,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasIndex("IdTipoNavigationIdTipo");
 
-                    b.ToTable("Producto_Tipo_Descripcion", (string)null);
+                    b.ToTable("PRODUCTOS_TIPOS_DESCRIPCION", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.StockCuantitativo", b =>
@@ -422,6 +490,38 @@ namespace AponusWebAPI.Migrations
                     b.HasKey("IdComponente");
 
                     b.ToTable("STOCK_CUANTITATIVOS", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.StockInsumos", b =>
+                {
+                    b.Property<string>("IdInsumo")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_INSUMO");
+
+                    b.Property<int?>("CantidadGranallado")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_GRANALLADO");
+
+                    b.Property<int?>("CantidadMoldeado")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_MOLDEADO");
+
+                    b.Property<int?>("CantidadPintura")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_PINTURA");
+
+                    b.Property<int?>("CantidadProceso")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_PROCESO");
+
+                    b.Property<int?>("CantidadRecibido")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_RECIBIDO");
+
+                    b.HasKey("IdInsumo")
+                        .HasName("PK_STOCK_INSUMOS");
+
+                    b.ToTable("STOCK_INSUMOS", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.StockMensurable", b =>
@@ -502,7 +602,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("Usuario");
 
-                    b.ToTable("Usuarios", (string)null);
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ComponentesCuantitativo", b =>

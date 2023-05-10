@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Aponus_Web_API.Models;
 
@@ -14,6 +12,10 @@ public partial class AponusContext : DbContext
         : base(options)
     {
     }
+    public virtual DbSet<Insumos_Detalle> Insumos_Detalles { get; set; }
+    public virtual DbSet<Productos_Componentes> Componentes_Productos{ get; set; }
+
+    public virtual DbSet<StockInsumos> stockInsumos { get; set; }
 
     public virtual DbSet<ComponentesCuantitativo> ComponentesCuantitativos { get; set; }
 
@@ -53,6 +55,113 @@ public partial class AponusContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
+
+        modelBuilder.Entity<StockInsumos>(entity =>
+        {
+            entity.ToTable("STOCK_INSUMOS");
+
+            entity.Property(e => e.IdInsumo)
+            .HasColumnName("ID_INSUMO")
+            .HasColumnType("varchar(50)");
+
+            entity.HasKey(PK => PK.IdInsumo)
+            .HasName("PK_STOCK_INSUMOS");
+
+            entity.Property(e => e.CantidadRecibido)
+           .HasColumnName("CANTIDAD_RECIBIDO")
+           .HasColumnType("int");
+
+            entity.Property(e => e.CantidadGranallado)
+            .HasColumnName("CANTIDAD_GRANALLADO")
+            .HasColumnType("int");
+
+            entity.Property(e => e.CantidadPintura)
+           .HasColumnName("CANTIDAD_PINTURA")
+           .HasColumnType("int");
+
+
+            entity.Property(e => e.CantidadProceso)
+           .HasColumnName("CANTIDAD_PROCESO")
+           .HasColumnType("int");
+
+            entity.Property(e => e.CantidadMoldeado)
+           .HasColumnName("CANTIDAD_MOLDEADO")
+           .HasColumnType("int");
+
+        });
+
+        modelBuilder.Entity<Productos_Componentes>(entity => 
+        {
+            entity.ToTable("PRODUCTOS_COMPONENTES");
+
+            entity.Property(e=>e.IdProducto)
+            .HasColumnName("ID_PRODUCTO")
+            .HasColumnType("varchar(50)");
+
+            entity.Property(e => e.IdComponente)
+           .HasColumnName("ID_COMPONENTE")
+           .HasColumnType("varchar(50)");
+
+            entity.HasKey(PK => new { PK.IdProducto, PK.IdComponente })
+            .HasName("PK_PRODUCTOS_COMPONENTES");
+
+            entity.Property(e => e.Cantidad)
+            .HasColumnName("CANTIDAD")
+            .HasColumnType("int");
+
+            entity.Property(e => e.Peso)
+            .HasColumnName("PESO")
+            .HasColumnType("decimal(18,2)");
+
+            entity.Property(e => e.Longitud)
+             .HasColumnName("LONGITUD")
+             .HasColumnType("decimal(18,2)");
+
+        });
+
+
+
+        modelBuilder.Entity<Insumos_Detalle>(entity =>
+        {
+            entity.Property(e => e.IdInsumo)
+            .HasColumnName("ID_INSUMO")
+            .HasColumnType("varchar(50)");
+
+            entity.HasKey(e=>e.IdInsumo)
+            .HasName("PK_ID_INSUMO");
+
+            entity.ToTable("COMPONENTES_DETALLE");
+
+            entity.Property(e => e.IdDescripcion)
+            .HasColumnName("ID_DESCRIPCION");
+
+            entity.Property(e => e.Diametro)
+            .HasColumnName("DIAMETRO")
+            .HasColumnType("decimal(18,2)");
+
+            entity.Property(e => e.Espesor)
+            .HasColumnName("ESPESOR")
+            .HasColumnType("decimal(18,2)");
+
+            entity.Property(e => e.Longitud)
+          .HasColumnName("LONGITUD")
+          .HasColumnType("decimal(18,2)");
+
+            entity.Property(e => e.Altura)
+          .HasColumnName("ALTURA")
+          .HasColumnType("decimal(18,2)");
+
+            entity.Property(e => e.Perfil)
+          .HasColumnName("PERFIL");
+
+            entity.Property(e => e.Tolerancia)
+          .HasColumnName("TOLERANCIA")
+          .HasColumnType("varchar(50)");
+            
+
+
+        });
+
 
         modelBuilder.Entity<ComponentesCuantitativo>(entity =>
         {
