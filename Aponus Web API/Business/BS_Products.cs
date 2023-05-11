@@ -55,7 +55,7 @@ namespace Aponus_Web_API.Business
                 producto.Producto.IdProducto= operacionesProductos.GenerarIdProd(producto); //Coorejir
 
                // operacionesProductos.GuardarProducto(producto);
-            foreach (ComponentesProducto Componente in producto.Componentes)
+            foreach (DTOComponentesProducto Componente in producto.Componentes)
             {
 
                 switch (new TablaInsumo().ObtenerTabla(new Insumos { IdInsumo = Componente.IdComponente }))

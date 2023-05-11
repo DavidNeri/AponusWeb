@@ -6,7 +6,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
     {
         public DatosProducto Producto{ get; set; }
 
-        public List<ComponentesProducto> Componentes { get; set; }
+        public List<DTOComponentesProducto> Componentes { get; set; }
 
     }
 }

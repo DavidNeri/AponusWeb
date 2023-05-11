@@ -2,7 +2,7 @@
 
 namespace Aponus_Web_API.Data_Transfer_objects
 {
-    public class EspecificacionesDatosProducto
+    public class DTODetalleDatosProducto
 
     {
         [JsonProperty(PropertyName = "idTipo", NullValueHandling = NullValueHandling.Ignore)]

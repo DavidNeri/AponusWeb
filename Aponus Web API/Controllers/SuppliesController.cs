@@ -29,24 +29,33 @@ namespace Aponus_Web_API.Controllers
         [HttpPost]
         [Route("ListProp")]
 
-        public JsonResult? Listar(EspecificacionesComponentes Especificaciones)
+        public JsonResult? Listar(DTODetalleComponentes Especificaciones)
         {
             return  new BS_Components().DeterminarProp(Especificaciones);
 
         }
 
-       
+        [HttpPost]
+        [Route("GetId")]
 
-       /* [HttpGet]
-        [Route("List/{idDescription}")]
-
-        public async Task<List<TipoInsumos>> Listar(int? idDescription)
+        public JsonResult? ObtenerId(DTODetalleComponentes Especificaciones)
         {
-            return await new BS_Stocks().Listar(idDescription);
+            return new BS_Components().ObtenerIdComponente(Especificaciones);
 
         }
 
-        */
+
+
+        /* [HttpGet]
+         [Route("List/{idDescription}")]
+
+         public async Task<List<TipoInsumos>> Listar(int? idDescription)
+         {
+             return await new BS_Stocks().Listar(idDescription);
+
+         }
+
+         */
 
 
     }

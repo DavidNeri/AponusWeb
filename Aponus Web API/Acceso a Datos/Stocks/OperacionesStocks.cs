@@ -536,22 +536,22 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         internal void ObtenerComponentes (ActualizacionStock Actualizacion)
         {
-            List<ComponentesProducto>? ListadoComponentes = new List<ComponentesProducto>();
+            List<DTOComponentesProducto>? ListadoComponentes = new List<DTOComponentesProducto>();
 
             //Actualizar Insumos Cuantitativos
             ListadoComponentes = null;
-            ListadoComponentes = new List<ComponentesProducto>();
+            ListadoComponentes = new List<DTOComponentesProducto>();
 
             ListadoComponentes = AponusDBContext.ComponentesCuantitativos
                        .Where(x => x.IdProducto == Actualizacion.IdExistencia)
-                       .Select(x => new ComponentesProducto
+                       .Select(x => new DTOComponentesProducto
                        {
                            IdComponente = x.IdComponente,
                            Cantidad = x.Cantidad * Actualizacion.Valor
                        })
                        .ToList();
 
-            foreach (ComponentesProducto Componentes in ListadoComponentes)
+            foreach (DTOComponentesProducto Componentes in ListadoComponentes)
             {
 
                 AponusDBContext.StockCuantitativos
@@ -566,18 +566,18 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                 //Actualiazr Insumos Pesables
                 ListadoComponentes = null;
-                ListadoComponentes = new List<ComponentesProducto>();
+                ListadoComponentes = new List<DTOComponentesProducto>();
 
                 ListadoComponentes = AponusDBContext.ComponentesPesables
                             .Where(x => x.IdProducto == Actualizacion.IdExistencia)
-                            .Select(x => new ComponentesProducto
+                            .Select(x => new DTOComponentesProducto
                             {
                                 IdComponente = x.IdComponente,
                                 Peso = x.Peso * Actualizacion.Valor
                             })
                             .ToList();
 
-                foreach (ComponentesProducto Componentes in ListadoComponentes)
+                foreach (DTOComponentesProducto Componentes in ListadoComponentes)
                 {
 
                     AponusDBContext.StockPesables
@@ -591,20 +591,20 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
             //Actualizar Insumos Mensurables
             ListadoComponentes = null;
-            ListadoComponentes = new List<ComponentesProducto>();
+            ListadoComponentes = new List<DTOComponentesProducto>();
 
             if (Actualizacion.IdJuntaPerfil != null)
             {
                 ListadoComponentes = AponusDBContext.ComponentesMensurables
                        .Where(x => x.IdProducto == Actualizacion.IdExistencia && x.IdComponente == Actualizacion.IdJuntaPerfil)
-                       .Select(x => new ComponentesProducto
+                       .Select(x => new DTOComponentesProducto
                        {
                            IdComponente = x.IdComponente,
                            Largo = x.Largo * Actualizacion.Valor
                        })
                        .ToList();
 
-                foreach (ComponentesProducto Componentes in ListadoComponentes)
+                foreach (DTOComponentesProducto Componentes in ListadoComponentes)
                 {
 
                     AponusDBContext.StockMensurables
@@ -620,11 +620,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             {
                 //Actualiazr Insumos Pesables
                 ListadoComponentes = null;
-                ListadoComponentes = new List<ComponentesProducto>();
+                ListadoComponentes = new List<DTOComponentesProducto>();
 
                 ListadoComponentes = AponusDBContext.ComponentesPesables
                             .Where(x => x.IdProducto == Actualizacion.IdExistencia && x.IdComponente.Contains("BUL")==false)
-                            .Select(x => new ComponentesProducto
+                            .Select(x => new DTOComponentesProducto
                             {
                                 IdComponente = x.IdComponente,
                                 Peso = x.Peso * Actualizacion.Valor
@@ -632,7 +632,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                             .ToList();
 
 
-                foreach (ComponentesProducto Componentes in ListadoComponentes)
+                foreach (DTOComponentesProducto Componentes in ListadoComponentes)
                 {
 
                     AponusDBContext.StockPesables
