@@ -107,7 +107,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.Cantidad)
             .HasColumnName("CANTIDAD")
-            .HasColumnType("int");
+            .HasColumnType("decimal(18,2)");
 
             entity.Property(e => e.Peso)
             .HasColumnName("PESO")
@@ -268,6 +268,7 @@ public partial class AponusContext : DbContext
                 .HasColumnName("PESO");
             entity.Property(e => e.Cantidad)
             .HasColumnName("CANTIDAD")
+            .HasColumnType("decimal(18, 2)")
             .HasDefaultValueSql("NULL");
 
             entity.HasOne(d => d.IdComponenteNavigation).WithMany(p => p.ComponentesPesables)

@@ -11,7 +11,7 @@ namespace Aponus_Web_API.Data_Transfer_objects
         public string? IdComponente { get; set; }
 
         [JsonProperty(PropertyName = "cantidad", NullValueHandling = NullValueHandling.Ignore)]
-        public int? Cantidad { get; set; }
+        public decimal? Cantidad { get; set; }
 
         [JsonProperty(PropertyName = "peso", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Peso { get; set; }

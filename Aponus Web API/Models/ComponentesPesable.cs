@@ -10,7 +10,7 @@ public partial class ComponentesPesable
     public string IdComponente { get; set; } = null!;
 
     public decimal? Peso { get; set; }
-    public int? Cantidad { get; set; }
+    public decimal? Cantidad { get; set; }
 
     public virtual StockPesable IdComponente1 { get; set; } = null!;
 
