@@ -44,6 +44,14 @@ namespace Aponus_Web_API.Controllers
 
         }
 
+        [HttpPost]
+        [Route("SaveProductComponents")]
+
+        public IActionResult? GuardarComponentesProducto(List<DTOComponentesProducto> ComponentesProd)
+        {
+            return new BS_Components().GuardarComponentesProducto(ComponentesProd);
+
+        }
 
 
         /* [HttpGet]
