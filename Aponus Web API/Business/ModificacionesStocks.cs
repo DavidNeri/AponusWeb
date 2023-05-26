@@ -332,6 +332,167 @@ namespace Aponus_Web_API.Business
             }
 
         }
+
+        internal void newActualizarInsumo_Aumentar(ActualizacionStock Actualizacion)
+        {
+            switch (Actualizacion.Destino)
+            {
+                case "Recibido":
+                    IncrementarRecibidos(Actualizacion);
+
+                    switch (Actualizacion.Origen)
+                    {
+                        case "Granallado":
+                            NewDescontarGranallado(Actualizacion);
+                            break;
+                        case "Pintura":
+                            NewDescontarPintura(Actualizacion);
+                            break;
+                        case "Proceso":
+                            NewDescontarProceso(Actualizacion);
+                            break;
+                        case "Moldeado":
+                            NewDescontarMoldeado(Actualizacion);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    break;
+
+                case "Granallado":
+                    NewIncrementarGranallado(Actualizacion);
+                    switch (Actualizacion.Origen)
+                    {
+                        case "Recibido":
+                            NewDescontarRecibidos(Actualizacion);
+                            break;
+                        case "Pitnura":
+                            NewDescontarPintura(Actualizacion);
+                            break;
+                        case "Proceso":
+                            NewDescontarProceso(Actualizacion);
+                            break;
+                        case "Moleado":
+                            NewDescontarMoldeado(Actualizacion);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    break;
+
+                case "Pintura":
+                    IncrementarPintura(Actualizacion);
+                    switch (Actualizacion.Origen)
+                    {
+                        case "Recibido":
+                            NewDescontarRecibidos(Actualizacion);
+                            break;
+                        case "Granallado":
+                            NewDescontarGranallado(Actualizacion);
+                            break;
+                        case "Proceso":
+                            NewDescontarProceso(Actualizacion);
+                            break;
+                        case "Moldeado":
+                            NewDescontarMoldeado(Actualizacion);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    break;
+
+                case "Proceso":
+                    IncrementarProceso(Actualizacion);
+
+                    switch (Actualizacion.Origen)
+                    {
+                        case "Recibido":
+                            NewDescontarRecibidos(Actualizacion);
+                            break;
+                        case "Granallado":
+                            NewDescontarGranallado(Actualizacion);
+                            break;
+                        case "Pintura":
+                            NewDescontarPintura(Actualizacion);
+                            break;
+                        case "Moldeado":
+                            NewDescontarMoldeado(Actualizacion);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    break;
+
+                case "Moldeado":
+                    IncrementarMoldeado(Actualizacion);
+
+                    switch (Actualizacion.Origen)
+                    {
+                        case "Recibido":
+                            NewDescontarRecibidos(Actualizacion);
+                            break;
+                        case "Granallado":
+                            NewDescontarGranallado(Actualizacion);
+                            break;
+                        case "Proceso":
+                            NewDescontarProceso(Actualizacion);
+                            break;
+                        case "Pintura":
+                            NewDescontarPintura(Actualizacion);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void NewIncrementarGranallado(ActualizacionStock actualizacion)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void NewDescontarRecibidos(ActualizacionStock actualizacion)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void NewDescontarMoldeado(ActualizacionStock actualizacion)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void NewDescontarProceso(ActualizacionStock actualizacion)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void NewDescontarPintura(ActualizacionStock actualizacion)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void NewDescontarGranallado(ActualizacionStock actualizacion)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void NewActualizarInsumo_Descontar(ActualizacionStock actualizacion)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void NewActualizarInsumo_NuevoValor(ActualizacionStock actualizacion)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "5GB8tEJwgpnV++dJvLQfKasToYYabRVvFpOIsWSE2uBqzMzGAdiTvjdY3Awq0hX+KFcXp3mGbIM6IgHR/6F6AA==",
+  "dgSpecHash": "rdgo0FS+XSkh/IP1Y36TsND+G1KL4Zz5UIglUMlme+8RdZkRO/+JQO1MLHom+FGnGX8FV5tGLDVs9xYapSI8OQ==",
   "success": true,
   "projectFilePath": "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\David\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\David\\.nuget\\packages\\humanizer.core.es\\2.14.1\\humanizer.core.es.2.14.1.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\messagepack.annotations\\2.1.152\\messagepack.annotations.2.1.152.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\messagepackanalyzer\\2.1.152\\messagepackanalyzer.2.1.152.nupkg.sha512",

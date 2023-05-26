@@ -12,7 +12,7 @@ public partial class AponusContext : DbContext
         : base(options)
     {
     }
-    public virtual DbSet<Insumos_Detalle> Insumos_Detalles { get; set; }
+    public virtual DbSet<ComponentesDetalle> ComponentesDetalles { get; set; }
     public virtual DbSet<Productos_Componentes> Componentes_Productos{ get; set; }
 
     public virtual DbSet<StockInsumos> stockInsumos { get; set; }
@@ -121,7 +121,7 @@ public partial class AponusContext : DbContext
 
 
 
-        modelBuilder.Entity<Insumos_Detalle>(entity =>
+        modelBuilder.Entity<ComponentesDetalle>(entity =>
         {
             entity.Property(e => e.IdInsumo)
             .HasColumnName("ID_INSUMO")
@@ -138,6 +138,12 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.Diametro)
             .HasColumnName("DIAMETRO")
             .HasColumnType("decimal(18,2)");
+
+            entity.Property(e => e.DiametroNominal)
+           .HasColumnName("DIAMETRO_NOMINAL")
+           .HasColumnType("int")
+           .IsRequired(false)
+           .HasDefaultValue(null);
 
             entity.Property(e => e.Espesor)
             .HasColumnName("ESPESOR")

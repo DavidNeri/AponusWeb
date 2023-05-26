@@ -32,18 +32,18 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
             do
             {
-                var propertyType = typeof(Insumos_Detalle).GetProperty(propiedadesNulas[i]).PropertyType;
+                var propertyType = typeof(ComponentesDetalle).GetProperty(propiedadesNulas[i]).PropertyType;
 
                 // Crear la expresión lambda para la propiedad a seleccionar
-                var parameter = Expression.Parameter(typeof(Insumos_Detalle), "x");
+                var parameter = Expression.Parameter(typeof(ComponentesDetalle), "x");
                 var property = Expression.Property(parameter, propiedadesNulas[i]);
-                Expression<Func<Insumos_Detalle, object>> lambda = null;
+                Expression<Func<ComponentesDetalle, object>> lambda = null;
 
                 // Agregar comprobación para manejar valores nulos
                 var defaultValue = propertyType.IsValueType ? Activator.CreateInstance(propertyType) : null;
                 var propertyOrDefault = Expression.Coalesce(property, Expression.Constant(defaultValue, propertyType));
 
-                lambda = Expression.Lambda<Func<Insumos_Detalle, object>>(
+                lambda = Expression.Lambda<Func<ComponentesDetalle, object>>(
                           Expression.Convert(propertyOrDefault, typeof(object)),
                           parameter);
 
@@ -53,8 +53,8 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
                 if (Valores.Count()>0)                    
                 {
-                    var Columna = AponusDBContext.Set<Insumos_Detalle>()
-                        .Select(e => typeof(Insumos_Detalle).GetProperty(propiedadesNulas[i]))
+                    var Columna = AponusDBContext.Set<ComponentesDetalle>()
+                        .Select(e => typeof(ComponentesDetalle).GetProperty(propiedadesNulas[i]))
                         .First()
                         .Name;
 
@@ -92,10 +92,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
             return jsonResult;
         }
 
-        private IQueryable<Insumos_Detalle> GenerarWhereAND(List<(string Nombre, string Valor)> propiedadesNoNulas)
+        private IQueryable<ComponentesDetalle> GenerarWhereAND(List<(string Nombre, string Valor)> propiedadesNoNulas)
         {
             var dbContext = AponusDBContext;
-            var query = dbContext.Insumos_Detalles.AsQueryable().Where(x => true);
+            var query = dbContext.ComponentesDetalles.AsQueryable().Where(x => true);
 
             foreach ((string Nombre, string Valor) propiedad in propiedadesNoNulas)
             {
@@ -108,18 +108,18 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                 if (valor != null)
                 {
                     var nombre = propiedad.Nombre;
-                    var propertyType = typeof(Insumos_Detalle).GetProperty(nombre)?.PropertyType;
+                    var propertyType = typeof(ComponentesDetalle).GetProperty(nombre)?.PropertyType;
 
                     if (int.TryParse(valor, out valorNumeroEntero))
                     {
-                        var parameter = Expression.Parameter(typeof(Insumos_Detalle), "x");
+                        var parameter = Expression.Parameter(typeof(ComponentesDetalle), "x");
                         var property = Expression.Property(parameter, nombre);
 
                         try
                         {
                             var constant = Expression.Constant(valorNumeroEntero, typeof(int?));
                             var equals = Expression.Equal(property, constant);
-                            var lambda = Expression.Lambda<Func<Insumos_Detalle, bool>>(equals, parameter);
+                            var lambda = Expression.Lambda<Func<ComponentesDetalle, bool>>(equals, parameter);
                             query = query.Where(lambda);
 
                         }
@@ -127,24 +127,24 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                         {
                             var constant = Expression.Constant(valorNumeroEntero, typeof(int));
                             var equals = Expression.Equal(property, constant);
-                            var lambda = Expression.Lambda<Func<Insumos_Detalle, bool>>(equals, parameter);
+                            var lambda = Expression.Lambda<Func<ComponentesDetalle, bool>>(equals, parameter);
                             query = query.Where(lambda);
                         }
 
                     }
                     else if (decimal.TryParse(valor, out numeroDecimal))
                     {
-                        var parameter = Expression.Parameter(typeof(Insumos_Detalle), "x");
+                        var parameter = Expression.Parameter(typeof(ComponentesDetalle), "x");
                         var property = Expression.Property(parameter, nombre);
                         var constant = Expression.Constant(numeroDecimal, typeof(decimal?));
                         var equals = Expression.Equal(property, constant);
-                        var lambda = Expression.Lambda<Func<Insumos_Detalle, bool>>(equals, parameter);
+                        var lambda = Expression.Lambda<Func<ComponentesDetalle, bool>>(equals, parameter);
                         query = query.Where(lambda);
                     }
                     else
                     {
                         var typedValue = Convert.ChangeType(valor, propertyType);
-                        var parameter = Expression.Parameter(typeof(Insumos_Detalle), "x");
+                        var parameter = Expression.Parameter(typeof(ComponentesDetalle), "x");
                         var property = Expression.Property(parameter, nombre);
 
 
@@ -153,7 +153,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                         {
                             var value = Expression.Constant(typedValue);
                             var equals = Expression.Equal(property, value);
-                            var lambda = Expression.Lambda<Func<Insumos_Detalle, bool>>(equals, parameter);
+                            var lambda = Expression.Lambda<Func<ComponentesDetalle, bool>>(equals, parameter);
 
                             // Agregar la condición al Where
                             query = query.Where(lambda);

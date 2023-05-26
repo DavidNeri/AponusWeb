@@ -1,37 +1,43 @@
 ﻿using Newtonsoft.Json;
 
-namespace Aponus_Web_API.Data_Transfer_objects
+namespace Aponus_Web_API.Data_Transfer_Objects
 {
-    public class Stocks
+    public class NewStocks
     {
         [JsonProperty(PropertyName = "idInsumo", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdInsumo { get; set; }
 
-        [JsonProperty(PropertyName = "requerido", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Requerido { get; set; }
+        [JsonProperty(PropertyName = "pesoReq", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? PesoReq{ get; set; }
+
+        [JsonProperty(PropertyName = "CantidadReq", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? CantidadReq{ get; set; }
+
+        [JsonProperty(PropertyName = "longReq", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? LongReq { get; set; }
 
         [JsonProperty(PropertyName = "recibido", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Recibido { get; set; }
+        public decimal? Recibido { get; set; }
 
         [JsonProperty(PropertyName = "granallado", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Granallado { get; set; }
+        public decimal? Granallado { get; set; }
 
         [JsonProperty(PropertyName = "pintura", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Pintura { get; set; }
+        public decimal? Pintura { get; set; }
 
         [JsonProperty(PropertyName = "moldeado", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Moldeado { get; set; }
+        public decimal? Moldeado { get; set; }
 
         [JsonProperty(PropertyName = "proceso", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Proceso { get; set; }
+        public decimal? Proceso { get; set; }
 
         [JsonProperty(PropertyName = "total", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Total { get; set; }
+        public decimal? Total { get; set; }
 
         [JsonProperty(PropertyName = "faltantes", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Faltantes { get; set; }
+        public decimal? Faltantes { get; set; }
 
         [JsonProperty(PropertyName = "disponibles", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Disponibles { get; set; }
+        public decimal? Disponibles { get; set; }
     }
 }

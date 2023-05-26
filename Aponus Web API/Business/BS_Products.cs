@@ -13,6 +13,7 @@ using Aponus_Web_API.Acceso_a_Datos.Productos;
 using Aponus_Web_API.Acceso_a_Datos.Insumos;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Microsoft.Data.SqlClient;
+using Aponus_Web_API.Acceso_a_Datos.Componentes;
 
 namespace Aponus_Web_API.Business
 {
@@ -43,7 +44,7 @@ namespace Aponus_Web_API.Business
                 return new JsonResult(e);
             }
 
-
+                
         }
 
         internal void GuardarProducto(GuardarProducto producto)
@@ -80,53 +81,7 @@ namespace Aponus_Web_API.Business
                 }
             }
 
-            /*   foreach (ComponentesProducto Componente in producto.Componentes)
-               { 
-
-                   switch (new TablaInsumo().ObtenerTabla(new Insumos { IdInsumo = Componente.IdComponente }))
-                   {
-                       case 0:
-                           Componente.IdProducto = producto.Producto.IdProducto;
-                           operacionesProductos.GuardarComponententesPesables(Componente);
-
-                           break;
-                       case 1:
-                           Componente.IdProducto = producto.Producto.IdProducto;
-
-                           operacionesProductos.GuardarComponententesCuantitativos(Componente);
-                           break;
-
-                       case 2:
-                           Componente.IdProducto = producto.Producto.IdProducto;
-                           operacionesProductos.GuardarComponententesMensurables(Componente);
-                           break;
-                       default:
-                           break;
-                   }
-
-
-               }
-               return new StatusCodeResult(StatusCodes.Status200OK);*/
-
-
-            // }
-            //  catch (DbUpdateException e)
-            //  {
-            //    string Mensaje = e.Message;
-            //
-            //    return new ForbidResult(Mensaje);
-
-            // operacionesProductos.EliminarComponententesPesables(producto, Componentes);
-            // operacionesProductos.EliminarComponententesCuantitativos(producto, Componentes);
-            //operacionesProductos.EliminarComponententesMensurables(producto, Componentes);
-            //operacionesProductos.EliminarProducto(producto);
-
-
-            // }
-
-
-
-
+            
 
         }
 
@@ -138,6 +93,13 @@ namespace Aponus_Web_API.Business
         internal async Task<JsonResult> ListarDN(string? typeId, int? idDescription)
         {
             return await new ObtenerProductos().ListarDN(typeId, idDescription);
+        }
+
+        internal JsonResult NewListarComponentes(string? productId, int q)
+        {
+
+            return new ComponentesProductos().ObtenerComponentes(productId,q);
+
         }
 
         internal Task<JsonResult> ListarProductos(string? TypeId) {
@@ -160,6 +122,22 @@ namespace Aponus_Web_API.Business
         {
 
             return new ObtenerProductos().Listar(typeId, IdDescription, Dn);
+
+        }
+
+        internal void NuevoGuardarProducto(GuardarProducto producto)
+        {
+            OperacionesProductos operacionesProductos = new OperacionesProductos();
+            string IdProducto = operacionesProductos.GenerarIdProd(producto);
+
+            producto.Producto.IdProducto = IdProducto;
+
+            producto.Componentes.All(x => { x.IdProducto = IdProducto; return true; });
+
+            operacionesProductos.GuardarProducto(producto);
+
+            operacionesProductos.GuardarComponentes(producto.Componentes);
+
 
         }
     }   

@@ -82,6 +82,7 @@ namespace Aponus_Web_API.Business
 
         internal JsonResult? ObtenerIdComponente(DTODetalleComponentes? Especificaciones)
         {
+
             return new ObtenerComponentes().ObtenerId(CategorizarPropiedades(Especificaciones).Item2);
 
         }
@@ -96,7 +97,7 @@ namespace Aponus_Web_API.Business
             foreach (var propiedad in propiedades)
             {
                 var valor = propiedad.GetValue(Especificaciones);
-                bool propiedadExiste = typeof(Insumos_Detalle).GetProperty(propiedad.Name) != null;
+                bool propiedadExiste = typeof(ComponentesDetalle).GetProperty(propiedad.Name) != null;
                 if (valor == null && propiedad.Name != "idComponente" && propiedadExiste)
                 {
                     Array.Resize(ref propiedadesNulas, propiedadesNulas.Length + 1);

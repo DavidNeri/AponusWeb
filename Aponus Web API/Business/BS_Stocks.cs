@@ -83,6 +83,57 @@ namespace Aponus_Web_API.Business
             }
         }
 
+        internal IActionResult NewActualizarStock(ActualizacionStock Actualizacion)
+        {
+            try
+            {
+                switch (Actualizacion.IdTipoExistencia)
+                {
+                    case 0:
+                        switch (Actualizacion.Operador)
+                        {
+                            case "+":
+                                new ModificacionesStocks().newActualizarInsumo_Aumentar(Actualizacion);
+                                break;
+                            case "-":
+                                new ModificacionesStocks().NewActualizarInsumo_Descontar(Actualizacion);
+                                break;
+                            case "=":
+                                new ModificacionesStocks().NewActualizarInsumo_NuevoValor(Actualizacion);
+                                break;
+
+                        }
+                        break;
+
+                    case 1:
+
+                        switch (Actualizacion.Operador)
+                        {
+                            case "+":
+                                new ModificacionesStocks().ActualizarProducto_Agregar(Actualizacion);
+                                break;
+                            case "-":
+                                new ModificacionesStocks().ActualizarProducto_Descontar(Actualizacion);
+                                break;
+                            case "=":
+                                new ModificacionesStocks().ActualizarProducto_NuevoValor(Actualizacion);
+                                break;
+                        }
+                        break;
+
+
+                }
+                return new JsonResult(new StatusCodeResult(200));
+
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new StatusCodeResult(400));
+
+            }
+        }
+
+
         internal Task<List<Insumos>> ListarBulones()
         {
             return new OperacionesStocks().ListarBulones();
@@ -91,6 +142,33 @@ namespace Aponus_Web_API.Business
         internal Task<List<Insumos>> LIstarPerfilesJuntas()
         {
             return new OperacionesStocks().ListarPerfilesJuntas();
+
+        }
+
+        internal Task<List<TipoInsumos>> NewListar(int? IdDescripcion, int? DN)
+        {
+
+
+            if (IdDescripcion == null && DN==null)
+            {
+                return new OperacionesStocks().Listar();
+
+            }
+            else if (IdDescripcion != null && DN == null)
+            {
+                return new OperacionesStocks().Listar(IdDescripcion);
+
+            }
+            else if (IdDescripcion != null && DN != null)
+            {
+                return new OperacionesStocks().Listar(IdDescripcion, DN);
+
+            }
+            else
+            {
+                return null;
+            }
+
 
         }
     }

@@ -113,6 +113,24 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
+
+        [HttpGet]
+        //Reemplaza a ListParts
+        [Route("NewListComponents/{productId}/{q=1}")]
+        public JsonResult NewListComponents(string? ProductId, int Q = 1)
+        {
+            try
+            {
+                return new BS_Products().NewListarComponentes(ProductId, Q);
+
+                //return Json(a, new Newtonsoft.Json.JsonSerializerSettings());
+            }
+            catch (Exception e)
+            {
+                return Json(e);
+            }
+        }
+
         //Ver y eliminar
         [HttpGet]
         [Route("ListDN/{TypeId}")]
@@ -161,6 +179,22 @@ namespace Aponus_Web_API.Controllers
             }
             catch (DbUpdateException e ) 
             {   
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
+            }
+        }
+
+        [HttpPost]
+        [Route("NewSaveProduct")]
+        public IActionResult NuevoGuardarProducto(GuardarProducto Producto)
+        {
+            try
+            {
+                new BS_Products().NuevoGuardarProducto(Producto);
+                return new StatusCodeResult(StatusCodes.Status200OK);
+            }
+            catch (DbUpdateException e)
+            {
                 string Mensaje = e.InnerException.Message;
                 return new JsonResult(Mensaje);
             }

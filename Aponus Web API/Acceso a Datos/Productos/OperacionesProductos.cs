@@ -1,10 +1,12 @@
-﻿using Aponus_Web_API.Data_Transfer_objects;
+﻿using Aponus_Web_API.Acceso_a_Datos.Componentes;
+using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Entity.Validation;
 using System.Text.RegularExpressions;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Productos
@@ -79,26 +81,40 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
 
         internal void GuardarProducto(GuardarProducto producto)
         {
+            var existingProducto = AponusDBContext.Productos.FirstOrDefault(p => p.IdProducto == producto.Producto.IdProducto);
 
-            AponusDBContext.Productos
-             .Add(new Producto
-             {
-                 IdProducto = producto.Producto.IdProducto,
-                 IdDescripcion = (int)producto.Producto.IdDescripcion,
-                 IdTipo = producto.Producto.IdTipo,
-                 DiametroNominal = producto.Producto.DiametroNominal,
-                 Cantidad = producto.Producto.Cantidad,
-                 Precio = producto.Producto.Precio,
-                 Tolerancia = producto.Producto.Tolerancia,
 
-             });
+            if (existingProducto != null)
+            {
+                existingProducto.IdDescripcion = (int)producto.Producto.IdDescripcion;
+                existingProducto.IdTipo = producto.Producto.IdTipo;
+                existingProducto.DiametroNominal = producto.Producto.DiametroNominal;
+                existingProducto.Cantidad = producto.Producto.Cantidad;
+                existingProducto.Precio = producto.Producto.Precio;
+                existingProducto.Tolerancia = producto.Producto.Tolerancia;
+            }
+            else
+            {
+                AponusDBContext.Productos
+            .Add(new Producto
+            {
+                IdProducto = producto.Producto.IdProducto,
+                IdDescripcion = (int)producto.Producto.IdDescripcion,
+                IdTipo = producto.Producto.IdTipo,
+                DiametroNominal = producto.Producto.DiametroNominal,
+                Cantidad = producto.Producto.Cantidad,
+                Precio = producto.Producto.Precio,
+                Tolerancia = producto.Producto.Tolerancia
+            });
+            }
+           
 
             AponusDBContext.SaveChanges();
         }
 
         public string GenerarIdProd(GuardarProducto Producto)
         {
-            string IdProducto = "";
+            string IdProducto;
 
             try
             {
@@ -114,6 +130,36 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
             }
 
             return IdProducto;
+        }
+
+        internal void GuardarComponentes(List<DTOComponentesProducto> Componentes)
+        {
+            bool ChkIdProd = Componentes.All(x => x.IdProducto != null);
+
+            if (ChkIdProd)
+            {
+                foreach (DTOComponentesProducto Componente in Componentes)
+                {
+                    try
+                    {
+                        ComponentesProductos.GuardarComponenteProd(new Productos_Componentes
+                        {
+                            IdProducto = Componente.IdProducto,
+                            IdComponente = Componente.IdComponente,
+                            Cantidad = Componente.Cantidad,
+                            Longitud = Componente.Largo,
+                            Peso = Componente.Peso,
+                        });
+
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                AponusDBContext.SaveChanges();
+            }
+           
+
         }
     }
 }

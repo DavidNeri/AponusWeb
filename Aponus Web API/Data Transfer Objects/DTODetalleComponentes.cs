@@ -25,6 +25,9 @@ namespace Aponus_Web_API.Data_Transfer_objects
         [JsonProperty(PropertyName = "diametro" , NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Diametro { get; set; }
 
+        [JsonProperty(PropertyName = "diametroNominal", NullValueHandling = NullValueHandling.Ignore)]
+        public int? DiametroNominal { get; set; }
+
         [JsonProperty(PropertyName = "Altura" , NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Altura { get; set; }
        

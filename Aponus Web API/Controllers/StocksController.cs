@@ -18,11 +18,12 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("List/Types")]
+        [Route("List/{idDescription}")]
 
-        public async Task<List<TipoInsumos>> ListarTipoInsumos()
+        public async Task<List<TipoInsumos>> Listar(int? idDescription)
         {
-            return await new BS_Stocks().ListarTipoInsumos();
+            return await new BS_Stocks().Listar(idDescription);
+
         }
 
         [HttpGet]
@@ -32,17 +33,37 @@ namespace Aponus_Web_API.Controllers
         {
             return await new BS_Stocks().Listar(idDescription, Dn);
 
-        }
+        }       
+
+        /// <summary>
+        /// Reemplzo de List/All && List/{idDescription} && List/{idDescription}/{dn} Tablas Nuevas 
+        /// Reemplaza 3 "/all - /iDDescripcion y  /iddescripcicion+DN
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        /// 
 
         [HttpGet]
-        [Route("List/{idDescription}")]
-
-        public async Task<List<TipoInsumos>> Listar(int? idDescription)
+        [Route("NewList/{idDescription?}/{dn?}")]
+        public async Task<List<TipoInsumos>> NewListar(int? idDescription, int? dn)
         {
-            return await new BS_Stocks().Listar(idDescription);
+            return await new BS_Stocks().NewListar(idDescription, dn);
 
         }
 
+        ////
+        ////
+        ///
+
+        [HttpGet]
+        [Route("List/Types")]
+
+        public async Task<List<TipoInsumos>> ListarTipoInsumos()
+        {
+            return await new BS_Stocks().ListarTipoInsumos();
+        }
+
+        
         [HttpGet]
         [Route("List/Diameters/{idDescription}/")]
 
@@ -70,6 +91,31 @@ namespace Aponus_Web_API.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Reemplaza a StockUpdate
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("NewStockUpdate")]
+        public IActionResult NewActualizarStock(ActualizacionStock Actualizacion)
+        {
+
+            try
+            {
+                new BS_Stocks().ActualizarStock(Actualizacion);
+
+                return StatusCode(200);
+
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500);
+            }
+
+        }
+
 
         [HttpGet]
         [Route("List/Bolts")]
