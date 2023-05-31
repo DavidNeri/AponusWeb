@@ -90,7 +90,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
                 var Resultado = new Dictionary<string, string>()
                 {
-                    {"idComponent",IdInsumo }
+                    {"idComponente",IdInsumo }
                 };
 
                 jsonResult= new JsonResult(Resultado);
