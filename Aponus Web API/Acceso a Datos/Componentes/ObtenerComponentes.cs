@@ -88,11 +88,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
             {
                 var IdInsumo = Insumo[0].ToString();
 
-                var Resultado = new Dictionary<string, string>()
+                var Resultado = new DTOComponentesProducto()
                 {
-                    {"idComponente",IdInsumo }
+                    IdComponente= IdInsumo,
                 };
-
                 jsonResult= new JsonResult(Resultado);
             }
 
