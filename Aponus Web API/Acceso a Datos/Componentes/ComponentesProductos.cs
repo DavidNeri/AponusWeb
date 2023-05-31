@@ -42,10 +42,12 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
         }
 
-        internal JsonResult ObtenerComponentes(string? productId, int q)
+        internal JsonResult ObtenerComponentesProducto(DTODetallesProducto Producto)
         {
+
+
             var ComponentesProducto = AponusDbContext.Componentes_Productos
-                    .Where(x => x.IdProducto == productId)
+                    .Where(x => x.IdProducto == Producto.IdProducto)
                     .Join(AponusDbContext.ComponentesDetalles,
                         _Componentes => _Componentes.IdComponente,
                         _DetalleComponentes => _DetalleComponentes.IdInsumo,
@@ -95,9 +97,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                                         (_StockComponentes.CantidadProceso ?? 0) +
                                         (_StockComponentes.CantidadGranallado ?? 0),
 
-                                PesoReq =(_JoinResult._DetComponentes._Componentes.Peso ?? 0) *q ,
-                                CantidadReq= (_JoinResult._DetComponentes._Componentes.Cantidad?? 0) * q,
-                                LongReq= (_JoinResult._DetComponentes._Componentes.Longitud?? 0) * q,
+                                PesoReq =(_JoinResult._DetComponentes._Componentes.Peso ?? 0) *Producto.Cantidad ,
+                                CantidadReq= (_JoinResult._DetComponentes._Componentes.Cantidad?? 0) * Producto.Cantidad,
+                                LongReq= (_JoinResult._DetComponentes._Componentes.Longitud?? 0) * Producto.Cantidad,
                                 
 
                             }
@@ -200,9 +202,21 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
                 foreach (var item in producto.StockComponente)
                 {
-                   
+                    if (item.Recibido == 0) item.Recibido= null;                   
+                    if (item.Granallado== 0) item.Granallado= null;                   
+                    if (item.Pintura== 0) item.Pintura= null;                   
+                    if (item.Proceso== 0) item.Proceso = null;                   
+                    if (item.Moldeado== 0) item.Moldeado= null;                   
+
+                    if (item.Total== 0) item.Total= null;                   
+
+                    if (item.PesoReq== 0) item.PesoReq= null;                   
+                    if (item.CantidadReq== 0) item.CantidadReq= null;                   
+                    if (item.LongReq== 0) item.LongReq= null;                   
+                                    
                 }
             }
+
 
             return new JsonResult(productos);
 

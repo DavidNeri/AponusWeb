@@ -16,7 +16,7 @@ namespace Aponus_Web_API.Controllers
             return await new BS_Stocks().Listar();
 
         }
-
+      
         [HttpGet]
         [Route("List/{idDescription}")]
 
@@ -103,7 +103,7 @@ namespace Aponus_Web_API.Controllers
 
             try
             {
-                new BS_Stocks().ActualizarStock(Actualizacion);
+                new BS_Stocks().NewActualizarStock(Actualizacion);
 
                 return StatusCode(200);
 

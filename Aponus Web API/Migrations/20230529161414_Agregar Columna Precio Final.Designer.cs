@@ -4,6 +4,7 @@ using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20230529161414_Agregar Columna Precio Final")]
+    partial class AgregarColumnaPrecioFinal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -343,13 +346,8 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("ID_TIPO");
 
-                    b.Property<decimal?>("PorcentajeGanancia")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("PORCENTAJE_GANANCIA");
-
                     b.Property<decimal?>("PrecioFinal")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("PRECIO_FINAL");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("PrecioLista")
                         .ValueGeneratedOnAdd()
@@ -614,7 +612,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("Usuario");
 
-                    b.ToTable("Usuarios", (string)null);
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ComponentesCuantitativo", b =>

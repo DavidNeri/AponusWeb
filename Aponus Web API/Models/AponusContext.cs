@@ -411,10 +411,17 @@ public partial class AponusContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("ID_TIPO");
-            entity.Property(e => e.Precio)
+            entity.Property(e => e.PrecioLista)
                 .HasDefaultValueSql("((0))")
                 .HasColumnType("money")
-                .HasColumnName("PRECIO");
+                .HasColumnName("PRECIO_LISTA");
+
+            entity.Property(e => e.PrecioFinal)
+            .HasColumnName("PRECIO_FINAL");
+
+            entity.Property(e => e.PorcentajeGanancia)
+            .HasColumnName("PORCENTAJE_GANANCIA");
+            
             entity.Property(e => e.Tolerancia).HasColumnName("TOLERANCIA");
 
             entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.Productos)

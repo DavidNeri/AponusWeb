@@ -95,11 +95,12 @@ namespace Aponus_Web_API.Business
             return await new ObtenerProductos().ListarDN(typeId, idDescription);
         }
 
-        internal JsonResult NewListarComponentes(string? productId, int q)
+        internal JsonResult NewListarComponentesProducto(DTODetallesProducto Producto)
         {
 
-            return new ComponentesProductos().ObtenerComponentes(productId,q);
+            Producto.Cantidad ??= 1;
 
+            return new ComponentesProductos().ObtenerComponentesProducto(Producto);
         }
 
         internal Task<JsonResult> ListarProductos(string? TypeId) {

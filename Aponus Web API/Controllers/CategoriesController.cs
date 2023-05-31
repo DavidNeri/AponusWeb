@@ -63,7 +63,8 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new CategoriesServices().AgregarDescripcion(NuevaCategoria);
+                // return new CategoriesServices().    (NuevaCategoria);
+                return null;
             }
             catch (DbUpdateException e)
             {

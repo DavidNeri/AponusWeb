@@ -18,9 +18,13 @@ public partial class Producto
 
     public int? Cantidad { get; set; }
 
-    public decimal? Precio { get; set; }
+    public decimal? PrecioLista { get; set; }
 
-    
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal? PrecioFinal{ get; set; }
+
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal? PorcentajeGanancia { get; set; }
     public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }  = null!;
 
     public virtual ProductosTipo IdTipoNavigation { get; set; } = null!;

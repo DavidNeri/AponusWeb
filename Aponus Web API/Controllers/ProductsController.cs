@@ -114,16 +114,15 @@ namespace Aponus_Web_API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         //Reemplaza a ListParts
-        [Route("NewListComponents/{productId}/{q=1}")]
-        public JsonResult NewListComponents(string? ProductId, int Q = 1)
+        [Route("NewListComponents")]
+        public JsonResult NewListComponents(DTODetallesProducto Producto)
         {
             try
             {
-                return new BS_Products().NewListarComponentes(ProductId, Q);
+                return new BS_Products().NewListarComponentesProducto(Producto);
 
-                //return Json(a, new Newtonsoft.Json.JsonSerializerSettings());
             }
             catch (Exception e)
             {

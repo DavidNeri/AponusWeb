@@ -166,7 +166,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                 }).First();
 
                             _Insumos.Columnas = new ColumnasJson().setColumnas(new ColumnasInsumosPesables(), null, null, especificaciones);
-
+                         
                         }
 
                     }

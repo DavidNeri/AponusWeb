@@ -1,5 +1,6 @@
 ﻿using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Models;
+using Aponus_Web_API.Services;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -755,6 +756,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                      Descripcion = group.Key.Descripcion,
                      Especificaciones = group.Select(result => result.Especificaciones.Single()).ToList()                    
                  }).ToListAsync();
+
+
+            foreach (TipoInsumos ListaInsumos in tipoInsumosList)
+            {
+                ListaInsumos.Columnas = new ColumnasJson().NewSetColumnas(ListaInsumos.Especificaciones);
+            }
+                    
 
 
             return tipoInsumosList;

@@ -86,8 +86,18 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                 jsonResult= new JsonResult("Los valores no corresponden a un elemento unico");
             }else
             {
-                jsonResult= new JsonResult(Insumo);
+                var IdInsumo = Insumo[0].ToString();
+
+                var Resultado = new Dictionary<string, string>()
+                {
+                    {"idComponent",IdInsumo }
+                };
+
+                jsonResult= new JsonResult(Resultado);
             }
+
+
+
 
             return jsonResult;
         }

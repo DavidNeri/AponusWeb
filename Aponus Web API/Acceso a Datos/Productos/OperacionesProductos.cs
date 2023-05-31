@@ -90,7 +90,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                 existingProducto.IdTipo = producto.Producto.IdTipo;
                 existingProducto.DiametroNominal = producto.Producto.DiametroNominal;
                 existingProducto.Cantidad = producto.Producto.Cantidad;
-                existingProducto.Precio = producto.Producto.Precio;
+                existingProducto.PrecioLista = producto.Producto.Precio;
                 existingProducto.Tolerancia = producto.Producto.Tolerancia;
             }
             else
@@ -103,7 +103,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                 IdTipo = producto.Producto.IdTipo,
                 DiametroNominal = producto.Producto.DiametroNominal,
                 Cantidad = producto.Producto.Cantidad,
-                Precio = producto.Producto.Precio,
+                PrecioLista = producto.Producto.Precio,
                 Tolerancia = producto.Producto.Tolerancia
             });
             }

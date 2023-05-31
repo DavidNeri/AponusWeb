@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using Aponus_Web_API.Data_Transfer_objects;
+using Newtonsoft.Json;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Aponus_Web_API.Services
 {
@@ -15,6 +17,61 @@ namespace Aponus_Web_API.Services
         public ColumnasJson()
         {
         }
+
+        [JsonProperty(PropertyName = "largo", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Largo { get; set; } = "Largo";
+
+        [JsonProperty(PropertyName = "ancho", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Ancho { get; set; } = "Ancho";
+
+        [JsonProperty(PropertyName = "espesor", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Espesor { get; set; } = "Espesor";
+
+        [JsonProperty(PropertyName = "perfil", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Perfil { get; set; } = "Perfil";
+
+        [JsonProperty(PropertyName = "diametro", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Diametro { get; set; } = "Diametro";
+
+        [JsonProperty(PropertyName = "diametroNominal", NullValueHandling = NullValueHandling.Ignore)]
+        public string? DiametroNominal { get; set; } = "DN";
+
+
+        [JsonProperty(PropertyName = "altura", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Altura { get; set; } = "Altura";
+
+        [JsonProperty(PropertyName = "tolerancia", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Tolerancia { get; set; } = "Tolerancia";
+
+        [JsonProperty(PropertyName = "longitud", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Longitud { get; set; } = "Longitud";
+
+
+        [JsonProperty(PropertyName = "recibido", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Recibido { get; set; } = "Cant. Recibida";
+
+        [JsonProperty(PropertyName = "pintura", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Pintura { get; set; } = "Cant. Pintura";
+
+        [JsonProperty(PropertyName = "proceso", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Proceso { get; set; } = "Cant. Proceso";    
+
+        [JsonProperty(PropertyName = "requerido", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Requerido { get; set; } = "Cant. Requerida";
+
+
+        [JsonProperty(PropertyName = "granallado", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Granallado { get; set; } = "Cant. Granallado";
+      
+
+        [JsonProperty(PropertyName = "moldeado", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Moldeado { get; set; } = "Cant. Moldeada";
+    
+
+       
+  
+
+       
 
         public  string[] setColumnas(
         
@@ -123,6 +180,34 @@ namespace Aponus_Web_API.Services
           
           
         }
+
+
+        public string[] NewSetColumnas(List<DTODetalleComponentes> Especificaciones)
+        {
+            List<string> columnasList = new List<string>();
+
+            if (Especificaciones.All(x => x.Largo != null)) columnasList.Add(Largo);
+            if (Especificaciones.All(x => x.Ancho != null)) columnasList.Add(Ancho);
+            if (Especificaciones.All(x => x.Espesor != null)) columnasList.Add(Espesor);
+            if (Especificaciones.All(x => x.Perfil != null)) columnasList.Add(Perfil);
+            if (Especificaciones.All(x => x.Diametro != null)) columnasList.Add(Diametro);
+            if (Especificaciones.All(x => x.DiametroNominal != null)) columnasList.Add(DiametroNominal);
+            if (Especificaciones.All(x => x.Altura != null)) columnasList.Add(Altura);
+            if (Especificaciones.All(x => x.Tolerancia != null)) columnasList.Add(Tolerancia);
+            if (Especificaciones.All(x => x.Longitud != null)) columnasList.Add(Longitud);
+            if (Especificaciones.All(x => x.Recibido != null)) columnasList.Add(Recibido);
+            if (Especificaciones.All(x => x.Pintura != null)) columnasList.Add(Pintura);
+            if (Especificaciones.All(x => x.Proceso != null)) columnasList.Add(Proceso);
+            if (Especificaciones.All(x => x.Requerido != null)) columnasList.Add(Requerido);
+            if (Especificaciones.All(x => x.Granallado != null)) columnasList.Add(Granallado);
+            if (Especificaciones.All(x => x.Moldeado != null)) columnasList.Add(Moldeado);
+
+
+            string[] columnas = columnasList.ToArray();
+
+            return columnas;
+        }
+
     }
 
 }
