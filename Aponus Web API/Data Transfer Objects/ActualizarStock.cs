@@ -4,8 +4,11 @@ namespace Aponus_Web_API.Data_Transfer_objects
 {
     public class ActualizacionStock
     {
+        [JsonProperty(PropertyName = "id", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Id { get; set; }
+
         [JsonProperty(PropertyName = "idExistencia", NullValueHandling = NullValueHandling.Ignore)]
-        public string? IdExistencia { get; set; }
+        public string? IdExistencia { get; set; }       
 
         [JsonProperty(PropertyName = "idTipoExistencia", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdTipoExistencia { get; set; }
@@ -20,7 +23,7 @@ namespace Aponus_Web_API.Data_Transfer_objects
         public string? Operador { get; set; }
 
         [JsonProperty(PropertyName = "valor", NullValueHandling = NullValueHandling.Ignore)]
-        public int? Valor { get; set; }
+        public decimal? Valor { get; set; }
 
         [JsonProperty(PropertyName = "idJuntaPerfil", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdJuntaPerfil { get; set; }

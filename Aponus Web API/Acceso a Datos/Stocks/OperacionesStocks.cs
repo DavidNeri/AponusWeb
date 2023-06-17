@@ -4,6 +4,8 @@ using Aponus_Web_API.Services;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
+using System.Reflection;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Stocks
@@ -651,31 +653,64 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         }
 
-        internal void AgregarProducto(ActualizacionStock Actualizacion)
+        internal bool AgregarProducto(ActualizacionStock Actualizacion)
         {
-            AponusDBContext.Productos
+            bool resultado = true;
+            try
+            {
+                 AponusDBContext.Productos
                 .Where(x => x.IdProducto == Actualizacion.IdExistencia)
                 .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,
                 AponusDBContext.Productos.
                 Where(x => x.IdProducto == Actualizacion.IdExistencia).
                 Select(x => x.Cantidad).SingleOrDefault() + Actualizacion.Valor));
+            }
+            catch (Exception)
+            {
+
+                resultado=false;
+            }
+            return resultado;
         }
 
-        internal void RestarProducto(ActualizacionStock Actualizacion)
+        internal bool RestarProducto(ActualizacionStock Actualizacion)
         {
-            AponusDBContext.Productos
-                .Where(x => x.IdProducto == Actualizacion.IdExistencia)
-                .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,
-                AponusDBContext.Productos.
-                Where(x => x.IdProducto == Actualizacion.IdExistencia).
-                Select(x => x.Cantidad).SingleOrDefault() - Actualizacion.Valor));
+            bool resultado = true;
+            try
+            {
+                AponusDBContext.Productos
+               .Where(x => x.IdProducto == Actualizacion.IdExistencia)
+               .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,
+               AponusDBContext.Productos.
+               Where(x => x.IdProducto == Actualizacion.IdExistencia).
+               Select(x => x.Cantidad).SingleOrDefault() - Actualizacion.Valor));
+            }
+            catch (Exception)
+            {
+
+                resultado=false;
+            }
+
+            return resultado;
+           
         }
 
-        internal void SetCantidadProducto(ActualizacionStock Actualizacion)
+        internal bool SetCantidadProducto(ActualizacionStock Actualizacion)
         {
-            AponusDBContext.Productos
-                .Where(x => x.IdProducto == Actualizacion.IdExistencia)
-                .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,Actualizacion.Valor));
+            bool resultado = true;
+            try
+            {
+                AponusDBContext.Productos
+               .Where(x => x.IdProducto == Actualizacion.IdExistencia)
+               .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad, Actualizacion.Valor));
+            }
+            catch (Exception)
+            {
+
+                resultado=false;
+            }
+            return  resultado;
+           
         }
 
         internal async Task<List<Data_Transfer_objects.Insumos>> ListarBulones()
@@ -878,7 +913,128 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             return tipoInsumosList;
         }
 
-      
+        internal bool IncrementarStockInsumo(ActualizacionStock Actualizacion, string? Prop)
+        {
+            bool result = false;
+            PropertyInfo? Propiedad = typeof(StockInsumos).GetProperties().FirstOrDefault(p => p.Name.Contains(Prop));
+
+            try
+            {
+                var elementos = AponusDBContext.stockInsumos
+                        .Where(x => x.IdInsumo == Actualizacion.Id)
+                        .ToList();
+
+                foreach (var elemento in elementos)
+                {
+                    decimal? valorSumar = Actualizacion.Valor ?? 0;
+
+                    var valorActual = (decimal?)Propiedad?.GetValue(elemento);
+                    if (valorActual == null) valorActual = 0;
+
+                    decimal? nuevoValor = (valorActual ?? 0) + valorSumar;
+
+                    if (Propiedad != null)
+                    {
+                        Propiedad.SetValue(elemento, nuevoValor);
+                    }
+                }
+
+                AponusDBContext.SaveChanges(); // Guardar los cambios en la base de datos
+
+                result = true;
+                return result;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        internal bool DescontarStockInsumo(ActualizacionStock Actualizacion, string? Prop)
+        {
+            bool result = false;
+            PropertyInfo? Propiedad = typeof(StockInsumos).GetProperties().FirstOrDefault(p => p.Name.Contains(Prop));
+
+            try
+            {
+                var elementos = AponusDBContext.stockInsumos
+                       .Where(x => x.IdInsumo == Actualizacion.Id)
+                       .ToList();
+
+                foreach (var elemento in elementos)
+                {
+                    decimal? valorSumar = Actualizacion.Valor ?? 0;
+
+                    var valorActual = (decimal?)Propiedad?.GetValue(elemento);
+                    if (valorActual == null) valorActual = 0;
+
+                    decimal? nuevoValor = (valorActual ?? 0) - valorSumar;
+
+                    if (Propiedad != null)
+                    {
+                        Propiedad.SetValue(elemento, nuevoValor);
+                    }
+                }
+
+                AponusDBContext.SaveChanges(); // Guardar los cambios en la base de datos
+                result = true;
+                return result;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+           
+        }
+
+        public StockInsumos? BuscarInsumo(string Insumo)
+        {
+            return AponusDBContext.stockInsumos.Where(x => x.IdInsumo == Insumo).Select(x => new StockInsumos()
+            {
+                IdInsumo = x.IdInsumo,
+                CantidadGranallado = x.CantidadGranallado,
+                CantidadMoldeado = x.CantidadMoldeado,
+                CantidadPintura = x.CantidadPintura,
+                CantidadProceso = x.CantidadProceso,
+                CantidadRecibido = x.CantidadRecibido
+
+            }).SingleOrDefault();
+
+        }
+
+
+
+
+        internal bool NewSetearStockInsumo(ActualizacionStock Actualizacion)
+        {
+            PropertyInfo? Propiedad = typeof(StockInsumos).GetProperties().FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino));
+            bool resultado = true;
+            try
+            {
+                var elementos = AponusDBContext.stockInsumos
+                       .Where(x => x.IdInsumo == Actualizacion.Id)
+                       .ToList();
+
+                foreach (var elemento in elementos)
+                {
+
+
+                    if (Propiedad != null)
+                    {
+                        Propiedad.SetValue(elemento, Actualizacion.Valor);
+                    }
+                }
+
+                AponusDBContext.SaveChanges(); // Guardar los cambios en la base de datos
+                return resultado;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
         
     }

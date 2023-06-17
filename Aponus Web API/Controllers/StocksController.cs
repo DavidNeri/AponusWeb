@@ -103,9 +103,8 @@ namespace Aponus_Web_API.Controllers
 
             try
             {
-                new BS_Stocks().NewActualizarStock(Actualizacion);
+                return new BS_Stocks().NewActualizarStock(Actualizacion);
 
-                return StatusCode(200);
 
             }
             catch (Exception)

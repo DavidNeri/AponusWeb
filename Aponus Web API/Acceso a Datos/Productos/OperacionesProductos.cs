@@ -89,7 +89,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                 existingProducto.IdDescripcion = (int)producto.Producto.IdDescripcion;
                 existingProducto.IdTipo = producto.Producto.IdTipo;
                 existingProducto.DiametroNominal = producto.Producto.DiametroNominal;
-                existingProducto.Cantidad = producto.Producto.Cantidad;
+                existingProducto.Cantidad = Convert.ToInt32(producto.Producto.Cantidad);
                 existingProducto.PrecioLista = producto.Producto.Precio;
                 existingProducto.Tolerancia = producto.Producto.Tolerancia;
             }
@@ -102,7 +102,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                 IdDescripcion = (int)producto.Producto.IdDescripcion,
                 IdTipo = producto.Producto.IdTipo,
                 DiametroNominal = producto.Producto.DiametroNominal,
-                Cantidad = producto.Producto.Cantidad,
+                Cantidad = Convert.ToInt32(producto.Producto.Cantidad),
                 PrecioLista = producto.Producto.Precio,
                 Tolerancia = producto.Producto.Tolerancia
             });
@@ -160,6 +160,24 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
             }
            
 
+        }
+
+
+        public Producto? BuscarProducto(string Producto)
+        {
+            return AponusDBContext.Productos
+                .Where(x => x.IdProducto == Producto)
+                .Select(x=>new Producto()
+                {
+                    IdProducto=x.IdProducto,
+                    Cantidad=x.Cantidad,
+                    Tolerancia=x.Tolerancia,
+                    PrecioFinal=x.PrecioFinal,
+                    PrecioLista=x.PrecioLista,
+                    PorcentajeGanancia=x.PorcentajeGanancia,
+                    DiametroNominal=x.DiametroNominal
+                    
+                }).SingleOrDefault();
         }
     }
 }

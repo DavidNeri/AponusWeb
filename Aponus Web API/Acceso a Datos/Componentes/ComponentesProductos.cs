@@ -97,7 +97,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                                         (_StockComponentes.CantidadProceso ?? 0) +
                                         (_StockComponentes.CantidadGranallado ?? 0),
 
-                                PesoReq =(_JoinResult._DetComponentes._Componentes.Peso ?? 0) *Producto.Cantidad ,
+                                PesoReq=(_JoinResult._DetComponentes._Componentes.Peso ?? 0) *Producto.Cantidad ,
                                 CantidadReq= (_JoinResult._DetComponentes._Componentes.Cantidad?? 0) * Producto.Cantidad,
                                 LongReq= (_JoinResult._DetComponentes._Componentes.Longitud?? 0) * Producto.Cantidad,
                                 

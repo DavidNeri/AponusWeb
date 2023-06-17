@@ -69,24 +69,24 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.CantidadRecibido)
            .HasColumnName("CANTIDAD_RECIBIDO")
-           .HasColumnType("int");
+           .HasColumnType("decimal");
 
             entity.Property(e => e.CantidadGranallado)
             .HasColumnName("CANTIDAD_GRANALLADO")
-            .HasColumnType("int");
+            .HasColumnType("decimal");
 
             entity.Property(e => e.CantidadPintura)
            .HasColumnName("CANTIDAD_PINTURA")
-           .HasColumnType("int");
+           .HasColumnType("decimal");
 
 
             entity.Property(e => e.CantidadProceso)
            .HasColumnName("CANTIDAD_PROCESO")
-           .HasColumnType("int");
+           .HasColumnType("decimal");
 
             entity.Property(e => e.CantidadMoldeado)
            .HasColumnName("CANTIDAD_MOLDEADO")
-           .HasColumnType("int");
+           .HasColumnType("decimal");
 
         });
 

@@ -22,7 +22,7 @@ namespace Aponus_Web_API.Data_Transfer_objects
 
 
         [JsonProperty(PropertyName = "cantidad", NullValueHandling = NullValueHandling.Ignore)]
-        public int? Cantidad { get; set; }
+        public decimal? Cantidad { get; set; }
 
         [JsonProperty(PropertyName = "precio", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Precio { get; set; }

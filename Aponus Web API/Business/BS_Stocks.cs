@@ -3,6 +3,7 @@ using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using Aponus_Web_API.Acceso_a_Datos.Productos;
 
 namespace Aponus_Web_API.Business
 {
@@ -87,43 +88,29 @@ namespace Aponus_Web_API.Business
         {
             try
             {
-                switch (Actualizacion.IdTipoExistencia)
+
+                if (new OperacionesStocks().BuscarInsumo(Actualizacion.Id)!=null)
                 {
-                    case 0:
-                        switch (Actualizacion.Operador)
-                        {
-                            case "+":
-                                new ModificacionesStocks().newActualizarInsumo_Aumentar(Actualizacion);
-                                break;
-                            case "-":
-                                new ModificacionesStocks().NewActualizarInsumo_Descontar(Actualizacion);
-                                break;
-                            case "=":
-                                new ModificacionesStocks().NewActualizarInsumo_NuevoValor(Actualizacion);
-                                break;
 
-                        }
-                        break;
-
-                    case 1:
-
-                        switch (Actualizacion.Operador)
-                        {
-                            case "+":
-                                new ModificacionesStocks().ActualizarProducto_Agregar(Actualizacion);
-                                break;
-                            case "-":
-                                new ModificacionesStocks().ActualizarProducto_Descontar(Actualizacion);
-                                break;
-                            case "=":
-                                new ModificacionesStocks().ActualizarProducto_NuevoValor(Actualizacion);
-                                break;
-                        }
-                        break;
-
-
+                     return new ModificacionesStocks().newActualizarStockInsumo(Actualizacion);
+                 
                 }
-                return new JsonResult(new StatusCodeResult(200));
+                else if (new OperacionesProductos().BuscarProducto(Actualizacion.Id)!=null)
+                {
+
+                    return new ModificacionesStocks().newActualizarStockProducto(Actualizacion);
+                }
+                else
+                {
+                    var Resultado = new ObjectResult("Error interno, no se aplicaron los cambios")
+                    {
+                        StatusCode = 500,
+                    };
+                    return Resultado;
+                }
+
+
+                
 
             }
             catch (Exception)
