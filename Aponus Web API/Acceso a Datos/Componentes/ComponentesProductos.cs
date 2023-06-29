@@ -70,15 +70,15 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                         _StockComponentes => _StockComponentes.IdInsumo,
                         (_JoinResult, _StockComponentes) => new
                         {
-                            _IdComponente =_JoinResult._DetComponentes._Componentes.IdComponente ?? "" ,
-                            _Descripcion=_JoinResult._NombreComponentes.Descripcion ??  "",
-                            _Diametro=_JoinResult._DetComponentes._DetalleComponentes.Diametro ?? null,
-                            _Longitud=_JoinResult._DetComponentes._DetalleComponentes.Longitud ?? null,
-                            _Altura=_JoinResult._DetComponentes._DetalleComponentes.Altura ?? null,
-                            _Espesor=_JoinResult._DetComponentes._DetalleComponentes.Espesor ?? null,
-                            _Perfil=_JoinResult._DetComponentes._DetalleComponentes.Perfil ?? null,
-                            _Tolerancia=_JoinResult._DetComponentes._DetalleComponentes.Tolerancia ?? "",
-                            _DiametroNominal=_JoinResult._DetComponentes._DetalleComponentes.DiametroNominal ?? null,
+                            _IdComponente = _JoinResult._DetComponentes._Componentes.IdComponente ?? "",
+                            _Descripcion = _JoinResult._NombreComponentes.Descripcion ?? "",
+                            _Diametro = _JoinResult._DetComponentes._DetalleComponentes.Diametro ?? null,
+                            _Longitud = _JoinResult._DetComponentes._DetalleComponentes.Longitud ?? null,
+                            _Altura = _JoinResult._DetComponentes._DetalleComponentes.Altura ?? null,
+                            _Espesor = _JoinResult._DetComponentes._DetalleComponentes.Espesor ?? null,
+                            _Perfil = _JoinResult._DetComponentes._DetalleComponentes.Perfil ?? null,
+                            _Tolerancia = _JoinResult._DetComponentes._DetalleComponentes.Tolerancia ?? "",
+                            _DiametroNominal = _JoinResult._DetComponentes._DetalleComponentes.DiametroNominal ?? null,
                             _Largo = _JoinResult._DetComponentes._Componentes.Longitud ?? null,
 
 
@@ -97,16 +97,17 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                                         (_StockComponentes.CantidadProceso ?? 0) +
                                         (_StockComponentes.CantidadGranallado ?? 0),
 
-                                PesoReq=(_JoinResult._DetComponentes._Componentes.Peso ?? 0) *Producto.Cantidad ,
-                                CantidadReq= (_JoinResult._DetComponentes._Componentes.Cantidad?? 0) * Producto.Cantidad,
-                                LongReq= (_JoinResult._DetComponentes._Componentes.Longitud?? 0) * Producto.Cantidad,
-                                
+                                PesoReq = ((_JoinResult._DetComponentes._DetalleComponentes.Peso ?? 0) * (_JoinResult._DetComponentes._Componentes.Cantidad ?? 0)) * Producto.Cantidad,
+                                // PesoReq=(_JoinResult._DetComponentes._Componentes.Peso ?? 0) *Producto.Cantidad ,
+                                CantidadReq = (_JoinResult._DetComponentes._Componentes.Cantidad ?? 0) * Producto.Cantidad,
+                                LongReq = (_JoinResult._DetComponentes._Componentes.Longitud ?? 0) * Producto.Cantidad,
+
 
                             }
                         })
                     .GroupBy(cp => new
-                    { 
-                        cp._IdComponente, 
+                    {
+                        cp._IdComponente,
                         cp._Descripcion,
                         cp._Longitud,
                         cp._Perfil,
@@ -120,15 +121,15 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                     .Select(group => new
                     {
                         IdComponente = group.Key._IdComponente,
-                        Descripcion = group.Key._Descripcion, 
+                        Descripcion = group.Key._Descripcion,
                         Perfil = group.Key._Perfil,
                         Longitud = group.Key._Longitud,
-                        DiametroNominal=group.Key._DiametroNominal,
-                        Altura=group.Key._Altura,
-                        Largo=group.Key._Largo,
-                        Diametro=group.Key._Diametro,
+                        DiametroNominal = group.Key._DiametroNominal,
+                        Altura = group.Key._Altura,
+                        Largo = group.Key._Largo,
+                        Diametro = group.Key._Diametro,
                         Espesor = group.Key._Espesor,
-                        Tolerancia=group.Key._Tolerancia,
+                        Tolerancia = group.Key._Tolerancia,
                         StockComponente = group.Select(cp => cp.StockComponente).ToList(),
 
                     })
@@ -152,7 +153,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                 string? tolerancia = cp.Tolerancia ?? "";
                 string? DiametroNominal = cp.DiametroNominal.ToString() ?? "";
                 string? largo = cp.Largo != null ? string.Format("{0:####}", cp.Largo) : null;
-                
+
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append($"{descripcion}");
@@ -188,6 +189,21 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
                 productos.Add(productoComponente);
             }
+
+            var ComponentesProdIds = ComponentesProducto.Select(x => x.IdComponente).ToList();
+
+            var Siglas = AponusDbContext.ComponentesDetalles
+                .Where(x => ComponentesProdIds.Contains(x.IdInsumo))
+                .Select(x => new
+                {
+                    idInsumo = x.IdInsumo,
+                    Unidades = x.Sigla
+                }).ToList();
+                                
+               
+            
+
+
 
             foreach (var producto in productos)
             {

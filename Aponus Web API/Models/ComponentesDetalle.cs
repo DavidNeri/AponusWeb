@@ -15,9 +15,11 @@ namespace Aponus_Web_API.Models
         public decimal? Altura { get; set; }
         public int? Perfil { get; set; }
         public string? Tolerancia { get; set; }
+        public decimal? Peso { get; set; }
+        public string? Sigla { get; set; }
 
 
 
 
-    }   
+    }
 }

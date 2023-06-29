@@ -163,7 +163,14 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.Tolerancia)
           .HasColumnName("TOLERANCIA")
           .HasColumnType("varchar(50)");
-            
+
+            entity.Property(e => e.Peso)
+         .HasColumnName("PESO")
+         .HasColumnType("decimal(18,2)");
+
+            entity.Property(e => e.Sigla)
+         .HasColumnName("Sigla")
+         .HasColumnType("nvarchar(50)");
 
 
         });
