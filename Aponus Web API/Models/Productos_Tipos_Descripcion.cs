@@ -8,7 +8,7 @@
         //Navigation Properties
 
         public  ProductosTipo IdTipoNavigation { get; set; }
-        public ProductosDescripcion Descripcion { get; set; }
+        public ProductosDescripcion DescripcionNavigation { get; set; }
 
 
     }

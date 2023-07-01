@@ -484,6 +484,19 @@ public partial class AponusContext : DbContext
             entity.Property(e=>e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
             entity.HasKey(Key => new { Key.IdTipo, Key.IdDescripcion });
 
+            entity.HasOne(e => e.IdTipoNavigation)
+            .WithMany()
+            .HasForeignKey(e=>e.IdTipo)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+
+            entity.HasOne(e => e.DescripcionNavigation)
+            .WithMany()
+            .HasForeignKey(e => e.IdDescripcion)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+
+
         });
 
 

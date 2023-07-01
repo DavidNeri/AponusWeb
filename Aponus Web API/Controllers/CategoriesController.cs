@@ -4,6 +4,7 @@ using Aponus_Web_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Aponus_Web_API.Data_Transfer_Objects;
+using Aponus_Web_API.Business;
 
 
 namespace Aponus_Web_API.Controllers
@@ -64,6 +65,24 @@ namespace Aponus_Web_API.Controllers
             try
             {
                 return new CategoriesServices().AgregarDescripcion(NuevaCategoria);
+            }
+            catch (DbUpdateException e)
+            {
+
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
+            }
+
+
+        }
+
+        [HttpPost]
+        [Route("Update")]
+        public IActionResult ActualizarCategorias(DTOCategorias Anterior)
+        {
+            try
+            {
+                return new BS_Categories().Actualizar(Anterior);
             }
             catch (DbUpdateException e)
             {
