@@ -1,18 +1,24 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Aponus_Web_API.Models;
 
 public partial class ProductosTipo
 {
+    
+    [Column("ID_TIPO")]
     public string IdTipo { get; set; } = null!;
 
+    [Column("DESCRIPCION")]
     public string? DescripcionTipo { get; set; }
 
     public ICollection<Producto> Productos{ get; set;} = new List<Producto>();
 
     //Navigation Propertires
 
-    public ICollection<Productos_Tipos_Descripcion> Producto_Tipo_Descripcione { get; set; }
+    //public  ICollection<Productos_Tipos_Descripcion> Producto_Tipo_Descripcione { get; set; }
 
 }

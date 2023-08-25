@@ -446,18 +446,27 @@ public partial class AponusContext : DbContext
 
         modelBuilder.Entity<ProductosDescripcion>(entity =>
         {
-            entity.HasKey(e => e.IdDescripcion);
+            entity.HasKey(e => e.IdDescripcion) ;
 
             entity.ToTable("PRODUCTOS_DESCRIPCION");
 
             entity.Property(e => e.IdDescripcion)
-                .ValueGeneratedNever()
                 .HasColumnName("ID_DESCRIPCION");
+
             entity.Property(e => e.DescripcionProducto)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPCION");
-           
+
+
+            /*entity.HasMany(e => e.Producto_Tipo_Descripcione)
+            .WithOne(e => e.IdDescripcionNavigation)
+            .HasForeignKey(e => e.IdDescripcion)
+            .HasConstraintName("FK_PRODUCTOS_TIPOS_DESCRIPCION_ID_DESCRIPCION");
+            ;
+
+            */
+
         });
 
         modelBuilder.Entity<ProductosTipo>(entity =>
@@ -475,7 +484,13 @@ public partial class AponusContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPCION");
 
-            
+            /*entity.HasMany(e => e.Producto_Tipo_Descripcione)
+            .WithOne(e => e.IdTipoNavigation)
+            .HasForeignKey(e => e.IdTipo)
+            .HasConstraintName("FK_PRODUCTOS_TIPOS_DESCRIPCION_ID_TIPO");
+            */
+
+
         });
         modelBuilder.Entity<Productos_Tipos_Descripcion>(entity =>
         {
@@ -484,20 +499,24 @@ public partial class AponusContext : DbContext
             entity.Property(e=>e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
             entity.HasKey(Key => new { Key.IdTipo, Key.IdDescripcion });
 
-            entity.HasOne(e => e.IdTipoNavigation)
+          /* entity.HasOne(e => e.IdTipoNavigation)
             .WithMany()
             .HasForeignKey(e=>e.IdTipo)
-            .OnDelete(DeleteBehavior.Restrict)
+            .OnDelete(DeleteBehavior.NoAction)
+            .HasConstraintName("FK_PRODUCTOS_TIPOS_DESCRIPCION_ID_TIPO")
             .IsRequired();
-
-            entity.HasOne(e => e.DescripcionNavigation)
+          */
+            /*entity.HasOne(e => e.IdDescripcionNavigation)
             .WithMany()
             .HasForeignKey(e => e.IdDescripcion)
-            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_PRODUCTOS_TIPOS_DESCRIPCION_ID_DESCRIPCION")
+            .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
-
+          */
 
         });
+
+        
 
 
         modelBuilder.Entity<StockCuantitativo>(entity =>

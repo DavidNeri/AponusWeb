@@ -35,26 +35,24 @@ namespace Aponus_Web_API.Controllers
         public List<DTODescripciones> ListarDescripciones(string IdTipo)
         {
             
-                return new CategoriesServices().ListarDescripciones(IdTipo);
+                return new BS_Categories().ListarDescripciones(IdTipo);
             
         }
 
 
         [HttpPost]
         [Route("Types/new")]
-        public string? AgregarTipo_Descripcion(DTOCategorias NuevaCategoria)
+        public JsonResult AgregarTipo_Descripcion(DTOCategorias NuevaCategoria)
         {
             try
             {
-                 string? Id_Tipo = new CategoriesServices().AgregarTipo(NuevaCategoria);
-                return Id_Tipo;
+                return new BS_Categories().AgregarTipo(NuevaCategoria);
+                
             }
-            catch 
+            catch (Exception ex)
             {
-                return null;
+                return new JsonResult(ex.Message);
             }
-           
-
         }
 
 
@@ -64,7 +62,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new CategoriesServices().AgregarDescripcion(NuevaCategoria);
+                return new BS_Categories().AgregarDescripcion(NuevaCategoria);
             }
             catch (DbUpdateException e)
             {
@@ -72,17 +70,15 @@ namespace Aponus_Web_API.Controllers
                 string Mensaje = e.InnerException.Message;
                 return new JsonResult(Mensaje);
             }
-
-
         }
 
         [HttpPost]
         [Route("Update")]
-        public IActionResult ActualizarCategorias(DTOCategorias Anterior)
+        public IActionResult ActualizarCategorias(DTOActualizarCategorias ActualizarCategorias)
         {
             try
             {
-                return new BS_Categories().Actualizar(Anterior);
+                return new BS_Categories().Actualizar(ActualizarCategorias);
             }
             catch (DbUpdateException e)
             {
@@ -93,7 +89,6 @@ namespace Aponus_Web_API.Controllers
 
 
         }
-
 
     }
 }

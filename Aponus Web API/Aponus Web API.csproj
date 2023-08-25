@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DataScope.Stemmer.NETStandart" Version="1.0.0.6" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Humanizer.Core.es" Version="2.14.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.12" />

@@ -572,10 +572,10 @@ namespace Aponus_Web_API.Business
             {
                 case "+":
 
-                    JsonResult Componentes = new ComponentesProductos().ObtenerComponentesProducto(new DTODetallesProducto()
+                    JsonResult Componentes = new ComponentesProductos().ObtenerComponentesFormateados(new DTODetallesProducto()
                     {
                         IdProducto = Actualizacion.Id,
-                        Cantidad = Actualizacion.Valor
+                        Cantidad = Convert.ToInt32(Actualizacion.Valor)
                     });
 
                     List<DTOProductoComponente> ListaComponentes = Componentes.Value as List<DTOProductoComponente>;

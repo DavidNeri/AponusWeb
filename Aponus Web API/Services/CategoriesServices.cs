@@ -2,113 +2,51 @@
 using Aponus_Web_API.Data_Transfer_Objects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+using System.Text.RegularExpressions;
+using DataScope.Stemmer.NETStandart;
+using Annytab.Stemmer;
+using System.Data.SqlClient;
+using Microsoft.Extensions.FileProviders.Physical;
+using Aponus_Web_API.Models;
 
 namespace Aponus_Web_API.Services
 {
     public class CategoriesServices
     {
+        private readonly AponusContext AponusDBContext;
+        public CategoriesServices() { AponusDBContext = new AponusContext(); }
+
         
 
-        internal IActionResult AgregarDescripcion(DTOCategorias NuevaCategoria)
+        public string? GenerarIdTipo(string tipo)
         {
-            NuevaCategoria.Descripcion = NuevaCategoria.Descripcion.ToUpper();
+            string IdTipo;
             try
             {
-                Categorias categorias = new Categorias();
-
-                //Inserta la Descripcion y obtiene el id
-                NuevaCategoria.IdDescripcion= categorias.NuevaDescripcion(NuevaCategoria);
-
-
-                categorias.VincularCatgorias(NuevaCategoria);
-                return new StatusCodeResult(StatusCodes.Status200OK);
-
-            }
-            catch (DbUpdateException e )
-            {
-
-                string Mensaje = e.InnerException.Message;
-                return new JsonResult(Mensaje);
-            }
-          
-
-        }
-
-        internal string? AgregarTipo(DTOCategorias NuevaCategoria)
-        {
-            try
-            {
-                NuevaCategoria.IdTipo = GenerarIdTipo(NuevaCategoria.DescripcionTipo);                
-                NuevaCategoria.DescripcionTipo = NuevaCategoria.DescripcionTipo.ToUpper();
-
-                new Categorias().NuevoTipo(NuevaCategoria);
+               /* string[] Palabras = new string[60] {"a", "ante", "bajo", "cabe", "con", "contra", "de","desde", "en", "entre", "hasta", "hacia", "para","por", "según", "sin", "so", "sobre", "tras", "/",
+                    "p/", "P/", "con", "el", "la", "los", "las", "un","una", "unos", "unas", "y", "o", "pero", "como","si", "no", "más", "menos", "mucho", "poco", "bien","mal", "ser", "estar", "tener", "haber", "hacer",
+                    "decir", "ir", "venir", "llevar", "dar", "ver","saber", "poder", "querer", "deber", "amar","\\"};*/
 
 
-                return NuevaCategoria.IdTipo;
+                string textoNormalizado = Regex.Replace(tipo.Trim(), @"\s+", " ").ToUpper();
 
-            }
-            catch 
-            {                
-                return null;
+                var stemmer = new SpanishStemmer();
 
-            }
-            
-        }
-        internal List<DTODescripciones> ListarDescripciones(string IdTipo)
-        {
-            return new Categorias().ListarDescripciones(IdTipo);
-        }
+                var IdTipo_Palabras = textoNormalizado.Split(' ');
 
-        private string GenerarIdTipo(string tipo)
-        {
-            try
-            {
-                string[] Preposiciones = new string[19] {"a", "ante", "bajo", "cabe", "con", "contra",
-                "de", "desde", "en", "entre", "hasta", "hacia",
-                "para", "por", "según", "sin", "so", "sobre",
-                "tras"
-            };
+                string resultado = String.Join("_",IdTipo_Palabras.Select(Palabra=>stemmer.GetSteamWord(Palabra).ToUpper()));
 
-                string[] palabras = tipo.Split(' ');
-                string NuevaCadena = "";
-
-                foreach (string palabra in palabras)
-                {
-                    if (!Preposiciones.Contains(palabra.ToLower()))
-                    {
-                        NuevaCadena += palabra + " ";
-                    }
-                }
-
-                NuevaCadena = NuevaCadena.TrimEnd();
-                string[] IdTipoArray = NuevaCadena.Split(" ");
-                string Id_Tipo = "";
-
-                for (int i = 0; i < IdTipoArray.Length; i++)
-                {
-                    if ((i == IdTipoArray.Length - 1) && IdTipoArray[i].Length >= 3)
-                    {
-                        Id_Tipo = Id_Tipo + IdTipoArray[i].Substring(0, 3).ToUpper();
-                    }
-                    else if (IdTipoArray[i].Length >= 3)
-                    {
-                        Id_Tipo = Id_Tipo + IdTipoArray[i].Substring(0, 3).ToUpper() + "_";
-                    }
-
-                }
-
-                Id_Tipo = Id_Tipo.ToUpper();
-
-                return Id_Tipo;
+                return resultado;
             }
             catch (Exception)
             {
-
-                return "";
+                return null;
             }
            
 
         }
+
+    
+
     }
 }

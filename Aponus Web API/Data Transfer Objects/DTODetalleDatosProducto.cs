@@ -1,4 +1,5 @@
-﻿ using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Data_Transfer_objects
 {
@@ -22,10 +23,16 @@ namespace Aponus_Web_API.Data_Transfer_objects
 
 
         [JsonProperty(PropertyName = "cantidad", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? Cantidad { get; set; }
+        public int? Cantidad { get; set; }
 
-        [JsonProperty(PropertyName = "precio", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? Precio { get; set; }
+        [JsonProperty(PropertyName = "precioLista", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? PrecioLista { get; set; }
+
+        [JsonProperty(PropertyName = "precioFinal", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? PrecioFinal { get; set; }
+
+        [JsonProperty(PropertyName = "porcentajeGanancia", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? PorcentajeGanancia { get; set; }
 
 
     }

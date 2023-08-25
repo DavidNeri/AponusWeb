@@ -544,7 +544,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
         {
             List<DTOComponentesProducto>? ListadoComponentes = new List<DTOComponentesProducto>();
 
-            //Actualizar Insumos Cuantitativos
+            //ActualizarComponente Insumos Cuantitativos
             ListadoComponentes = null;
             ListadoComponentes = new List<DTOComponentesProducto>();
 
@@ -595,7 +595,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 }
 
             }
-            //Actualizar Insumos Mensurables
+            //ActualizarComponente Insumos Mensurables
             ListadoComponentes = null;
             ListadoComponentes = new List<DTOComponentesProducto>();
 

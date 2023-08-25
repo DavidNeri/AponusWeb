@@ -42,7 +42,12 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
         }
 
-        internal JsonResult ObtenerComponentesProducto(DTODetallesProducto Producto)
+        internal List<DTOComponentesProducto> ObtenerComponentes(string idProducto)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal JsonResult ObtenerComponentesFormateados(DTODetallesProducto Producto)
         {
 
 

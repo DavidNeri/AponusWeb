@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity.Validation;
+using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Productos
@@ -79,7 +81,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
 
         }
 
-        internal void GuardarProducto(GuardarProducto producto)
+        internal void GuardarProducto(DTOProducto producto)
         {
             var existingProducto = AponusDBContext.Productos.FirstOrDefault(p => p.IdProducto == producto.Producto.IdProducto);
 
@@ -90,7 +92,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                 existingProducto.IdTipo = producto.Producto.IdTipo;
                 existingProducto.DiametroNominal = producto.Producto.DiametroNominal;
                 existingProducto.Cantidad = Convert.ToInt32(producto.Producto.Cantidad);
-                existingProducto.PrecioLista = producto.Producto.Precio;
+                existingProducto.PrecioLista = producto.Producto.PrecioLista;
                 existingProducto.Tolerancia = producto.Producto.Tolerancia;
             }
             else
@@ -103,7 +105,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                 IdTipo = producto.Producto.IdTipo,
                 DiametroNominal = producto.Producto.DiametroNominal,
                 Cantidad = Convert.ToInt32(producto.Producto.Cantidad),
-                PrecioLista = producto.Producto.Precio,
+                PrecioLista = producto.Producto.PrecioLista,
                 Tolerancia = producto.Producto.Tolerancia
             });
             }
@@ -112,7 +114,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
             AponusDBContext.SaveChanges();
         }
 
-        public string GenerarIdProd(GuardarProducto Producto)
+        public string GenerarIdProd(DTOProducto Producto)
         {
             string IdProducto;
 
@@ -163,21 +165,71 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
         }
 
 
-        public Producto? BuscarProducto(string Producto)
+        public Producto? BuscarProducto(string Id_Producto)
         {
             return AponusDBContext.Productos
-                .Where(x => x.IdProducto == Producto)
+                .Where(x => x.IdProducto == Id_Producto)
                 .Select(x=>new Producto()
                 {
                     IdProducto=x.IdProducto,
-                    Cantidad=x.Cantidad,
-                    Tolerancia=x.Tolerancia,
+                    IdDescripcion=x.IdDescripcion,
+                    IdTipo=x.IdTipo,
+                    DiametroNominal = x.DiametroNominal,
+                    Tolerancia = x.Tolerancia,
+                    Cantidad = x.Cantidad,
                     PrecioFinal=x.PrecioFinal,
                     PrecioLista=x.PrecioLista,
                     PorcentajeGanancia=x.PorcentajeGanancia,
-                    DiametroNominal=x.DiametroNominal
                     
                 }).SingleOrDefault();
+        }
+
+        internal void ActualizarComponente(DTOProducto producto)
+        {
+        }
+
+        internal void Actualizar(PropertyInfo prop, DTODetallesProducto detallesProducto, Producto? ProductUpdateDetails)
+        {            
+
+            PropertyInfo? PropertyProductUpdate = ProductUpdateDetails.GetType().GetProperty(prop.Name);
+
+
+            if (PropertyProductUpdate != null)
+            {
+                var CurrenValue = prop.GetValue(detallesProducto);
+
+                PropertyProductUpdate.SetValue(ProductUpdateDetails, CurrenValue);
+
+               
+            }  
+
+        }
+
+        internal void ModifyProductDetails(Producto ProductUpdate)
+        {
+            AponusDBContext.Entry(ProductUpdate).State = EntityState.Modified;
+
+            AponusDBContext.SaveChanges();
+        }
+
+
+        internal string? ObtenerValor(string prop, string IdProducto) {
+
+            var Valor = AponusDBContext.Productos
+                .Where(x=>x.IdProducto==IdProducto)
+                .Select(x => x.GetType().GetProperty(prop).GetValue(x))
+                .FirstOrDefault();
+
+            if (Valor!=null)
+            {
+                return Valor.ToString();
+
+            }
+            else
+            {
+                return null;
+            }
+
         }
     }
 }

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Data_Transfer_Objects
 {
-    public class GuardarProducto
+    public class DTOProducto
     {
         [JsonProperty(PropertyName = "producto", NullValueHandling = NullValueHandling.Ignore)]
         public DatosProducto Producto{ get; set; }

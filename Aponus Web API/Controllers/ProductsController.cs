@@ -169,7 +169,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("SaveProduct")]
-        public IActionResult GuardarProducto(GuardarProducto Producto)
+        public IActionResult GuardarProducto(DTOProducto Producto)
         {
             try
             {
@@ -185,7 +185,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("NewSaveProduct")]
-        public IActionResult NuevoGuardarProducto(GuardarProducto Producto)
+        public IActionResult NuevoGuardarProducto(DTOProducto Producto)
         {
             try
             {
@@ -196,6 +196,38 @@ namespace Aponus_Web_API.Controllers
             {
                 string Mensaje = e.InnerException.Message;
                 return new JsonResult(Mensaje);
+            }
+        }
+
+
+
+        [HttpPost]
+        [Route("UpdateProduct")]
+        public IActionResult ActualizarProducto(DTOProducto Producto)
+        {
+            try
+            {
+                return new BS_Products().Actualizar(Producto);
+            }
+            catch (DbUpdateException e)
+            {
+                return null;
+
+            }
+        }
+
+
+        [HttpPost]
+        [Route("UpdateProduct2")]
+        public IActionResult EliminarComponentesProducto(DTOProducto Producto)
+        {
+            try
+            {
+                return null;
+            }
+            catch (DbUpdateException e)
+            {
+                return null;
             }
         }
     }

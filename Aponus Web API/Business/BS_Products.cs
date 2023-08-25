@@ -14,6 +14,9 @@ using Aponus_Web_API.Acceso_a_Datos.Insumos;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Microsoft.Data.SqlClient;
 using Aponus_Web_API.Acceso_a_Datos.Componentes;
+using System.Reflection;
+using MessagePack;
+using System;
 
 namespace Aponus_Web_API.Business
 {
@@ -47,7 +50,7 @@ namespace Aponus_Web_API.Business
                 
         }
 
-        internal void GuardarProducto(GuardarProducto producto)
+        internal void GuardarProducto(DTOProducto producto)
         {
             OperacionesProductos operacionesProductos = new OperacionesProductos();
 
@@ -55,7 +58,7 @@ namespace Aponus_Web_API.Business
            // {
                 producto.Producto.IdProducto= operacionesProductos.GenerarIdProd(producto); //Coorejir
 
-               // operacionesProductos.GuardarProducto(producto);
+               // operacionesProductos.DTOProducto(producto);
             foreach (DTOComponentesProducto Componente in producto.Componentes)
             {
 
@@ -100,7 +103,7 @@ namespace Aponus_Web_API.Business
 
             Producto.Cantidad ??= 1;
 
-            return new ComponentesProductos().ObtenerComponentesProducto(Producto);
+            return new ComponentesProductos().ObtenerComponentesFormateados(Producto);
         }
 
         internal Task<JsonResult> ListarProductos(string? TypeId) {
@@ -126,7 +129,7 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal void NuevoGuardarProducto(GuardarProducto producto)
+        internal void NuevoGuardarProducto(DTOProducto producto)
         {
             OperacionesProductos operacionesProductos = new OperacionesProductos();
             string IdProducto = operacionesProductos.GenerarIdProd(producto);
@@ -140,6 +143,131 @@ namespace Aponus_Web_API.Business
             operacionesProductos.GuardarComponentes(producto.Componentes);
 
 
+        }
+
+        internal IActionResult Actualizar(DTOProducto _Producto)
+        {
+            OperacionesProductos OP= new OperacionesProductos();
+            bool UpdateIdProd = false;
+            if (_Producto.Producto.IdProducto != null)
+            {
+                try
+                {
+                    PropertyInfo[]? DetallesProductoProps = _Producto.Producto.DetallesProducto.GetType().GetProperties();
+                    DetallesProductoProps = DetallesProductoProps.Where(prop=>prop.GetValue(_Producto.Producto.DetallesProducto)!=null).ToArray();
+                    //string? IdProducto = DetallesProductoProps.FirstOrDefault(prop=>prop.Name.Contains("IdProducto")).GetValue(_Producto.Producto.DetallesProducto).ToString();
+
+                    Producto? ProductUpdateDetails = OP.BuscarProducto(_Producto.Producto.IdProducto);
+
+                    foreach (PropertyInfo prop in DetallesProductoProps)
+                    {
+
+                        //string? ValorActual = prop.GetValue(_Producto.Producto.DetallesProducto).ToString();
+
+                        var ValorActual = prop.GetValue(_Producto.Producto.DetallesProducto);
+
+                        if (ValorActual != null) //ValorActual!=null
+                        {
+
+                            string Propiedad = prop.Name;
+
+                            var _valorOriginal = ProductUpdateDetails.GetType().GetProperty(prop.Name).GetValue(ProductUpdateDetails);
+
+                            //string ValorOriginal = OP.ObtenerValor(Propiedad, IdProducto);
+                               
+                            if (((_valorOriginal.GetType() == ValorActual.GetType() && !_valorOriginal.Equals(ValorActual)) && 
+                                !prop.Name.Contains("Cantidad") && 
+                                //ValorActual.ToString()!= "-1" && 
+                                _valorOriginal!=null))
+                            {
+                                int resultado;
+
+                                //(Int32.TryParse((string?)ValorActual, out resultado)
+
+                                if (ValorActual.ToString()== "-1")
+                                {
+                                    prop.SetValue(null, null);
+                                }
+                              
+
+                                OP.Actualizar(prop, _Producto.Producto.DetallesProducto, ProductUpdateDetails);
+
+
+                                if (!prop.Name.Equals("Cantidad") ||
+                                    !prop.Name.Equals("Precio") ||
+                                    !prop.Name.Equals("idProducto"))
+                                {
+                                    UpdateIdProd= true;
+                                }
+
+                            }
+                        }         
+                                                
+                    }
+
+
+                    if (_Producto.Componentes!=null)
+                    {
+                        ComponentesProductos Componentes= new ComponentesProductos();
+                        List<DTOComponentesProducto> ProducCompnentsUpdate = Componentes.ObtenerComponentes(_Producto.Producto.IdProducto);
+
+                        foreach (DTOComponentesProducto Componente in _Producto.Componentes)
+                        {
+                            if (Componente.Cantidad==-1)
+                            {
+                               // Componentes.Eliminar(Componente);
+                                ProducCompnentsUpdate.Remove(Componente);
+                            }
+                            else
+                            {
+                                int indice = ProducCompnentsUpdate.FindIndex(x => x.IdComponente.Contains(Componente.IdComponente));
+                                if (indice != null)
+                                {
+                                    ProducCompnentsUpdate[indice] = Componente;
+
+                                }
+                                else
+                                {
+                                   // Componentes.Agregar(Componente);
+                                }
+                                //Comparar
+                            }
+
+
+                        }
+                    }
+
+
+                    if (ProductUpdateDetails!=null)
+                    {
+                        OP.ModifyProductDetails(ProductUpdateDetails);
+
+                    }
+
+
+                    JsonResult Json = new ComponentesProductos().ObtenerComponentesFormateados(_Producto.Producto.DetallesProducto);
+
+
+                    return new StatusCodeResult(200);
+                }
+                catch (Exception)
+                {
+
+                    return null;
+                }
+
+                //para la unidad de medidda "GetUnidadComponente" o "ObtenerUnidadComponente"
+
+
+
+
+            }
+            else
+                return new ContentResult()
+                {
+                    Content = "El _Producto no puede estar vacio",
+                    ContentType = "tex/plain"
+                };
         }
     }   
 }
