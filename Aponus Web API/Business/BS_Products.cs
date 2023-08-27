@@ -205,47 +205,89 @@ namespace Aponus_Web_API.Business
                                                 
                     }
 
-
-                    if (_Producto.Componentes!=null)
-                    {
-                        ComponentesProductos Componentes= new ComponentesProductos();
-                        List<DTOComponentesProducto> ProducCompnentsUpdate = Componentes.ObtenerComponentes(_Producto.Producto.IdProducto);
-
-                        foreach (DTOComponentesProducto Componente in _Producto.Componentes)
-                        {
-                            if (Componente.Cantidad==-1)
-                            {
-                               // Componentes.Eliminar(Componente);
-                                ProducCompnentsUpdate.Remove(Componente);
-                            }
-                            else
-                            {
-                                int indice = ProducCompnentsUpdate.FindIndex(x => x.IdComponente.Contains(Componente.IdComponente));
-                                if (indice != null)
-                                {
-                                    ProducCompnentsUpdate[indice] = Componente;
-
-                                }
-                                else
-                                {
-                                   // Componentes.Agregar(Componente);
-                                }
-                                //Comparar
-                            }
-
-
-                        }
-                    }
-
-
-                    if (ProductUpdateDetails!=null)
+                    if (ProductUpdateDetails != null)
                     {
                         OP.ModifyProductDetails(ProductUpdateDetails);
 
                     }
 
 
-                    JsonResult Json = new ComponentesProductos().ObtenerComponentesFormateados(_Producto.Producto.DetallesProducto);
+                    if (_Producto.Componentes!=null)
+                    {
+                        //ComponentesProductos Componentes= new ComponentesProductos();
+                        List<DTOComponentesProducto> ProducComponentsUpdate = new ComponentesProductos().ObtenerComponentes(_Producto.Producto.IdProducto);
+
+                        foreach (DTOComponentesProducto Componente in _Producto.Componentes)
+                        {
+                            if (Componente.Cantidad==-1)
+                            {
+                                if (Componente.IdProducto==null)
+                                {
+                                    Componente.IdProducto = _Producto.Producto.IdProducto;
+                                }
+
+
+                                OP.EliminarComponente(new Productos_Componentes()
+                                {
+                                    IdComponente=Componente.IdComponente,
+                                    IdProducto=Componente.IdProducto,
+                                });;
+
+                                ProducComponentsUpdate.Remove(Componente);
+                            }
+                            else
+                            {
+                                int indice = ProducComponentsUpdate.FindIndex(x => x.IdComponente.Contains(Componente.IdComponente));
+                                if (indice != null)
+                                {
+                                    ProducComponentsUpdate[indice] = Componente;
+
+
+                                }
+                                else
+                                {
+                                    OP.AgregarComponente(new Productos_Componentes()
+                                    {
+                                        IdComponente = Componente.IdComponente,
+                                        IdProducto = Componente.IdProducto,
+                                    });
+                                    ProducComponentsUpdate.Remove(Componente);
+
+                                }
+
+                               
+                            }
+
+
+                            if (ProducComponentsUpdate!=null)
+                            {
+                                List<Productos_Componentes> ListComponentesUpdate = new List<Productos_Componentes>();
+
+                                foreach (DTOComponentesProducto Componete in ProducComponentsUpdate)
+                                {
+                                    ListComponentesUpdate.Add(new Productos_Componentes()
+                                    {
+                                        Cantidad = Componete.Cantidad,
+                                        IdComponente = Componete.IdComponente,
+                                        IdProducto = Componete.IdProducto,
+                                        Peso = Componete.Peso,
+                                        Longitud = Componete.Largo
+
+                                    });
+                                }
+
+                                OP.ModifyProductComponents(ListComponentesUpdate);
+
+                            }
+
+
+                        }
+
+                        
+
+                    }
+
+
 
 
                     return new StatusCodeResult(200);

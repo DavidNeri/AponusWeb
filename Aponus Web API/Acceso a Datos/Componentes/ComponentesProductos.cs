@@ -8,6 +8,7 @@ using Aponus_Web_API.Data_Transfer_Objects;
 using System.Globalization;
 using System.Text;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 {
@@ -42,10 +43,19 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
         }
 
-        internal List<DTOComponentesProducto> ObtenerComponentes(string idProducto)
+        internal void Eliminar(DTOComponentesProducto componente)
         {
             throw new NotImplementedException();
         }
+
+        internal List<DTOComponentesProducto> ObtenerComponentes(string idProducto)=>
+        
+            AponusDbContext.Componentes_Productos
+            .Where(x=>x.IdProducto==idProducto)
+            .Select(x=>new DTOComponentesProducto()
+            {
+                IdComponente= x.IdComponente,
+            }).ToList();
 
         internal JsonResult ObtenerComponentesFormateados(DTODetallesProducto Producto)
         {
@@ -75,6 +85,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                         _StockComponentes => _StockComponentes.IdInsumo,
                         (_JoinResult, _StockComponentes) => new
                         {
+                            _IdProducto = _JoinResult._DetComponentes._Componentes.IdProducto,
                             _IdComponente = _JoinResult._DetComponentes._Componentes.IdComponente ?? "",
                             _Descripcion = _JoinResult._NombreComponentes.Descripcion ?? "",
                             _Diametro = _JoinResult._DetComponentes._DetalleComponentes.Diametro ?? null,
@@ -85,11 +96,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                             _Tolerancia = _JoinResult._DetComponentes._DetalleComponentes.Tolerancia ?? "",
                             _DiametroNominal = _JoinResult._DetComponentes._DetalleComponentes.DiametroNominal ?? null,
                             _Largo = _JoinResult._DetComponentes._Componentes.Longitud ?? null,
-
+                            
 
                             StockComponente = new NewStocks
                             {
-                                IdInsumo = _StockComponentes.IdInsumo,
+                                IdInsumo = _StockComponentes.IdInsumo,                                
                                 Recibido = _StockComponentes.CantidadRecibido ?? 0,
                                 Granallado = _StockComponentes.CantidadGranallado ?? 0,
                                 Pintura = _StockComponentes.CantidadPintura ?? 0,
@@ -113,6 +124,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                     .GroupBy(cp => new
                     {
                         cp._IdComponente,
+                        cp._IdProducto,
                         cp._Descripcion,
                         cp._Longitud,
                         cp._Perfil,
@@ -125,6 +137,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
                     .Select(group => new
                     {
+                        idProducto = group.Key._IdProducto,
                         IdComponente = group.Key._IdComponente,
                         Descripcion = group.Key._Descripcion,
                         Perfil = group.Key._Perfil,
@@ -148,6 +161,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
             foreach (var cp in ComponentesProducto)
             {
+                string? IdProducto = cp.idProducto ?? "";
                 string? IdComponente = cp.IdComponente ?? "";
                 string? descripcion = cp.Descripcion ?? "";
                 string? diametro = cp.Diametro != null ? string.Format("{0:####}", cp.Diametro) : null;
@@ -179,7 +193,8 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
                 DTOProductoComponente productoComponente = new DTOProductoComponente
                 {
-                    IdComponente = cp.IdComponente,
+                    IdProducto = cp.idProducto,
+                    IdComponente = cp.IdComponente,                    
                     Descripcion = sb.ToString(),
                     Perfil = cp.Perfil,
                     Longitud = cp.Longitud,

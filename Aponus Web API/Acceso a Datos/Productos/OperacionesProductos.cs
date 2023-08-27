@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Reflection;
 using System.Reflection.Metadata;
@@ -207,7 +208,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
 
         internal void ModifyProductDetails(Producto ProductUpdate)
         {
-            AponusDBContext.Entry(ProductUpdate).State = EntityState.Modified;
+            AponusDBContext.Entry(ProductUpdate).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
             AponusDBContext.SaveChanges();
         }
@@ -230,6 +231,36 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                 return null;
             }
 
+        }
+
+        internal void EliminarComponente(Productos_Componentes componente)
+        {
+            var DeleteComponent = AponusDBContext.Componentes_Productos
+                .FirstOrDefault(x => x.IdComponente==componente.IdComponente 
+                                        && x.IdProducto==componente.IdProducto);
+
+            if (DeleteComponent != null)
+            {
+                AponusDBContext.Componentes_Productos.Remove(DeleteComponent);
+                AponusDBContext.SaveChanges() ;
+            }
+            
+
+        }
+
+        internal void AgregarComponente(Productos_Componentes NewComponent)
+        {   
+            AponusDBContext.Componentes_Productos.Add(NewComponent);
+            AponusDBContext.SaveChanges();
+            
+        }
+
+        internal void ModifyProductComponents(List<Productos_Componentes> ProducComponentsUpdate)
+        {
+
+            AponusDBContext.Componentes_Productos.UpdateRange(ProducComponentsUpdate);
+
+            AponusDBContext.SaveChanges();
         }
     }
 }
