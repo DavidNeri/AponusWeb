@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Text;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 {
@@ -54,7 +55,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
             .Where(x=>x.IdProducto==idProducto)
             .Select(x=>new DTOComponentesProducto()
             {
+                IdProducto=x.IdProducto,
                 IdComponente= x.IdComponente,
+                Cantidad= x.Cantidad,
+                Peso= x.Peso,
+                Largo=x.Longitud
             }).ToList();
 
         internal JsonResult ObtenerComponentesFormateados(DTODetallesProducto Producto)
@@ -161,7 +166,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
             foreach (var cp in ComponentesProducto)
             {
-                string? IdProducto = cp.idProducto ?? "";
                 string? IdComponente = cp.IdComponente ?? "";
                 string? descripcion = cp.Descripcion ?? "";
                 string? diametro = cp.Diametro != null ? string.Format("{0:####}", cp.Diametro) : null;
@@ -193,7 +197,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
                 DTOProductoComponente productoComponente = new DTOProductoComponente
                 {
-                    IdProducto = cp.idProducto,
                     IdComponente = cp.IdComponente,                    
                     Descripcion = sb.ToString(),
                     Perfil = cp.Perfil,
@@ -253,8 +256,15 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                 }
             }
 
+            string ? IdProd = ComponentesProducto.Select(x => x.idProducto).FirstOrDefault();
+            
+            var result = new
+            {
+                idProducto = IdProd,
+                Componentes = productos
+            };
 
-            return new JsonResult(productos);
+            return new JsonResult(result);
 
 
 
