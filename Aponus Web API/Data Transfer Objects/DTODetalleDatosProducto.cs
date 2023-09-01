@@ -21,7 +21,6 @@ namespace Aponus_Web_API.Data_Transfer_objects
         [JsonProperty(PropertyName = "tolerancia", NullValueHandling = NullValueHandling.Ignore)]
         public string? Tolerancia{ get; set; }
 
-
         [JsonProperty(PropertyName = "cantidad", NullValueHandling = NullValueHandling.Ignore)]
         public int? Cantidad { get; set; }
 

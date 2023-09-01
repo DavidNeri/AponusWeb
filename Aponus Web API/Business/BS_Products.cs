@@ -17,6 +17,7 @@ using Aponus_Web_API.Acceso_a_Datos.Componentes;
 using System.Reflection;
 using MessagePack;
 using System;
+using System.Data.Common;
 
 namespace Aponus_Web_API.Business
 {
@@ -56,9 +57,9 @@ namespace Aponus_Web_API.Business
 
            // try
            // {
-                producto.Producto.IdProducto= operacionesProductos.GenerarIdProd(producto); //Coorejir
+                producto.Producto.IdProducto= operacionesProductos.GenerarIdProd(producto.Producto.DetallesProducto); //Coorejir
 
-               // operacionesProductos.DTOProducto(producto);
+               // OP.DTOProducto(ProductUpdate);
             foreach (DTOComponentesProducto Componente in producto.Componentes)
             {
 
@@ -129,187 +130,295 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal void NuevoGuardarProducto(DTOProducto producto)
+        internal IActionResult NuevoGuardarProducto(DTODetallesProducto ActualizarProducto)
         {
-            OperacionesProductos operacionesProductos = new OperacionesProductos();
-            string IdProducto = operacionesProductos.GenerarIdProd(producto);
+            OperacionesProductos OP = new OperacionesProductos();
+          
 
-            producto.Producto.IdProducto = IdProducto;
+            if (ActualizarProducto.IdProducto== null
+                && ActualizarProducto.IdTipo!=null
+                && ActualizarProducto.IdDescripcion!=null
+                && ActualizarProducto.DiametroNominal!=null
+                && ActualizarProducto.Tolerancia!=null)
+            {
+                //Producto Nuevo
+                ActualizarProducto.IdProducto = OP.GenerarIdProd(ActualizarProducto);
+                Producto? _BuscarProducto = OP.BuscarProducto(ActualizarProducto.IdProducto);
 
-            producto.Componentes.All(x => { x.IdProducto = IdProducto; return true; });
+                //Si no encontro el Producto despues de generar el ID, guarda el nuevo
+                if (_BuscarProducto == null) 
+                    OP.GuardarProducto(ActualizarProducto);
 
-            operacionesProductos.GuardarProducto(producto);
+                //Si lo encontro despues de haber generado el ID es un actualizar 
+                if (_BuscarProducto != null) 
+                    ProductUpdate(ActualizarProducto);
 
-            operacionesProductos.GuardarComponentes(producto.Componentes);
+                return new JsonResult(ActualizarProducto.IdProducto);
 
+            }
+            else if (ActualizarProducto.IdProducto == null
+                && (ActualizarProducto.IdTipo != null
+                || ActualizarProducto.IdDescripcion != null
+                || ActualizarProducto.DiametroNominal != null
+                || ActualizarProducto.Tolerancia != null))
+            {
+                //Si No pasaron el IdProducto (Nuevo) pero falta algun campo necesario para generar el Nuevo Id
+                return new ContentResult()
+                {
+                    Content = "Faltan Datos",
+                    ContentType = "application/json",
+                    StatusCode = 400,
+
+                };
+            }
+            else if (ActualizarProducto.IdProducto != null)
+            {
+                //Si pasaron el IdProducto
+               
+                return ProductUpdate(ActualizarProducto);
+                
+            }
+            else
+            {
+                return new ContentResult()
+                {
+                    Content = "Faltan Datos, No se realizaron modificaciones",
+                    ContentType = "application/json",
+                    StatusCode=400,
+
+                };
+            }
 
         }
 
-        internal IActionResult Actualizar(DTOProducto _Producto)
+        internal IActionResult ProductUpdate(DTODetallesProducto ActualizarProducto)
         {
-            OperacionesProductos OP= new OperacionesProductos();
+            OperacionesProductos OP = new OperacionesProductos();
             bool UpdateIdProd = false;
-            if (_Producto.Producto.IdProducto != null)
+            try
             {
-                try
+                Producto? ProductoOriginal = OP.BuscarProducto(ActualizarProducto.IdProducto);
+                PropertyInfo[]? PropsActualizarProducto = ActualizarProducto
+                    .GetType()
+                    .GetProperties()
+                    .Where(prop => prop.GetValue(ActualizarProducto) != null)
+                    .ToArray();
+
+                if (ProductoOriginal != null)
                 {
-                    PropertyInfo[]? DetallesProductoProps = _Producto.Producto.DetallesProducto.GetType().GetProperties();
-                    DetallesProductoProps = DetallesProductoProps.Where(prop=>prop.GetValue(_Producto.Producto.DetallesProducto)!=null).ToArray();
-                    //string? IdProducto = DetallesProductoProps.FirstOrDefault(prop=>prop.Name.Contains("IdProducto")).GetValue(_Producto.Producto.DetallesProducto).ToString();
-
-                    Producto? ProductUpdateDetails = OP.BuscarProducto(_Producto.Producto.IdProducto);
-
-                    foreach (PropertyInfo prop in DetallesProductoProps)
+                    foreach (PropertyInfo prop in PropsActualizarProducto)
                     {
+                        //Modificar atributos del producto existente
+                        PropertyInfo? _valorOriginal = ProductoOriginal.GetType().GetProperty(prop.Name);
+                        var valorOriginal = _valorOriginal.GetValue(ProductoOriginal);
+                        var valorNuevo = prop.GetValue(ActualizarProducto);
 
-                        //string? ValorActual = prop.GetValue(_Producto.Producto.DetallesProducto).ToString();
-
-                        var ValorActual = prop.GetValue(_Producto.Producto.DetallesProducto);
-
-                        if (ValorActual != null) //ValorActual!=null
+                        if (!valorOriginal.Equals(valorNuevo) && prop.Name != "idProducto")
                         {
-
-                            string Propiedad = prop.Name;
-
-                            var _valorOriginal = ProductUpdateDetails.GetType().GetProperty(prop.Name).GetValue(ProductUpdateDetails);
-
-                            //string ValorOriginal = OP.ObtenerValor(Propiedad, IdProducto);
-                               
-                            if (((_valorOriginal.GetType() == ValorActual.GetType() && !_valorOriginal.Equals(ValorActual)) && 
-                                !prop.Name.Contains("Cantidad") && 
-                                //ValorActual.ToString()!= "-1" && 
-                                _valorOriginal!=null))
+                            _valorOriginal.SetValue(ProductoOriginal, valorNuevo);
+                            if (prop.Name.Contains("IdDescripcion") || prop.Name.Contains("Tolerancia") || prop.Name.Contains("IdTipo"))
                             {
-                                int resultado;
-
-                                //(Int32.TryParse((string?)ValorActual, out resultado)
-
-                                if (ValorActual.ToString()== "-1")
+                                if (valorNuevo == null)
                                 {
-                                    prop.SetValue(null, null);
-                                }
-                              
+                                    //Si alguno de los campos necesarios para generar el Nuevo ID es Nulo
+                                    return new ContentResult()
+                                    {
+                                        Content = "Faltan Datos, No se realizaron modificaciones",
+                                        ContentType = "application/json",
+                                        StatusCode = 400,
 
-                                OP.Actualizar(prop, _Producto.Producto.DetallesProducto, ProductUpdateDetails);
-
-
-                                if (!prop.Name.Equals("Cantidad") ||
-                                    !prop.Name.Equals("Precio") ||
-                                    !prop.Name.Equals("idProducto"))
-                                {
-                                    UpdateIdProd= true;
-                                }
-
-                            }
-                        }         
-                                                
-                    }
-
-                    if (ProductUpdateDetails != null)
-                    {
-                        OP.ModifyProductDetails(ProductUpdateDetails);
-
-                    }
-
-
-                    if (_Producto.Componentes!=null)
-                    {
-                        //ComponentesProductos Componentes= new ComponentesProductos();
-                        List<DTOComponentesProducto> ProducComponentsUpdate = new ComponentesProductos().ObtenerComponentes(_Producto.Producto.IdProducto);
-
-                        foreach (DTOComponentesProducto Componente in _Producto.Componentes)
-                        {
-                            if (Componente.Cantidad==-1)
-                            {
-                                if (Componente.IdProducto==null)
-                                {
-                                    Componente.IdProducto = _Producto.Producto.IdProducto;
-                                }
-
-
-                                OP.EliminarComponente(new Productos_Componentes()
-                                {
-                                    IdComponente=Componente.IdComponente,
-                                    IdProducto=Componente.IdProducto,
-                                });;
-
-                                ProducComponentsUpdate.Remove(Componente);
-                            }
-                            else
-                            {
-                                int indice = ProducComponentsUpdate.FindIndex(x => x.IdComponente.Contains(Componente.IdComponente));
-                                if (indice != null)
-                                {
-                                    ProducComponentsUpdate[indice] = Componente;
-
-
+                                    };
                                 }
                                 else
                                 {
-                                    OP.AgregarComponente(new Productos_Componentes()
-                                    {
-                                        IdComponente = Componente.IdComponente,
-                                        IdProducto = Componente.IdProducto,
-                                    });
-                                    ProducComponentsUpdate.Remove(Componente);
-
+                                    UpdateIdProd = true;
                                 }
-
-                               
+                                
                             }
-
-
-                            if (ProducComponentsUpdate!=null)
-                            {
-                                List<Productos_Componentes> ListComponentesUpdate = new List<Productos_Componentes>();
-
-                                foreach (DTOComponentesProducto Componete in ProducComponentsUpdate)
-                                {
-                                    ListComponentesUpdate.Add(new Productos_Componentes()
-                                    {
-                                        Cantidad = Componete.Cantidad,
-                                        IdComponente = Componete.IdComponente,
-                                        IdProducto = Componete.IdProducto,
-                                        Peso = Componete.Peso,
-                                        Longitud = Componete.Largo
-
-                                    });
-                                }
-
-                                OP.ModifyProductComponents(ListComponentesUpdate);
-
-                            }
-
 
                         }
+                    }
+                    //Asignar nuevo Nombre  al objeto 'ProductoOriginal'
+                    Producto ProductoOriginalModificado = ProductoOriginal;
+                   
 
-                        
+                    //En caso de corresponder actualizar el IDProducto
+                    if (UpdateIdProd == true)
+                    {
+                        string IdAnterior = ActualizarProducto.IdProducto;
+
+                        string NuevoId = OP.GenerarIdProd(new DTODetallesProducto()
+                        {
+                            IdProducto = null,
+                            DiametroNominal = ProductoOriginalModificado.DiametroNominal,
+                            IdDescripcion = ProductoOriginalModificado.IdDescripcion,
+                            IdTipo = ProductoOriginalModificado.IdTipo,
+                            Tolerancia = ProductoOriginalModificado.Tolerancia
+
+                        });
+
+                        if (IdAnterior != NuevoId)
+                        {
+                            if (OP.BuscarProducto(NuevoId) != null)
+                            {
+                                return new ContentResult()
+                                {
+                                    Content = "Producto existente, no se aplicaron los cambios",
+                                    ContentType = "application/json",
+                                    StatusCode = 400,
+
+                                };
+                            }
+
+                            OP.ModifyProductDetails(ProductoOriginalModificado);
+                            OP.ActualizarIdProd(IdAnterior, NuevoId);
+                            
+                            return new JsonResult(NuevoId);
+                        }
 
                     }
+                    else
+                    {
+                        if (ProductoOriginalModificado != null)  OP.ModifyProductDetails(ProductoOriginalModificado);
+                    }
 
-
-
-
-                    return new StatusCodeResult(200);
+                    return new JsonResult(ProductoOriginalModificado.IdProducto);
                 }
-                catch (Exception)
+                else
                 {
+                    return new ContentResult()
+                    {
+                        Content = "No se encontró el Producto a Modificar",
+                        ContentType = "application/json",
+                        StatusCode = 404,
 
-                    return null;
+                    };
                 }
-
-                //para la unidad de medidda "GetUnidadComponente" o "ObtenerUnidadComponente"
-
-
-
 
             }
-            else
+            catch (Exception ex)
+            {
+
                 return new ContentResult()
                 {
-                    Content = "El _Producto no puede estar vacio",
-                    ContentType = "tex/plain"
+                    Content = "Producto existente, no se aplicaron los cambios",
+                    ContentType = "application/json",
+                    StatusCode = 400    ,
+
                 };
+            }
         }
-    }   
+
+        internal IActionResult ActualizarComponentes(List<DTOComponentesProducto> Componentes)
+        {
+            OperacionesProductos OP = new OperacionesProductos();
+            List<Productos_Componentes> ListaComponentes = new List<Productos_Componentes>();
+            ComponentesProductos CP = new ComponentesProductos();
+
+            try
+            {
+                OP.DeleteAllProductComponents(Componentes
+                        .Where(x => x.IdProducto != null)
+                        .Select(x => x.IdProducto)
+                        .First()
+                        .ToString());
+
+                foreach (DTOComponentesProducto componente in Componentes)
+                {
+                    ListaComponentes.Add(new Productos_Componentes()
+                    {
+                        Cantidad = componente.Cantidad,
+                        IdComponente = componente.IdComponente,
+                        IdProducto = componente.IdProducto,
+                        Longitud = componente.Largo,
+                        Peso = componente.Peso,
+
+                    });
+                }                
+                   
+
+                foreach (Productos_Componentes Componente in ListaComponentes)
+                {
+                    CP.GuardarComponenteProd(Componente);
+
+                }
+
+                return new StatusCodeResult(200);
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException.Message!=null)
+                {
+                    return new ContentResult()
+                    {
+                        Content= ex.InnerException.Message, 
+                        ContentType= "application/json",
+                    };
+                }
+                else
+                {
+
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "application/json",
+                    };
+                }
+            }catch(Exception ex)
+            {
+                if (ex.InnerException.Message != null)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException.Message,
+                        ContentType = "application/json",
+                    };
+                }
+                else
+                {
+
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "application/json",
+                    };
+                }
+            }
+           
+                
+        }
+
+        [HttpPost]
+        [Route("FetchComponentsUnities")]
+
+        public IActionResult ObtenerUnidades(string IdComponente)
+        {
+            try
+            {
+                return new BS_Components().ObtenerUnidades(IdComponente);
+            }
+            catch (DbException ex)
+            {
+                if (ex.InnerException.Message != null)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException.Message,
+                        ContentType = "application/json",
+                    };
+                }
+                else
+                {
+
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "application/json",
+                    };
+                }
+            }
+        }
+
+
+    }
 }

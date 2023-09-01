@@ -17,7 +17,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
     {
         private readonly AponusContext AponusDbContext;
         public ComponentesProductos() { AponusDbContext = new AponusContext(); }
-        internal static void GuardarComponenteProd(Productos_Componentes componente)
+        internal void GuardarComponenteProd(Productos_Componentes componente)
         {
             using (var DbContext = new AponusContext())
             {               
@@ -222,11 +222,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                     idInsumo = x.IdInsumo,
                     Unidades = x.Sigla
                 }).ToList();
-                                
-               
-            
-
-
 
             foreach (var producto in productos)
             {

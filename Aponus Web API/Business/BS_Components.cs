@@ -23,6 +23,7 @@ namespace Aponus_Web_API.Business
         internal IActionResult GuardarComponentesProducto(List<DTOComponentesProducto> ComponentesProd)
         {
             bool ChkIdProd = ComponentesProd.All(x => x.IdProducto != null);
+            ComponentesProductos CP = new ComponentesProductos();
             
             if (ChkIdProd)
             {
@@ -30,7 +31,7 @@ namespace Aponus_Web_API.Business
                 {
                     try
                     {
-                        ComponentesProductos.GuardarComponenteProd(new Productos_Componentes
+                        CP.GuardarComponenteProd(new Productos_Componentes
                         {
                             IdProducto = Componente.IdProducto,
                             IdComponente = Componente.IdComponente,
@@ -87,7 +88,13 @@ namespace Aponus_Web_API.Business
 
         }
 
-                
+        internal IActionResult ObtenerUnidades(string IdComponente)
+        {
+            Expression<Func<Productos_Componentes, bool>> filtro = x => x.IdComponente == IdComponente;
+
+            return null;
+        }
+
         private (string[], List<(string Nombre, string Valor)>) CategorizarPropiedades(DTODetalleComponentes? Especificaciones)
         {
             var propiedadesNulas = new string[0];

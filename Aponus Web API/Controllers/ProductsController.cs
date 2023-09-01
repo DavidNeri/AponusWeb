@@ -183,14 +183,14 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
+
         [HttpPost]
         [Route("NewSaveProduct")]
-        public IActionResult NuevoGuardarProducto(DTOProducto Producto)
+        public IActionResult NuevoGuardarProducto(DTODetallesProducto Producto)
         {
             try
             {
-                new BS_Products().NuevoGuardarProducto(Producto);
-                return new StatusCodeResult(StatusCodes.Status200OK);
+                return new BS_Products().NuevoGuardarProducto(Producto);
             }
             catch (DbUpdateException e)
             {
@@ -202,33 +202,51 @@ namespace Aponus_Web_API.Controllers
 
 
         [HttpPost]
-        [Route("UpdateProduct")]
-        public IActionResult ActualizarProducto(DTOProducto Producto)
+        [Route("UpdateComponents")]
+        public IActionResult ActualizarComponentes(List<DTOComponentesProducto> Producto)
         {
             try
             {
-                return new BS_Products().Actualizar(Producto);
+                return new BS_Products().ActualizarComponentes(Producto);
             }
-            catch (DbUpdateException e)
+            catch (DbUpdateException ex)
             {
-                return null;
+                if (ex.InnerException.Message != null)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException.Message,
+                        ContentType = "application/json",
+                    };
+                }
+                else
+                {
 
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "application/json",
+                    };
+                }
             }
         }
 
 
         [HttpPost]
-        [Route("UpdateProduct2")]
-        public IActionResult EliminarComponentesProducto(DTOProducto Producto)
+        [Route("FetchComponentsUnities")]
+
+        public IActionResult ObtenerUnidades(string IdComponente)
         {
             try
             {
-                return null;
+                return new BS_Components().ObtenerUnidades(IdComponente);
             }
             catch (DbUpdateException e)
             {
-                return null;
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
             }
         }
+
     }
 }
