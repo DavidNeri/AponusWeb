@@ -88,11 +88,10 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal IActionResult ObtenerUnidades(string IdComponente)
+        internal async Task<IActionResult> ObtenerTipoAlmacenamiento( )
         {
-            Expression<Func<Productos_Componentes, bool>> filtro = x => x.IdComponente == IdComponente;
-
-            return null;
+            
+            return await new OperacionesComponentes().ListarTiposAlacenamiento();
         }
 
         private (string[], List<(string Nombre, string Valor)>) CategorizarPropiedades(DTODetalleComponentes? Especificaciones)

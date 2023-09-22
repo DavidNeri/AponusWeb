@@ -2,7 +2,7 @@
 
 namespace Aponus_Web_API.Data_Transfer_objects
 {
-    public class DTODetalleComponentes : Stocks
+    public class DTODetalleComponentes : DTOStocks
     {
         [JsonProperty(PropertyName = "idDescripcion", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdDescripcion { get; set; }
@@ -36,6 +36,15 @@ namespace Aponus_Web_API.Data_Transfer_objects
 
         [JsonProperty(PropertyName = "longitud", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Longitud { get; set; }
+
+        [JsonProperty(PropertyName = "idFraccionamiento", NullValueHandling = NullValueHandling.Ignore)]
+        public string? idFraccionamiento { get; set; }
+
+        [JsonProperty(PropertyName = "idAlmacenamiento", NullValueHandling = NullValueHandling.Ignore)]
+        public string? idAlmacenamiento{ get; set; }
+
+        [JsonProperty(PropertyName = "peso", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? Peso { get; set; }
 
 
 

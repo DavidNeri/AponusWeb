@@ -53,6 +53,10 @@
               "target": "Package",
               "version": "[6.4.4, )"
             },
+            "Fractions": {
+              "target": "Package",
+              "version": "[7.2.1, )"
+            },
             "Humanizer.Core.es": {
               "target": "Package",
               "version": "[2.14.1, )"
@@ -63,7 +67,7 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.5, )"
+              "version": "[7.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -107,7 +111,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.110\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.111\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -92,8 +92,10 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Aponus Web API.deps.json
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Aponus Web API.runtimeconfig.json
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Aponus Web API.pdb
+D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Annytab.Stemmer.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Azure.Core.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Azure.Identity.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\DataScope.Stemmer.NETStandart.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\EntityFramework.SqlServer.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\EntityFramework.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Humanizer.dll
@@ -182,6 +184,7 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Configuration.ConfigurationM
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Data.SqlClient.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Drawing.Common.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Management.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Memory.Data.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Reflection.MetadataLoadContext.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Runtime.Caching.dll
@@ -190,6 +193,9 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Security.Permissions.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Text.Encodings.Web.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Text.Json.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Windows.Extensions.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Z.EntityFramework.Extensions.EFCore.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Z.EntityFramework.Plus.EFCore.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Z.Expressions.Eval.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\es\Humanizer.resources.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\cs\Microsoft.CodeAnalysis.resources.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\de\Microsoft.CodeAnalysis.resources.dll
@@ -360,6 +366,7 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.0\System.Management.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
@@ -385,10 +392,4 @@ D:\Aponus SA\Aponus Web API\obj\Debug\net6.0\refint\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\obj\Debug\net6.0\Aponus Web API.pdb
 D:\Aponus SA\Aponus Web API\obj\Debug\net6.0\Aponus Web API.genruntimeconfig.cache
 D:\Aponus SA\Aponus Web API\obj\Debug\net6.0\ref\Aponus Web API.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Annytab.Stemmer.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\DataScope.Stemmer.NETStandart.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\System.Management.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.0\System.Management.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Z.EntityFramework.Extensions.EFCore.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Z.EntityFramework.Plus.EFCore.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Z.Expressions.Eval.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Fractions.dll

@@ -232,21 +232,7 @@ namespace Aponus_Web_API.Controllers
         }
 
 
-        [HttpPost]
-        [Route("FetchComponentsUnities")]
-
-        public IActionResult ObtenerUnidades(string IdComponente)
-        {
-            try
-            {
-                return new BS_Components().ObtenerUnidades(IdComponente);
-            }
-            catch (DbUpdateException e)
-            {
-                string Mensaje = e.InnerException.Message;
-                return new JsonResult(Mensaje);
-            }
-        }
+       
 
     }
 }

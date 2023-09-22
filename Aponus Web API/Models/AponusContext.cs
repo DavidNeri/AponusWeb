@@ -166,11 +166,16 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.Peso)
          .HasColumnName("PESO")
-         .HasColumnType("decimal(18,2)");
+         .HasColumnType("decimal(18,3)");
 
-            entity.Property(e => e.Sigla)
-         .HasColumnName("Sigla")
-         .HasColumnType("nvarchar(50)");
+            entity.Property(e => e.IdFraccionamiento)
+                .HasColumnName("ID_FRACCIONAMIENTO")
+                    .HasColumnType("nvarchar(50)");
+
+        entity.Property(e => e.IdAlmacenamiento)
+                     .HasColumnName("ID_ALMACENAMIENTO")
+                     .HasColumnType("nvarchar(50)");
+
 
 
         });

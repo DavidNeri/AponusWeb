@@ -118,9 +118,9 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("PESO");
 
-                    b.Property<string>("Sigla")
+                    b.Property<string>("IdFraccionamiento")
                         .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Sigla");
+                        .HasColumnName("IdFraccionamiento");
 
                     b.Property<string>("Tolerancia")
                         .HasColumnType("varchar(50)")

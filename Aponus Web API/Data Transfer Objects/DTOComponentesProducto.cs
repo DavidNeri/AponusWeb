@@ -18,6 +18,7 @@ namespace Aponus_Web_API.Data_Transfer_objects
 
         [JsonProperty(PropertyName = "largo", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Largo { get; set; }
+        
 
     }
 }

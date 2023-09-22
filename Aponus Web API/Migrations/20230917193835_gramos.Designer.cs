@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    [Migration("20230705083018_Prueba_05072023_053")]
-    partial class Prueba05072023053
+    [Migration("20230917193835_gramos")]
+    partial class gramos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace AponusWebAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("Modern_Spanish_CI_AI")
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -102,9 +102,17 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("ESPESOR");
 
+                    b.Property<string>("IdAlmacenamiento")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ID_ALMACENAMIENTO");
+
                     b.Property<int>("IdDescripcion")
                         .HasColumnType("int")
                         .HasColumnName("ID_DESCRIPCION");
+
+                    b.Property<string>("IdFraccionamiento")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ID_FRACCIONAMIENTO");
 
                     b.Property<decimal?>("Longitud")
                         .HasColumnType("decimal(18,2)")
@@ -115,12 +123,8 @@ namespace AponusWebAPI.Migrations
                         .HasColumnName("PERFIL");
 
                     b.Property<decimal?>("Peso")
-                        .HasColumnType("decimal(18,2)")
+                        .HasColumnType("decimal(18,3)")
                         .HasColumnName("PESO");
-
-                    b.Property<string>("IdFraccionamiento")
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("IdFraccionamiento");
 
                     b.Property<string>("Tolerancia")
                         .HasColumnType("varchar(50)")
@@ -383,9 +387,12 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosDescripcion", b =>
                 {
-                    b.Property<int?>("IdDescripcion")
+                    b.Property<int>("IdDescripcion")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID_DESCRIPCION");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDescripcion"));
 
                     b.Property<string>("DescripcionProducto")
                         .HasMaxLength(50)
@@ -449,26 +456,14 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.Productos_Tipos_Descripcion", b =>
                 {
                     b.Property<string>("IdTipo")
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("ID_TIPO");
 
                     b.Property<int?>("IdDescripcion")
                         .HasColumnType("int")
                         .HasColumnName("ID_DESCRIPCION");
 
-                    b.Property<int?>("ProductosDescripcionIdDescripcion")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductosTipoIdTipo")
-                        .HasColumnType("varchar(50)");
-
                     b.HasKey("IdTipo", "IdDescripcion");
-
-                    b.HasIndex("IdDescripcion");
-
-                    b.HasIndex("ProductosDescripcionIdDescripcion");
-
-                    b.HasIndex("ProductosTipoIdTipo");
 
                     b.ToTable("PRODUCTOS_TIPOS_DESCRIPCION", (string)null);
                 });
@@ -756,33 +751,6 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("IdTipoNavigation");
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Models.Productos_Tipos_Descripcion", b =>
-                {
-                    b.HasOne("Aponus_Web_API.Models.ProductosDescripcion", "DescripcionNavigation")
-                        .WithMany()
-                        .HasForeignKey("IdDescripcion")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Aponus_Web_API.Models.ProductosTipo", "IdTipoNavigation")
-                        .WithMany()
-                        .HasForeignKey("IdTipo")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Aponus_Web_API.Models.ProductosDescripcion", null)
-                        .WithMany("Producto_Tipo_Descripcione")
-                        .HasForeignKey("ProductosDescripcionIdDescripcion");
-
-                    b.HasOne("Aponus_Web_API.Models.ProductosTipo", null)
-                        .WithMany("Producto_Tipo_Descripcione")
-                        .HasForeignKey("ProductosTipoIdTipo");
-
-                    b.Navigation("DescripcionNavigation");
-
-                    b.Navigation("IdTipoNavigation");
-                });
-
             modelBuilder.Entity("Aponus_Web_API.Models.StockCuantitativo", b =>
                 {
                     b.HasOne("Aponus_Web_API.Models.CuantitativosDetalle", "IdComponenteNavigation")
@@ -842,15 +810,11 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosDescripcion", b =>
                 {
-                    b.Navigation("Producto_Tipo_Descripcione");
-
                     b.Navigation("Productos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosTipo", b =>
                 {
-                    b.Navigation("Producto_Tipo_Descripcione");
-
                     b.Navigation("Productos");
                 });
 

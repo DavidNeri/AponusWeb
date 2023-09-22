@@ -16,7 +16,9 @@ namespace Aponus_Web_API.Models
         public int? Perfil { get; set; }
         public string? Tolerancia { get; set; }
         public decimal? Peso { get; set; }
-        public string? Sigla { get; set; }
+        public string? IdFraccionamiento { get; set; }
+        public string? IdAlmacenamiento{ get; set; }
+
 
 
 

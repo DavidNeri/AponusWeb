@@ -9,6 +9,20 @@ namespace Aponus_Web_API.Controllers
     [ApiController]
     public class ComponentsController : Controller
     {
+        [HttpGet]
+        [Route("FetchUnities")]
 
+        public async Task<IActionResult> ObtenerAlmacenamiento()
+        {
+            try
+            {
+                return await new BS_Components().ObtenerTipoAlmacenamiento();
+            }
+            catch (DbUpdateException e)
+            {
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
+            }
+        }
     }
 }

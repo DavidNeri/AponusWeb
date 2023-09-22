@@ -388,36 +388,7 @@ namespace Aponus_Web_API.Business
                 
         }
 
-        [HttpPost]
-        [Route("FetchComponentsUnities")]
-
-        public IActionResult ObtenerUnidades(string IdComponente)
-        {
-            try
-            {
-                return new BS_Components().ObtenerUnidades(IdComponente);
-            }
-            catch (DbException ex)
-            {
-                if (ex.InnerException.Message != null)
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException.Message,
-                        ContentType = "application/json",
-                    };
-                }
-                else
-                {
-
-                    return new ContentResult()
-                    {
-                        Content = ex.Message,
-                        ContentType = "application/json",
-                    };
-                }
-            }
-        }
+        
 
 
     }

@@ -18,7 +18,7 @@ namespace AponusWebAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("Modern_Spanish_CI_AI")
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -99,9 +99,17 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("ESPESOR");
 
+                    b.Property<string>("IdAlmacenamiento")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ID_ALMACENAMIENTO");
+
                     b.Property<int>("IdDescripcion")
                         .HasColumnType("int")
                         .HasColumnName("ID_DESCRIPCION");
+
+                    b.Property<string>("IdFraccionamiento")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ID_FRACCIONAMIENTO");
 
                     b.Property<decimal?>("Longitud")
                         .HasColumnType("decimal(18,2)")
@@ -112,12 +120,8 @@ namespace AponusWebAPI.Migrations
                         .HasColumnName("PERFIL");
 
                     b.Property<decimal?>("Peso")
-                        .HasColumnType("decimal(18,2)")
+                        .HasColumnType("decimal(18,3)")
                         .HasColumnName("PESO");
-
-                    b.Property<string>("Sigla")
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Sigla");
 
                     b.Property<string>("Tolerancia")
                         .HasColumnType("varchar(50)")
@@ -614,7 +618,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("Usuario");
 
-                    b.ToTable("Usuarios", (string)null);
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ComponentesCuantitativo", b =>
