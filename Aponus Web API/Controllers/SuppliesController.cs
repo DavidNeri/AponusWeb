@@ -29,7 +29,7 @@ namespace Aponus_Web_API.Controllers
         [HttpPost]
         [Route("ListProp")]
 
-        public JsonResult? Listar(DTODetalleComponentes Especificaciones)
+        public JsonResult? Listar(DTOComponente Especificaciones)
         {
             return  new BS_Components().DeterminarProp(Especificaciones);
 
@@ -38,7 +38,7 @@ namespace Aponus_Web_API.Controllers
         [HttpPost]
         [Route("GetId")]
 
-        public JsonResult? ObtenerId(DTODetalleComponentes Especificaciones)
+        public JsonResult? ObtenerId(DTOComponente Especificaciones)
         {
             return new BS_Components().ObtenerIdComponente(Especificaciones);
 

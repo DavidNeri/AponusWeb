@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Business;
-
+using Microsoft.AspNetCore.Http.Metadata;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Controllers
 {
-     [Route("Aponus/[controller]")]
-   // [Route("/*")]
+    [Route("Aponus/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
@@ -86,6 +87,117 @@ namespace Aponus_Web_API.Controllers
                 string Mensaje = e.InnerException.Message;
                 return new JsonResult(Mensaje);
             }
+
+
+        }
+
+        [HttpGet]
+        [Route("ListComponentesDescriptions")]
+        public async Task<JsonResult> ListarNombreComponentes()
+        {
+            try
+            {
+                return await new BS_Categories().ListarNombresComponentes();
+            }
+            catch (DbUpdateException e)
+            {
+
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
+            }
+
+
+        }
+
+        [HttpGet]
+        [Route("GetNewComponentId/{ComponentDescription}")]
+        public async Task<JsonResult> ObtenerNuevoIdComponente(string ComponentDescription)
+        {
+            try
+            {
+                return await new BS_Categories().ObtenerNuevoIdComponente(ComponentDescription);
+            }
+            catch (Exception e)
+            {
+
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
+            }
+
+
+        }
+
+        [HttpPost]
+        [Route("NewComponentDescription")]
+        public IActionResult AgregarDescripcionCompoente ([FromBody] string nombreComponente)
+        {
+             try
+             {
+                 return  new BS_Categories().AgregarDescripcionCompoente(nombreComponente);
+             }
+             catch (DbUpdateException ex)
+             {
+
+                 if (ex.InnerException != null)
+                 {
+                     return new ContentResult()
+                     {
+                         Content = ex.InnerException.Message,
+                         ContentType = "text/plain",
+                         StatusCode = 400,
+
+                     };
+                 }
+                 else
+                 {
+                     return new ContentResult()
+                     {
+                         Content = ex.Message,
+                         ContentType = "text/plain",
+                         StatusCode = 400,
+
+                     };
+                 };
+             }
+
+            
+
+        }
+
+
+        [HttpPost]
+        [Route("ModifyComponentDescription")]
+        public IActionResult ModificarDescripcionCompoente( DTODescripcionComponentes Descripcion)
+        {
+            try
+            {
+                return new BS_Categories().ModificarDescripcionCompoente(Descripcion);
+            }
+            catch (DbUpdateException ex)
+            {
+
+                if (ex.InnerException != null)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                }
+                else
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                };
+            }
+
 
 
         }

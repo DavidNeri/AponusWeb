@@ -75,6 +75,20 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
         }
 
+        internal IActionResult Listar(int? IdDescripcion)
+        {
+            IQueryable<ComponentesDetalle> query = AponusDBContext.ComponentesDetalles;
+
+            if (IdDescripcion.HasValue)
+            {
+                query = query.Where(X => X.IdDescripcion == IdDescripcion.Value);
+            }
+
+            var Componentes = query.ToList();
+
+            return new JsonResult(Componentes);
+        }
+
         internal JsonResult? ObtenerId(List<(string Nombre, string Valor)> propiedadesNoNulas)
         {
             var query = GenerarWhereAND(propiedadesNoNulas);

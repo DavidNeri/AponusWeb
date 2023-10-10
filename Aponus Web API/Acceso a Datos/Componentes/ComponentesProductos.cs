@@ -160,9 +160,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
             List<string> AllComponentesIds = ComponentesProducto.Select(cp => cp.IdComponente).ToList();
 
-            List<DTODetalleComponentes> PropiedadesComponentes = AponusDbContext.ComponentesDetalles
+            List<DTOComponente> PropiedadesComponentes = AponusDbContext.ComponentesDetalles
                 .Where(x=>AllComponentesIds.Contains(x.IdInsumo))
-                .Select(x => new DTODetalleComponentes()
+                .Select(x => new DTOComponente()
                 {                    
                     idComponente = x.IdInsumo,
                     idAlmacenamiento = x.IdAlmacenamiento,
@@ -281,7 +281,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                             {
                                 if (propiedad.Name.Contains("Requerido"))
                                 {
-                                    DTODetalleComponentes? Componente = PropiedadesComponentes.FirstOrDefault(x => x.idComponente == item.IdInsumo);
+                                    DTOComponente? Componente = PropiedadesComponentes.FirstOrDefault(x => x.idComponente == item.IdInsumo);
                                     
                                     string? CantidadRequerida = (string?)item.GetType().GetProperty(propiedad.Name)?.GetValue(item);
                                     if (CantidadRequerida == "") CantidadRequerida = "0";

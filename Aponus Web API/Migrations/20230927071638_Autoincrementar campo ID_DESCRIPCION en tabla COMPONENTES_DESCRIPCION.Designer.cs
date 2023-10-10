@@ -4,6 +4,7 @@ using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20230927071638_Autoincrementar campo ID_DESCRIPCION en tabla COMPONENTES_DESCRIPCION")]
+    partial class AutoincrementarcampoIDDESCRIPCIONentablaCOMPONENTESDESCRIPCION
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,6 +69,9 @@ namespace AponusWebAPI.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("DESCRIPCION");
+
+                    b.Property<int?>("IdDescripcionTipo")
+                        .HasColumnType("int");
 
                     b.HasKey("IdDescripcion");
 
@@ -615,7 +621,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("Usuario");
 
-                    b.ToTable("Usuarios", (string)null);
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ComponentesCuantitativo", b =>

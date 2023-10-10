@@ -78,7 +78,7 @@ namespace Aponus_Web_API.Services
         ColumnasInsumosPesables? _CIP = null,
         ColumnasInsumosCuantitativos? _CIC = null,
         ColumnasInsumosMensurables? _CIM = null, 
-        DTODetalleComponentes? especificaciones = null
+        DTOComponente? especificaciones = null
         )
         
         {
@@ -182,7 +182,7 @@ namespace Aponus_Web_API.Services
         }
 
 
-        public string[] NewSetColumnas(List<DTODetalleComponentes> Especificaciones)
+        public string[] NewSetColumnas(List<DTOComponente> Especificaciones)
         {
             List<string> columnasList = new List<string>();
 

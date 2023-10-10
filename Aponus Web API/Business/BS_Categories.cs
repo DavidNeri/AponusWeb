@@ -1,4 +1,5 @@
-﻿using Aponus_Web_API.Acceso_a_Datos.Sistema;
+﻿using Aponus_Web_API.Acceso_a_Datos.Componentes;
+using Aponus_Web_API.Acceso_a_Datos.Sistema;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Services;
@@ -239,6 +240,80 @@ namespace Aponus_Web_API.Business
                 ContentType = "text/plain"
 
             };
+        }
+
+        internal async Task<JsonResult> ListarNombresComponentes()
+        {
+            return await new OperacionesComponentes().ListarNombres() ;
+        }
+
+        internal async Task<JsonResult> ObtenerNuevoIdComponente(string ComponentDescription)
+        {
+            return await new OperacionesComponentes().ObtenerNuevoId(ComponentDescription);
+        }
+
+        internal IActionResult AgregarDescripcionCompoente(string DescripcionComponente)
+        {
+            try
+            {
+                return new Categorias().AgregarDescripcionCompoente(DescripcionComponente);
+            }
+            catch (DbUpdateException ex)
+            {
+
+                if (ex.InnerException!=null)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+                    
+                    };
+                }
+                else
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                };
+            }
+        }
+
+        internal IActionResult ModificarDescripcionCompoente(DTODescripcionComponentes descripcion)
+        {
+            try
+            {
+                return new Categorias().ModificarDescripcionComponente(descripcion);
+            }
+            catch (DbUpdateException ex)
+            {
+
+                if (ex.InnerException != null)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                }
+                else
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                };
+            }
         }
     }
 }

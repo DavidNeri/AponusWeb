@@ -1,22 +1,25 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Models;
 
 public partial class ComponentesDescripcion
 {
 
+    [MessagePack.Key("ID_DESCRIPCION")]
     public int IdDescripcion { get; set; }
-    public int? IdDescripcionTipo { get; set; }
            
     public string? Descripcion{ get; set; }
 
-    public virtual ICollection<CuantitativosDetalle> CuantitativosDetalles { get; set; } = new List<CuantitativosDetalle>();
+   // public virtual ICollection<CuantitativosDetalle> CuantitativosDetalles { get; set; } = new List<CuantitativosDetalle>();
 
-    public virtual ICollection<MensurablesDetalle> MensurablesDetalles { get; set; } = new List<MensurablesDetalle>();
+    //public virtual ICollection<MensurablesDetalle> MensurablesDetalles { get; set; } = new List<MensurablesDetalle>();
 
-    public virtual ICollection<PesablesDetalle> PesablesDetalles { get; set; } = new List<PesablesDetalle>();
-    public virtual ICollection<ComponentesDescripcion> ComponentesDescripcions { get; set; } = new List<ComponentesDescripcion>();
+    //public virtual ICollection<PesablesDetalle> PesablesDetalles { get; set; } = new List<PesablesDetalle>();
+    //public virtual ICollection<ComponentesDescripcion> ComponentesDescripcions { get; set; } = new List<ComponentesDescripcion>();
 
 
 

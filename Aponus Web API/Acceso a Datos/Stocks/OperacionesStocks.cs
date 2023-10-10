@@ -757,9 +757,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                         {
                             IdDescripcion = JoinResult.Descripciones.IdDescripcion,
                             Descripcion = JoinResult.Descripciones.Descripcion,
-                            Especificaciones = new List<DTODetalleComponentes>
+                            Especificaciones = new List<DTOComponente>
                             {
-                                new DTODetalleComponentes
+                                new DTOComponente
                                 {
                                     // IdDescripcion = JoinResult.Detalles.IdDescripcion,
                                     idComponente = JoinResult.Detalles.IdInsumo,
@@ -821,9 +821,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     {
                                         IdDescripcion = JoinResult.Descripciones.IdDescripcion,
                                         Descripcion = JoinResult.Descripciones.Descripcion,
-                                        Especificaciones = new List<DTODetalleComponentes>
+                                        Especificaciones = new List<DTOComponente>
                                         {
-                                new DTODetalleComponentes
+                                new DTOComponente
                                 {
                                     // IdDescripcion = JoinResult.Detalles.IdDescripcion,
                                     idComponente = JoinResult.Detalles.IdInsumo,
@@ -876,9 +876,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                    {
                                        IdDescripcion = JoinResult.Descripciones.IdDescripcion,
                                        Descripcion = JoinResult.Descripciones.Descripcion,
-                                       Especificaciones = new List<DTODetalleComponentes>
+                                       Especificaciones = new List<DTOComponente>
                                        {
-                                new DTODetalleComponentes
+                                new DTOComponente
                                 {
                                     // IdDescripcion = JoinResult.Detalles.IdDescripcion,
                                     idComponente = JoinResult.Detalles.IdInsumo,

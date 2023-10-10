@@ -1,7 +1,9 @@
 ﻿using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Data.Entity.Infrastructure;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Sistema
@@ -138,6 +140,132 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
                 AponusDBContext.SaveChanges();
 
             }
+        }
+
+        internal IActionResult AgregarDescripcionCompoente(string descripcionComponente)
+        {
+            
+
+            try
+            {
+                var Exists = AponusDBContext.ComponentesDescripcions
+                .FirstOrDefault(
+                x => x.Descripcion.Trim().ToUpper() == descripcionComponente.Trim().ToUpper()
+                );
+                if (Exists == null)
+                {
+                    AponusDBContext.ComponentesDescripcions.Add(new ComponentesDescripcion() { Descripcion = descripcionComponente.Trim().ToUpper(), });
+                    AponusDBContext.SaveChanges();
+                    return new StatusCodeResult(200);
+
+                }
+                else
+                {
+                    return new ContentResult()
+                    {
+                        Content = "El nombre del componente ya existe",
+                        ContentType = "application/json",
+                        StatusCode = 400
+                    };
+                }
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+
+                if (ex.InnerException != null)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                }
+                else
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                };
+            }catch(Exception ex) 
+            {
+                if (ex.InnerException != null)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                }
+                else
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                };
+            }
+
+           
+            
+
+            
+
+                
+        }
+
+        internal IActionResult ModificarDescripcionComponente(DTODescripcionComponentes descripcion)
+        {
+            try
+            {
+                AponusDBContext.ComponentesDescripcions.Update(new ComponentesDescripcion()
+                {
+                    IdDescripcion = descripcion.IdDescripcion,
+                    Descripcion = descripcion.Descripcion.Trim().ToUpper(),
+                });
+                AponusDBContext.SaveChanges();
+
+                return new StatusCodeResult(200);
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+
+                if (ex.InnerException != null)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                }
+                else
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "text/plain",
+                        StatusCode = 400,
+
+                    };
+                };
+            }
+            
+
+
+
+
         }
     }
 }

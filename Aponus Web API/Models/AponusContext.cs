@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Models;
 
@@ -219,16 +220,18 @@ public partial class AponusContext : DbContext
         modelBuilder.Entity<ComponentesDescripcion>(entity =>
         {
             entity.HasKey(e => e.IdDescripcion);
+            
 
             entity.ToTable("COMPONENTES_DESCRIPCION");
 
             entity.Property(e => e.IdDescripcion)
-                .HasDefaultValueSql("((-1))")
-                .HasColumnName("ID_DESCRIPCION");
+                .HasColumnName("ID_DESCRIPCION")
+                .UseIdentityColumn(1, 1);
+
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .HasColumnName("DESCRIPCION");
+                .HasColumnName("DESCRIPCION");  
 
         });
 
@@ -334,9 +337,9 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.Tolerancia)
             .HasColumnName("TOLERANCIA");
 
-            entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.CuantitativosDetalles)
-                .HasForeignKey(d => d.IdDescripcion)
-                .HasConstraintName("FK_CUANTITATIVOS_DETALLE_COMPONENTES_DESCRIPCION");
+           // entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.CuantitativosDetalles)
+             //   .HasForeignKey(d => d.IdDescripcion)
+               // .HasConstraintName("FK_CUANTITATIVOS_DETALLE_COMPONENTES_DESCRIPCION");
         });
 
         modelBuilder.Entity<MensurablesDetalle>(entity =>
@@ -375,9 +378,9 @@ public partial class AponusContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_MENSURABLES_DETALLE_STOCK_MENSURABLES");
 
-            entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.MensurablesDetalles)
-                .HasForeignKey(d => d.IdDescripcion)
-                .HasConstraintName("FK_MENSURABLES_DETALLE_COMPONENTES_DESCRIPCION");
+           // entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.MensurablesDetalles)
+             //   .HasForeignKey(d => d.IdDescripcion)
+               // .HasConstraintName("FK_MENSURABLES_DETALLE_COMPONENTES_DESCRIPCION");
         });
 
         modelBuilder.Entity<PesablesDetalle>(entity =>
@@ -399,9 +402,9 @@ public partial class AponusContext : DbContext
                 .HasColumnName("DIAMETRO");
             entity.Property(e => e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
 
-            entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.PesablesDetalles)
-                .HasForeignKey(d => d.IdDescripcion)
-                .HasConstraintName("FK_PESABLES_DETALLE_COMPONENTES_DESCRIPCION");
+          //  entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.PesablesDetalles)
+            //    .HasForeignKey(d => d.IdDescripcion)
+              //  .HasConstraintName("FK_PESABLES_DETALLE_COMPONENTES_DESCRIPCION");
         });
 
         modelBuilder.Entity<Producto>(entity =>

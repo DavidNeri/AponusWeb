@@ -46,7 +46,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                )
                .ToListAsync();
 
-                List<DTODetalleComponentes> ComponentesPesables = await AponusDBContext.PesablesDetalles
+                List<DTOComponente> ComponentesPesables = await AponusDBContext.PesablesDetalles
                     .Join(AponusDBContext.StockPesables,
                     PD => PD.IdComponente, SP => SP.IdComponente,
                     (PD, SP) => new
@@ -57,7 +57,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                         SP.CantidadRecibido,
                         SP.CantidadPintura,
                         SP.CantidadProceso
-                    }).Select(x => new DTODetalleComponentes
+                    }).Select(x => new DTOComponente
                     {
                         IdDescripcion = x.IdDescripcion,
                         Altura = x.Altura,
@@ -67,7 +67,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                         Recibido = x.CantidadRecibido.ToString(),
                     }).ToListAsync();
 
-                List<DTODetalleComponentes> ComponentesCuantitativos = await AponusDBContext.CuantitativosDetalles
+                List<DTOComponente> ComponentesCuantitativos = await AponusDBContext.CuantitativosDetalles
                   .Join(AponusDBContext.StockCuantitativos,
                   CD => CD.IdComponente, SC => SC.IdComponente,
                   (CD, SC) => new
@@ -87,7 +87,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                   })
 
 
-                  .Select(x => new DTODetalleComponentes
+                  .Select(x => new DTOComponente
                   {
                       IdDescripcion = x.IdDescripcion,
                       idComponente = x.IdComponente,
@@ -104,7 +104,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                   }).ToListAsync();
 
-                List<DTODetalleComponentes> ComponentesMensurables = await AponusDBContext.MensurablesDetalles
+                List<DTOComponente> ComponentesMensurables = await AponusDBContext.MensurablesDetalles
                   .Join(AponusDBContext.StockMensurables,
                   MD => MD.IdComponente, SM => SM.IdComponente,
                   (MD, SM) => new
@@ -117,7 +117,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                       MD.Perfil,
                       SM.CantidadRecibido,
                       SM.CantidadProceso
-                  }).Select(x => new DTODetalleComponentes
+                  }).Select(x => new DTOComponente
                   {
                       IdDescripcion = x.IdDescripcion,
                       idComponente = x.IdComponente,
@@ -132,19 +132,19 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                 foreach (TipoInsumos _Insumos in Stocks)
                 {
-                    foreach (DTODetalleComponentes _Pesables in ComponentesPesables)
+                    foreach (DTOComponente _Pesables in ComponentesPesables)
                     {
                         if (_Pesables.IdDescripcion == _Insumos.IdDescripcion)
                         {
                             if (_Insumos.Especificaciones == null)
                             {
-                                _Insumos.Especificaciones = new List<DTODetalleComponentes>();
+                                _Insumos.Especificaciones = new List<DTOComponente>();
                             }
 
                             _Insumos.Especificaciones.Add(_Pesables);
-                            DTODetalleComponentes especificaciones =
+                            DTOComponente especificaciones =
                                 ComponentesPesables.Where(especificaciones => especificaciones.IdDescripcion
-                                == _Pesables.IdDescripcion).Select(x => new DTODetalleComponentes
+                                == _Pesables.IdDescripcion).Select(x => new DTOComponente
                                 {
                                     IdDescripcion = x.IdDescripcion,
                                     Moldeado = x.Moldeado,
@@ -171,20 +171,20 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                     }
 
-                    foreach (DTODetalleComponentes _Cuantitativos in ComponentesCuantitativos)
+                    foreach (DTOComponente _Cuantitativos in ComponentesCuantitativos)
                     {
                         if (_Cuantitativos.IdDescripcion == _Insumos.IdDescripcion)
                         {
                             if (_Insumos.Especificaciones == null)
                             {
-                                _Insumos.Especificaciones = new List<DTODetalleComponentes>();
+                                _Insumos.Especificaciones = new List<DTOComponente>();
                             }
 
                             _Insumos.Especificaciones.Add(_Cuantitativos);
 
-                            DTODetalleComponentes especificaciones =
+                            DTOComponente especificaciones =
                                 ComponentesCuantitativos.Where(especificaciones => especificaciones.IdDescripcion
-                                == _Cuantitativos.IdDescripcion).Select(x => new DTODetalleComponentes
+                                == _Cuantitativos.IdDescripcion).Select(x => new DTOComponente
                                 {
                                     IdDescripcion = x.IdDescripcion,
                                     Moldeado = x.Moldeado,
@@ -215,20 +215,20 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                     }
 
-                    foreach (DTODetalleComponentes _Mensurables in ComponentesMensurables)
+                    foreach (DTOComponente _Mensurables in ComponentesMensurables)
                     {
                         if (_Mensurables.IdDescripcion == _Insumos.IdDescripcion)
                         {
                             if (_Insumos.Especificaciones == null)
                             {
-                                _Insumos.Especificaciones = new List<DTODetalleComponentes>();
+                                _Insumos.Especificaciones = new List<DTOComponente>();
                             }
 
                             _Insumos.Especificaciones.Add(_Mensurables);
 
-                            DTODetalleComponentes especificaciones = ComponentesMensurables
+                            DTOComponente especificaciones = ComponentesMensurables
                                 .Where(x => x.IdDescripcion == _Mensurables.IdDescripcion)
-                                .Select(x => new DTODetalleComponentes
+                                .Select(x => new DTOComponente
                                 {
                                     IdDescripcion = x.IdDescripcion,
                                     Moldeado = x.Moldeado,
@@ -291,7 +291,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                .ToListAsync();
 
 
-                List<DTODetalleComponentes> ComponentesCuantitativos = await AponusDBContext.CuantitativosDetalles
+                List<DTOComponente> ComponentesCuantitativos = await AponusDBContext.CuantitativosDetalles
                   .Join(AponusDBContext.StockCuantitativos,
                   CD => CD.IdComponente, SC => SC.IdComponente,
                   (CD, SC) => new
@@ -311,7 +311,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                   })
 
                   .Where(x => x.Diametro == DN && x.IdDescripcion == IdDescripcion)
-                  .Select(x => new DTODetalleComponentes
+                  .Select(x => new DTOComponente
                   {
                       IdDescripcion = x.IdDescripcion,
                       idComponente = x.IdComponente,
@@ -333,19 +333,19 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 {
 
 
-                    foreach (DTODetalleComponentes _Cuantitativos in ComponentesCuantitativos)
+                    foreach (DTOComponente _Cuantitativos in ComponentesCuantitativos)
                     {
                         if (_Cuantitativos.IdDescripcion == _Insumos.IdDescripcion)
                         {
                             if (_Insumos.Especificaciones == null)
                             {
-                                _Insumos.Especificaciones = new List<DTODetalleComponentes>();
+                                _Insumos.Especificaciones = new List<DTOComponente>();
                             }
 
                             _Insumos.Especificaciones.Add(_Cuantitativos);
-                            DTODetalleComponentes especificaciones =
+                            DTOComponente especificaciones =
                                ComponentesCuantitativos.Where(especificaciones => especificaciones.IdDescripcion
-                               == _Cuantitativos.IdDescripcion).Select(x => new DTODetalleComponentes
+                               == _Cuantitativos.IdDescripcion).Select(x => new DTOComponente
                                {
                                    IdDescripcion = x.IdDescripcion,
                                    Moldeado = x.Moldeado,
@@ -405,7 +405,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                ).Where(x => x.IdDescripcion == IdDescripcion)
                .ToListAsync();
 
-                List<DTODetalleComponentes> ComponentesPesables = await AponusDBContext.PesablesDetalles
+                List<DTOComponente> ComponentesPesables = await AponusDBContext.PesablesDetalles
                    .Join(AponusDBContext.StockPesables,
                    PD => PD.IdComponente, SP => SP.IdComponente,
                    (PD, SP) => new
@@ -416,7 +416,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                        SP.CantidadRecibido,
                        SP.CantidadPintura,
                        SP.CantidadProceso
-                   }).Select(x => new DTODetalleComponentes
+                   }).Select(x => new DTOComponente
                    {
                        IdDescripcion = x.IdDescripcion,
                        Altura = x.Altura,
@@ -427,7 +427,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                    }).ToListAsync();
 
 
-                List<DTODetalleComponentes> ComponentesCuantitativos = await AponusDBContext.CuantitativosDetalles
+                List<DTOComponente> ComponentesCuantitativos = await AponusDBContext.CuantitativosDetalles
                   .Join(AponusDBContext.StockCuantitativos,
                   CD => CD.IdComponente, SC => SC.IdComponente,
                   (CD, SC) => new
@@ -447,7 +447,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                   })
 
                   .Where(x => x.IdDescripcion == IdDescripcion)
-                  .Select(x => new DTODetalleComponentes
+                  .Select(x => new DTOComponente
                   {
                       IdDescripcion = x.IdDescripcion,
                       idComponente = x.IdComponente,
@@ -464,7 +464,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                   }).ToListAsync();
 
-                List<DTODetalleComponentes> ComponentesMensurables = await AponusDBContext.MensurablesDetalles
+                List<DTOComponente> ComponentesMensurables = await AponusDBContext.MensurablesDetalles
                  .Join(AponusDBContext.StockMensurables,
                  MD => MD.IdComponente, SM => SM.IdComponente,
                  (MD, SM) => new
@@ -477,7 +477,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                      MD.Perfil,
                      SM.CantidadRecibido,
                      SM.CantidadProceso
-                 }).Select(x => new DTODetalleComponentes
+                 }).Select(x => new DTOComponente
                  {
                      IdDescripcion = x.IdDescripcion,
                      idComponente = x.IdComponente,
@@ -492,19 +492,19 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                 foreach (TipoInsumos _Insumos in Stocks)
                 {
-                    foreach (DTODetalleComponentes _Pesables in ComponentesPesables)
+                    foreach (DTOComponente _Pesables in ComponentesPesables)
                     {
                         if (_Pesables.IdDescripcion == _Insumos.IdDescripcion)
                         {
                             if (_Insumos.Especificaciones == null)
                             {
-                                _Insumos.Especificaciones = new List<DTODetalleComponentes>();
+                                _Insumos.Especificaciones = new List<DTOComponente>();
                             }
 
                             _Insumos.Especificaciones.Add(_Pesables);
-                            DTODetalleComponentes especificaciones =
+                            DTOComponente especificaciones =
                                 ComponentesPesables.Where(especificaciones => especificaciones.IdDescripcion
-                                == _Pesables.IdDescripcion).Select(x => new DTODetalleComponentes
+                                == _Pesables.IdDescripcion).Select(x => new DTOComponente
                                 {
                                     IdDescripcion = x.IdDescripcion,
                                     Moldeado = x.Moldeado,
@@ -532,19 +532,19 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     }
 
 
-                    foreach (DTODetalleComponentes _Cuantitativos in ComponentesCuantitativos)
+                    foreach (DTOComponente _Cuantitativos in ComponentesCuantitativos)
                     {
                         if (_Cuantitativos.IdDescripcion == _Insumos.IdDescripcion)
                         {
                             if (_Insumos.Especificaciones == null)
                             {
-                                _Insumos.Especificaciones = new List<DTODetalleComponentes>();
+                                _Insumos.Especificaciones = new List<DTOComponente>();
                             }
 
                             _Insumos.Especificaciones.Add(_Cuantitativos);
-                            DTODetalleComponentes especificaciones =
+                            DTOComponente especificaciones =
                                ComponentesCuantitativos.Where(especificaciones => especificaciones.IdDescripcion
-                               == _Cuantitativos.IdDescripcion).Select(x => new DTODetalleComponentes
+                               == _Cuantitativos.IdDescripcion).Select(x => new DTOComponente
                                {
                                    IdDescripcion = x.IdDescripcion,
                                    Moldeado = x.Moldeado,
@@ -570,20 +570,20 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                         }
                     }
 
-                    foreach (DTODetalleComponentes _Mensurables in ComponentesMensurables)
+                    foreach (DTOComponente _Mensurables in ComponentesMensurables)
                     {
                         if (_Mensurables.IdDescripcion == _Insumos.IdDescripcion)
                         {
                             if (_Insumos.Especificaciones == null)
                             {
-                                _Insumos.Especificaciones = new List<DTODetalleComponentes>();
+                                _Insumos.Especificaciones = new List<DTOComponente>();
                             }
 
                             _Insumos.Especificaciones.Add(_Mensurables);
 
-                            DTODetalleComponentes especificaciones = ComponentesMensurables
+                            DTOComponente especificaciones = ComponentesMensurables
                                 .Where(x => x.IdDescripcion == _Mensurables.IdDescripcion)
-                                .Select(x => new DTODetalleComponentes
+                                .Select(x => new DTOComponente
                                 {
                                     IdDescripcion = x.IdDescripcion,
                                     Moldeado = x.Moldeado,
