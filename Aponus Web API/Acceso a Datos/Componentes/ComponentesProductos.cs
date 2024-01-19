@@ -184,16 +184,16 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
             foreach (var cp in ComponentesProducto)
             {
-                string? IdComponente = cp.IdComponente ?? "";
-                string? descripcion = cp.Descripcion ?? "";
-                string? diametro = cp.Diametro != null ? string.Format("{0:####}", cp.Diametro) : null;
-                string? longitud = cp.Longitud != null ? string.Format("{0:#,0}", cp.Longitud) : null;
-                string? altura = cp.Altura != null ? string.Format("{0:####}", cp.Altura) : null;
-                string? espesor = cp.Espesor != null ? string.Format("{0:####}", cp.Espesor) : null;
-                string? perfil = cp.Perfil != null ? string.Format("{0:####}", cp.Perfil) : null;
-                string? tolerancia = cp.Tolerancia ?? "";
-                string? DiametroNominal = cp.DiametroNominal.ToString() ?? "";
-                string? largo = cp.Largo != null ? string.Format("{0:####}", cp.Largo) : null;
+                    string? IdComponente = cp.IdComponente ?? "";
+                    string? descripcion = cp.Descripcion ?? "";
+                    string? diametro = cp.Diametro != null ? string.Format("{0:####}", cp.Diametro) : null;
+                    string? longitud = cp.Longitud != null ? string.Format("{0:#,0}", cp.Longitud) : null;
+                    string? altura = cp.Altura != null ? string.Format("{0:####}", cp.Altura) : null;
+                    string? espesor = cp.Espesor != null ? string.Format("{0:####}", cp.Espesor) : null;
+                    string? perfil = cp.Perfil != null ? string.Format("{0:####}", cp.Perfil) : null;
+                    string? tolerancia = cp.Tolerancia ?? "";
+                    string? DiametroNominal = cp.DiametroNominal.ToString() ?? "";
+                    string? largo = cp.Largo != null ? string.Format("{0:####}", cp.Largo) : null;
 
 
                 

@@ -17,6 +17,7 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.0",
           "Microsoft.EntityFrameworkCore.Tools": "7.0.1",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "6.0.11",
+          "NtpClient": "1.0.14",
           "Swashbuckle.AspNetCore": "6.2.3",
           "Z.EntityFramework.Plus.EFCore": "7.22.6"
         },
@@ -1541,6 +1542,14 @@
           "lib/netstandard2.0/Newtonsoft.Json.Bson.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.2.22727"
+          }
+        }
+      },
+      "NtpClient/1.0.14": {
+        "runtime": {
+          "lib/net40/NtpClient.dll": {
+            "assemblyVersion": "1.0.14.0",
+            "fileVersion": "1.0.14.0"
           }
         }
       },
@@ -3328,6 +3337,13 @@
       "sha512": "sha512-QYFyxhaABwmq3p/21VrZNYvCg3DaEoN/wUuw5nmfAf0X3HLjgupwhkEWdgfb9nvGAUIv3osmZoD3kKl4jxEmYQ==",
       "path": "newtonsoft.json.bson/1.0.2",
       "hashPath": "newtonsoft.json.bson.1.0.2.nupkg.sha512"
+    },
+    "NtpClient/1.0.14": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VUQlDuDgi9mjK+/P9TF9qVp/AuPVVY/Ir+g9scvP6l99XiMYTe+2gu49UZAnoVXtaOfF9r4tmvH5EIzintV8qQ==",
+      "path": "ntpclient/1.0.14",
+      "hashPath": "ntpclient.1.0.14.nupkg.sha512"
     },
     "NuGet.Common/6.3.1": {
       "type": "package",

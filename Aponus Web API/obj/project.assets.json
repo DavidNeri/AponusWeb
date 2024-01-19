@@ -1972,6 +1972,19 @@
           }
         }
       },
+      "NtpClient/1.0.14": {
+        "type": "package",
+        "compile": {
+          "lib/net40/NtpClient.dll": {
+            "related": ".XML"
+          }
+        },
+        "runtime": {
+          "lib/net40/NtpClient.dll": {
+            "related": ".XML"
+          }
+        }
+      },
       "NuGet.Common/6.3.1": {
         "type": "package",
         "dependencies": {
@@ -6847,6 +6860,19 @@
         "lib/netstandard2.0/Newtonsoft.Json.Bson.xml",
         "newtonsoft.json.bson.1.0.2.nupkg.sha512",
         "newtonsoft.json.bson.nuspec"
+      ]
+    },
+    "NtpClient/1.0.14": {
+      "sha512": "VUQlDuDgi9mjK+/P9TF9qVp/AuPVVY/Ir+g9scvP6l99XiMYTe+2gu49UZAnoVXtaOfF9r4tmvH5EIzintV8qQ==",
+      "type": "package",
+      "path": "ntpclient/1.0.14",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/NtpClient.XML",
+        "lib/net40/NtpClient.dll",
+        "ntpclient.1.0.14.nupkg.sha512",
+        "ntpclient.nuspec"
       ]
     },
     "NuGet.Common/6.3.1": {
@@ -11765,6 +11791,7 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.1",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 6.0.11",
+      "NtpClient >= 1.0.14",
       "Swashbuckle.AspNetCore >= 6.2.3",
       "Z.EntityFramework.Plus.EFCore >= 7.22.6"
     ]
@@ -11853,6 +11880,10 @@
             "target": "Package",
             "version": "[6.0.11, )"
           },
+          "NtpClient": {
+            "target": "Package",
+            "version": "[1.0.14, )"
+          },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[6.2.3, )"
@@ -11881,8 +11912,20 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.111\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.115\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"NtpClient 1.0.14\" se restauró con \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\" en lugar de la plataforma de destino del proyecto \"net6.0\". Puede que el paquete no sea totalmente compatible con el proyecto.",
+      "libraryId": "NtpClient",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }

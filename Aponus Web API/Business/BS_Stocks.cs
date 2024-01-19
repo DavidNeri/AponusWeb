@@ -108,10 +108,6 @@ namespace Aponus_Web_API.Business
                     };
                     return Resultado;
                 }
-
-
-                
-
             }
             catch (Exception)
             {

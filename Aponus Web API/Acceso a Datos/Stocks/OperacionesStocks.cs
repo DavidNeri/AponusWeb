@@ -1,12 +1,11 @@
 ﻿using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Services;
-using Humanizer;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
 using System.Reflection;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using NtpClient;
+using System.Net.NetworkInformation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 {
@@ -1036,6 +1035,96 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
         }
 
-        
+        internal void GuardarMovimiento(ActualizacionStock actualizacion, decimal? valorOriginalOrigen, decimal? valorAntDestino)
+        {
+            //Obtner la letra de Directorio del Systema
+            string DirectorioPadre = Path.Combine(Path.GetPathRoot(Environment.SystemDirectory),"Aponus");
+            string DirectorioHijo= Path.Combine(DirectorioPadre, "Documentacion");
+            string[] servidoresNTP = { "Time.Windows.com","pool.ntp.org", "south-america.pool.ntp.org", "Time.Windows.com" }; // Lista de servidores NTP
+            bool ConexionExistosa = false;
+            string [] NombresArchivos = new string[actualizacion.Archivos.Count];
+            string Carpeta="";
+            DateTime FechaHora = new DateTime();
+            List<Stock_Movimientos> Movimientos = new List<Stock_Movimientos>();
+            List<ArchivosMovimientosStock> MovimientosStockArchivosList = new List<ArchivosMovimientosStock>();
+
+            //--Crear/Validar Directorio para la copia de Archivos           
+            foreach (string Servidor in servidoresNTP)
+            {
+                try
+                {
+                    Ping ping = new Ping();
+                    PingReply Respuesta = ping.Send(Servidor, 1000);
+
+                    if (Respuesta!=null && Respuesta.Status== IPStatus.Success)
+                    {
+                        INtpConnection Conexion = new NtpConnection(Servidor);                        
+                        Carpeta = Conexion.GetUtc().AddHours(-3).ToString("dd-MM-yyyy");
+                        FechaHora = Conexion.GetUtc().AddHours(-3);
+                        ConexionExistosa = true;
+                        break;
+                    }                   
+                }
+                catch (PingException){ }
+            }
+
+            if (ConexionExistosa == false)
+            {
+                Carpeta = DateTime.Now.ToString("dd-MM-yyyy");
+                FechaHora = DateTime.Now;
+            }
+
+            for (int i = 0; i < NombresArchivos.Length; i++)
+            {
+                NombresArchivos[i] = Guid.NewGuid().ToString();//Conexion.GetUtc().AddHours(-3).ToString("yyyyMMddHHmmssffffff");
+                MovimientosStockArchivosList.Add(new ArchivosMovimientosStock()
+                {
+                    HashArchivo = NombresArchivos[i].ToString(),
+                });
+            }
+
+            _ =!Directory.Exists(DirectorioPadre)&&Carpeta!="" ? Directory.CreateDirectory(DirectorioPadre):null;
+            _=!Directory.Exists(DirectorioHijo)? Directory.CreateDirectory(DirectorioHijo):null;
+            _=!Directory.Exists(DirectorioHijo + @"\" + Carpeta) ? Directory.CreateDirectory(DirectorioHijo + @"\"+Carpeta):null;
+
+            //Copiar Archivos
+            int x = 0;
+
+            foreach (IFormFile Archivo in actualizacion.Archivos)
+            {
+                var ExtensionArchivo = Path.GetExtension(Archivo.FileName);
+                string NombreArchivo = NombresArchivos[x];
+                ArchivosMovimientosStock UPDATEMovimientosStock_Archivos = MovimientosStockArchivosList.FirstOrDefault(x => x.HashArchivo.Equals(NombreArchivo));
+                
+                var RutaArchivo = Path.Combine(DirectorioPadre, DirectorioHijo, Carpeta, Path.GetFileNameWithoutExtension(NombresArchivos[x])+ExtensionArchivo);
+
+                using (var FlujoArchivos = new FileStream(RutaArchivo, FileMode.Create))
+                {
+                    Archivo.CopyTo(FlujoArchivos);
+                };
+                UPDATEMovimientosStock_Archivos.PathArchivo = RutaArchivo.ToString();
+                x++;
+
+            }             
+            //Guardar Movimiento en BD
+            Stock_Movimientos Movimiento = new Stock_Movimientos()
+            {
+                
+                IdUsuario = actualizacion.Usuario,
+                FechaHora = FechaHora,
+                
+            };          
+
+            AponusDBContext.Stock_Movimientos.Add(Movimiento);
+            AponusDBContext.SaveChanges();
+
+            int IdMovimiento = Movimiento.IdMovimiento;
+
+            MovimientosStockArchivosList.ForEach(x => x.IdMovimiento = IdMovimiento);
+
+            AponusDBContext.ArchivosStock.AddRange(MovimientosStockArchivosList);
+            AponusDBContext.SaveChanges();
+
+        }
     }
 }

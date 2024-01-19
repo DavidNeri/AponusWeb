@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Aponus_Web_API.Business;
 using Aponus_Web_API.Data_Transfer_objects;
+using System.IO;
+using System.Drawing.Drawing2D;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -75,29 +77,29 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("StockUpdate")]
-        public IActionResult ActualizarStock(ActualizacionStock Actualizacion) {
+        public IActionResult ActualizarStock([FromForm] ActualizacionStock Actualizacion) {
 
             try
             {
-                new BS_Stocks().ActualizarStock(Actualizacion);
+                return new BS_Stocks().NewActualizarStock(Actualizacion);
 
-                return StatusCode(200);
+
+                
 
             }
             catch (Exception)
             {
-
                 return StatusCode(500);
             }
 
-        }
+        }        
 
         /// <summary>
         /// Reemplaza a StockUpdate
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Route("NewStockUpdate")]
+        [Route("NewStockUpdate")] //-->Usar este
         public IActionResult NewActualizarStock(ActualizacionStock Actualizacion)
         {
 

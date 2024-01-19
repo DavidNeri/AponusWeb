@@ -348,12 +348,13 @@ namespace Aponus_Web_API.Business
         {
             StockInsumos? stockInsumo = new OperacionesStocks().BuscarInsumo(Actualizacion.Id);
             PropertyInfo[] propiedades = stockInsumo.GetType().GetProperties();
-            decimal? valorOrigen=null;
+            decimal? valorOriginalOrigen=null;
             Actualizacion.Valor = Actualizacion.Valor ?? 0;
             PropertyInfo? propiedadOrigen = null;
+            decimal? ValorAntDestino = null;
 
 
-            if (string.IsNullOrEmpty(Actualizacion.Destino))
+           /* if (string.IsNullOrEmpty(Actualizacion.Destino))
             {
                 var Resultado = new ObjectResult("Ingresar el Destino")
                 {
@@ -362,12 +363,19 @@ namespace Aponus_Web_API.Business
                 return Resultado;
             }
             else
-            {
+            {*/
+                PropertyInfo? ValorDestinoDB = propiedades.FirstOrDefault(p => p.Name.ToUpper().Contains(Actualizacion.Destino.ToUpper()));
+                object valorDestinoenDB = ValorDestinoDB.GetValue(stockInsumo);                
+                decimal? ValorDestinoDBDec = (decimal?)valorDestinoenDB;
+                ValorAntDestino = ValorDestinoDBDec;
+                Actualizacion.Destino= ValorDestinoDB.Name ?? "";
+
                 if (Actualizacion.Origen != null)
                 {
-                    propiedadOrigen = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Origen));
+                    propiedadOrigen = propiedades.FirstOrDefault(p => p.Name.ToUpper().Contains(Actualizacion.Origen.ToUpper()));
                     object valor = propiedadOrigen.GetValue(stockInsumo);
-                    valorOrigen = (decimal?)valor ?? 0;
+                    valorOriginalOrigen = (decimal?)valor ?? 0;
+                    Actualizacion.Origen = propiedadOrigen.Name;
                 }
 
 
@@ -376,7 +384,7 @@ namespace Aponus_Web_API.Business
                     if (propiedadOrigen != null)
                     {
 
-                        if ((valorOrigen < Actualizacion.Valor) & valorOrigen != null)
+                        if ((valorOriginalOrigen < Actualizacion.Valor) & valorOriginalOrigen != null)
                         {
                             var Resultado = new ObjectResult("La cantidad a agregar o restar en el Origen es inferior a la que se desea incrementar o descontar en el destino")
                             {
@@ -385,22 +393,23 @@ namespace Aponus_Web_API.Business
                             return Resultado;
                         }
                     }
-                    if (Actualizacion.Origen == null || ((valorOrigen > Actualizacion.Valor) & (valorOrigen != null || propiedadOrigen == null)))
+                    if (Actualizacion.Origen == null || ((valorOriginalOrigen > Actualizacion.Valor) & (valorOriginalOrigen != null || propiedadOrigen == null)))
                     {
                         switch (Actualizacion.Operador)
                         {
                             case "+": //HAce la misma validacion q para restar
-
+                                
                                 if ((propiedadOrigen == null || Actualizacion.Origen != null) && Actualizacion.Destino != null)
                                 {
-                                    if (propiedadOrigen == null)
+                                   // PropertyInfo? ValorDestinoDB = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino));
+                                    //object valor = ValorDestinoDB.GetValue(stockInsumo);
+                                    //decimal? ValorDestinoDBDec = (decimal?)valor;
+                                    //ValorAntDestino = ValorDestinoDBDec;
+
+                                    /*if (propiedadOrigen == null)
                                     {
-                                        PropertyInfo? ValorDestinoDB = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino));
-                                        object valor = ValorDestinoDB.GetValue(stockInsumo);
-                                        decimal? ValorDestinoDBDec = (decimal?)valor;
-
-
-                                        /* if ((ValorDestinoDBDec - Actualizacion.Valor) < 0)
+                                        
+                                        if ((ValorDestinoDBDec - Actualizacion.Valor) < 0)
                                          {
 
                                              var Resultado = new ObjectResult("El valor a restar es inferior al disponible")
@@ -409,14 +418,17 @@ namespace Aponus_Web_API.Business
                                              };
                                              return Resultado;
                                          }
-                                        */
-                                    }
+                                        
+                                    }*/
 
                                     if (Actualizacion.Origen != null)
                                     {
+                                        //esta asignacion eesta de mas , o la anterior
                                         PropertyInfo? ValorOrigenDB = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Origen));
-                                        object valor = ValorOrigenDB.GetValue(stockInsumo);
-                                        decimal? ValorOrigenDBDec = (decimal?)valor;
+                                        object valor_Origen = ValorOrigenDB.GetValue(stockInsumo);
+                                        decimal? ValorOrigenDBDec = (decimal?)valor_Origen;
+                                        
+
                                         if (ValorOrigenDBDec - Actualizacion.Valor < 0)
                                         {
 
@@ -446,6 +458,9 @@ namespace Aponus_Web_API.Business
                                             return Resultado;
                                         }
                                     }
+
+                                    new OperacionesStocks().GuardarMovimiento(Actualizacion, valorOriginalOrigen, ValorAntDestino);
+
                                 }
                                 else
                                 {
@@ -461,12 +476,14 @@ namespace Aponus_Web_API.Business
 
                                 if ((propiedadOrigen == null || Actualizacion.Origen != null) && Actualizacion.Destino != null)
                                 {
+                                    //PropertyInfo? ValorDestinoDB = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino));
+                                    //object valor = ValorDestinoDB.GetValue(stockInsumo);
+                                    //decimal? ValorDestinoDBDec = (decimal?)valor;
+                                    //ValorAntDestino = ValorDestinoDBDec;
 
                                     if (propiedadOrigen == null)
                                     {
-                                        PropertyInfo? ValorDestinoDB = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino));
-                                        object valor = ValorDestinoDB.GetValue(stockInsumo);
-                                        decimal? ValorDestinoDBDec = (decimal?)valor;
+                                        
                                         if (ValorDestinoDBDec - Actualizacion.Valor < 0)
                                         {
 
@@ -481,8 +498,8 @@ namespace Aponus_Web_API.Business
                                     if (Actualizacion.Origen != null)
                                     {
                                         PropertyInfo? ValorOrigenDB = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Origen));
-                                        object valor = ValorOrigenDB.GetValue(stockInsumo);
-                                        decimal? ValorOrigenDBDec = (decimal?)valor;
+                                        object valorenDB = ValorOrigenDB.GetValue(stockInsumo);
+                                        decimal? ValorOrigenDBDec = (decimal?)valorenDB;
                                         if (ValorOrigenDBDec - Actualizacion.Valor < 0)
                                         {
 
@@ -509,6 +526,7 @@ namespace Aponus_Web_API.Business
                                                 return Resultado;
                                             }
                                         }
+                                        new OperacionesStocks().GuardarMovimiento(Actualizacion, valorOriginalOrigen, ValorAntDestino);
 
                                     }
                                     else
@@ -525,6 +543,7 @@ namespace Aponus_Web_API.Business
                             case "=":
                                 if (new OperacionesStocks().NewSetearStockInsumo(Actualizacion))
                                 {
+                                    new OperacionesStocks().GuardarMovimiento(Actualizacion, valorOriginalOrigen, ValorAntDestino);
                                     return new StatusCodeResult(200);
                                 }
                                 else
@@ -552,7 +571,7 @@ namespace Aponus_Web_API.Business
                     };
                     return Resultado;
                 }
-            }
+            
             
         }
 

@@ -53,18 +53,5 @@ namespace Aponus_Web_API.Controllers
 
         }
 
-
-        /* [HttpGet]
-         [Route("List/{idDescription}")]
-
-         public async Task<List<TipoInsumos>> Listar(int? idDescription)
-         {
-             return await new BS_Stocks().Listar(idDescription);
-
-         }
-
-         */
-
-
     }
 }

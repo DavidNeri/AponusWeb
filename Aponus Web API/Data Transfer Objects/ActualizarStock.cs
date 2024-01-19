@@ -31,6 +31,18 @@ namespace Aponus_Web_API.Data_Transfer_objects
         [JsonProperty(PropertyName = "idBulon", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdBulon { get; set; }
 
+        [JsonProperty(PropertyName = "usuario", NullValueHandling = NullValueHandling.Ignore)]
+        public string Usuario { get; set; }
+
+        [JsonProperty(PropertyName = "archivos", NullValueHandling = NullValueHandling.Ignore)]
+        public List<IFormFile>? Archivos { get; set; }
+
+        [JsonProperty(PropertyName = "idProveedorOrigen", NullValueHandling = NullValueHandling.Ignore)]
+        public int? IdProveedorOrigen { get; set; }
+
+        [JsonProperty(PropertyName = "idProveedorDestino", NullValueHandling = NullValueHandling.Ignore)]
+        public int? IdProveedorDestino{ get; set; }
+
 
     }
 }
