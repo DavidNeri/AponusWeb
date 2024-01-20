@@ -7,6 +7,9 @@ namespace Aponus_Web_API.Data_Transfer_objects
         [JsonProperty(PropertyName = "idInsumo", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdInsumo { get; set; }
 
+        [JsonProperty(PropertyName = "NombreInsumo", NullValueHandling = NullValueHandling.Ignore)]
+        public string? NombreInsumo { get; set; }
+
         [JsonProperty(PropertyName = "requerido", NullValueHandling = NullValueHandling.Ignore)]
         public string? Requerido { get; set; }
 

@@ -103,11 +103,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                             StockComponente = new DTOStocks
                             {
                                 IdInsumo = _StockComponentes.IdInsumo,
-                                Recibido = _StockComponentes.CantidadRecibido.ToString(),
-                                Granallado = _StockComponentes.CantidadGranallado != null ? _StockComponentes.CantidadGranallado.ToString() : null,
-                                Pintura = _StockComponentes.CantidadPintura != null ? _StockComponentes.CantidadPintura.ToString() : null,
-                                Proceso = _StockComponentes.CantidadProceso != null ? _StockComponentes.CantidadProceso.ToString() : null,
-                                Moldeado = _StockComponentes.CantidadMoldeado != null ? _StockComponentes.CantidadMoldeado.ToString() : null,
+                                Recibido = _StockComponentes.CantidadRecibido != null ? _StockComponentes.CantidadRecibido.ToString(): "Sin Stock",
+                                Granallado = _StockComponentes.CantidadGranallado != null ? _StockComponentes.CantidadGranallado.ToString() : "Sin Stock",
+                                Pintura = _StockComponentes.CantidadPintura != null ? _StockComponentes.CantidadPintura.ToString() : "Sin Stock",
+                                Proceso = _StockComponentes.CantidadProceso != null ? _StockComponentes.CantidadProceso.ToString() : "Sin Stock",
+                                Moldeado = _StockComponentes.CantidadMoldeado != null ? _StockComponentes.CantidadMoldeado.ToString() : "Sin Stock",
 
                                 Total = ((_StockComponentes.CantidadPintura ?? 0) +
                                         (_StockComponentes.CantidadMoldeado ?? 0) +
@@ -210,10 +210,16 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                     sb.Append($", Espesor:{espesor}mm");
                 if (perfil != null)
                     sb.Append($", Perfil:{perfil}");
-                if (tolerancia != "")
+                if (tolerancia != null && tolerancia!="")
                     sb.Append($", Tolerancia:{tolerancia}");
-                if (DiametroNominal != "")
+                if (DiametroNominal != null && DiametroNominal != "")
                     sb.Append($", DN:{DiametroNominal}mm");
+
+                foreach (var componente in cp.StockComponente)
+                {
+                    componente.NombreInsumo = descripcion;
+                }
+
 
                 DTOProductoComponente productoComponente = new DTOProductoComponente
                 {
@@ -242,6 +248,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
             foreach (var producto in productos)
             {
+                
                 producto.Perfil = null;
                 producto.Longitud = null;
                 producto.DiametroNominal = null;
@@ -275,7 +282,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                     {
                         
 
-                        if (propiedad.GetValue(item) !=null && !propiedad.Name.Contains("IdInsumo"))
+                        if (propiedad.GetValue(item) !=null
+                            && !propiedad.Name.Contains("IdInsumo")
+                            && !propiedad.Name.Contains("NombreInsumo")
+                            && propiedad.GetValue(item).ToString() != "Sin Stock")
                         {
                             if (SiglaFraccionamiento != null )
                             {
