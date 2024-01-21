@@ -2,6 +2,7 @@
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Data.Entity;
 using System.Net;
@@ -40,7 +41,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                 .Select(result => new DTOMovimientosStock()
                 {
-                    IdMovimiento = result.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdMovimiento,                    
+                    IdMovimiento = result.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdMovimiento,
                     FechaHora = result.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.FechaHora,
                     Usuario = result.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdUsuario,
 
@@ -48,15 +49,17 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     .Where(s => s.IdMovimiento == result.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdMovimiento)
                     .Select(s => new DTOSuministrosMovimientosStock()
                     {
-                        IdMovimiento= s.IdMovimiento,
-                        CampoStockDestino= s.CampoStockDestino,
-                        CampoStockOrigen= s.CampoStockOrigen,
-                        Cantidad= s.Cantidad,
-                        IdSuministro= s.IdSuministro,
-                        ValorAnteriorDestino = s.ValorAnteriorDestino,
-                        ValorAnteriorOrigen = s.ValorAnteriorOrigen,
-                         ValorNuevoDestino = s.ValorNuevoDestino,
-                         ValorNuevoOrigen = s.ValorNuevoOrigen
+                        IdMovimiento = s.IdMovimiento,
+                        CampoStockDestino =!string.IsNullOrEmpty(s.CampoStockDestino)? s.CampoStockDestino.Replace("Cantidad",""):s.CampoStockDestino,
+                        CampoStockOrigen = !string.IsNullOrEmpty(s.CampoStockOrigen) ? s.CampoStockOrigen.Replace("Cantidad",""):s.CampoStockOrigen,
+                        Cantidad = !string.IsNullOrEmpty(s.Cantidad.ToString()) ? s.Cantidad.ToString() : 0.00.ToString(),
+                        IdSuministro = s.IdSuministro,
+                        ValorAnteriorDestino = !string.IsNullOrEmpty(s.ValorAnteriorDestino.ToString()) ? s.ValorAnteriorDestino.ToString() : 0.00.ToString(),
+                        ValorAnteriorOrigen = !string.IsNullOrEmpty(s.ValorAnteriorOrigen.ToString()) ? s.ValorAnteriorOrigen.ToString() : 0.00.ToString(),
+                        ValorNuevoDestino = !string.IsNullOrEmpty(s.ValorNuevoDestino.ToString()) ? s.ValorNuevoDestino.ToString() : 0.00.ToString(),
+                        ValorNuevoOrigen = !string.IsNullOrEmpty(s.ValorNuevoOrigen.ToString()) ? s.ValorNuevoOrigen.ToString() : 0.00.ToString(),
+
+                        
 
 
                     })
@@ -110,20 +113,32 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                string? Unidad)> SuministrosFormateados = new ObtenerInsumos().ObtenerDetalleSuministro(SuministrosId);
 
 
-           /* ListadoMovimientos=ListadoMovimientos
-                .Join(
-                    SuministrosFormateados,
-                    ListMov=>ListMov.Suministros.Select(x=>x.IdSuministro),
-                    SumForm=>SumForm.IdSuministro,
-                    (ListMov, SumForm)=>
-                    {
-                        ListMov.Suministros.Select(x=>x.IdSuministro) = SumForm.NombreFormateado;
-                        ListMov.Valor = ListMov.Valor + " " + SumForm.Unidad; 
-                        return ListMov;
-                    })
-                .ToList();
-           */
+            foreach (var movimiento in ListadoMovimientos)
+            {
+                foreach (var suministro in movimiento.Suministros)
+                {
+                        (string IdSuministro,
+                         string NombreFormateado,
+                         string? Unidad)
+                        SumFormat = SuministrosFormateados.FirstOrDefault(x=>x.IdSuministro==suministro.IdSuministro);
 
+                    suministro.NombreSuministro = SumFormat.NombreFormateado;
+                    suministro.Cantidad = suministro.Cantidad + " " + SumFormat.Unidad;
+                    suministro.ValorNuevoDestino = suministro.ValorNuevoDestino + " " + SumFormat.Unidad;
+                    suministro.ValorNuevoOrigen = suministro.ValorNuevoOrigen + " " + SumFormat.Unidad;
+                    suministro.ValorAnteriorOrigen = suministro.ValorAnteriorOrigen + "" + SumFormat.Unidad;
+                    suministro.ValorAnteriorDestino = suministro.ValorAnteriorDestino + " " + SumFormat.Unidad;
+
+                                      
+                    
+                 
+                    
+                }
+            }
+
+          
+
+            
             var MovimientosIds = ListadoMovimientos.Select(m=>m.IdMovimiento).Distinct().ToList();
            
             List<DTOInfoArchivosMovimientosStock> InfoArchivosMovimientos = AponusDBContext.ArchivosStock

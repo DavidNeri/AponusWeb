@@ -4,13 +4,14 @@
     {
         public int IdMovimiento { get; set; }
         public string IdSuministro { get; set; }
+        public string? NombreSuministro { get; set; }
         public string? CampoStockOrigen { get; set; }
         public string? CampoStockDestino { get; set; }
-        public decimal? ValorAnteriorOrigen { get; set; }
-        public decimal? ValorAnteriorDestino { get; set; }
-        public decimal? ValorNuevoOrigen { get; set; }
-        public decimal? ValorNuevoDestino { get; set; }
-        public decimal Cantidad { get; set; }
+        public string? ValorAnteriorOrigen { get; set; }
+        public string? ValorAnteriorDestino { get; set; }
+        public string? ValorNuevoOrigen { get; set; }
+        public string? ValorNuevoDestino { get; set; }
+        public string? Cantidad { get; set; }
 
     }
 }
