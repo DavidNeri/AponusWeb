@@ -1,5 +1,6 @@
 ﻿using Aponus_Web_API.Business;
 using Aponus_Web_API.Data_Transfer_Objects;
+using Aponus_Web_API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
@@ -14,9 +15,9 @@ namespace Aponus_Web_API.Controllers
 
         ////NewStockUpdate en STockControllers = NuevoMovimiento, Actualizacion
 
-        public IActionResult Listar()
+        public IActionResult Listar(FiltrosMovimientos? Filtros)
         {
-            return new BS_Movimientos().Listar();
+            return new BS_Movimientos().Listar(Filtros);
         }
     }
 }

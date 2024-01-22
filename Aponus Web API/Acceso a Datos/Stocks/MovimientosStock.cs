@@ -1,10 +1,12 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Insumos;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
+using Aponus_Web_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Data.Entity;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -14,9 +16,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
     {
         private readonly AponusContext AponusDBContext;
         public MovimientosStock() { AponusDBContext = new AponusContext(); }
-        public IActionResult Listar()
+        public IActionResult Listar(FiltrosMovimientos? Filtros = null)
         {
-            List<DTOMovimientosStock> ListadoMovimientos = AponusDBContext.Stock_Movimientos
+           
+            IQueryable<DTOMovimientosStock> ListadoMovimientos = AponusDBContext.Stock_Movimientos
                 .Join(
                     AponusDBContext.Proveedores,
                     movimientos => movimientos.IdProveedorOrigen,
@@ -37,8 +40,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
 
                 )
-
-
                 .Select(result => new DTOMovimientosStock()
                 {
                     IdMovimiento = result.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdMovimiento,
@@ -50,8 +51,8 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     .Select(s => new DTOSuministrosMovimientosStock()
                     {
                         IdMovimiento = s.IdMovimiento,
-                        CampoStockDestino =!string.IsNullOrEmpty(s.CampoStockDestino)? s.CampoStockDestino.Replace("Cantidad",""):s.CampoStockDestino,
-                        CampoStockOrigen = !string.IsNullOrEmpty(s.CampoStockOrigen) ? s.CampoStockOrigen.Replace("Cantidad",""):s.CampoStockOrigen,
+                        CampoStockDestino = !string.IsNullOrEmpty(s.CampoStockDestino) ? s.CampoStockDestino.Replace("Cantidad", "") : s.CampoStockDestino,
+                        CampoStockOrigen = !string.IsNullOrEmpty(s.CampoStockOrigen) ? s.CampoStockOrigen.Replace("Cantidad", "") : s.CampoStockOrigen,
                         Cantidad = !string.IsNullOrEmpty(s.Cantidad.ToString()) ? s.Cantidad.ToString() : 0.00.ToString(),
                         IdSuministro = s.IdSuministro,
                         ValorAnteriorDestino = !string.IsNullOrEmpty(s.ValorAnteriorDestino.ToString()) ? s.ValorAnteriorDestino.ToString() : 0.00.ToString(),
@@ -59,7 +60,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                         ValorNuevoDestino = !string.IsNullOrEmpty(s.ValorNuevoDestino.ToString()) ? s.ValorNuevoDestino.ToString() : 0.00.ToString(),
                         ValorNuevoOrigen = !string.IsNullOrEmpty(s.ValorNuevoOrigen.ToString()) ? s.ValorNuevoOrigen.ToString() : 0.00.ToString(),
 
-                        
+
 
 
                     })
@@ -101,8 +102,16 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                     }
 
-                })               
-                .ToList();
+                });
+
+
+            if (Filtros != null)
+            {
+                var CondicionWhere = new FiltrosMovimientos().ConstruirCondicionWhere(Filtros);
+                var Listado = ListadoMovimientos.Where(CondicionWhere);
+                return new JsonResult(Listado);
+            }
+
 
             List<string>SuministrosId=ListadoMovimientos
                 .SelectMany(x=>x.Suministros.Select(x=>x.IdSuministro))

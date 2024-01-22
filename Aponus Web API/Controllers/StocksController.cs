@@ -105,7 +105,7 @@ namespace Aponus_Web_API.Controllers
 
             try
             {
-                Actualizacion.Operador = "=";
+                
                 return new BS_Stocks().NewActualizarStock(Actualizacion);
 
 
