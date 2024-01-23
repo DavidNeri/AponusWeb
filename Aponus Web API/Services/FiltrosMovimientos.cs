@@ -16,6 +16,7 @@ namespace Aponus_Web_API.Services
 
         public Expression<Func<DTOMovimientosStock, bool>> ConstruirCondicionWhere(FiltrosMovimientos filtros)
         {
+            string Propiedad;
             // Parámetro para la expresión lambda
             var EntidadParametro = Expression.Parameter(typeof(DTOMovimientosStock));
 
@@ -24,6 +25,8 @@ namespace Aponus_Web_API.Services
 
             // Obtener propiedades no nulas de los filtros
             var PropsNoNulas = typeof(FiltrosMovimientos).GetProperties().Where(Prop => Prop.GetValue(filtros) != null);
+
+            
 
             foreach (var Prop in PropsNoNulas)
             {
@@ -50,27 +53,72 @@ namespace Aponus_Web_API.Services
                     }
                 }
 
-                //Para el resto de los filtros 
-                string Propiedad;
 
+                //Para el "CampoStockDestino", debo Recorrer 'Suministros'
                 if (Prop.Name.Equals("Etapa"))
                 {
 
                     Propiedad = "CampoStockDestino";
-                }
-                else if (Prop.Name.Equals("Proveedor")) Propiedad = "ProveedorDestino";
-                else Propiedad = Prop.Name;
 
-                if (!string.IsNullOrEmpty(Prop.GetValue(filtros)?.ToString()))
+                    // Obtener la propiedad Suministros de DTOMovimientosStock
+                    var PropSuministros = Expression.Property(EntidadParametro, "Suministros");
+
+                    // Crear un parámetro para los elementos dentro de la lista Suministros
+                    var ParamSuministros = Expression.Parameter(typeof(DTOSuministrosMovimientosStock));
+
+                    // Acceder a la propiedad CampoStockDestino de los elementos dentro de la lista Suministros
+                    var propCampoStockDestino = Expression.Property(ParamSuministros, Propiedad);
+
+                    // Construir la condición para la propiedad CampoStockDestino dentro de la lista Suministros
+                    var metodoContains = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+
+                    var CondicionCampoStockDestino = Expression.Call(propCampoStockDestino,
+                        metodoContains,
+                        Expression.Constant(filtros.Etapa, typeof(string)));
+
+                    // Crear una expresión Lambda para la condición CampoStockDestino dentro de la lista Suministros
+
+                    var lambdaCampoStockDestino = Expression.Lambda<Func<DTOSuministrosMovimientosStock, bool>>(CondicionCampoStockDestino,
+                        ParamSuministros);
+
+                    // Utilizar Any para verificar si al menos un elemento en la lista cumple la condición
+                    var CondicionCampoStockDestinoLista = Expression.Call(typeof(Enumerable),   // Tipo que contiene el método estático (Enumerable en este caso)
+                        "Any",                                                                  // Nombre del método estático (Any en este caso)
+                        new[] { typeof(DTOSuministrosMovimientosStock) },                       // Tipo genérico del método. En este caso, se espera que la secuencia sea de tipo IEnumerable<DTOSuministrosMovimientosStock>.
+                        PropSuministros,                                                        // Es la expresión que representa la lista o secuencia que se evaluará.
+                        lambdaCampoStockDestino);                                               //Es la expresión lambda que representa la condición que debe cumplir al menos un elemento en la lista.
+
+                    // Agregar la condición a la lista general de condiciones
+                    Condiciones.Add(CondicionCampoStockDestinoLista);
+                }
+                else if (Prop.Name.Equals("Proveedor"))
                 {
-                    var Condicion = Expression.Call(
-                        Expression.Property(EntidadParametro, Propiedad),
-                        typeof(string).GetMethod("Contains"),
-                        Expression.Constant(Prop.GetValue(filtros), typeof(string)));
+                    Propiedad = "ProveedorDestino";
 
-                    Condiciones.Add(Condicion);
+                    //Obtener la prop ProveedorDestino de DTOMovimientosSTock
+                    var PropProveedor = Expression.Property(EntidadParametro, Propiedad);
+
+                    // Crear un parámetro para los elementos dentro de la lista Proveedores
+                    var paramProveedor = Expression.Parameter(typeof(DTOProveedores));
+
+                    // Acceder a la propiedad NombreProveedor de los elementos dentro de la lista Proveedores
+                    var NombreProveedor = Expression.Property(paramProveedor, "NombreProveedor");
+
+                    // Construir la condición para la propiedad NombreProveedor dentro de ProveedorDestino en DTOMovimientosSTock
+                    var metodoContains = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+
+                    var condicionNombreProveedor = Expression.Call(PropProveedor,   // El objeto o expresión sobre el cual se llama el método
+                        metodoContains,                                             // El método que se va a llamar (en este caso, el método Contains)
+                        Expression.Constant(filtros.Proveedor, typeof(string)));    // El argumento que se pasa al método
+
+                    // Crear una expresión Lambda para la condición CampoStockDestino dentro del objeto Proveedores
+
+                    var lambdaProveedores = Expression.Lambda<Func<DTOProveedores, bool>>(condicionNombreProveedor,paramProveedor);
+
                 }
-                
+
+
+
             }
 
             // Unir las condiciones con AND

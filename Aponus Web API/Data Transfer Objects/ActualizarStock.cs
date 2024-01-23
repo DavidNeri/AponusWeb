@@ -32,7 +32,7 @@ namespace Aponus_Web_API.Data_Transfer_objects
         public string? IdBulon { get; set; }
 
         [JsonProperty(PropertyName = "usuario", NullValueHandling = NullValueHandling.Ignore)]
-        public string Usuario { get; set; }
+        public string?   Usuario { get; set; }
 
         [JsonProperty(PropertyName = "archivos", NullValueHandling = NullValueHandling.Ignore)]
         public List<IFormFile>? Archivos { get; set; }

@@ -32,7 +32,7 @@ public partial class AponusContext : DbContext
     public virtual DbSet<StockCuantitativo> StockCuantitativos { get; set; }
     public virtual DbSet<StockMensurable> StockMensurables { get; set; }
     public virtual DbSet<StockPesable> StockPesables { get; set; }
-    public virtual DbSet<Usuarios> Usuarios { get; set; }
+    public virtual DbSet<Usuarios> Usuarios { get; set; } 
     public virtual DbSet<Proveedores> Proveedores { get; set; }
     public virtual DbSet<SuministrosMovimientosStock> SuministrosMovimientoStock { get; set; }
 

@@ -700,7 +700,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             try
             {
                 AponusDBContext.Productos
-               .Where(x => x.IdProducto == Actualizacion.IdExistencia)
+               .Where(x => x.IdProducto == Actualizacion.Id)
                .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad, Actualizacion.Valor));
             }
             catch (Exception)
