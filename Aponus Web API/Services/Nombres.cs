@@ -57,6 +57,8 @@ namespace Aponus_Web_API.Services
             return SuministrosFormateados;
         }
 
+       
+
 
     }
 }

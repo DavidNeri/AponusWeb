@@ -46,10 +46,10 @@ namespace Aponus_Web_API.Controllers
         /// 
 
         [HttpGet]
-        [Route("NewList/{idDescription?}/{dn?}")]
-        public async Task<List<TipoInsumos>> NewListar(int? idDescription, int? dn)
+        [Route("NewList/{idDescription?}")]
+        public IActionResult NewListar(int? idDescription)
         {
-            return await new BS_Stocks().NewListar(idDescription, dn);
+            return  new BS_Stocks().NewListar(idDescription);
 
         }
 

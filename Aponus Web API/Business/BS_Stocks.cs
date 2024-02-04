@@ -4,6 +4,8 @@ using Aponus_Web_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using Aponus_Web_API.Acceso_a_Datos.Productos;
+using System.Linq.Expressions;
+using Aponus_Web_API.Models;
 
 namespace Aponus_Web_API.Business
 {
@@ -128,31 +130,12 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal Task<List<TipoInsumos>> NewListar(int? IdDescripcion, int? DN)
+        internal IActionResult NewListar(int? IdDescripcion)
         {
-
-
-            if (IdDescripcion == null && DN==null)
-            {
-                return new OperacionesStocks().Listar();
-
-            }
-            else if (IdDescripcion != null && DN == null)
-            {
-                return new OperacionesStocks().Listar(IdDescripcion);
-
-            }
-            else if (IdDescripcion != null && DN != null)
-            {
-                return new OperacionesStocks().Listar(IdDescripcion, DN);
-
-            }
-            else
-            {
-                return null;
-            }
-
-
+            return new OperacionesStocks().Listar(IdDescripcion);
+           
         }
+
+        
     }
 }

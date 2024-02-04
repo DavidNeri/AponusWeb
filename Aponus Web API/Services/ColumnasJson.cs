@@ -9,6 +9,8 @@ using System.Reflection;
 using Aponus_Web_API.Data_Transfer_objects;
 using Newtonsoft.Json;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Aponus_Web_API.Data_Transfer_Objects;
+using AponusWebAPI.Migrations;
 
 namespace Aponus_Web_API.Services
 {
@@ -31,11 +33,13 @@ namespace Aponus_Web_API.Services
         public string? Perfil { get; set; } = "Perfil";
 
         [JsonProperty(PropertyName = "diametro", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Diametro { get; set; } = "Diametro";
+        public string? Diametro { get; set; } = "Diámetro";
 
         [JsonProperty(PropertyName = "diametroNominal", NullValueHandling = NullValueHandling.Ignore)]
         public string? DiametroNominal { get; set; } = "DN";
 
+        [JsonProperty(PropertyName = "peso", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Peso { get; set; } = "Peso";
 
         [JsonProperty(PropertyName = "altura", NullValueHandling = NullValueHandling.Ignore)]
         public string? Altura { get; set; } = "Altura";
@@ -46,30 +50,33 @@ namespace Aponus_Web_API.Services
         [JsonProperty(PropertyName = "longitud", NullValueHandling = NullValueHandling.Ignore)]
         public string? Longitud { get; set; } = "Longitud";
 
-
         [JsonProperty(PropertyName = "recibido", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Recibido { get; set; } = "Cant. Recibida";
+        public string? Recibido { get; set; } = "Recibidos";
 
         [JsonProperty(PropertyName = "pintura", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Pintura { get; set; } = "Cant. Pintura";
+        public string? Pintura { get; set; } = "En Pintura";
 
         [JsonProperty(PropertyName = "proceso", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Proceso { get; set; } = "Cant. Proceso";    
-
-        [JsonProperty(PropertyName = "requerido", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Requerido { get; set; } = "Cant. Requerida";
-
+        public string? Proceso { get; set; } = "En Proceso";
 
         [JsonProperty(PropertyName = "granallado", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Granallado { get; set; } = "Cant. Granallado";
-      
+        public string? Granallado { get; set; } = "En Granallado";
 
         [JsonProperty(PropertyName = "moldeado", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Moldeado { get; set; } = "Cant. Moldeada";
-    
+        public string? Moldeado { get; set; } = "Moldeados";
 
-       
-  
+        [JsonProperty(PropertyName = "requerido", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Requerido { get; set; } = "Requeridos";
+
+        [JsonProperty(PropertyName = "disponibles", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Disponibles { get; set; } = "Disponibles";
+
+        [JsonProperty(PropertyName = "faltantes", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Faltantes { get; set; } = "Faltantes";
+
+        [JsonProperty(PropertyName = "total", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Total { get; set; } = "Total";
+
 
        
 
@@ -182,31 +189,71 @@ namespace Aponus_Web_API.Services
         }
 
 
-        public string[] NewSetColumnas(List<DTOComponente> Especificaciones)
+        public string[] NewSetColumnas(List<DTOComponente> Especificaciones = null, List<DTOComponenteFormateado> Especificacionesformato = null)
         {
             List<string> columnasList = new List<string>();
 
-            if (Especificaciones.All(x => x.Largo != null)) columnasList.Add(Largo);
-            if (Especificaciones.All(x => x.Ancho != null)) columnasList.Add(Ancho);
-            if (Especificaciones.All(x => x.Espesor != null)) columnasList.Add(Espesor);
-            if (Especificaciones.All(x => x.Perfil != null)) columnasList.Add(Perfil);
-            if (Especificaciones.All(x => x.Diametro != null)) columnasList.Add(Diametro);
-            if (Especificaciones.All(x => x.DiametroNominal != null)) columnasList.Add(DiametroNominal);
-            if (Especificaciones.All(x => x.Altura != null)) columnasList.Add(Altura);
-            if (Especificaciones.All(x => x.Tolerancia != null)) columnasList.Add(Tolerancia);
-            if (Especificaciones.All(x => x.Longitud != null)) columnasList.Add(Longitud);
-            if (Especificaciones.All(x => x.Recibido != null)) columnasList.Add(Recibido);
-            if (Especificaciones.All(x => x.Pintura != null)) columnasList.Add(Pintura);
-            if (Especificaciones.All(x => x.Proceso != null)) columnasList.Add(Proceso);
-            if (Especificaciones.All(x => x.Requerido != null)) columnasList.Add(Requerido);
-            if (Especificaciones.All(x => x.Granallado != null)) columnasList.Add(Granallado);
-            if (Especificaciones.All(x => x.Moldeado != null)) columnasList.Add(Moldeado);
+            if (Especificaciones!=null)
+            {
+                if (Especificacionesformato.Any(x => x.Largo != null)) columnasList.Add(Largo);
+                if (Especificacionesformato.Any(x => x.Ancho != null)) columnasList.Add(Ancho);
+                if (Especificacionesformato.Any(x => x.Longitud != null)) columnasList.Add(Longitud);
+                if (Especificacionesformato.Any(x => x.Espesor != null)) columnasList.Add(Espesor);
+                if (Especificacionesformato.Any(x => x.Altura != null)) columnasList.Add(Altura);
+                if (Especificacionesformato.Any(x => x.Diametro != null)) columnasList.Add(Diametro);
+                if (Especificacionesformato.Any(x => x.DiametroNominal != null)) columnasList.Add(DiametroNominal);
+                if (Especificacionesformato.Any(x => x.Tolerancia != null)) columnasList.Add(Tolerancia);
+                if (Especificacionesformato.Any(x => x.Peso != null)) columnasList.Add(Peso);
+                if (Especificacionesformato.Any(x => x.Perfil != null)) columnasList.Add(Perfil);
+                if (Especificacionesformato.Any(x => x.Recibido != null)) columnasList.Add(Recibido);
+                if (Especificacionesformato.Any(x => x.Granallado != null)) columnasList.Add(Granallado);
+                if (Especificacionesformato.Any(x => x.Pintura != null)) columnasList.Add(Pintura);
+                if (Especificacionesformato.Any(x => x.Proceso != null)) columnasList.Add(Proceso);
+                if (Especificacionesformato.Any(x => x.Moldeado != null)) columnasList.Add(Moldeado);
+                if (Especificacionesformato.Any(x => x.Requerido != null)) columnasList.Add(Requerido);
+                if (Especificacionesformato.Any(x => x.Disponibles != null)) columnasList.Add(Disponibles);
+                if (Especificacionesformato.Any(x => x.Faltantes != null)) columnasList.Add(Faltantes);
+                if (Especificacionesformato.Any(x => x.Total != null)) columnasList.Add(Total);
 
+                string[] columnas = columnasList.ToArray();
+                return columnas;
+            }
+            else if (Especificacionesformato!=null)
+            {  
+                if (Especificacionesformato.Any(x => x.Largo != null)) columnasList.Add(Largo);
+                if (Especificacionesformato.Any(x => x.Ancho != null)) columnasList.Add(Ancho);
+                if (Especificacionesformato.Any(x => x.Longitud != null)) columnasList.Add(Longitud);
+                if (Especificacionesformato.Any(x => x.Espesor != null)) columnasList.Add(Espesor);
+                if (Especificacionesformato.Any(x => x.Altura != null)) columnasList.Add(Altura);
+                if (Especificacionesformato.Any(x => x.Diametro != null)) columnasList.Add(Diametro);
+                if (Especificacionesformato.Any(x => x.DiametroNominal != null)) columnasList.Add(DiametroNominal);
+                if (Especificacionesformato.Any(x => x.Tolerancia != null)) columnasList.Add(Tolerancia);
+                if (Especificacionesformato.Any(x => x.Peso != null)) columnasList.Add(Peso);
+                if (Especificacionesformato.Any(x => x.Perfil != null)) columnasList.Add(Perfil);              
+                if (Especificacionesformato.Any(x => x.Recibido != null)) columnasList.Add(Recibido);
+                if (Especificacionesformato.Any(x => x.Granallado != null)) columnasList.Add(Granallado);
+                if (Especificacionesformato.Any(x => x.Pintura != null)) columnasList.Add(Pintura);
+                if (Especificacionesformato.Any(x => x.Proceso != null)) columnasList.Add(Proceso);
+                if (Especificacionesformato.Any(x => x.Moldeado != null)) columnasList.Add(Moldeado);
+                if (Especificacionesformato.Any(x => x.Requerido != null)) columnasList.Add(Requerido);
+                if (Especificacionesformato.Any(x => x.Disponibles != null)) columnasList.Add(Disponibles);
+                if (Especificacionesformato.Any(x => x.Faltantes != null)) columnasList.Add(Faltantes);
+                if (Especificacionesformato.Any(x => x.Total != null)) columnasList.Add(Total);
 
-            string[] columnas = columnasList.ToArray();
+                string[] columnas = columnasList.ToArray();
+                return columnas;
 
-            return columnas;
+            }
+            else
+            {
+                return columnasList.ToArray();
+            }            
+
+            
         }
+
+
+       
 
     }
 

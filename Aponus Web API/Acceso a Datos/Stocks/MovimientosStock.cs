@@ -137,11 +137,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     suministro.ValorNuevoOrigen = suministro.ValorNuevoOrigen + " " + SumFormat.Unidad;
                     suministro.ValorAnteriorOrigen = suministro.ValorAnteriorOrigen + "" + SumFormat.Unidad;
                     suministro.ValorAnteriorDestino = suministro.ValorAnteriorDestino + " " + SumFormat.Unidad;
-
-                                      
-                    
-                 
-                    
                 }
             }
 

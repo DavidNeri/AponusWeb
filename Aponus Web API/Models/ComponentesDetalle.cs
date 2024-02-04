@@ -4,7 +4,6 @@ namespace Aponus_Web_API.Models
 {
     public class ComponentesDetalle
     {
-
         [Key]
         public string IdInsumo { get; set; }   
         public int IdDescripcion { get; set; }
@@ -18,10 +17,5 @@ namespace Aponus_Web_API.Models
         public decimal? Peso { get; set; }
         public string? IdFraccionamiento { get; set; }
         public string? IdAlmacenamiento{ get; set; }
-
-
-
-
-
     }
 }

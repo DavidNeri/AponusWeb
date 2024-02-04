@@ -1,11 +1,20 @@
-﻿using Aponus_Web_API.Data_Transfer_objects;
+﻿using Aponus_Web_API.Acceso_a_Datos.Insumos;
+using Aponus_Web_API.Business;
+using Aponus_Web_API.Data_Transfer_objects;
+using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NtpClient;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
-using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 {
@@ -740,178 +749,95 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             return PerfilesJuntas;
         }
 
-        internal async Task<List<TipoInsumos>> Listar()
-        {
 
-            List<TipoInsumos> tipoInsumosList =  await AponusDBContext.ComponentesDetalles
+
+        internal  IActionResult Listar(int? IdDescripcion=null)
+        {          
+
+            List<TipoInsumos> tipoInsumosList =   AponusDBContext.ComponentesDetalles
                  .Join(AponusDBContext.ComponentesDescripcions,
                  Detalles => Detalles.IdDescripcion,
                  Descripciones => Descripciones.IdDescripcion,
-                 (Detalles, Descripciones) => new { Detalles,Descripciones}
+                 (Detalles, Descripciones) => new { Detalles, Descripciones }
                  )
                  .Join(AponusDBContext.stockInsumos,
-                        JoinResult=>JoinResult.Detalles.IdInsumo,
-                        Stock=>Stock.IdInsumo,
-                        (JoinResult,Stock)=>new TipoInsumos
+                        JoinResult => JoinResult.Detalles.IdInsumo,
+                        Stock => Stock.IdInsumo,
+                        (JoinResult, Stock) => new TipoInsumos
                         {
                             IdDescripcion = JoinResult.Descripciones.IdDescripcion,
                             Descripcion = JoinResult.Descripciones.Descripcion,
-                            Especificaciones = new List<DTOComponente>
+                            especificacionesFormato = new List<DTOComponenteFormateado>
                             {
-                                new DTOComponente
+                                new DTOComponenteFormateado
                                 {
-                                    // IdDescripcion = JoinResult.Detalles.IdDescripcion,
+                                    //IdDescripcion = JoinResult.Detalles.IdDescripcion,
                                     idComponente = JoinResult.Detalles.IdInsumo,
-                                    Largo = JoinResult.Detalles.Longitud,
-                                    Espesor = JoinResult.Detalles.Espesor,
+                                    Largo = JoinResult.Detalles.Longitud != null ? $"{JoinResult.Detalles.Longitud}mm" : null,
+                                    Espesor = JoinResult.Detalles.Espesor != null ? $"{JoinResult.Detalles.Espesor}mm" : null,
                                     Perfil = JoinResult.Detalles.Perfil,
-                                    Diametro = JoinResult.Detalles.Diametro,
-                                    Altura = JoinResult.Detalles.Altura,
+                                    Diametro = JoinResult.Detalles.Diametro != null ? $"{JoinResult.Detalles.Diametro}mm" : null,
+                                    Peso= JoinResult.Detalles.Peso != null ? $"{JoinResult.Detalles.Peso}g" : null,
+                                    Altura = JoinResult.Detalles.Altura != null ? $"{JoinResult.Detalles.Altura}mm" : null,
                                     Tolerancia = JoinResult.Detalles.Tolerancia,
                                     Recibido = Stock.CantidadRecibido.ToString(),
                                     Granallado = Stock.CantidadGranallado.ToString(),
                                     Pintura = Stock.CantidadPintura.ToString(),
                                     Proceso = Stock.CantidadProceso.ToString(),
                                     Moldeado = Stock.CantidadMoldeado.ToString(),
-                                    DiametroNominal= JoinResult.Detalles.DiametroNominal
+                                    DiametroNominal= JoinResult.Detalles.DiametroNominal,
 
                                 }
                             }
                         })
-
+                 
                  .GroupBy(Result => new
                  {
                      Result.IdDescripcion,
                      Result.Descripcion
                  })
+                 .Where(Filtros=>(!IdDescripcion.HasValue || Filtros.Key.IdDescripcion==IdDescripcion.Value))
                  .Select(group => new TipoInsumos
-                 {  
+                 {
                      IdDescripcion = group.Key.IdDescripcion,
                      Descripcion = group.Key.Descripcion,
-                     Especificaciones = group.Select(result => result.Especificaciones.Single()).ToList()                    
-                 }).ToListAsync();
+                     especificacionesFormato = group.Select(result => result.especificacionesFormato.Single()).ToList()
+                 })
+                 .ToList();
+
+
+            List<(string IdSuministro, string? Unidad)> Unidades = ObtenerUnidadesAlmacenamiento(tipoInsumosList
+                .SelectMany(x => x.especificacionesFormato.Select(y => y.idComponente))
+                .ToList());
 
 
             foreach (TipoInsumos ListaInsumos in tipoInsumosList)
             {
-                ListaInsumos.Columnas = new ColumnasJson().NewSetColumnas(ListaInsumos.Especificaciones);
+                ListaInsumos.Columnas = new ColumnasJson().NewSetColumnas(null, ListaInsumos.especificacionesFormato);
+
             }
-                    
+
+            tipoInsumosList.SelectMany(x => x.especificacionesFormato)
+                 .Join(Unidades,
+                     espec => espec.idComponente,
+                     unidad => unidad.IdSuministro,
+                     (espec, unidad) => 
+                     {
+                         espec.Pintura = !string.IsNullOrEmpty(espec.Pintura) ? espec.Pintura + unidad.Unidad : null;
+                         espec.Granallado = !string.IsNullOrEmpty(espec.Granallado) ? espec.Granallado + unidad.Unidad : null;
+                         espec.Proceso= !string.IsNullOrEmpty(espec.Proceso) ? espec.Proceso + unidad.Unidad : null;
+                         espec.Moldeado= !string.IsNullOrEmpty(espec.Moldeado) ? espec.Moldeado + unidad.Unidad : null;
+                         espec.Recibido = !string.IsNullOrEmpty(espec.Recibido)? espec.Recibido + unidad.Unidad : null;
+
+                         return tipoInsumosList;
+
+                     })
+                 .ToList();
+
+            return new JsonResult(tipoInsumosList);
 
 
-            return tipoInsumosList;
-
-
-        }
-
-        internal async Task<List<TipoInsumos>> Listar(int? idDescripcion)
-        {
-            List<TipoInsumos> tipoInsumosList = await AponusDBContext.ComponentesDetalles
-                             .Join(AponusDBContext.ComponentesDescripcions,
-                             Detalles => Detalles.IdDescripcion,
-                             Descripciones => Descripciones.IdDescripcion,
-                             (Detalles, Descripciones) => new { Detalles, Descripciones }
-                             )
-                             .Where(JoinResult=>JoinResult.Descripciones.IdDescripcion==idDescripcion)
-                             .Join(AponusDBContext.stockInsumos,
-                                    JoinResult => JoinResult.Detalles.IdInsumo,
-                                    Stock => Stock.IdInsumo,
-                                    (JoinResult, Stock) => new TipoInsumos
-                                    {
-                                        IdDescripcion = JoinResult.Descripciones.IdDescripcion,
-                                        Descripcion = JoinResult.Descripciones.Descripcion,
-                                        Especificaciones = new List<DTOComponente>
-                                        {
-                                new DTOComponente
-                                {
-                                    // IdDescripcion = JoinResult.Detalles.IdDescripcion,
-                                    idComponente = JoinResult.Detalles.IdInsumo,
-                                    Largo = JoinResult.Detalles.Longitud,
-                                    Espesor = JoinResult.Detalles.Espesor,
-                                    Perfil = JoinResult.Detalles.Perfil,
-                                    Diametro = JoinResult.Detalles.Diametro,
-                                    Altura = JoinResult.Detalles.Altura,
-                                    Tolerancia = JoinResult.Detalles.Tolerancia,
-                                    Recibido = Stock.CantidadRecibido.ToString(),
-                                    Granallado = Stock.CantidadGranallado.ToString(),
-                                    Pintura = Stock.CantidadPintura.ToString(),
-                                    Proceso = Stock.CantidadProceso.ToString(),
-                                    Moldeado = Stock.CantidadMoldeado.ToString(),
-                                    DiametroNominal= JoinResult.Detalles.DiametroNominal
-
-                                }
-                                        }
-                                    })
-
-                             .GroupBy(Result => new
-                             {
-                                 Result.IdDescripcion,
-                                 Result.Descripcion
-                             })
-                             .Select(group => new TipoInsumos
-                             {
-                                 IdDescripcion = group.Key.IdDescripcion,
-                                 Descripcion = group.Key.Descripcion,
-                                 Especificaciones = group.Select(result => result.Especificaciones.Single()).ToList()
-                             }).ToListAsync();
-
-            return tipoInsumosList;
-        }
-
-        internal async Task<List<TipoInsumos>> Listar(int? idDescripcion, int? dN)
-        {
-            
-            List<TipoInsumos> tipoInsumosList = await AponusDBContext.ComponentesDetalles
-                            .Join(AponusDBContext.ComponentesDescripcions,
-                            Detalles => Detalles.IdDescripcion,
-                            Descripciones => Descripciones.IdDescripcion,
-                            (Detalles, Descripciones) => new { Detalles, Descripciones }
-                            )
-                            .Where(JoinResult => JoinResult.Descripciones.IdDescripcion == idDescripcion && JoinResult.Detalles.DiametroNominal==dN)
-                            .Join(AponusDBContext.stockInsumos,
-                                   JoinResult => JoinResult.Detalles.IdInsumo,
-                                   Stock => Stock.IdInsumo,
-                                   (JoinResult, Stock) => new TipoInsumos
-                                   {
-                                       IdDescripcion = JoinResult.Descripciones.IdDescripcion,
-                                       Descripcion = JoinResult.Descripciones.Descripcion,
-                                       Especificaciones = new List<DTOComponente>
-                                       {
-                                new DTOComponente
-                                {
-                                    // IdDescripcion = JoinResult.Detalles.IdDescripcion,
-                                    idComponente = JoinResult.Detalles.IdInsumo,
-                                    Largo = JoinResult.Detalles.Longitud,
-                                    Espesor = JoinResult.Detalles.Espesor,
-                                    Perfil = JoinResult.Detalles.Perfil,
-                                    Diametro = JoinResult.Detalles.Diametro,
-                                    Altura = JoinResult.Detalles.Altura,
-                                    Tolerancia = JoinResult.Detalles.Tolerancia,
-                                    Recibido = Stock.CantidadRecibido.ToString(),
-                                    Granallado = Stock.CantidadGranallado.ToString(),
-                                    Pintura = Stock.CantidadPintura.ToString(),
-                                    Proceso = Stock.CantidadProceso.ToString(),
-                                    Moldeado = Stock.CantidadMoldeado.ToString(),
-                                    DiametroNominal= JoinResult.Detalles.DiametroNominal
-                                }
-                                       }
-                                   })
-
-                            .GroupBy(Result => new
-                            {
-                                Result.IdDescripcion,
-                                Result.Descripcion
-                            })
-                            .Select(group => new TipoInsumos
-                            {
-                                IdDescripcion = group.Key.IdDescripcion,
-                                Descripcion = group.Key.Descripcion,
-                                Especificaciones = group.Select(result => result.Especificaciones.Single()).ToList()
-                            }).ToListAsync();
-
-            return tipoInsumosList;
-        }
-
+        }       
         internal bool IncrementarStockInsumo(ActualizacionStock Actualizacion, string? Prop)
         {
             bool result = false;
@@ -1004,8 +930,17 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
         }
 
 
+        private List<(string IdSuministro, string? Unidad)> ObtenerUnidadesAlmacenamiento(List<string> Suministros)
+        {
+            List<(string IdSuministro, string? Unidad)> Unidades = AponusDBContext.ComponentesDetalles
+                .Where(x => Suministros.Contains(x.IdInsumo))
+                .Select(x => new ValueTuple<string, string?>(x.IdInsumo, x.IdAlmacenamiento)).ToList();
 
+            return Unidades;
 
+        }
+               
+            
         internal bool NewSetearStockInsumo(ActualizacionStock Actualizacion)
         {
             PropertyInfo? Propiedad = typeof(StockInsumos).GetProperties().FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino));

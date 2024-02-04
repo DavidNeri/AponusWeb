@@ -8,7 +8,6 @@ namespace Aponus_Web_API.Services
 {
     public class FiltrosMovimientos
     {
-        public string? IdUsuario { get; set; }
         public string? Proveedor{ get; set; }
         public string? Etapa { get; set; }
         public DateTime? Desde { get; set; }
@@ -98,6 +97,8 @@ namespace Aponus_Web_API.Services
                     //Obtener la prop ProveedorDestino de DTOMovimientosSTock
                     var PropProveedor = Expression.Property(EntidadParametro, Propiedad);
 
+                    var PropNombreProveedor = Expression.Property(PropProveedor, "NombreProveedor");
+
                     // Crear un parámetro para los elementos dentro de la lista Proveedores
                     var paramProveedor = Expression.Parameter(typeof(DTOProveedores));
 
@@ -107,13 +108,12 @@ namespace Aponus_Web_API.Services
                     // Construir la condición para la propiedad NombreProveedor dentro de ProveedorDestino en DTOMovimientosSTock
                     var metodoContains = typeof(string).GetMethod("Contains", new[] { typeof(string) });
 
-                    var condicionNombreProveedor = Expression.Call(PropProveedor,   // El objeto o expresión sobre el cual se llama el método
+                    var condicionNombreProveedor = Expression.Call(PropNombreProveedor,   // El objeto o expresión sobre el cual se llama el método
                         metodoContains,                                             // El método que se va a llamar (en este caso, el método Contains)
                         Expression.Constant(filtros.Proveedor, typeof(string)));    // El argumento que se pasa al método
 
-                    // Crear una expresión Lambda para la condición CampoStockDestino dentro del objeto Proveedores
 
-                    var lambdaProveedores = Expression.Lambda<Func<DTOProveedores, bool>>(condicionNombreProveedor,paramProveedor);
+                    Condiciones.Add(condicionNombreProveedor);
 
                 }
 
