@@ -25,8 +25,14 @@ public partial class Producto
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal? PorcentajeGanancia { get; set; }
-    public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }  = null!;
 
+    [ForeignKey("ID_ESTADO")]
+    public int IdEstado { get; set; }
+
+    public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }  = null!;
     public virtual ProductosTipo IdTipoNavigation { get; set; } = null!;
+    public EstadosProductos IdEstadoNavigation { get; set; }
     public virtual ICollection<ComponentesCuantitativo>? ComponentesCuantitativos { get; set;} = new List<ComponentesCuantitativo>();
+
+
 }

@@ -1,5 +1,6 @@
 ﻿using MessagePack;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Models
 {
@@ -12,6 +13,10 @@ namespace Aponus_Web_API.Models
         public decimal? Peso { get; set; }
         public decimal? Longitud { get; set; }
 
+        [ForeignKey("ID_ESTADO")]
+        public int IdEstado { get; set; }
+
+        public EstadosProductosComponentes IdEstadoNavigation { get; set; }
 
     }
 }

@@ -13,21 +13,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
         private readonly AponusContext AponusDBContext;
         public ObtenerStocks() { AponusDBContext = new AponusContext(); }
 
-        public async Task<List<TipoInsumos>> ListarTipoInsumos()
-        {
-            List<TipoInsumos> TipoInsumos = await
-          AponusDBContext.ComponentesDescripcions
-              .Select(
-               x => new TipoInsumos
-               {
-                   IdDescripcion = x.IdDescripcion,
-                   Descripcion = x.Descripcion,
-               }
-              )
-              .ToListAsync();
-            return TipoInsumos;
-
-        }
+       
 
 
         public async Task<List<TipoInsumos>> Listar()
@@ -36,7 +22,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             try
             {
                 List<TipoInsumos> Stocks = await
-           AponusDBContext.ComponentesDescripcions
+                    AponusDBContext.ComponentesDescripcions
                .Select(
                 x => new TipoInsumos
                 {
@@ -165,7 +151,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     Total = x.Total
                                 }).First();
 
-                            _Insumos.Columnas = new ColumnasJson().setColumnas(new ColumnasInsumosPesables(), null, null, especificaciones);
                          
                         }
 
@@ -206,8 +191,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     
                                 }).First();
 
-                            _Insumos.Columnas = new ColumnasJson().setColumnas(
-                                null, new ColumnasInsumosCuantitativos(), null, especificaciones);
 
 
                         }
@@ -250,8 +233,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                                 }).First();
 
-                            _Insumos.Columnas = new ColumnasJson().setColumnas
-                                (null, null, new ColumnasInsumosMensurables(), especificaciones);
+                            
                         }
                     }
 
@@ -365,9 +347,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                    Tolerancia = x.Tolerancia,
                                    Total = x.Total
                                }).First();
-
-                            _Insumos.Columnas = new ColumnasJson().setColumnas(
-                                null, new ColumnasInsumosCuantitativos(), null, especificaciones);
                         }
 
                     }
@@ -525,8 +504,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     Total = x.Total
                                 }).First();
 
-                            _Insumos.Columnas = new ColumnasJson().setColumnas(new ColumnasInsumosPesables(), null, null, especificaciones);
-
                         }
 
                     }
@@ -564,9 +541,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                    Tolerancia = x.Tolerancia,
                                    Total = x.Total
                                }).First();
-
-                            _Insumos.Columnas = new ColumnasJson().setColumnas(
-                                null, new ColumnasInsumosCuantitativos(), null, especificaciones);
                         }
                     }
 
@@ -604,9 +578,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     Total = x.Total
 
                                 }).First();
-
-                            _Insumos.Columnas = new ColumnasJson().setColumnas
-                                (null, null, new ColumnasInsumosMensurables(), especificaciones);
                         }
                     }
 

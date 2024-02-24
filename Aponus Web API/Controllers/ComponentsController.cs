@@ -42,21 +42,7 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("SaveComponent")]
-
-        public IActionResult ObtenerPropsComponentes(DTOComponente componente)
-        {
-            try
-            {
-                return new BS_Components().GuardarComponente(componente);
-            }
-            catch (DbUpdateException e)
-            {
-                string Mensaje = e.InnerException.Message;
-                return new JsonResult(Mensaje);
-            }
-        }
+        
 
         [HttpGet]
         [Route("List/{IdDescripcion?}")]

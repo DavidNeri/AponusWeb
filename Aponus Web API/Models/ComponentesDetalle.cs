@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Models 
 {
@@ -17,5 +18,11 @@ namespace Aponus_Web_API.Models
         public decimal? Peso { get; set; }
         public string? IdFraccionamiento { get; set; }
         public string? IdAlmacenamiento{ get; set; }
+
+        [ForeignKey("ID_ESTADO")]
+        public int IdEstado { get; set; }
+
+        public EstadosComponentesDetalles IdEstadoNavigation { get; set; }
+
     }
 }

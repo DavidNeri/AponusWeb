@@ -9,6 +9,8 @@ namespace Aponus_Web_API.Models
         public string Usuario { get; set; }
         public  string Contraseña { get; set; }
         public string correo { get; set; }
-        public int IdPerfil { get; set; }  
+        public int IdPerfil { get; set; }
+
+        public ICollection<Proveedores> IdUsuarioRegistroNavigation { get; set; }
     }
 }

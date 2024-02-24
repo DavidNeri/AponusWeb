@@ -1,5 +1,7 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Componentes;
 using Aponus_Web_API.Acceso_a_Datos.Sistema;
+using Aponus_Web_API.Acceso_a_Datos.Stocks;
+using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Services;
@@ -10,7 +12,7 @@ namespace Aponus_Web_API.Business
 {
     public class BS_Categories
     {
-      
+       
         internal IActionResult AgregarDescripcion(DTOCategorias NuevaCategoria)
         {
             NuevaCategoria.Descripcion = NuevaCategoria.Descripcion.ToUpper();
@@ -247,10 +249,7 @@ namespace Aponus_Web_API.Business
             return await new OperacionesComponentes().ListarNombres() ;
         }
 
-        internal async Task<JsonResult> ObtenerNuevoIdComponente(string ComponentDescription)
-        {
-            return await new OperacionesComponentes().ObtenerNuevoId(ComponentDescription);
-        }
+        
 
         internal IActionResult AgregarDescripcionCompoente(string DescripcionComponente)
         {
@@ -314,6 +313,16 @@ namespace Aponus_Web_API.Business
                     };
                 };
             }
+        }
+
+        internal IActionResult EliminarTipoProducto(string idTipo)
+        {
+            return new Categorias.Productos().EliminarTipo(idTipo);
+        }
+
+        internal IActionResult EliminarDescripcionProducto(int idDescription)
+        {
+            return new Categorias.Productos().EliminarDescripcion(idDescription);
         }
     }
 }

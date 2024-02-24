@@ -15,7 +15,12 @@ public partial class ProductosTipo
     [Column("DESCRIPCION")]
     public string? DescripcionTipo { get; set; }
 
+    [ForeignKey("ID_ESTADO")]
+    public int IdEstado { get; set; }
+    
     public ICollection<Producto> Productos{ get; set;} = new List<Producto>();
+  
+    public EstadosTiposProductos IdEstadoNavigation { get; set; }
 
     //Navigation Propertires
 

@@ -46,7 +46,7 @@ namespace Aponus_Web_API.Controllers
         /// 
 
         [HttpGet]
-        [Route("NewList/{idDescription?}")]
+        [Route("Supplies/List/{idDescription?}")]
         public IActionResult NewListar(int? idDescription)
         {
             return  new BS_Stocks().NewListar(idDescription);
@@ -57,13 +57,7 @@ namespace Aponus_Web_API.Controllers
         ////
         ///
 
-        [HttpGet]
-        [Route("List/Types")]
-
-        public async Task<List<TipoInsumos>> ListarTipoInsumos()
-        {
-            return await new BS_Stocks().ListarTipoInsumos();
-        }
+       
 
         
         [HttpGet]
@@ -134,7 +128,21 @@ namespace Aponus_Web_API.Controllers
         }
 
 
+        [HttpGet]
+        [Route("Products/List/{TypeId?}/{IdDescription?}")]
+        public JsonResult ListProducts(string? TypeId, int? IdDescription)
+        {
+            try
+            {
+                return new BS_Stocks().ListarProductos(TypeId, IdDescription);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
+
+        }
 
 
     }

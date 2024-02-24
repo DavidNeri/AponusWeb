@@ -18,6 +18,7 @@ namespace Aponus_Web_API.Business
 {
     public class BS_Components
     {
+        
         internal JsonResult? DeterminarProp(DTOComponente? Especificaciones)
         {
             return new ObtenerComponentes().ListarProp(
@@ -26,62 +27,7 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal IActionResult GuardarComponente(DTOComponente componente)
-        {
-            try
-            {
-
-                if (componente.idComponente != null && componente.IdDescripcion != null)
-                {
-                    new OperacionesComponentes().GuardarComponente(new ComponentesDetalle()
-                    {
-                        IdInsumo = componente.idComponente,
-                        Diametro = componente.Diametro,
-                        Altura = componente.Altura,
-                        IdDescripcion = (int)componente.IdDescripcion,
-                        DiametroNominal = componente.DiametroNominal,
-                        Espesor = componente.Espesor,
-                        IdAlmacenamiento = componente.idAlmacenamiento,
-                        IdFraccionamiento = componente.idFraccionamiento,
-                        Longitud = componente.Longitud,
-                        Perfil = componente.Perfil,
-                        Peso = componente.Peso,
-                        Tolerancia = componente.Tolerancia,
-
-
-                    });
-                    return new StatusCodeResult(200);
-                }
-                else
-                {
-                    return new ContentResult()
-                    {
-                        Content = "El Codigo de Componente y la Descripcion no pueden ser nulos",
-                        ContentType = "text/plan",
-                        StatusCode = 400
-
-                    };
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                string Mensaje;
-                if (ex.InnerException.Message != null) 
-                    Mensaje = ex.InnerException.Message;
-                else Mensaje = ex.Message;
-
-                
-                    return new ContentResult()
-                    {
-                        Content = Mensaje,
-                        ContentType = "text/plan",
-                        StatusCode = 500,
-                    };
-                
-            }
-            
-        }
-
+        
         internal IActionResult GuardarComponentesProducto(List<DTOComponentesProducto> ComponentesProd)
         {
             bool ChkIdProd = ComponentesProd.All(x => x.IdProducto != null);

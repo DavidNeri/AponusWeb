@@ -35,6 +35,13 @@ public partial class AponusContext : DbContext
     public virtual DbSet<Usuarios> Usuarios { get; set; } 
     public virtual DbSet<Proveedores> Proveedores { get; set; }
     public virtual DbSet<SuministrosMovimientosStock> SuministrosMovimientoStock { get; set; }
+    public virtual DbSet<EstadosProductos> EstadosProducto { get; set; }
+    public virtual DbSet<EstadosProductosComponentes> EstadosProductosComponente { get; set; }
+    public virtual DbSet<EstadosComponentesDetalles> EstadosComponentesDetalle { get; set; }
+    public virtual DbSet<EstadosTiposProductos> EstadosTiposProducto { get; set; }
+    public virtual DbSet<EstadosProductosDescripciones> EstadosProductosDescripcione { get; set; }
+
+
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -43,8 +50,6 @@ public partial class AponusContext : DbContext
         optionsBuilder
             .UseSqlServer("Server=DAVID\\DATABASESERVER19; Database=Aponus;User Id=Administrador;Password=AponusIng;Trusted_Connection=True; TrustServerCertificate=True;")
             .EnableSensitiveDataLogging();
-
-
     }
 
 
@@ -52,6 +57,105 @@ public partial class AponusContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
+
+        modelBuilder.Entity<EstadosProductosDescripciones>(entity =>
+        {
+            entity.ToTable("ESTADOS_PRODUCTOS_DESCRIPCIONES");
+
+            entity.HasKey(PK => PK.IdEstado);
+
+            entity.Property(p => p.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)");
+
+            entity.Property(p => p.Descripcion)
+            .HasColumnName("DESCRIPCION")
+            .HasColumnType("nvarchar(max)");
+
+            entity.HasMany(p => p.ProductosDescripcions)
+            .WithOne(p => p.IdEstadoNavigation)
+            .HasForeignKey(p => p.IdEstado);
+        });
+
+
+        modelBuilder.Entity<EstadosTiposProductos>(entity =>
+        {
+            entity.ToTable("ESTADOS_PRODUCTOS_TIPOS");
+
+            entity.HasKey(PK => PK.IdEstado);
+
+            entity.Property(e => e.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)");
+
+            entity.Property(e => e.Descripcion)
+            .HasColumnType("nvarchar(max)")
+            .HasColumnName("DESCRIPCION");
+
+            entity.HasMany(e => e.ProductosTipos)
+            .WithOne(e => e.IdEstadoNavigation)
+            .HasForeignKey(e => e.IdEstado);
+
+
+        });
+
+        modelBuilder.Entity<EstadosComponentesDetalles>(entity =>
+        {
+            entity.HasKey(e => e.IdEstado);
+
+            entity.Property(e => e.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)");
+
+            entity.Property(e => e.Descripcion)
+            .HasColumnType("nvarchar(max)")
+            .HasColumnName("DESCRIPCION");
+
+            entity.HasMany(e => e.ComponentesDetalle)
+            .WithOne(e => e.IdEstadoNavigation)
+            .HasForeignKey(e => e.IdEstado);
+
+            
+
+        });
+
+        modelBuilder.Entity<EstadosProductosComponentes>(entity =>
+        {
+            entity.HasKey(PK => PK.IdEstado);
+
+            entity.Property(e => e.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)");
+
+            entity.Property(e => e.Descripcion)
+            .HasColumnType("nvarchar(max)")
+            .HasColumnName("DESCRIPCION");
+
+            entity.HasMany(e => e.ProductosComponentes)
+            .WithOne(e => e.IdEstadoNavigation)
+            .HasForeignKey(e => e.IdEstado);
+            
+        });
+
+        modelBuilder.Entity<EstadosProductos>(entity =>
+        {
+            entity.HasKey(PK => PK.IdEstado);
+
+            entity.Property(entity => entity.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)");
+
+            entity.Property(e => e.Descripcion)
+            .HasColumnType("nvarchar(max)")
+            .HasColumnName("DESCRIPCION");
+
+            entity.HasMany(e => e.Productos)
+            .WithOne(e => e.IdEstadoNavigation)
+            .HasForeignKey(e => e.IdEstado);
+            
+
+
+        });
 
         modelBuilder.Entity<SuministrosMovimientosStock>(entity =>
         {
@@ -164,6 +268,11 @@ public partial class AponusContext : DbContext
              .HasColumnName("LONGITUD")
              .HasColumnType("decimal(18,2)");
 
+            entity.Property(e => e.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)")
+            .HasDefaultValueSql("1");
+
         });
 
 
@@ -212,8 +321,12 @@ public partial class AponusContext : DbContext
           .HasColumnType("varchar(50)");
 
             entity.Property(e => e.Peso)
-         .HasColumnName("PESO")
-         .HasColumnType("decimal(18,3)");
+            .HasColumnName("PESO")
+            .HasColumnType("decimal(18,3)");
+
+            entity.Property(e => e.IdEstado)
+            .HasColumnType("varbinary(1)")
+            .HasDefaultValueSql("1");
 
             entity.Property(e => e.IdFraccionamiento)
                 .HasColumnName("ID_FRACCIONAMIENTO")
@@ -485,6 +598,11 @@ public partial class AponusContext : DbContext
             
             entity.Property(e => e.Tolerancia).HasColumnName("TOLERANCIA");
 
+            entity.Property(e => e.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)")
+            .HasDefaultValueSql("1");
+
             entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.Productos)
                  
                 .HasForeignKey(d=>d.IdDescripcion)
@@ -495,6 +613,10 @@ public partial class AponusContext : DbContext
                 .HasForeignKey(d => d.IdTipo)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PRODUCTOS_PRODUCTOS_TIPOS");
+
+
+
+            
 
         });
 
@@ -512,6 +634,10 @@ public partial class AponusContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPCION");
 
+            entity.Property(e => e.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)")
+            .HasDefaultValueSql("1");
 
             /*entity.HasMany(e => e.Producto_Tipo_Descripcione)
             .WithOne(e => e.IdDescripcionNavigation)
@@ -537,6 +663,11 @@ public partial class AponusContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPCION");
+
+            entity.Property(e => e.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)")
+            .HasDefaultValueSql("1");
 
             /*entity.HasMany(e => e.Producto_Tipo_Descripcione)
             .WithOne(e => e.IdTipoNavigation)
@@ -675,6 +806,12 @@ public partial class AponusContext : DbContext
             .HasColumnName("CONTRASEÑA")
             .HasColumnType("varchar(50)");
 
+            entity.HasMany(e => e.IdUsuarioRegistroNavigation)
+            .WithOne(u => u.UsuarioRegistro)
+            .HasForeignKey(e => e.IdUsuarioRegistro);
+
+            
+
 
         });
 
@@ -751,17 +888,26 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.IdProveedor)
         .HasColumnName("ID_PROVEEDOR");
 
-            entity.Property(e => e.NombreProveedor)
-                .HasColumnName("NOMBRE_PROVEEDOR");
+            entity.Property(e => e.NombreClave)
+                .HasColumnName("NOMBRE_CLAVE");
+
+            entity.Property(e => e.Nombre)
+            .HasColumnName("NOMBRE")
+            .HasColumnType("varchar(max)");
+
+            entity.Property(e => e.Apellido)
+            .HasColumnName("APELLIDO")
+            .HasColumnType("varchar(max)");
 
             entity.Property(e => e.Pais)
                 .HasColumnName("PAIS");
 
-           // entity.Property(e => e.Ciudad)
-             //   .HasColumnName("CIUDAD");
+            entity.Property(e => e.Ciudad)
+                .HasColumnName("CIUDAD");
 
             entity.Property(e => e.Localidad)
-                .HasColumnName("LOCALIDAD");
+                .HasColumnName("LOCALIDAD")
+                .HasColumnType("varchar(MAX)");
 
             entity.Property(e => e.Calle)
                 .HasColumnName("CALLE");
@@ -790,10 +936,19 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.FechaRegistro)
                 .HasColumnName("FECHA_REGISTRO");
 
-            entity.Property(e => e.Estado)
-                .HasColumnName("ESTADO");
+            entity.Property(e => e.IdUsuarioRegistro)
+            .HasColumnName("ID_USUARIO_REGISTRO")
+            .HasColumnType("varchar(50)")
+            .IsRequired();
 
+            entity.Property(x => x.Barrio)
+            .HasColumnName("BARRIO")
+            .HasColumnType("varchar(max)");
 
+            entity.Property(e => e.IdEstado)
+                .HasColumnName("ID_ESTADO")
+                .HasColumnType("varbinary(1)")
+                .HasDefaultValueSql("(1)");
 
 
 

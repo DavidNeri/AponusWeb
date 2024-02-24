@@ -69,7 +69,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     ProveedorOrigen = new DTOProveedores()
                     {
                         IdProveedor = result.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.IdProveedor,
-                        NombreProveedor = result.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.NombreProveedor,
+                        Nombre = result.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Nombre,
+                        Apellido= result.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Apellido,
+                        NombreClave = result.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.NombreClave,
                         Pais = result.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Pais,
                         Localidad = result.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Localidad,
                         Calle = result.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Calle,
@@ -87,7 +89,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     ProveedorDestino = new DTOProveedores()
                     {
                         IdProveedor = result.movimientos_proveedores.ProveedorDestino.IdProveedor,
-                        NombreProveedor = result.movimientos_proveedores.ProveedorDestino.NombreProveedor,
+                        Nombre = result.movimientos_proveedores.ProveedorDestino.Nombre,
+                        Apellido = result.movimientos_proveedores.ProveedorDestino.Apellido,
+                        NombreClave = result.movimientos_proveedores.ProveedorDestino.NombreClave,
                         Pais = result.movimientos_proveedores.ProveedorDestino.Pais,
                         Localidad = result.movimientos_proveedores.ProveedorDestino.Localidad,
                         Calle = result.movimientos_proveedores.ProveedorDestino.Calle,

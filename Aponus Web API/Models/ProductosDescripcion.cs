@@ -12,7 +12,11 @@ public partial class ProductosDescripcion
     [Column("DESCRIPCION")]
     public string? DescripcionProducto { get; set; }
 
+    [ForeignKey("ID_ESTADO")]
+    public int IdEstado { get; set; }
+    public EstadosProductosDescripciones IdEstadoNavigation { get; set; }
     public virtual ICollection<Producto> Productos { get; set; } = new List <Producto>();
+
 
     //public virtual ICollection<Productos_Tipos_Descripcion> Producto_Tipo_Descripcione { get; set; }
 }

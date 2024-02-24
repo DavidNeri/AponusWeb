@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NtpClient;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Reflection;
@@ -773,23 +774,24 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                 {
                                     //IdDescripcion = JoinResult.Detalles.IdDescripcion,
                                     idComponente = JoinResult.Detalles.IdInsumo,
-                                    Largo = JoinResult.Detalles.Longitud != null ? $"{JoinResult.Detalles.Longitud}mm" : null,
-                                    Espesor = JoinResult.Detalles.Espesor != null ? $"{JoinResult.Detalles.Espesor}mm" : null,
-                                    Perfil = JoinResult.Detalles.Perfil,
+                                    Largo = JoinResult.Detalles.Longitud != null ? $"{JoinResult.Detalles.Longitud}mm" : "-",
+                                    Espesor = JoinResult.Detalles.Espesor != null ? $"{JoinResult.Detalles.Espesor}mm" : "-",
+                                    Perfil = JoinResult.Detalles.Perfil != null ? JoinResult.Detalles.Perfil.ToString() : "-",
                                     Diametro = JoinResult.Detalles.Diametro != null ? $"{JoinResult.Detalles.Diametro}mm" : null,
-                                    Peso= JoinResult.Detalles.Peso != null ? $"{JoinResult.Detalles.Peso}g" : null,
-                                    Altura = JoinResult.Detalles.Altura != null ? $"{JoinResult.Detalles.Altura}mm" : null,
-                                    Tolerancia = JoinResult.Detalles.Tolerancia,
-                                    Recibido = Stock.CantidadRecibido.ToString(),
-                                    Granallado = Stock.CantidadGranallado.ToString(),
-                                    Pintura = Stock.CantidadPintura.ToString(),
-                                    Proceso = Stock.CantidadProceso.ToString(),
-                                    Moldeado = Stock.CantidadMoldeado.ToString(),
-                                    DiametroNominal= JoinResult.Detalles.DiametroNominal,
+                                    Peso= JoinResult.Detalles.Peso != null ? $"{JoinResult.Detalles.Peso}g" : "-",
+                                    Altura = JoinResult.Detalles.Altura != null ? $"{JoinResult.Detalles.Altura}mm" : "-",
+                                    Tolerancia = JoinResult.Detalles.Tolerancia != null ? JoinResult.Detalles.Tolerancia : "-",
+                                    Recibido = Stock.CantidadRecibido != null ? Stock.CantidadRecibido.ToString() : "-",
+                                    Granallado = Stock.CantidadGranallado != null ? Stock.CantidadGranallado.ToString() : "-",
+                                    Pintura = Stock.CantidadPintura != null ? Stock.CantidadPintura.ToString() : "-",
+                                    Proceso = Stock.CantidadProceso != null ? Stock.CantidadProceso.ToString() : "-",
+                                    Moldeado = Stock.CantidadMoldeado != null ? Stock.CantidadMoldeado.ToString() : "-",
+                                    DiametroNominal = JoinResult.Detalles.DiametroNominal  != null ? JoinResult.Detalles.DiametroNominal.ToString() : "-",
+                                    
 
                                 }
                             }
-                        })
+                        })                
                  
                  .GroupBy(Result => new
                  {
@@ -803,7 +805,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                      Descripcion = group.Key.Descripcion,
                      especificacionesFormato = group.Select(result => result.especificacionesFormato.Single()).ToList()
                  })
-                 .ToList();
+                 .OrderBy(x => x.Descripcion)
+                 .AsEnumerable()
+                 .ToList()
+                 ;
 
 
             List<(string IdSuministro, string? Unidad)> Unidades = ObtenerUnidadesAlmacenamiento(tipoInsumosList
@@ -813,7 +818,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
             foreach (TipoInsumos ListaInsumos in tipoInsumosList)
             {
-                ListaInsumos.Columnas = new ColumnasJson().NewSetColumnas(null, ListaInsumos.especificacionesFormato);
+                ListaInsumos.Columnas = new ColumnasJson().ObtenerColumnas(null, ListaInsumos.especificacionesFormato);
 
             }
 
@@ -823,11 +828,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                      unidad => unidad.IdSuministro,
                      (espec, unidad) => 
                      {
-                         espec.Pintura = !string.IsNullOrEmpty(espec.Pintura) ? espec.Pintura + unidad.Unidad : null;
-                         espec.Granallado = !string.IsNullOrEmpty(espec.Granallado) ? espec.Granallado + unidad.Unidad : null;
-                         espec.Proceso= !string.IsNullOrEmpty(espec.Proceso) ? espec.Proceso + unidad.Unidad : null;
-                         espec.Moldeado= !string.IsNullOrEmpty(espec.Moldeado) ? espec.Moldeado + unidad.Unidad : null;
-                         espec.Recibido = !string.IsNullOrEmpty(espec.Recibido)? espec.Recibido + unidad.Unidad : null;
+                         espec.Pintura = !espec.Pintura.Equals("-") ? espec.Pintura + unidad.Unidad : espec.Pintura;
+                         espec.Granallado = !espec.Granallado.Equals("-") ? espec.Granallado + unidad.Unidad : espec.Granallado;
+                         espec.Proceso= !espec.Proceso.Equals("-") ? espec.Proceso + unidad.Unidad : espec.Proceso;
+                         espec.Moldeado= !espec.Moldeado.Equals("-") ? espec.Moldeado + unidad.Unidad : espec.Moldeado;
+                         espec.Recibido = !espec.Recibido.Equals("-") ? espec.Recibido + unidad.Unidad : espec.Recibido;
 
                          return tipoInsumosList;
 
@@ -1060,6 +1065,62 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             AponusDBContext.ArchivosStock.AddRange(MovimientosStockArchivosList);
             AponusDBContext.SaveChanges();
 
+        }
+
+        internal List<DTOTiposProductos>  ListarProductos()
+        {
+
+            List<DTOTiposProductos> ListadoProductos = AponusDBContext.Producto_Tipo_Descripcion
+                .Join(AponusDBContext.ProductosTipos,
+                aux => aux.IdTipo,
+                ptd => ptd.IdTipo,
+                (aux, ptd) => new { aux, ptd })
+                .Join(AponusDBContext.ProductosDescripcions,
+                auxPtd => auxPtd.aux.IdDescripcion,
+                pDesc => pDesc.IdDescripcion,
+                (auxPtd, pDesc) => new { auxPtd, pDesc })
+                .AsQueryable()
+                .Select(x => new DTOTiposProductos()
+                {
+
+                    IdTipo = x.auxPtd.ptd.IdTipo,
+                    DescripcionTipo = x.auxPtd.ptd.DescripcionTipo,
+                    DescripcionProductos = AponusDBContext.ProductosDescripcions
+                    .Where(pd => pd.IdDescripcion == x.pDesc.IdDescripcion)
+                    .Select(pd => new DTODescripcionesProductos()
+                    {
+                        IdDescripcion = pd.IdDescripcion,
+                        NombreDescripcion = pd.DescripcionProducto,
+                        Productos = pd.Productos
+                        .Where(prod => prod.IdDescripcion == pd.IdDescripcion && prod.IdTipo == x.auxPtd.ptd.IdTipo && Convert.ToInt32(prod.IdEstado)== Convert.ToInt32("0x01", 16))
+                        .Select(x => new DTOStockProductos()
+                        {
+                            IdProducto = x.IdProducto,
+                            IdTipo = x.IdTipo,
+                            Cantidad = x.Cantidad!=null ? x.Cantidad.ToString() + "Ud." : "-",
+                            DiametroNominal = x.DiametroNominal != null ? x.DiametroNominal.ToString() + "mm" : "-",
+                            PrecioLista = x.PrecioLista != null ? x.PrecioLista.ToString() : "-",
+                            PrecioFinal = x.PrecioFinal != null ? x.PrecioFinal.ToString() : "-",
+                            Tolerancia = !string.IsNullOrEmpty(x.Tolerancia) ? x.Tolerancia : "-",
+                            PorcentajeGanancia =x.PorcentajeGanancia != null ? x.PorcentajeGanancia.ToString() +"%" :"-"
+
+
+                        })
+                        .OrderBy(prod => Convert.ToInt32(prod.DiametroNominal.Replace("mm", "").Replace("-","")))
+                        .ToList()
+
+                    })
+                    .OrderBy(x => x.NombreDescripcion)
+                    .ToList(),
+
+                })
+                .OrderBy(x => x.DescripcionTipo)
+                .ToList();
+                
+
+
+
+            return ListadoProductos;
         }
     }
 }

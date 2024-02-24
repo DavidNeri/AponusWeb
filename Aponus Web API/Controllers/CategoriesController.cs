@@ -8,6 +8,8 @@ using Aponus_Web_API.Business;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Newtonsoft.Json;
+using System.Linq;
+using Aponus_Web_API.Data_Transfer_objects;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -16,33 +18,38 @@ namespace Aponus_Web_API.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly AponusContext AponusDBContext;
+        public CategoriesController(AponusContext aponusDBContext){AponusDBContext = aponusDBContext;}
 
-        public CategoriesController(AponusContext aponusDBContext)
-        {
-            AponusDBContext = aponusDBContext;
-        }
+
         [HttpGet]
-        [Route("ListCategories")]
+        [Route("Products/Types/List")]
         public async Task<JsonResult> ListCategories() {
+            
 
-            List<ProductosTipo> Lista_Tipos = await AponusDBContext.ProductosTipos.OrderBy(x
-                => x.IdTipo).ToListAsync();
-            Lista_Tipos.OrderBy(x => x.DescripcionTipo);
-            return new JsonResult(Lista_Tipos);
-        }
+            List<ProductosTipo> TipoProductos = await AponusDBContext.ProductosTipos
+                .OrderBy(x=> x.DescripcionTipo)
+                .Where(x=>Convert.ToInt32(x.IdEstado)==Convert.ToInt32("0x01",16))
+                .Select(x=> new ProductosTipo()
+                {
+                    IdTipo= x.IdTipo,
+                    DescripcionTipo= x.DescripcionTipo,
+                    IdEstado= Convert.ToInt32(x.IdEstado),
+                })
+                .ToListAsync();
+
+            return new JsonResult(TipoProductos);
+        }       
 
         [HttpGet]
-        [Route("ListDescriptions/{idTipo}")]
+        [Route("Products/Descriptions/List/{idTipo}")]
         public List<DTODescripciones> ListarDescripciones(string IdTipo)
-        {
-            
-                return new BS_Categories().ListarDescripciones(IdTipo);
-            
+        {            
+                return new BS_Categories().ListarDescripciones(IdTipo);            
         }
 
 
         [HttpPost]
-        [Route("Types/new")]
+        [Route("Products/Types/New")]
         public JsonResult AgregarTipo_Descripcion(DTOCategorias NuevaCategoria)
         {
             try
@@ -56,9 +63,24 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("Products/Types/{TypeId}/Delete/")] //Continuar!!
+        public IActionResult EliminarTipoProducto(string IdTipo)
+        {
+            try
+            {
+                return new BS_Categories().EliminarTipoProducto(IdTipo);
+
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message);
+            }
+        }
+
 
         [HttpPost]
-        [Route("Descriptions/new")]
+        [Route("Products/Descriptions/New")]
         public IActionResult AgregarDescripcion( DTOCategorias NuevaCategoria)
         {
             try
@@ -74,7 +96,21 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpPost]
-        [Route("Update")]
+        [Route("Products/Descriptions/{IdDescription}/Delete/")]
+        public IActionResult EliminarTipoProducto(int IdDescription)
+        {
+            try
+            {
+                return new BS_Categories().EliminarDescripcionProducto(IdDescription);
+
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("Products/Type-or-Description/Update")]
         public IActionResult ActualizarCategorias(DTOActualizarCategorias ActualizarCategorias)
         {
             try
@@ -92,7 +128,7 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("ListComponentesDescriptions")]
+        [Route("Supplies/Descriptions/List")]
         public async Task<JsonResult> ListarNombreComponentes()
         {
             try
@@ -105,30 +141,13 @@ namespace Aponus_Web_API.Controllers
                 string Mensaje = e.InnerException.Message;
                 return new JsonResult(Mensaje);
             }
-
-
         }
 
-        [HttpGet]
-        [Route("GetNewComponentId/{ComponentDescription}")]
-        public async Task<JsonResult> ObtenerNuevoIdComponente(string ComponentDescription)
-        {
-            try
-            {
-                return await new BS_Categories().ObtenerNuevoIdComponente(ComponentDescription);
-            }
-            catch (Exception e)
-            {
 
-                string Mensaje = e.InnerException.Message;
-                return new JsonResult(Mensaje);
-            }
-
-
-        }
+        
 
         [HttpPost]
-        [Route("NewComponentDescription")]
+        [Route("Supplies/Descriptions/New")]
         public IActionResult AgregarDescripcionCompoente ([FromBody] string nombreComponente)
         {
              try
@@ -164,9 +183,9 @@ namespace Aponus_Web_API.Controllers
 
         }
 
-
+        
         [HttpPost]
-        [Route("ModifyComponentDescription")]
+        [Route("Supplies/Descriptions/Update")] //ModifyComponentDescription
         public IActionResult ModificarDescripcionCompoente( DTODescripcionComponentes Descripcion)
         {
             try

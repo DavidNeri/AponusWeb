@@ -31,7 +31,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public string? Diametro { get; set; }
 
         [JsonProperty(Order = 9, PropertyName = "diametroNominal", NullValueHandling = NullValueHandling.Ignore)]
-        public int? DiametroNominal { get; set; }
+        public string? DiametroNominal { get; set; }
 
         [JsonProperty(Order = 10, PropertyName = "tolerancia", NullValueHandling = NullValueHandling.Ignore)]
         public string? Tolerancia { get; set; }
@@ -40,7 +40,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public string? Peso { get; set; }
 
         [JsonProperty(Order = 12, PropertyName = "perfil", NullValueHandling = NullValueHandling.Ignore)]
-        public int? Perfil { get; set; }
+        public string? Perfil { get; set; }
 
         [JsonProperty(Order = 13, PropertyName = "idFraccionamiento", NullValueHandling = NullValueHandling.Ignore)]
         public string? idFraccionamiento { get; set; }

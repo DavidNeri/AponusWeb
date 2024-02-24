@@ -2,6 +2,7 @@
 using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -16,7 +17,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_TablasInsumos().ObtenerTablaInsumo(Insumo);
+                return new BS_Supplies().ObtenerTablaInsumo(Insumo);
             }
             catch (Exception)
             {
@@ -25,8 +26,43 @@ namespace Aponus_Web_API.Controllers
             }
             
         }
+        [HttpGet]
+        [Route("new-id/{SypplyName}")]
+        public async Task<JsonResult> GenerarIdInsumo(string NombreInsumo)
+        {
+            try
+            {
+                return await new BS_Supplies().ObtenerNuevoIdComponente(NombreInsumo);
+            }
+            catch (Exception e)
+            {
+
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
+            }
+
+
+        }
 
         [HttpPost]
+        [Route("Create-or-Update")]
+
+        public IActionResult ObtenerPropsComponentes(DTOComponente InsumoProducto)
+        {
+            try
+            {
+                return new BS_Supplies().GuardarInsumoProducto(InsumoProducto);
+            }
+            catch (DbUpdateException e)
+            {
+                string Mensaje = e.InnerException.Message;
+                return new JsonResult(Mensaje);
+            }
+        }
+
+        [HttpPost]
+
+
         [Route("ListProp")]
 
         public JsonResult? Listar(DTOComponente Especificaciones)

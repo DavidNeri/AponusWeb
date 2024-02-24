@@ -23,9 +23,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                {
                    IdDescripcion = x.IdDescripcion,
                    DescripcionProducto = x.DescripcionProducto,
-                   Productos = x.Productos
+                   Productos = x.Productos.Select(P => new Producto()
+                   {
+                       Cantidad = P.Cantidad,
+                   }).ToList(),
+
                }
-               );
+               ); 
 
 
             return new JsonResult(Products);
@@ -54,7 +58,8 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
 
         }
         public async Task<JsonResult> Listar(string? typeId, int? IdDescription)
-        {
+        {     
+
             try
             {
 
