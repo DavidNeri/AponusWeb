@@ -40,6 +40,11 @@ public partial class AponusContext : DbContext
     public virtual DbSet<EstadosComponentesDetalles> EstadosComponentesDetalle { get; set; }
     public virtual DbSet<EstadosTiposProductos> EstadosTiposProducto { get; set; }
     public virtual DbSet<EstadosProductosDescripciones> EstadosProductosDescripcione { get; set; }
+    public virtual DbSet<EstadosMovimientosStock> EstadoMovimientosStock { get; set; }
+    public virtual DbSet<EstadosArchivosMovimientosStock> EstadoArchivosMovimientosStock { get; set; }
+    public virtual DbSet<EstadosSuministrosMovimientosStock> EstadoSuministrosMovimientosStock { get; set; }
+
+
 
 
 
@@ -57,6 +62,74 @@ public partial class AponusContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
+
+        modelBuilder.Entity<EstadosMovimientosStock>(entity =>
+        {
+            entity.ToTable("ESTADOS_MOVIMIENTOS_STOCK");
+
+            entity.HasKey(PK => PK.IdEstado);
+
+            entity.Property(p => p.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("int")
+            .ValueGeneratedOnAdd();
+
+            entity.Property(p => p.IdEstadoPropio)
+            .HasColumnName("ID_ESTADO_PROPIO")
+            .HasColumnType("varbinary(1)")
+            .HasDefaultValueSql("1");
+
+            entity.Property(p => p.Descripcion)
+            .HasColumnName("DESCRIPCION")
+            .HasColumnType("nvarchar(max)");
+
+            entity.HasMany(p => p.movimientosStock)
+            .WithOne(p => p.estadoMovimiento)
+            .HasForeignKey(p => p.IdEstado);
+        });
+
+        modelBuilder.Entity<EstadosArchivosMovimientosStock>(entity =>
+        {
+            entity.ToTable("ESTADOS_ARCHIVOS_MOVIMIENTOS_STOCK");
+
+            entity.HasKey(PK => PK.IdEstado);
+
+            entity.Property(p => p.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)");
+
+            entity.Property(p => p.Descripcion)
+            .HasColumnName("DESCRIPCION")
+            .HasColumnType("nvarchar(max)");           
+
+
+
+            entity.HasMany(p => p.ArchivosMovimientoStock)
+            .WithOne(p => p.ArchivosMovimientosStockNavigation)
+            .HasForeignKey(p => p.IdEstado);
+        });
+
+        modelBuilder.Entity<EstadosSuministrosMovimientosStock>(entity =>
+        {
+            entity.ToTable("ESTADOS_SUMINISTROS_MOVIMIENTOS_STOCK");
+
+            entity.HasKey(PK => PK.IdEstado);
+
+            entity.Property(p => p.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("varbinary(1)");
+
+            entity.Property(p => p.Descripcion)
+            .HasColumnName("DESCRIPCION")
+            .HasColumnType("nvarchar(max)");
+
+            entity.HasMany(p => p.SuministrosMovimientoStock)
+            .WithOne(p => p.EstadosSuministrosMovimientosStockNavigation)
+            .HasForeignKey(p => p.IdEstado);
+        });
+
+
+
 
         modelBuilder.Entity<EstadosProductosDescripciones>(entity =>
         {
@@ -174,14 +247,7 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_SUMINISTRO")
             .HasColumnType("nvarchar(50)");
 
-            entity.Property(e => e.CampoStockOrigen)
-            .HasColumnType("CAMPO_STOCK_ORIGEN")
-            .HasColumnType("nvarchar(50)");
-
-            entity.Property(e => e.CampoStockDestino)
-           .HasColumnType("CAMPO_STOCK_DESTINO")
-           .HasColumnType("nvarchar(50)");
-
+      
             entity.Property(e => e.ValorAnteriorOrigen)
            .HasColumnType("VALOR_ANTERIOR_ORIGEN")
            .HasColumnType("decimal(18,2)");
@@ -201,8 +267,14 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.Cantidad)
             .HasColumnName("CANTIDAD")
             .HasColumnType("decimal(18,2)");
-        
-            
+
+            entity.Property(e => e.IdEstado)
+           .HasColumnName("ID_ESTADO")
+           .HasColumnType("Varbinary(1)")
+           .HasDefaultValueSql("1");
+
+
+
         });
 
 
@@ -218,26 +290,32 @@ public partial class AponusContext : DbContext
             entity.HasKey(PK => PK.IdInsumo)
             .HasName("PK_STOCK_INSUMOS");
 
-            entity.Property(e => e.CantidadRecibido)
-           .HasColumnName("CANTIDAD_RECIBIDO")
+            entity.Property(e => e.Recibido)
+           .HasColumnName("RECIBIDO")
            .HasColumnType("decimal");
 
-            entity.Property(e => e.CantidadGranallado)
-            .HasColumnName("CANTIDAD_GRANALLADO")
+            entity.Property(e => e.Granallado)
+            .HasColumnName("GRANALLADO")
             .HasColumnType("decimal");
 
-            entity.Property(e => e.CantidadPintura)
-           .HasColumnName("CANTIDAD_PINTURA")
+            entity.Property(e => e.Pintura)
+           .HasColumnName("PINTURA")
            .HasColumnType("decimal");
 
 
-            entity.Property(e => e.CantidadProceso)
-           .HasColumnName("CANTIDAD_PROCESO")
+            entity.Property(e => e.Proceso)
+           .HasColumnName("PROCESO")
            .HasColumnType("decimal");
 
-            entity.Property(e => e.CantidadMoldeado)
-           .HasColumnName("CANTIDAD_MOLDEADO")
+            entity.Property(e => e.Moldeado)
+           .HasColumnName("MOLDEADO")
            .HasColumnType("decimal");
+
+            entity.Property(e => e.Pendiente)
+          .HasColumnName("PENDIENTE")
+          .HasColumnType("decimal(18,2)");
+
+
 
         });
 
@@ -825,14 +903,24 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.IdMovimiento)
             .HasColumnName("ID_MOVIMIENTO")
-            .HasColumnType("int");
+            .HasColumnType("int")
+            .ValueGeneratedOnAdd();
 
-            entity.Property(e => e.IdUsuario)
-            .HasColumnName("ID_USUARIO")
+            entity.Property(e => e.CreadoUsuario)
+            .HasColumnName("USUARIO_CREADO")
             .HasColumnType("nvarchar(50)");
 
-            entity.Property(e => e.FechaHora)
-            .HasColumnName("FECHA_HORA")
+            entity.Property(e => e.ModificadoUsuario)
+            .HasColumnName("USUARIO_MODIFICA")
+            .HasColumnType("nvarchar(50)");
+
+
+            entity.Property(e => e.FechaHoraCreado)
+            .HasColumnName("FECHA_HORA_CREADO")
+            .HasColumnType("datetime2(7)");
+
+            entity.Property(e => e.FechaHoraUltimaModificacion)
+            .HasColumnName("FECHA_HORA_ULTIMA_MODIFICACION")
             .HasColumnType("datetime2(7)");
 
             entity.Property(e => e.IdProveedorOrigen)
@@ -842,6 +930,23 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.IdProveedorDestino)
             .HasColumnName("ID_PROVEEDOR_DESTINO")
             .HasColumnType("int");
+
+            entity.Property(e => e.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("int")
+            .HasDefaultValueSql("1");
+
+            entity.Property(e => e.Origen)
+            .HasColumnName("ORIGEN")
+            .HasColumnType("varchar(50)");
+
+            entity.Property(e => e.Destino)
+            .HasColumnName("DESTINO")
+            .HasColumnType("varchar(50)");
+
+            entity.Property(e => e.Tipo)
+           .HasColumnName("TIPO")
+           .HasColumnType("varchar(15)");
 
             entity.HasOne(e => e.ProveedorOrigen)
             .WithMany(e => e.MovimientosOrigen)
@@ -873,9 +978,18 @@ public partial class AponusContext : DbContext
             .HasColumnName("PATH")
             .HasColumnType("varchar(MAX)");
 
+            entity.Property(e => e.MimeType)
+           .HasColumnName("MIME_TYPE")
+           .HasColumnType("varchar(MAX)");
+
             entity.HasOne(e => e.StockMovimiento).WithMany()
             .HasForeignKey(e => e.IdMovimiento)
             .HasPrincipalKey(p => p.IdMovimiento);
+
+            entity.Property(e => e.IdEstado)
+           .HasColumnName("ID_ESTADO")
+           .HasColumnType("Varbinary(1)")
+           .HasDefaultValueSql("1");
 
 
         });

@@ -33,12 +33,25 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("HASH_ARCHIVO");
 
+                    b.Property<byte[]>("IdEstado")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Varbinary(1)")
+                        .HasColumnName("ID_ESTADO")
+                        .HasDefaultValueSql("1");
+
+                    b.Property<string>("MimeType")
+                        .HasColumnType("varchar(MAX)")
+                        .HasColumnName("MIME_TYPE");
+
                     b.Property<string>("PathArchivo")
                         .IsRequired()
                         .HasColumnType("varchar(MAX)")
                         .HasColumnName("PATH");
 
                     b.HasKey("IdMovimiento", "HashArchivo");
+
+                    b.HasIndex("IdEstado");
 
                     b.ToTable("ARCHIVOS_STOCK", (string)null);
                 });
@@ -270,6 +283,22 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("CUANTITATIVOS_DETALLE", (string)null);
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosArchivosMovimientosStock", b =>
+                {
+                    b.Property<byte[]>("IdEstado")
+                        .HasColumnType("varbinary(1)")
+                        .HasColumnName("ID_ESTADO");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DESCRIPCION");
+
+                    b.HasKey("IdEstado");
+
+                    b.ToTable("ESTADOS_ARCHIVOS_MOVIMIENTOS_STOCK", (string)null);
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosComponentesDetalles", b =>
                 {
                     b.Property<byte[]>("IdEstado")
@@ -285,6 +314,29 @@ namespace AponusWebAPI.Migrations
                     b.HasKey("IdEstado");
 
                     b.ToTable("EstadosComponentesDetalle");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosMovimientosStock", b =>
+                {
+                    b.Property<byte[]>("IdEstado")
+                        .HasColumnType("varbinary(1)")
+                        .HasColumnName("ID_ESTADO");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DESCRIPCION");
+
+                    b.Property<byte[]>("IdEstadoPropio")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(1)")
+                        .HasColumnName("ID_ESTADO_PROPIO")
+                        .HasDefaultValueSql("1");
+
+                    b.HasKey("IdEstado");
+
+                    b.ToTable("ESTADOS_MOVIMIENTOS_STOCK", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductos", b =>
@@ -336,6 +388,22 @@ namespace AponusWebAPI.Migrations
                     b.HasKey("IdEstado");
 
                     b.ToTable("ESTADOS_PRODUCTOS_DESCRIPCIONES", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosSuministrosMovimientosStock", b =>
+                {
+                    b.Property<byte[]>("IdEstado")
+                        .HasColumnType("varbinary(1)")
+                        .HasColumnName("ID_ESTADO");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DESCRIPCION");
+
+                    b.HasKey("IdEstado");
+
+                    b.ToTable("ESTADOS_SUMINISTROS_MOVIMIENTOS_STOCK", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosTiposProductos", b =>
@@ -763,25 +831,29 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("ID_INSUMO");
 
-                    b.Property<decimal?>("CantidadGranallado")
+                    b.Property<decimal?>("Granallado")
                         .HasColumnType("decimal")
-                        .HasColumnName("CANTIDAD_GRANALLADO");
+                        .HasColumnName("GRANALLADO");
 
-                    b.Property<decimal?>("CantidadMoldeado")
+                    b.Property<decimal?>("Moldeado")
                         .HasColumnType("decimal")
-                        .HasColumnName("CANTIDAD_MOLDEADO");
+                        .HasColumnName("MOLDEADO");
 
-                    b.Property<decimal?>("CantidadPintura")
-                        .HasColumnType("decimal")
-                        .HasColumnName("CANTIDAD_PINTURA");
+                    b.Property<decimal?>("Pendiente")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("PENDIENTE");
 
-                    b.Property<decimal?>("CantidadProceso")
+                    b.Property<decimal?>("Pintura")
                         .HasColumnType("decimal")
-                        .HasColumnName("CANTIDAD_PROCESO");
+                        .HasColumnName("PINTURA");
 
-                    b.Property<decimal?>("CantidadRecibido")
+                    b.Property<decimal?>("Proceso")
                         .HasColumnType("decimal")
-                        .HasColumnName("CANTIDAD_RECIBIDO");
+                        .HasColumnName("PROCESO");
+
+                    b.Property<decimal?>("Recibido")
+                        .HasColumnType("decimal")
+                        .HasColumnName("RECIBIDO");
 
                     b.HasKey("IdInsumo")
                         .HasName("PK_STOCK_INSUMOS");
@@ -854,9 +926,29 @@ namespace AponusWebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdMovimiento"));
 
-                    b.Property<DateTime>("FechaHora")
+                    b.Property<string>("CreadoUsuario")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("USUARIO_CREADO");
+
+                    b.Property<string>("Destino")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("DESTINO");
+
+                    b.Property<DateTime>("FechaHoraCreado")
                         .HasColumnType("datetime2(7)")
-                        .HasColumnName("FECHA_HORA");
+                        .HasColumnName("FECHA_HORA_CREADO");
+
+                    b.Property<DateTime?>("FechaHoraUltimaModificacion")
+                        .HasColumnType("datetime2(7)")
+                        .HasColumnName("FECHA_HORA_ULTIMA_MODIFICACION");
+
+                    b.Property<byte[]>("IdEstado")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Varbinary(1)")
+                        .HasColumnName("ID_ESTADO")
+                        .HasDefaultValueSql("1");
 
                     b.Property<int>("IdProveedorDestino")
                         .HasColumnType("int")
@@ -866,12 +958,22 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID_PROVEEDOR_ORIGEN");
 
-                    b.Property<string>("IdUsuario")
+                    b.Property<string>("ModificadoUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
-                        .HasColumnName("ID_USUARIO");
+                        .HasColumnName("USUARIO_MODIFICA");
+
+                    b.Property<string>("Origen")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ORIGEN");
+
+                    b.Property<string>("Tipo")
+                        .HasColumnType("varchar(15)")
+                        .HasColumnName("TIPO");
 
                     b.HasKey("IdMovimiento");
+
+                    b.HasIndex("IdEstado");
 
                     b.HasIndex("IdProveedorDestino");
 
@@ -890,17 +992,16 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ID_SUMINISTRO");
 
-                    b.Property<string>("CampoStockDestino")
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("CAMPO_STOCK_DESTINO");
-
-                    b.Property<string>("CampoStockOrigen")
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("CAMPO_STOCK_ORIGEN");
-
                     b.Property<decimal>("Cantidad")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("CANTIDAD");
+
+                    b.Property<byte[]>("IdEstado")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Varbinary(1)")
+                        .HasColumnName("ID_ESTADO")
+                        .HasDefaultValueSql("1");
 
                     b.Property<decimal?>("ValorAnteriorDestino")
                         .HasColumnType("decimal(18,2)")
@@ -919,6 +1020,8 @@ namespace AponusWebAPI.Migrations
                         .HasColumnName("VALOR_NUEVO_ORIGEN");
 
                     b.HasKey("IdMovimiento", "IdSuministro");
+
+                    b.HasIndex("IdEstado");
 
                     b.ToTable("SUMINISTROS_MOVIMIENTOS_STOCK", (string)null);
                 });
@@ -950,11 +1053,19 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.ArchivosMovimientosStock", b =>
                 {
+                    b.HasOne("Aponus_Web_API.Models.EstadosArchivosMovimientosStock", "ArchivosMovimientosStockNavigation")
+                        .WithMany("ArchivosMovimientoStock")
+                        .HasForeignKey("IdEstado")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Aponus_Web_API.Models.Stock_Movimientos", "StockMovimiento")
                         .WithMany()
                         .HasForeignKey("IdMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ArchivosMovimientosStockNavigation");
 
                     b.Navigation("StockMovimiento");
                 });
@@ -1163,6 +1274,12 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.Stock_Movimientos", b =>
                 {
+                    b.HasOne("Aponus_Web_API.Models.EstadosMovimientosStock", "estadoMovimiento")
+                        .WithMany("movimientosStock")
+                        .HasForeignKey("IdEstado")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Aponus_Web_API.Models.Proveedores", "ProveedorDestino")
                         .WithMany("MovimientosDestino")
                         .HasForeignKey("IdProveedorDestino")
@@ -1178,15 +1295,25 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("ProveedorDestino");
 
                     b.Navigation("ProveedorOrigen");
+
+                    b.Navigation("estadoMovimiento");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.SuministrosMovimientosStock", b =>
                 {
+                    b.HasOne("Aponus_Web_API.Models.EstadosSuministrosMovimientosStock", "EstadosSuministrosMovimientosStockNavigation")
+                        .WithMany("SuministrosMovimientoStock")
+                        .HasForeignKey("IdEstado")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Aponus_Web_API.Models.Stock_Movimientos", null)
                         .WithMany("Suministros")
                         .HasForeignKey("IdMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("EstadosSuministrosMovimientosStockNavigation");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.CuantitativosDetalle", b =>
@@ -1196,9 +1323,19 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("StockCuantitativo");
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosArchivosMovimientosStock", b =>
+                {
+                    b.Navigation("ArchivosMovimientoStock");
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosComponentesDetalles", b =>
                 {
                     b.Navigation("ComponentesDetalle");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosMovimientosStock", b =>
+                {
+                    b.Navigation("movimientosStock");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductos", b =>
@@ -1214,6 +1351,11 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductosDescripciones", b =>
                 {
                     b.Navigation("ProductosDescripcions");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosSuministrosMovimientosStock", b =>
+                {
+                    b.Navigation("SuministrosMovimientoStock");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosTiposProductos", b =>

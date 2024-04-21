@@ -17,7 +17,6 @@ public partial class ProductosDescripcion
     public EstadosProductosDescripciones IdEstadoNavigation { get; set; }
     public virtual ICollection<Producto> Productos { get; set; } = new List <Producto>();
 
-
     //public virtual ICollection<Productos_Tipos_Descripcion> Producto_Tipo_Descripcione { get; set; }
 }
     

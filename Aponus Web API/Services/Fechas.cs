@@ -5,7 +5,7 @@ namespace Aponus_Web_API.Services
 {
     public class Fechas
     {
-        public DateTime ObtenerFechaHora()
+        public static DateTime ObtenerFechaHora()
         {
             DateTime FechaHora = new DateTime();
             string[] servidoresNTP = { "Time.Windows.com", "pool.ntp.org", "south-america.pool.ntp.org", "Time.Windows.com" }; // Lista de servidores NTP

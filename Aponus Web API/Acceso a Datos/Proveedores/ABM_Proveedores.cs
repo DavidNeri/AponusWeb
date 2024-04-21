@@ -11,46 +11,82 @@ namespace Aponus_Web_API.Acceso_a_Datos.Proveedores
         private readonly AponusContext AponusDBContext;
         public ABM_Proveedores() { AponusDBContext = new AponusContext(); }
 
-        public IActionResult NuevoProveedor(DTOProveedores Proveedor)
+        public IActionResult Guardar(DTOProveedores Proveedor)
         {
-            if(Proveedor.Nombre ==null && Proveedor.Apellido == null && Proveedor.NombreClave == null) return new ContentResult()
-            {
-                Content= "Completar Nombre, Apellido y/o Razon Social",
-                ContentType="application/json",
-                StatusCode=400,
+            DateTime FechaRegistro = Fechas.ObtenerFechaHora();
 
-            };
-
+            string NombreClave = !string.IsNullOrEmpty(Proveedor.NombreClave) ?
+                                    Proveedor.NombreClave.Trim().ToUpper() :
+                                    Proveedor.Apellido.Trim().ToUpper() + " " +
+                                    Proveedor.Nombre.Trim().ToUpper();           
+            
             try
             {
-                AponusDBContext.Proveedores.Add(new Models.Proveedores()
+                if (Proveedor.IdProveedor != null)
                 {
-                    NombreClave= !string.IsNullOrEmpty(Proveedor.NombreClave) ? 
-                                    Proveedor.NombreClave.Trim().ToUpper().Replace(" ","") :
-                                    Proveedor.Apellido.Trim().ToUpper().Replace(" ", "") + " " + 
-                                    Proveedor.Nombre.Trim().ToUpper().Replace(" ", ""),
+                    var Existente = AponusDBContext.Proveedores.FirstOrDefault(x => x.IdProveedor == Proveedor.IdProveedor);                   
 
-                    Nombre = !string.IsNullOrEmpty(Proveedor.Nombre) ? Proveedor.Nombre.Trim().ToUpper().Replace(" ", "") : null,
-                    Apellido= !string.IsNullOrEmpty(Proveedor.Apellido) ? Proveedor.Apellido.Trim().ToUpper().Replace(" ", "") : null,
-                    Pais= !string.IsNullOrEmpty(Proveedor.Pais) ? Proveedor.Pais.Trim().ToUpper().Replace(" ", "") : null,
-                    Ciudad= !string.IsNullOrEmpty(Proveedor.Ciudad) ? Proveedor.Ciudad.Trim().ToUpper().Replace(" ", "") : null,
-                    Provincia= !string.IsNullOrEmpty(Proveedor.Provincia) ? Proveedor.Provincia.Trim().ToUpper().Replace(" ", "") : null,
-                    Localidad= !string.IsNullOrEmpty(Proveedor.Localidad) ? Proveedor.Localidad.Trim().ToUpper().Replace(" ", "") : null,
-                    Calle= !string.IsNullOrEmpty(Proveedor.Calle) ? Proveedor.Calle.Trim().ToUpper().Replace(" ", "") : null,
-                    Altura= !string.IsNullOrEmpty(Proveedor.Altura) ? Proveedor.Altura.Trim().ToUpper().Replace(" ", "") : null,
-                    CodigoPostal= !string.IsNullOrEmpty(Proveedor.CodigoPostal) ? Proveedor.CodigoPostal.Trim().ToUpper().Replace(" ", "") : null,
-                    Telefono1= !string.IsNullOrEmpty(Proveedor.Telefono1) ? Proveedor.Telefono1.Trim().ToUpper().Replace(" ", "") : null,
-                    Telefono2= !string.IsNullOrEmpty(Proveedor.Telefono2) ? Proveedor.Telefono2.Trim().ToUpper().Replace(" ", "") : null,
-                    Telefono3= !string.IsNullOrEmpty(Proveedor.Telefono3) ? Proveedor.Telefono3.Trim().ToUpper().Replace(" ", "") : null,
-                    Email= !string.IsNullOrEmpty(Proveedor.Email) ? Proveedor.Email.Trim().ToUpper().Replace(" ", "") : null,
-                    IdFiscal =Proveedor.IdFiscal.Trim().ToUpper().Replace(" ","").Replace("-","").Replace("_",""),
-                    FechaRegistro = new Fechas().ObtenerFechaHora(),
-                    IdUsuarioRegistro = Proveedor.IdUsuarioRegistro
-                });
+                    if (Existente != null)
+                    {
 
-                AponusDBContext.SaveChanges();
+                        Existente.NombreClave = NombreClave ?? Existente.NombreClave;
+                        Existente.Pais = Proveedor.Pais ?? Existente.Pais;
+                        Existente.Localidad = Proveedor.Localidad ?? Existente.Localidad;
+                        Existente.Calle = Proveedor.Calle ?? Existente.Calle;
+                        Existente.Altura = Proveedor.Altura ?? Existente.Altura;
+                        Existente.CodigoPostal = Proveedor.CodigoPostal ?? Existente.CodigoPostal;
+                        Existente.Telefono1 = Proveedor.Telefono1 ?? Existente.Telefono1;
+                        Existente.Telefono2 = Proveedor.Telefono2 ?? Existente.Telefono2;
+                        Existente.Telefono3 = Proveedor.Telefono3 ?? Existente.Telefono3;
+                        Existente.Email = Proveedor.Email ?? Existente.Email;
+                        Existente.IdFiscal = Proveedor.IdFiscal ?? Existente.IdFiscal;
+                        Existente.Ciudad = Proveedor.Ciudad ?? Existente.Ciudad;
+                        Existente.Provincia = Proveedor.Provincia ?? Existente.Provincia;
+                        Existente.Apellido = Proveedor.Apellido ?? Existente.Apellido;
+                        Existente.Nombre = Proveedor.Nombre ?? Existente.Nombre;
+                        Existente.IdUsuarioRegistro = Proveedor.IdUsuarioRegistro ?? Existente.IdUsuarioRegistro;
+                        Existente.Barrio = Proveedor.Barrio ?? Existente.Barrio;
 
-                return new StatusCodeResult(200);
+                        AponusDBContext.SaveChanges();
+                    }                   
+
+                    return new StatusCodeResult(200);
+
+                }
+                else
+                {
+                    Models.Proveedores NuevoProveedor = new Models.Proveedores()
+                    {
+                        NombreClave = !string.IsNullOrEmpty(Proveedor.NombreClave) ?
+                                        Proveedor.NombreClave.Trim().ToUpper() :
+                                        Proveedor.Apellido.Trim().ToUpper() + " " +
+                                        Proveedor.Nombre.Trim().ToUpper(),
+
+                        Nombre = !string.IsNullOrEmpty(Proveedor.Nombre) ? Proveedor.Nombre.Trim().ToUpper().Replace(" ", "") : null,
+                        Apellido = !string.IsNullOrEmpty(Proveedor.Apellido) ? Proveedor.Apellido.Trim().ToUpper().Replace(" ", "") : null,
+                        Pais = !string.IsNullOrEmpty(Proveedor.Pais) ? Proveedor.Pais.Trim().ToUpper().Replace(" ", "") : null,
+                        Ciudad = !string.IsNullOrEmpty(Proveedor.Ciudad) ? Proveedor.Ciudad.Trim().ToUpper().Replace(" ", "") : null,
+                        Provincia = !string.IsNullOrEmpty(Proveedor.Provincia) ? Proveedor.Provincia.Trim().ToUpper().Replace(" ", "") : null,
+                        Localidad = !string.IsNullOrEmpty(Proveedor.Localidad) ? Proveedor.Localidad.Trim().ToUpper().Replace(" ", "") : null,
+                        Calle = !string.IsNullOrEmpty(Proveedor.Calle) ? Proveedor.Calle.Trim().ToUpper().Replace(" ", "") : null,
+                        Altura = !string.IsNullOrEmpty(Proveedor.Altura) ? Proveedor.Altura.Trim().ToUpper().Replace(" ", "") : null,
+                        CodigoPostal = !string.IsNullOrEmpty(Proveedor.CodigoPostal) ? Proveedor.CodigoPostal.Trim().ToUpper().Replace(" ", "") : null,
+                        Telefono1 = !string.IsNullOrEmpty(Proveedor.Telefono1) ? Proveedor.Telefono1.Trim().ToUpper().Replace(" ", "") : null,
+                        Telefono2 = !string.IsNullOrEmpty(Proveedor.Telefono2) ? Proveedor.Telefono2.Trim().ToUpper().Replace(" ", "") : null,
+                        Telefono3 = !string.IsNullOrEmpty(Proveedor.Telefono3) ? Proveedor.Telefono3.Trim().ToUpper().Replace(" ", "") : null,
+                        Email = !string.IsNullOrEmpty(Proveedor.Email) ? Proveedor.Email.Trim().ToUpper().Replace(" ", "") : null,
+                        IdFiscal = Proveedor.IdFiscal.Trim().ToUpper().Replace(" ", "").Replace("-", "").Replace("_", ""),
+                        FechaRegistro = FechaRegistro,
+                        IdUsuarioRegistro = Proveedor.IdUsuarioRegistro,
+
+                    };
+
+                    AponusDBContext.Proveedores.Add(NuevoProveedor);
+                    AponusDBContext.SaveChanges();
+                    return new StatusCodeResult(200);
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -65,64 +101,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Proveedores
                 return excepcion;   
             }
 
-        }
-
-        internal IActionResult ActualizarProveedor(DTOProveedores Proveedor)
-        {
-            if (Proveedor.Nombre == null && Proveedor.Apellido == null && Proveedor.NombreClave == null) return new ContentResult()
-            {
-                Content = "Completar Nombre, Apellido y/o Razon Social",
-                ContentType = "application/json",
-                StatusCode = 400,
-
-            };
-
-            try
-            {
-                AponusDBContext.Proveedores.Update(new Models.Proveedores()
-                {
-                    NombreClave = !string.IsNullOrEmpty(Proveedor.NombreClave) ?
-                                     Proveedor.NombreClave.Trim().ToUpper().Replace(" ", "") :
-                                     Proveedor.Apellido.Trim().ToUpper().Replace(" ", "") + " " +
-                                     Proveedor.Nombre.Trim().ToUpper().Replace(" ", ""),
-
-                    Nombre = !string.IsNullOrEmpty(Proveedor.Nombre) ? Proveedor.Nombre.Trim().ToUpper().Replace(" ", "") : null,
-                    Apellido = !string.IsNullOrEmpty(Proveedor.Apellido) ? Proveedor.Apellido.Trim().ToUpper().Replace(" ", "") : null,
-                    Pais = !string.IsNullOrEmpty(Proveedor.Pais) ? Proveedor.Pais.Trim().ToUpper().Replace(" ", "") : null,
-                    Ciudad = !string.IsNullOrEmpty(Proveedor.Ciudad) ? Proveedor.Ciudad.Trim().ToUpper().Replace(" ", "") : null,
-                    Provincia = !string.IsNullOrEmpty(Proveedor.Provincia) ? Proveedor.Provincia.Trim().ToUpper().Replace(" ", "") : null,
-                    Localidad = !string.IsNullOrEmpty(Proveedor.Localidad) ? Proveedor.Localidad.Trim().ToUpper().Replace(" ", "") : null,
-                    Calle = !string.IsNullOrEmpty(Proveedor.Calle) ? Proveedor.Calle.Trim().ToUpper().Replace(" ", "") : null,
-                    Altura = !string.IsNullOrEmpty(Proveedor.Altura) ? Proveedor.Altura.Trim().ToUpper().Replace(" ", "") : null,
-                    CodigoPostal = !string.IsNullOrEmpty(Proveedor.CodigoPostal) ? Proveedor.CodigoPostal.Trim().ToUpper().Replace(" ", "") : null,
-                    Telefono1 = !string.IsNullOrEmpty(Proveedor.Telefono1) ? Proveedor.Telefono1.Trim().ToUpper().Replace(" ", "") : null,
-                    Telefono2 = !string.IsNullOrEmpty(Proveedor.Telefono2) ? Proveedor.Telefono2.Trim().ToUpper().Replace(" ", "") : null,
-                    Telefono3 = !string.IsNullOrEmpty(Proveedor.Telefono3) ? Proveedor.Telefono3.Trim().ToUpper().Replace(" ", "") : null,
-                    Email = !string.IsNullOrEmpty(Proveedor.Email) ? Proveedor.Email.Trim().ToUpper().Replace(" ", "") : null,
-                    IdFiscal = Proveedor.IdFiscal.Trim().ToUpper().Replace(" ", "").Replace("-", "").Replace("_", ""),
-                    FechaRegistro = new Fechas().ObtenerFechaHora(),
-                    IdUsuarioRegistro = Proveedor.IdUsuarioRegistro
-                });
-
-                AponusDBContext.SaveChanges();
-
-                return new StatusCodeResult(200);
-
-            }
-            catch (DbUpdateException ex)
-            {
-
-                ContentResult excepcion = new ContentResult()
-                {
-                    ContentType = "application/json",
-                    StatusCode = 400,
-                };
-
-                excepcion.Content = !string.IsNullOrEmpty(ex.InnerException.Message) ? "Error:\n" + ex.InnerException.Message : "Error:\n" + ex.Message;
-
-                return excepcion;
-            }
-        }
+        }        
 
         internal IActionResult Eliminar(int idProveedor)
         {
@@ -132,7 +111,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Proveedores
 
                 if (Proveedor != null)
                 {
-                    Proveedor.IdEstado= Convert.ToInt32("0x00", 16);
+                    Proveedor.IdEstado= 0;
                     AponusDBContext.Proveedores.Update(Proveedor);
                     AponusDBContext.SaveChanges();
 
@@ -166,35 +145,41 @@ namespace Aponus_Web_API.Acceso_a_Datos.Proveedores
 
         }
 
-        internal IActionResult Listar()
+        internal IActionResult Listar(int? IdProveedor = null)
         {
             try
             {
-                List<DTOProveedores> Listado = AponusDBContext.Proveedores
-                    .Where(x=> Convert.ToInt32(x.IdEstado) == Convert.ToInt32("0x01",16))
-                    .Select(x=> new DTOProveedores()
-                    {
-                        Altura= x.Altura,
-                        Apellido= x.Apellido,
-                        Calle = x.Calle,    
-                        Ciudad = x.Ciudad,
-                        CodigoPostal= x.CodigoPostal,
-                        Email= x.Email,
-                        IdFiscal= x.IdFiscal,
-                        Localidad= x.Localidad,
-                        Pais=x.Pais,
-                        NombreClave= x.NombreClave,
-                        Telefono1= x.Telefono1, 
-                        Telefono2= x.Telefono2,
-                        Telefono3= x.Telefono3,
-                        Nombre  = x.Nombre, 
-                        Provincia= x.Provincia,
-                        
-                    })
-                    .OrderBy(x => x.Apellido)
-                    .ThenBy(x => x.Nombre)
-                    .ThenBy(x=>x.NombreClave)
-                    .ToList();
+                IQueryable<DTOProveedores> Listado = AponusDBContext.Proveedores
+                   .Where(x => x.IdEstado == 1)
+                   .Select(x => new DTOProveedores()
+                   {
+                       Altura = x.Altura,
+                       Apellido = x.Apellido,
+                       Calle = x.Calle,
+                       Ciudad = x.Ciudad,
+                       CodigoPostal = x.CodigoPostal,
+                       Email = x.Email,
+                       IdFiscal = x.IdFiscal,
+                       Localidad = x.Localidad,
+                       Pais = x.Pais,
+                       NombreClave = x.NombreClave,
+                       Telefono1 = x.Telefono1,
+                       Telefono2 = x.Telefono2,
+                       Telefono3 = x.Telefono3,
+                       Nombre = x.Nombre,
+                       Provincia = x.Provincia,
+                       Barrio = x.Barrio,
+                       IdProveedor = x.IdProveedor,
+
+                   })
+                   .OrderBy(x => x.Apellido)
+                   .ThenBy(x => x.Nombre)
+                   .ThenBy(x => x.NombreClave);
+
+                if (IdProveedor != null)
+                {
+                    return new JsonResult(Listado.FirstOrDefault(x => x.IdProveedor == IdProveedor));
+                }
 
                 return new JsonResult(Listado);
             }

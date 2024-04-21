@@ -10,31 +10,25 @@ namespace Aponus_Web_API.Controllers
     public class SuppliersController : ControllerBase
     {
         [HttpPost]
-        [Route("New")]
-        public IActionResult Nuevo([FromForm] DTOProveedores Proveedor)
+        [Route("Save")]
+        public IActionResult Nuevo(DTOProveedores Proveedor)
         {
-            return new BS_Proveedores().Nuevo(Proveedor);
-        }
+            return new BS_Proveedores().Guardar(Proveedor);
+        }       
 
-        [HttpPut]
-        [Route("Update")]
-        public IActionResult Actualizar(DTOProveedores Proveedor)
-        {
-            return new BS_Proveedores().Actualizar(Proveedor);
-        }
 
-        [HttpDelete]
-        [Route("Delete/{Id}")]
-        public IActionResult Actualizar(int IdProveedor)
+        [HttpPost]
+        [Route("{IdProveedor}/Delete")]
+        public IActionResult Eliminar(int IdProveedor)
         {
             return new BS_Proveedores().Eliminar(IdProveedor);
         }
 
         [HttpGet]
-        [Route("List")]
-        public IActionResult Listar()
+        [Route("List/{IdProveedor?}")]
+        public IActionResult Listar(int? IdProveedor)
         {
-            return new BS_Proveedores().Listar();
+            return new BS_Proveedores().Listar(IdProveedor);
         }
 
     }

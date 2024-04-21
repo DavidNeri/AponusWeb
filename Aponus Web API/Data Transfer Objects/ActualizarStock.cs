@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Aponus_Web_API.Data_Transfer_Objects;
+using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Data_Transfer_objects
 {
@@ -42,6 +43,9 @@ namespace Aponus_Web_API.Data_Transfer_objects
 
         [JsonProperty(PropertyName = "idProveedorDestino", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdProveedorDestino{ get; set; }
+
+        [JsonProperty(PropertyName = "suminustros", NullValueHandling = NullValueHandling.Ignore)]
+        public List <DTOSuministrosMovimientosStock>? suministros { get; set; }
 
 
     }

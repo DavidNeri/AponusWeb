@@ -851,7 +851,7 @@ namespace AponusWebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdMovimiento"));
 
-                    b.Property<DateTime>("FechaHora")
+                    b.Property<DateTime>("FechaHoraCreado")
                         .HasColumnType("datetime2(7)")
                         .HasColumnName("FECHA_HORA");
 
@@ -863,7 +863,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID_PROVEEDOR_ORIGEN");
 
-                    b.Property<string>("IdUsuario")
+                    b.Property<string>("CreadoUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ID_USUARIO");
@@ -922,7 +922,7 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.Usuarios", b =>
                 {
-                    b.Property<string>("Usuario")
+                    b.Property<string>("CreadoUsuario")
                         .HasColumnType("varchar(50)")
                         .HasColumnName("USUARIO");
 
@@ -940,7 +940,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("CORREO");
 
-                    b.HasKey("Usuario");
+                    b.HasKey("CreadoUsuario");
 
                     b.ToTable("Usuarios");
                 });

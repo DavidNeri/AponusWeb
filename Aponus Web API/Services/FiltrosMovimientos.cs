@@ -36,7 +36,7 @@ namespace Aponus_Web_API.Services
                     {
 
                         var CondicionDesde = Expression.GreaterThanOrEqual(
-                            Expression.Property(EntidadParametro, "FechaHora"),
+                            Expression.Property(EntidadParametro, "FechaHoraCreado"),
                             Expression.Constant(filtros.Desde, typeof(DateTime?)));
 
                         Condiciones.Add(CondicionDesde);
@@ -45,7 +45,7 @@ namespace Aponus_Web_API.Services
                     else if (Prop.Name.Contains("Hasta") && Prop.GetValue(filtros) != null)
                     {
                         var CondicionHasta= Expression.LessThanOrEqual(
-                            Expression.Property(EntidadParametro, "FechaHora"),
+                            Expression.Property(EntidadParametro, "FechaHoraCreado"),
                             Expression.Constant(filtros.Hasta, typeof(DateTime?)));
 
                         Condiciones.Add(CondicionHasta);

@@ -10,13 +10,7 @@ namespace Aponus_Web_API.Models
         public int IdMovimiento { get; set; }
 
         [Key("ID_SUMINISTRO")]
-        public string IdSuministro { get; set; }        
-
-        [Column("CAMPO_STOCK_ORIGEN")]
-        public string? CampoStockOrigen { get; set; }
-
-        [Column("CAMPO_STOCK_DESTINO")]
-        public string? CampoStockDestino{ get; set; }
+        public string IdSuministro { get; set; } 
 
         [Column("VALOR_ANTERIOR_ORIGEN")]
         public decimal? ValorAnteriorOrigen { get; set; }
@@ -32,6 +26,10 @@ namespace Aponus_Web_API.Models
 
         [Column("CANTIDAD")]
         public decimal Cantidad{ get; set; }
+
+        public byte IdEstado { get; set; }
+
+        public EstadosSuministrosMovimientosStock? EstadosSuministrosMovimientosStockNavigation { get; set; }
 
 
     }

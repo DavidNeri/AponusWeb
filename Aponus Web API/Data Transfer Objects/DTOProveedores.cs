@@ -60,7 +60,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public DateTime? FechaRegistro { get; set; }
 
         [JsonProperty(Order = 18, PropertyName = "idUsuarioRegistro", NullValueHandling = NullValueHandling.Ignore)]
-        public string IdUsuarioRegistro { get; set; }
+        public string? IdUsuarioRegistro { get; set; }
 
         [JsonProperty(Order = 19, PropertyName = "idEstado", NullValueHandling = NullValueHandling.Ignore)]
         public bool? IdEstado { get; set; }

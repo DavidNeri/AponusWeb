@@ -1,20 +1,16 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Componentes;
+using Aponus_Web_API.Acceso_a_Datos.Proveedores;
 using Aponus_Web_API.Acceso_a_Datos.Stocks;
 using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using System.Drawing;
-using System.Reflection;
+using Z.EntityFramework.Plus;
+using Aponus_Web_API.Services;
 
 namespace Aponus_Web_API.Business
 {
-    public class ModificacionesStocks : OperacionesStocks
+    public class ModificacionesStocks : Stocks
     {
 
         internal void ActualizarInsumo_Aumentar(ActualizacionStock Actualizacion)
@@ -301,8 +297,8 @@ namespace Aponus_Web_API.Business
         {
             try
             {
-                new OperacionesStocks().ObtenerComponentes(Actualizacion);
-                new OperacionesStocks().AgregarProducto(Actualizacion);
+                new Stocks().ObtenerComponentes(Actualizacion);
+                new Stocks().AgregarProducto(Actualizacion);
             }
             catch (Exception)
             {
@@ -318,9 +314,9 @@ namespace Aponus_Web_API.Business
             {
                 AponusContext DBContext = new AponusContext();
 
-                DBContext.stockInsumos.Select(x=>x.CantidadGranallado);
+                DBContext.stockInsumos.Select(x=>x.Granallado);
 
-                new OperacionesStocks().RestarProducto(Actualizacion);
+                new Stocks().RestarProducto(Actualizacion);
             }
             catch (Exception)
             {
@@ -334,7 +330,7 @@ namespace Aponus_Web_API.Business
         {
             try
             {
-                new OperacionesStocks().SetCantidadProducto(Actualizacion);
+                new Stocks().SetCantidadProducto(Actualizacion);
             }
             catch (Exception)
             {
@@ -344,235 +340,136 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal IActionResult newActualizarStockInsumo(ActualizacionStock Actualizacion)
+        internal IActionResult newActualizarStockInsumo(DTOMovimientosStock Movimiento)
         {
-            StockInsumos? stockInsumo = new OperacionesStocks().BuscarInsumo(Actualizacion.Id);
-            PropertyInfo[] propiedades = stockInsumo.GetType().GetProperties();
-            decimal? valorOriginalOrigen=null;
-            Actualizacion.Valor = Actualizacion.Valor ?? 0;
-            PropertyInfo? propiedadOrigen = null;
-            decimal? ValorAntDestino = null;
 
+            List<ActualizacionStock> ListaSuministros = new List<ActualizacionStock>();
+            Stocks stocks = new Stocks();
 
-           /* if (string.IsNullOrEmpty(Actualizacion.Destino))
+            foreach (DTOSuministrosMovimientosStock suministro in Movimiento.Suministros)
             {
-                var Resultado = new ObjectResult("Ingresar el Destino")
-                {
-                    StatusCode = 500,
-                };
-                return Resultado;
-            }
-            else
-            {*/
-                PropertyInfo? ValorDestinoDB = propiedades.FirstOrDefault(p => p.Name.ToUpper().Contains(Actualizacion.Destino.ToUpper()));
-                object valorDestinoenDB = ValorDestinoDB.GetValue(stockInsumo);                
-                decimal? ValorDestinoDBDec = (decimal?)valorDestinoenDB;
-                ValorAntDestino = ValorDestinoDBDec;
-                Actualizacion.Destino= ValorDestinoDB.Name ?? "";
-
-                if (Actualizacion.Origen != null)
-                {
-                    propiedadOrigen = propiedades.FirstOrDefault(p => p.Name.ToUpper().Contains(Actualizacion.Origen.ToUpper()));
-                    object valor = propiedadOrigen.GetValue(stockInsumo);
-                    valorOriginalOrigen = (decimal?)valor ?? 0;
-                    Actualizacion.Origen = propiedadOrigen.Name;
-                }
+                decimal valorNuevoOrigen = (suministro.ValorAnteriorOrigen != null ? Convert.ToDecimal(suministro.ValorAnteriorOrigen) : 0) - Convert.ToDecimal(suministro.Cantidad);
+                decimal valorNuevoDestino= (suministro.ValorAnteriorDestino!= null ? Convert.ToDecimal(suministro.ValorAnteriorOrigen) : 0) + Convert.ToDecimal(suministro.Cantidad);
 
 
-                if (propiedadOrigen != null || Actualizacion.Origen == null)
-                {
-                    if (propiedadOrigen != null)
+                if(valorNuevoOrigen < 0)
+                    return new ContentResult()
                     {
-
-                        if ((valorOriginalOrigen < Actualizacion.Valor) & valorOriginalOrigen != null)
-                        {
-                            var Resultado = new ObjectResult("La cantidad a agregar o restar en el Origen es inferior a la que se desea incrementar o descontar en el destino")
-                            {
-                                StatusCode = 500,
-                            };
-                            return Resultado;
-                        }
-                    }
-                    if (Actualizacion.Origen == null || ((valorOriginalOrigen > Actualizacion.Valor) & (valorOriginalOrigen != null || propiedadOrigen == null)))
-                    {
-                        switch (Actualizacion.Operador)
-                        {
-                            case "+": //HAce la misma validacion q para restar
-                                
-                                if ((propiedadOrigen == null || Actualizacion.Origen != null) && Actualizacion.Destino != null)
-                                {
-                                   // PropertyInfo? ValorDestinoDB = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino));
-                                    //object valor = ValorDestinoDB.GetValue(stockInsumo);
-                                    //decimal? ValorDestinoDBDec = (decimal?)valor;
-                                    //ValorAntDestino = ValorDestinoDBDec;
-
-                                    /*if (propiedadOrigen == null)
-                                    {
-                                        
-                                        if ((ValorDestinoDBDec - Actualizacion.Valor) < 0)
-                                         {
-
-                                             var Resultado = new ObjectResult("El valor a restar es inferior al disponible")
-                                             {
-                                                 StatusCode = 500,
-                                             };
-                                             return Resultado;
-                                         }
-                                        
-                                    }*/
-
-                                    if (Actualizacion.Origen != null)
-                                    {
-                                        //esta asignacion eesta de mas , o la anterior
-                                        PropertyInfo? ValorOrigenDB = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Origen));
-                                        object valor_Origen = ValorOrigenDB.GetValue(stockInsumo);
-                                        decimal? ValorOrigenDBDec = (decimal?)valor_Origen;
-                                        
-
-                                        if (ValorOrigenDBDec - Actualizacion.Valor < 0)
-                                        {
-
-                                            var Resultado = new ObjectResult("El valor a restar en el 'Destino' es inferior al disponible en el 'Origen'")
-                                            {
-                                                StatusCode = 500,
-                                            };
-                                            return Resultado;
-                                        }
-                                    }
-                                }
-
-
-                                if (new OperacionesStocks().IncrementarStockInsumo(Actualizacion, Actualizacion.Destino))
-                                {
-
-                                    if (Actualizacion.Origen != null)
-                                    {
-                                        if (new OperacionesStocks().DescontarStockInsumo(Actualizacion, Actualizacion.Origen) == false)
-                                        {
-                                            new OperacionesStocks().DescontarStockInsumo(Actualizacion, Actualizacion.Destino);
-
-                                            var Resultado = new ObjectResult("Error interno, no se aplicaron los cambios")
-                                            {
-                                                StatusCode = 500,
-                                            };
-                                            return Resultado;
-                                        }
-                                    }
-
-                                    new OperacionesStocks().GuardarMovimiento(Actualizacion, valorOriginalOrigen, ValorAntDestino);
-
-                                }
-                                else
-                                {
-                                    var Resultado = new ObjectResult("Error interno, no se aplicaron los cambios")
-                                    {
-                                        StatusCode = 500,
-                                    };
-                                    return Resultado;
-
-                                }
-                                break;
-                            case "-":
-
-                                if ((propiedadOrigen == null || Actualizacion.Origen != null) && Actualizacion.Destino != null)
-                                {
-                                    //PropertyInfo? ValorDestinoDB = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino));
-                                    //object valor = ValorDestinoDB.GetValue(stockInsumo);
-                                    //decimal? ValorDestinoDBDec = (decimal?)valor;
-                                    //ValorAntDestino = ValorDestinoDBDec;
-
-                                    if (propiedadOrigen == null)
-                                    {
-                                        
-                                        if (ValorDestinoDBDec - Actualizacion.Valor < 0)
-                                        {
-
-                                            var Resultado = new ObjectResult("El valor a restar es inferior al disponible")
-                                            {
-                                                StatusCode = 500,
-                                            };
-                                            return Resultado;
-                                        }
-                                    }
-
-                                    if (Actualizacion.Origen != null)
-                                    {
-                                        PropertyInfo? ValorOrigenDB = propiedades.FirstOrDefault(p => p.Name.Contains(Actualizacion.Origen));
-                                        object valorenDB = ValorOrigenDB.GetValue(stockInsumo);
-                                        decimal? ValorOrigenDBDec = (decimal?)valorenDB;
-                                        if (ValorOrigenDBDec - Actualizacion.Valor < 0)
-                                        {
-
-                                            var Resultado = new ObjectResult("El valor a restar en el 'Destino' es inferior al disponible en el 'Origen'")
-                                            {
-                                                StatusCode = 500,
-                                            };
-                                            return Resultado;
-                                        }
-                                    }
-
-
-                                    if (new OperacionesStocks().DescontarStockInsumo(Actualizacion, Actualizacion.Destino))
-                                    {
-                                        if (Actualizacion.Origen != null)
-                                        {
-                                            if (new OperacionesStocks().IncrementarStockInsumo(Actualizacion, Actualizacion.Origen) == false)
-                                            {
-                                                new OperacionesStocks().IncrementarStockInsumo(Actualizacion, Actualizacion.Destino);
-                                                var Resultado = new ObjectResult("Error interno, no se aplicaron los cambios")
-                                                {
-                                                    StatusCode = 500,
-                                                };
-                                                return Resultado;
-                                            }
-                                        }
-                                        new OperacionesStocks().GuardarMovimiento(Actualizacion, valorOriginalOrigen, ValorAntDestino);
-
-                                    }
-                                    else
-                                    {
-                                        var Resultado = new ObjectResult("Error interno, no se aplicaron los cambios")
-                                        {
-                                            StatusCode = 500,
-                                        };
-                                        return Resultado;
-                                    }
-                                }
-
-                                break;
-                            case "=":
-                                if (new OperacionesStocks().NewSetearStockInsumo(Actualizacion))
-                                {
-                                    new OperacionesStocks().GuardarMovimiento(Actualizacion, valorOriginalOrigen, ValorAntDestino);
-                                    return new StatusCodeResult(200);
-                                }
-                                else
-                                {
-                                    var Resultado = new ObjectResult("Error interno, no se aplicaron los cambios")
-                                    {
-                                        StatusCode = 500,
-                                    };
-                                    return Resultado;
-                                }
-
-                            default:
-                                return new StatusCodeResult(500);
-
-                        }
-                    }
-
-                    return new StatusCodeResult(200);
-                }
-                else
-                {
-                    var Resultado = new ObjectResult("Error interno, no se aplicaron los cambios")
-                    {
-                        StatusCode = 500,
+                        Content = $"La cantidad en del Suministro Id:{suministro.IdSuministro} Disponible en " +
+                                    $"{Movimiento.Origen} es inferior a la cantidad en {Movimiento.Destino}",
+                        ContentType = "Aplication/Json",
+                        StatusCode = 400,
                     };
-                    return Resultado;
+
+                suministro.ValorNuevoOrigen = valorNuevoOrigen.ToString();
+                suministro.ValorNuevoDestino = valorNuevoDestino.ToString();
+
+                ListaSuministros.Add(new ActualizacionStock()
+                {
+                    Id = suministro.IdSuministro,
+                    Origen = Movimiento.Origen,
+                    Destino = Movimiento.Destino,
+                    Valor = Convert.ToDecimal(suministro.Cantidad)
+
+                });
+                
+            }
+
+            using (AponusContext AponusDbContext = new AponusContext())
+            {
+                using (var transaccion = AponusDbContext.Database.BeginTransaction())
+                {
+                    bool Rollback = false;
+
+                    foreach (ActualizacionStock suministro in ListaSuministros)
+                    {
+                        if (!stocks.IncrementarStockInsumo(AponusDbContext, suministro, suministro.Destino.ToUpper()))
+                        {
+                            Rollback = true;
+                        }
+
+                        if (!Rollback && !stocks.DescontarStockInsumo(AponusDbContext, suministro, suministro.Origen.ToUpper()))
+                        {
+                            Rollback = true;
+                        }
+
+                    }
+                    int? IdMovimiento = stocks.GuardarDatosMovimiento(AponusDbContext, new Stock_Movimientos
+                    {
+                        CreadoUsuario = Movimiento.UsuarioCreacion,
+                        ModificadoUsuario = Movimiento.UsuarioModificacion,
+                        FechaHoraCreado = Fechas.ObtenerFechaHora(),
+                        IdProveedorOrigen = (int)Movimiento.IdProveedorOrigen,
+                        IdProveedorDestino = (int)Movimiento.IdProveedorDestino,
+                    });
+
+                    if (IdMovimiento == null) Rollback = true;
+
+                    List<SuministrosMovimientosStock> Suministros = Movimiento.Suministros
+                        .Select(x => new SuministrosMovimientosStock()
+                        {
+                            IdMovimiento = (int)IdMovimiento,
+                            Cantidad = Convert.ToDecimal(x.Cantidad),
+                            IdSuministro = x.IdSuministro,
+                            ValorAnteriorOrigen = Convert.ToDecimal(x.ValorAnteriorOrigen),
+                            ValorAnteriorDestino = Convert.ToDecimal(x.ValorAnteriorDestino),
+                            ValorNuevoOrigen = Convert.ToDecimal(x.ValorNuevoOrigen),
+                            ValorNuevoDestino = Convert.ToDecimal(x.ValorNuevoDestino)
+
+                        })
+                        .ToList();
+
+                    if (!stocks.GuardarSuministrosMovimiento(AponusDbContext, Suministros)) Rollback = true;
+
+                    //Obtener el Nombre del Proveedor de Destino
+                    IActionResult Proveedores = new ABM_Proveedores().Listar();
+                    DTOProveedores? proveedor = new DTOProveedores();
+
+                    if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value!=null && jsonProveedores.Value is IEnumerable<DTOProveedores> ProveedoresList)
+                    {
+                        proveedor = ProveedoresList.FirstOrDefault(x => x.IdProveedor == Movimiento.IdProveedorDestino);
+                        
+                    }
+
+                    string? NombreCompletoProveedor = proveedor.Apellido + " " + proveedor.Nombre;//ListaProveedores.Where(x => x.IdProveedor == Movimiento.IdProveedorDestino).Select(x => x.Apellido + " " + x.Nombre).FirstOrDefault();
+                    string? NombreClave = proveedor.NombreClave; //ListaProveedores.Where(x => x.IdProveedor == Movimiento.IdProveedorDestino).Select(x => x.NombreClave).FirstOrDefault();
+                    //Obtener el Nombre del Proveedor de Destino
+
+                    string Ruta = stocks.CrearDirectorioMovimientos(string.IsNullOrEmpty(NombreClave) ? NombreCompletoProveedor : NombreClave);
+
+                    List<ArchivosMovimientosStock> DatosArchivosMovimiento = stocks.CopiarArchivosMovimientos(Movimiento.Archivos, Ruta);
+
+                    if (DatosArchivosMovimiento.Count == 0) Rollback = true;
+
+                    DatosArchivosMovimiento.ForEach(x => x.IdMovimiento = (int)IdMovimiento);
+
+                    if (!stocks.GuardarDatosArchivosMovimiento(AponusDbContext,DatosArchivosMovimiento)) Rollback = true;
+                    if (new MovimientosStock().RegistrarModificacion(AponusDbContext, Movimiento)) Rollback = true;
+
+                    if (Rollback)
+                    {
+                        transaccion.Rollback();
+                        return new ContentResult()
+                        {
+                            Content = $"Error interno, no se aplicaron los cambios",
+                            ContentType = "Aplication/Json",
+                            StatusCode = 500,
+                        };
+                    }else
+                    {
+                        AponusDbContext.Database.CommitTransaction();
+                        AponusDbContext.SaveChanges();
+                        return new StatusCodeResult(200);
+                    }                   
+
+
+
+                    
                 }
+
+            }
             
-            
+        
         }
 
         internal IActionResult newActualizarStockProducto(ActualizacionStock Actualizacion)
@@ -615,12 +512,12 @@ namespace Aponus_Web_API.Business
                                     Valor = Componente.LongReq
                                 };
 
-                                StockInsumos? StockComponente = new OperacionesStocks().BuscarInsumo(Componente.IdInsumo);
-                                Resultados.Add((StockComponente.IdInsumo, null, StockComponente.CantidadProceso, ComponenteActualizar.Valor));
+                                StockInsumos? StockComponente = new Stocks().BuscarInsumo(Componente.IdInsumo);
+                                Resultados.Add((StockComponente.IdInsumo, null, StockComponente.Proceso, ComponenteActualizar.Valor));
 
-                                if (StockComponente.CantidadProceso != null & ComponenteActualizar.Valor != null)
+                                if (StockComponente.Proceso != null & ComponenteActualizar.Valor != null)
                                 {
-                                    if ((int?)StockComponente.CantidadProceso < (int?)ComponenteActualizar.Valor)
+                                    if ((int?)StockComponente.Proceso < (int?)ComponenteActualizar.Valor)
                                     {
                                         IdComponenteList.Add(DetallesComponentesProducto.Descripcion);
                                     }
@@ -634,12 +531,12 @@ namespace Aponus_Web_API.Business
                                     Valor = Componente.PesoReq
                                 };
 
-                                StockInsumos? StockComponente = new OperacionesStocks().BuscarInsumo(Componente.IdInsumo);
-                                Resultados.Add((StockComponente.IdInsumo, null, StockComponente.CantidadProceso, ComponenteActualizar.Valor));
+                                StockInsumos? StockComponente = new Stocks().BuscarInsumo(Componente.IdInsumo);
+                                Resultados.Add((StockComponente.IdInsumo, null, StockComponente.Proceso, ComponenteActualizar.Valor));
 
-                                if (StockComponente.CantidadProceso != null & ComponenteActualizar.Valor != null)
+                                if (StockComponente.Proceso != null & ComponenteActualizar.Valor != null)
                                 {
-                                    if (StockComponente.CantidadProceso < ComponenteActualizar.Valor)
+                                    if (StockComponente.Proceso < ComponenteActualizar.Valor)
                                     {
                                         IdComponenteList.Add(DetallesComponentesProducto.Descripcion);
                                     }
@@ -653,12 +550,12 @@ namespace Aponus_Web_API.Business
                                     Valor = Componente.CantidadReq
                                 };
 
-                                StockInsumos? StockComponente = new OperacionesStocks().BuscarInsumo(Componente.IdInsumo);
-                                Resultados.Add((StockComponente.IdInsumo, null, StockComponente.CantidadProceso, ComponenteActualizar.Valor));
+                                StockInsumos? StockComponente = new Stocks().BuscarInsumo(Componente.IdInsumo);
+                                Resultados.Add((StockComponente.IdInsumo, null, StockComponente.Proceso, ComponenteActualizar.Valor));
 
-                                if (StockComponente.CantidadProceso != null & ComponenteActualizar.Valor != null)
+                                if (StockComponente.Proceso != null & ComponenteActualizar.Valor != null)
                                 {
-                                    if (StockComponente.CantidadProceso < ComponenteActualizar.Valor)
+                                    if (StockComponente.Proceso < ComponenteActualizar.Valor)
                                     {
                                         IdComponenteList.Add(DetallesComponentesProducto.Descripcion);
                                     }
@@ -701,7 +598,7 @@ namespace Aponus_Web_API.Business
                                     //infomar que no se realizaron modificaciones por error en la db . con try catch
 
                                     var elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                    elemento.resultado = new OperacionesStocks().DescontarStockInsumo(ComponenteActualizar, "Proceso");
+                                    elemento.resultado = new Stocks().DescontarStockInsumo(null, ComponenteActualizar, "Proceso");
 
                                 }
                                 else if (Componente.PesoReq != null)
@@ -713,7 +610,7 @@ namespace Aponus_Web_API.Business
                                     };
 
                                     var elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                    elemento.resultado = new OperacionesStocks().DescontarStockInsumo(ComponenteActualizar, "Proceso");
+                                    elemento.resultado = new Stocks().DescontarStockInsumo(null, ComponenteActualizar, "Proceso");
 
 
                                 }
@@ -726,7 +623,7 @@ namespace Aponus_Web_API.Business
                                     };
 
                                     var elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                    elemento.resultado = new OperacionesStocks().DescontarStockInsumo(ComponenteActualizar, "Proceso");
+                                    elemento.resultado = new Stocks().DescontarStockInsumo(null, ComponenteActualizar, "Proceso");
                                 }
                             }
                         }
@@ -749,7 +646,7 @@ namespace Aponus_Web_API.Business
                                     };
 
                                     var _elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                    _elemento.resultado = new OperacionesStocks().IncrementarStockInsumo(ComponenteActualizar, "Proceso");
+                                    _elemento.resultado = new Stocks().IncrementarStockInsumo(null,ComponenteActualizar, "Proceso");
                                 }
                             }
 
@@ -762,7 +659,7 @@ namespace Aponus_Web_API.Business
                         }
                         else
                         {
-                            if (new OperacionesStocks().AgregarProducto(Actualizacion))
+                            if (new Stocks().AgregarProducto(Actualizacion))
                             {
                                 return new StatusCodeResult(200);
                             }
@@ -772,7 +669,7 @@ namespace Aponus_Web_API.Business
                                 int i = 0;
                                 while (resultado==false && i>250)
                                 {
-                                    resultado = new OperacionesStocks().AgregarProducto(Actualizacion);
+                                    resultado = new Stocks().AgregarProducto(Actualizacion);
                                     i++;
                                 }
 
@@ -796,7 +693,7 @@ namespace Aponus_Web_API.Business
                     }
 
                 case "-":
-                    if (new OperacionesStocks().RestarProducto(Actualizacion))
+                    if (new Stocks().RestarProducto(Actualizacion))
                     {
                         return new StatusCodeResult(200);
                     }
@@ -806,7 +703,7 @@ namespace Aponus_Web_API.Business
                         int i = 0;
                         while (resultado == false && i > 250)
                         {
-                            resultado = new OperacionesStocks().RestarProducto(Actualizacion);
+                            resultado = new Stocks().RestarProducto(Actualizacion);
                             i++;
                         }
 
@@ -827,7 +724,7 @@ namespace Aponus_Web_API.Business
 
 
                 case "=":
-                    if (new OperacionesStocks().SetCantidadProducto(Actualizacion))
+                    if (new Stocks().SetCantidadProducto(Actualizacion))
                     {
                         return new StatusCodeResult(200);
                     }
@@ -837,7 +734,7 @@ namespace Aponus_Web_API.Business
                         int i = 0;
                         while (resultado == false && i > 250)
                         {
-                            resultado = new OperacionesStocks().SetCantidadProducto(Actualizacion);
+                            resultado = new Stocks().SetCantidadProducto(Actualizacion);
                             i++;
                         }
 

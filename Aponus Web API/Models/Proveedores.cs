@@ -64,7 +64,7 @@ namespace Aponus_Web_API.Models
         public string IdUsuarioRegistro{ get; set; }
 
         [Column("ID_ESTADO")]
-        public int IdEstado { get; set; }
+        public byte IdEstado { get; set; }
 
         public ICollection<Stock_Movimientos> MovimientosOrigen { get; set; }
         public ICollection<Stock_Movimientos> MovimientosDestino { get; set; }

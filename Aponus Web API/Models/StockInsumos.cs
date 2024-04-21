@@ -3,11 +3,13 @@
     public class StockInsumos
     {
         public string IdInsumo { get; set; }
-        public decimal? CantidadRecibido { get; set; }
-        public decimal? CantidadGranallado{ get; set; }
-        public decimal? CantidadPintura{ get; set; }
-        public decimal? CantidadProceso{ get; set; }
-        public decimal? CantidadMoldeado{ get; set; }
+        public decimal? Recibido { get; set; }
+        public decimal? Granallado{ get; set; }
+        public decimal? Pintura{ get; set; }
+        public decimal? Proceso{ get; set; }
+        public decimal? Moldeado{ get; set; }
+        public decimal? Pendiente { get; set;}
+
 
     }
 }

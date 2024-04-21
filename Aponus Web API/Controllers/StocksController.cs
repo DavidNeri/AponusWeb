@@ -69,49 +69,6 @@ namespace Aponus_Web_API.Controllers
 
         }
 
-        [HttpPost]
-        [Route("StockUpdate")]
-        public IActionResult ActualizarStock([FromForm] ActualizacionStock Actualizacion) {
-
-            try
-            {
-                return new BS_Stocks().NewActualizarStock(Actualizacion);
-
-
-                
-
-            }
-            catch (Exception)
-            {
-                return StatusCode(500);
-            }
-
-        }        
-
-        /// <summary>
-        /// Reemplaza a StockUpdate
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("NewStockUpdate")] //-->Usar este
-        public IActionResult NewActualizarStock(ActualizacionStock Actualizacion)
-        {
-
-            try
-            {
-                
-                return new BS_Stocks().NewActualizarStock(Actualizacion);
-
-
-            }
-            catch (Exception)
-            {
-
-                return StatusCode(500);
-            }
-
-        }
-
 
         [HttpGet]
         [Route("List/Bolts")]

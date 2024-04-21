@@ -10,7 +10,6 @@ D:\Aponus SA\Aponus - Sistema\bin\Debug\net6.0\Aponus - Sistema.deps.json
 D:\Aponus SA\Aponus - Sistema\bin\Debug\net6.0\Aponus - Sistema.runtimeconfig.json
 D:\Aponus SA\Aponus - Sistema\bin\Debug\net6.0\Aponus - Sistema.dll
 D:\Aponus SA\Aponus - Sistema\bin\Debug\net6.0\Aponus - Sistema.pdb
-D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\Aponus - Sistema.csproj.AssemblyReference.cache
 D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\Aponus - Sistema.GeneratedMSBuildEditorConfig.editorconfig
 D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\Aponus - Sistema.AssemblyInfoInputs.cache
 D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\Aponus - Sistema.AssemblyInfo.cs
@@ -29,3 +28,4 @@ D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\refint\Aponus - Sistema.dll
 D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\Aponus - Sistema.pdb
 D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\Aponus - Sistema.genruntimeconfig.cache
 D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\ref\Aponus - Sistema.dll
+D:\Aponus SA\Aponus - Sistema\obj\Debug\net6.0\Aponus - Sistema.sourcelink.json

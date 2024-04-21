@@ -58,7 +58,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
                  return IdDescripcion;
                 
             }
-            catch (Exception)
+            catch (SqlException ex)
             {
                 return 0;
 

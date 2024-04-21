@@ -103,17 +103,17 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                             StockComponente = new DTOStocks
                             {
                                 IdInsumo = _StockComponentes.IdInsumo,
-                                Recibido = _StockComponentes.CantidadRecibido != null ? _StockComponentes.CantidadRecibido.ToString(): "Sin Stock",
-                                Granallado = _StockComponentes.CantidadGranallado != null ? _StockComponentes.CantidadGranallado.ToString() : "Sin Stock",
-                                Pintura = _StockComponentes.CantidadPintura != null ? _StockComponentes.CantidadPintura.ToString() : "Sin Stock",
-                                Proceso = _StockComponentes.CantidadProceso != null ? _StockComponentes.CantidadProceso.ToString() : "Sin Stock",
-                                Moldeado = _StockComponentes.CantidadMoldeado != null ? _StockComponentes.CantidadMoldeado.ToString() : "Sin Stock",
+                                Recibido = _StockComponentes.Recibido != null ? _StockComponentes.Recibido.ToString(): "Sin Stock",
+                                Granallado = _StockComponentes.Granallado != null ? _StockComponentes.Granallado.ToString() : "Sin Stock",
+                                Pintura = _StockComponentes.Pintura != null ? _StockComponentes.Pintura.ToString() : "Sin Stock",
+                                Proceso = _StockComponentes.Proceso != null ? _StockComponentes.Proceso.ToString() : "Sin Stock",
+                                Moldeado = _StockComponentes.Moldeado != null ? _StockComponentes.Moldeado.ToString() : "Sin Stock",
 
-                                Total = ((_StockComponentes.CantidadPintura ?? 0) +
-                                        (_StockComponentes.CantidadMoldeado ?? 0) +
-                                        (_StockComponentes.CantidadRecibido ?? 0) + 
-                                        (_StockComponentes.CantidadProceso ?? 0) +
-                                        (_StockComponentes.CantidadGranallado ?? 0)).ToString(),
+                                Total = ((_StockComponentes.Pintura ?? 0) +
+                                        (_StockComponentes.Moldeado ?? 0) +
+                                        (_StockComponentes.Recibido ?? 0) + 
+                                        (_StockComponentes.Proceso ?? 0) +
+                                        (_StockComponentes.Granallado ?? 0)).ToString(),
 
                                 Requerido = ((_JoinResult._DetComponentes._Componentes.Cantidad ?? 0) * Producto.Cantidad).ToString(),
                                 // PesoReq=(_JoinResult._DetComponentes._Componentes.PesoComponente ?? 0) *Producto.CantidadRequerida Eliminar??,

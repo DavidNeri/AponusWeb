@@ -27,12 +27,12 @@ namespace Aponus_Web_API.Controllers
             
         }
         [HttpGet]
-        [Route("new-id/{SypplyName}")]
-        public async Task<JsonResult> GenerarIdInsumo(string NombreInsumo)
+        [Route("new-id/{sypplyName}/")]
+        public async Task<JsonResult> GenerarIdInsumo(string? sypplyName)
         {
             try
             {
-                return await new BS_Supplies().ObtenerNuevoIdComponente(NombreInsumo);
+                return await new BS_Supplies().ObtenerNuevoIdComponente(sypplyName);
             }
             catch (Exception e)
             {
@@ -40,10 +40,17 @@ namespace Aponus_Web_API.Controllers
                 string Mensaje = e.InnerException.Message;
                 return new JsonResult(Mensaje);
             }
-
-
         }
 
+       [HttpGet]
+        [Route("ListFormatted")]
+        public IActionResult ListarInsumosFormateados()
+        {
+
+            return new BS_Supplies().ListarNombresFormateados();
+
+        }
+      
         [HttpPost]
         [Route("Create-or-Update")]
 

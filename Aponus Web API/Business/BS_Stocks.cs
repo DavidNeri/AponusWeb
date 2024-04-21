@@ -86,59 +86,29 @@ namespace Aponus_Web_API.Business
             }
         }
 
-        internal IActionResult NewActualizarStock(ActualizacionStock Actualizacion)
-        {
-            try
-            {
-
-                if (new OperacionesStocks().BuscarInsumo(Actualizacion.Id)!=null)
-                {
-
-                     return new ModificacionesStocks().newActualizarStockInsumo(Actualizacion);
-                 
-                }
-                else if (new OperacionesProductos().BuscarProducto(Actualizacion.Id)!=null)
-                {
-
-                    return new ModificacionesStocks().newActualizarStockProducto(Actualizacion);
-                }
-                else
-                {
-                    var Resultado = new ObjectResult("Error interno, no se aplicaron los cambios")
-                    {
-                        StatusCode = 500,
-                    };
-                    return Resultado;
-                }
-            }
-            catch (Exception)
-            {
-                return new JsonResult(new StatusCodeResult(400));
-
-            }
-        }
+       
 
 
         internal Task<List<Insumos>> ListarBulones()
         {
-            return new OperacionesStocks().ListarBulones();
+            return new Stocks().ListarBulones();
         }
 
         internal Task<List<Insumos>> LIstarPerfilesJuntas()
         {
-            return new OperacionesStocks().ListarPerfilesJuntas();
+            return new Stocks().ListarPerfilesJuntas();
 
         }
 
         internal IActionResult NewListar(int? IdDescripcion)
         {
-            return new OperacionesStocks().Listar(IdDescripcion);
+            return new Stocks().Listar(IdDescripcion);
            
         }
 
         internal JsonResult ListarProductos(string? typeId, int? idDescription)
         {
-            List<DTOTiposProductos> ListadoProductos = new OperacionesStocks().ListarProductos();
+            List<DTOTiposProductos> ListadoProductos = new Stocks().ListarProductos();
 
 
             if (typeId != null && idDescription != null)

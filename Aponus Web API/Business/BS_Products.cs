@@ -53,7 +53,7 @@ namespace Aponus_Web_API.Business
 
         internal void GuardarProducto(DTOProducto producto)
         {
-            OperacionesProductos operacionesProductos = new OperacionesProductos();
+            Productos operacionesProductos = new Productos();
 
            // try
            // {
@@ -132,7 +132,7 @@ namespace Aponus_Web_API.Business
 
         internal IActionResult NuevoGuardarProducto(DTODetallesProducto ActualizarProducto)
         {
-            OperacionesProductos OP = new OperacionesProductos();
+            Productos OP = new Productos();
           
 
             if (ActualizarProducto.IdProducto== null
@@ -193,7 +193,7 @@ namespace Aponus_Web_API.Business
 
         internal IActionResult ProductUpdate(DTODetallesProducto ActualizarProducto)
         {
-            OperacionesProductos OP = new OperacionesProductos();
+            Productos OP = new Productos();
             bool UpdateIdProd = false;
             try
             {
@@ -311,7 +311,7 @@ namespace Aponus_Web_API.Business
 
         internal IActionResult ActualizarComponentes(List<DTOComponentesProducto> Componentes)
         {
-            OperacionesProductos OP = new OperacionesProductos();
+            Productos OP = new Productos();
             List<Productos_Componentes> ListaComponentes = new List<Productos_Componentes>();
             ComponentesProductos CP = new ComponentesProductos();
 

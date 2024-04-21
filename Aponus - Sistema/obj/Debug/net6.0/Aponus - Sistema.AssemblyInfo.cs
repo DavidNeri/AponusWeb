@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Aponus - Sistema")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e90513f1620081fd6e9fc1c75c8b16385ce980ed")]
 [assembly: System.Reflection.AssemblyProductAttribute("Aponus - Sistema")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Aponus - Sistema")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

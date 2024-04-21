@@ -47,7 +47,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
                    DescripcionProducto = x.DescripcionProducto,
 
                    Productos = (ICollection<Producto>)x.Productos
-                                .Where(x => x.IdTipo == typeId)
+                                .Where(x => x.IdTipo.Contains(typeId))
                                 .OrderBy(x => x.DiametroNominal)
 
                }

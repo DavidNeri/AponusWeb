@@ -13,6 +13,22 @@ namespace Aponus_Web_API.Controllers
     public class ProductsController : Controller
     {
         [HttpGet]
+        [Route("List/{TypeId?}/{IdDescription?}")]
+        public JsonResult ListProducts(string? TypeId, int? IdDescription)
+        {
+            try
+            {
+                return new BS_Stocks().ListarProductos(TypeId, IdDescription);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
+        }
+
+        [HttpGet]
         [Route("ListProducts")]
         public async Task<JsonResult> ListProducts() {
             try
@@ -25,56 +41,54 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("ListProducts/{TypeId}")]
-        public  Task<JsonResult> ListProducts(string? TypeId)
-        {
-            try
-            {
+        //[HttpGet]
+        //[Route("ListProducts/{TypeId}")]
+        //public Task<JsonResult> ListProducts(string? TypeId)
+        //{
+        //    try
+        //    {
 
-                return new BS_Products().ListarProductos(TypeId);
-            }
-            catch (Exception)
-            {
-                throw; 
-            }      
+        //        return new BS_Products().ListarProductos(TypeId);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
 
 
-        }
+        //}
         //Reemplazar por estos
-        [HttpGet]
-        [Route("ListProducts/{TypeId}/{IdDescription}")]
-        public Task<JsonResult> ListProducts(string? TypeId, int? IdDescription)
-        {
-            try
-            {
+        //[HttpGet]
+        //[Route("ListProducts/{TypeId}/{IdDescription}")]
+        //public Task<JsonResult> ListProducts(string? TypeId, int? IdDescription)
+        //{
+        //    try
+        //    {
 
-                return new BS_Products().ListarProductos(TypeId, IdDescription);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+        //        return new BS_Products().ListarProductos(TypeId, IdDescription);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
+        //[HttpGet]
+        //[Route("ListProducts/{TypeId}/{IdDescription}/{dn}")]
+        //public Task<JsonResult> ListProducts(string? TypeId, int? IdDescription, int Dn)
+        //{
+        //    try
+        //    {
 
-        }
-
-        [HttpGet]
-        [Route("ListProducts/{TypeId}/{IdDescription}/{dn}")]
-        public Task<JsonResult> ListProducts(string? TypeId, int? IdDescription, int Dn)
-        {
-            try
-            {
-
-                return new BS_Products().ListarProductos(TypeId, IdDescription, Dn);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+        //        return new BS_Products().ListarProductos(TypeId, IdDescription, Dn);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
 
 
-        }
+        //}
         //Reemplazar por estos
 
         //Ver y eliminar
@@ -97,21 +111,21 @@ namespace Aponus_Web_API.Controllers
 
         //Ver y eliminar
 
-        [HttpGet]
-        [Route("ListParts/{productId}/{q=1}")]
-        public async Task<JsonResult> ListParts(string? ProductId,int Q=1)
-        {
-            try
-            {
-                return new BS_Products().ListarInsumos(ProductId, Q);
-                
-                //return Json(a, new Newtonsoft.Json.JsonSerializerSettings());
-            }
-            catch (Exception e)
-            {
-                return Json(e);
-            }
-        }
+        //[HttpGet]
+        //[Route("ListParts/{productId}/{q=1}")]
+        //public async Task<JsonResult> ListParts(string? ProductId,int Q=1)
+        //{
+        //    try
+        //    {
+        //        return new BS_Products().ListarInsumos(ProductId, Q);
+
+        //        //return Json(a, new Newtonsoft.Json.JsonSerializerSettings());
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return Json(e);
+        //    }
+        //}
 
 
         [HttpPost]
@@ -202,7 +216,7 @@ namespace Aponus_Web_API.Controllers
 
 
         [HttpPost]
-        [Route("UpdateComponents")]
+        [Route("UpdateComponents")] // Guarda o actualiza los componentes
         public IActionResult ActualizarComponentes(List<DTOComponentesProducto> Producto)
         {
             try
