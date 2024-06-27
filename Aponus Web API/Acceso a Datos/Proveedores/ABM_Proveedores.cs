@@ -22,9 +22,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Proveedores
             
             try
             {
-                if (Proveedor.IdProveedor != null)
+                if (Proveedor.IdEntidad != null)
                 {
-                    var Existente = AponusDBContext.Proveedores.FirstOrDefault(x => x.IdProveedor == Proveedor.IdProveedor);                   
+                    var Existente = AponusDBContext.Proveedores.FirstOrDefault(x => x.IdEntidad == Proveedor.IdEntidad);                   
 
                     if (Existente != null)
                     {
@@ -55,7 +55,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Proveedores
                 }
                 else
                 {
-                    Models.Proveedores NuevoProveedor = new Models.Proveedores()
+                    Models.Clientes_Proveedores NuevoProveedor = new Models.Clientes_Proveedores()
                     {
                         NombreClave = !string.IsNullOrEmpty(Proveedor.NombreClave) ?
                                         Proveedor.NombreClave.Trim().ToUpper() :
@@ -107,7 +107,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Proveedores
         {
             try
             {
-                Models.Proveedores? Proveedor = AponusDBContext.Proveedores.Find(idProveedor);
+                Models.Clientes_Proveedores? Proveedor = AponusDBContext.Proveedores.Find(idProveedor);
 
                 if (Proveedor != null)
                 {
@@ -169,7 +169,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Proveedores
                        Nombre = x.Nombre,
                        Provincia = x.Provincia,
                        Barrio = x.Barrio,
-                       IdProveedor = x.IdProveedor,
+                       IdEntidad = x.IdEntidad,
 
                    })
                    .OrderBy(x => x.Apellido)
@@ -178,7 +178,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Proveedores
 
                 if (IdProveedor != null)
                 {
-                    return new JsonResult(Listado.FirstOrDefault(x => x.IdProveedor == IdProveedor));
+                    return new JsonResult(Listado.FirstOrDefault(x => x.IdEntidad == IdProveedor));
                 }
 
                 return new JsonResult(Listado);

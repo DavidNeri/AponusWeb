@@ -13,8 +13,8 @@ namespace Aponus_Web_API.Models
         public byte IdEstado { get; set; } = 1;
 
         [ForeignKey("IdMovimiento")]
-        public Stock_Movimientos StockMovimiento { get; set; }
-        public EstadosArchivosMovimientosStock? ArchivosMovimientosStockNavigation { get; set; }
+        public virtual Stock_Movimientos StockMovimiento { get; set; }
+        public virtual EstadosArchivosMovimientosStock? ArchivosMovimientosStockNavigation { get; set; }
 
 
     }

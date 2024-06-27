@@ -18,9 +18,9 @@ public partial class ProductosTipo
     [ForeignKey("ID_ESTADO")]
     public int IdEstado { get; set; }
     
-    public ICollection<Producto> Productos{ get; set;} = new List<Producto>();
+    public virtual ICollection<Producto> Productos{ get; set;} = new List<Producto>();
   
-    public EstadosTiposProductos IdEstadoNavigation { get; set; }
+    public virtual EstadosTiposProductos IdEstadoNavigation { get; set; }
 
     //Navigation Propertires
 

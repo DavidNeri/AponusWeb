@@ -31,8 +31,8 @@ public partial class Producto
 
     public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }  = null!;
     public virtual ProductosTipo IdTipoNavigation { get; set; } = null!;
-    public EstadosProductos IdEstadoNavigation { get; set; }
+    public virtual EstadosProductos IdEstadoNavigation { get; set; }
     public virtual ICollection<ComponentesCuantitativo>? ComponentesCuantitativos { get; set;} = new List<ComponentesCuantitativo>();
-
+    public virtual ICollection<VentasDetalles>? Ventas { get; set; } = new HashSet<VentasDetalles>();
 
 }

@@ -427,7 +427,7 @@ namespace Aponus_Web_API.Business
 
                     if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value!=null && jsonProveedores.Value is IEnumerable<DTOProveedores> ProveedoresList)
                     {
-                        proveedor = ProveedoresList.FirstOrDefault(x => x.IdProveedor == Movimiento.IdProveedorDestino);
+                        proveedor = ProveedoresList.FirstOrDefault(x => x.IdEntidad == Movimiento.IdProveedorDestino);
                         
                     }
 

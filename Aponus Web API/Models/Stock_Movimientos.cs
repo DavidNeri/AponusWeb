@@ -39,10 +39,10 @@ namespace Aponus_Web_API.Models
         public string? Tipo { get; set; }
         public int IdEstado { get; set; } = 1;
 
-        public Proveedores? ProveedorOrigen { get; set; }
-        public Proveedores? ProveedorDestino { get; set; }
-        public EstadosMovimientosStock? estadoMovimiento { get; set; }
-        public ICollection<SuministrosMovimientosStock>? Suministros { get; set; }
+        public virtual Clientes_Proveedores? ProveedorOrigen { get; set; }
+        public virtual Clientes_Proveedores? ProveedorDestino { get; set; }
+        public virtual EstadosMovimientosStock? estadoMovimiento { get; set; }
+        public virtual ICollection<SuministrosMovimientosStock>? Suministros { get; set; }
 
 
 

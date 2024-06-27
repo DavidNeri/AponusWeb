@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Models
         [Column("DESCRIPCION")]
         public string Descripcion { get; set; }
 
-        public ICollection<SuministrosMovimientosStock>? SuministrosMovimientoStock{ get; set; }
+        public virtual ICollection<SuministrosMovimientosStock>? SuministrosMovimientoStock{ get; set; }
 
     }
 }

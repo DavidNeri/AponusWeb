@@ -4,5 +4,7 @@
     {
         public int? idEstado {  get; set; }
         public string Descripcion { get; set; }
+
+        public byte? IdEstadoPropio { get; set; }
     }
 }

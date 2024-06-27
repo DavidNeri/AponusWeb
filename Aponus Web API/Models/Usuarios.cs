@@ -11,6 +11,8 @@ namespace Aponus_Web_API.Models
         public string correo { get; set; }
         public int IdPerfil { get; set; }
 
-        public ICollection<Proveedores> IdUsuarioRegistroNavigation { get; set; }
+        public virtual ICollection<Clientes_Proveedores> IdUsuarioRegistroNavigation { get; set; } = new HashSet<Clientes_Proveedores>();
+        public virtual ICollection<Compras> Compras { get; set; } = new HashSet<Compras>();
+        public virtual ICollection<Ventas> Ventas { get; set; } = new HashSet<Ventas>();
     }
 }

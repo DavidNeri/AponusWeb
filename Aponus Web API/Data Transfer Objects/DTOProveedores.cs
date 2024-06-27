@@ -5,8 +5,8 @@ namespace Aponus_Web_API.Data_Transfer_Objects
 {
     public class DTOProveedores
     {
-        [JsonProperty(Order=100, PropertyName = "idProveedor", NullValueHandling = NullValueHandling.Ignore)] 
-        public int? IdProveedor { get; set; }
+        [JsonProperty(Order=100, PropertyName = "idEntidad", NullValueHandling = NullValueHandling.Ignore)] 
+        public int? IdEntidad { get; set; }
 
         [JsonProperty(Order = 3, PropertyName = "nombreClave", NullValueHandling = NullValueHandling.Ignore)]
         public string? NombreClave{ get; set; }

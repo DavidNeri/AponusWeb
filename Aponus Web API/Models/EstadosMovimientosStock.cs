@@ -9,7 +9,7 @@ namespace Aponus_Web_API.Models
         [Key]
         [Column(("ID_ESTADO"))]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? IdEstado { get; set; } = 1;
+        public int? IdEstado { get; set; }
 
         [Column("DESCRIPCION")]
         public string Descripcion { get; set; }
@@ -17,7 +17,7 @@ namespace Aponus_Web_API.Models
         [Column("ID_ESTADO_PROPIO")]
         public byte? IdEstadoPropio { get; set; }
 
-        public ICollection<Stock_Movimientos> movimientosStock{ get; set; }
+        public virtual ICollection<Stock_Movimientos> movimientosStock{ get; set; }
 
     }
 }

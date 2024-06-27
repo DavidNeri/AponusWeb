@@ -100,7 +100,7 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpPost]
-        [Route("States/New")]
+        [Route("States/Save")]
 
         public async Task<IActionResult> NuevoEstado(DTOEstadosMovimientosStock Estado)
         {
@@ -111,7 +111,7 @@ namespace Aponus_Web_API.Controllers
                     ContentType = "Aplication/Json",
                     StatusCode = 400,
                 };
-            return await BS_Movimientos.Estados.Nuevo(Estado);
+            return await BS_Movimientos.Estados.Guardar(Estado);
         }
     }
 }

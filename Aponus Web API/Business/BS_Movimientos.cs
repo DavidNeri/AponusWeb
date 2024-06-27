@@ -1,15 +1,13 @@
-﻿using Aponus_Web_API.Acceso_a_Datos.Productos;
-using Aponus_Web_API.Acceso_a_Datos.Proveedores;
+﻿using Aponus_Web_API.Acceso_a_Datos.Proveedores;
 using Aponus_Web_API.Acceso_a_Datos.Stocks;
-using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Services;
 using Aponus_Web_API.Services.Movimientos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Data.Entity.Infrastructure;
+using Microsoft.Data.SqlClient;
 
 namespace Aponus_Web_API.Business
 {
@@ -245,7 +243,7 @@ namespace Aponus_Web_API.Business
 
                             if (ProveedoresActionResult is JsonResult jsonProveedores && jsonProveedores.Value != null && jsonProveedores.Value is IEnumerable<DTOProveedores> ProveedoresList)
                             {
-                                proveedor = ProveedoresList.FirstOrDefault(x => x.IdProveedor == ArchivosMovimiento.IdProveedorDestino);
+                                proveedor = ProveedoresList.FirstOrDefault(x => x.IdEntidad == ArchivosMovimiento.IdProveedorDestino);
                                 RutaCompleta = stocks.CrearDirectorioMovimientos(!string.IsNullOrEmpty(proveedor.NombreClave) ? proveedor.NombreClave : proveedor.Apellido + " " + proveedor.Nombre);
 
                             }
@@ -370,34 +368,50 @@ namespace Aponus_Web_API.Business
         {
             public static IActionResult Listar()
             {
-                JsonResult Listado;
+                
                 using (AponusContext AponusDbContext = new AponusContext())
                 {
-                    Listado = new JsonResult(MovimientosStock.Estados.Listar(AponusDbContext));
+                    var Listado = MovimientosStock.Estados.Listar(AponusDbContext);
+                    return new JsonResult(Listado);
                 }
 
-                return Listado;
+               
             }
 
-            internal static async Task<IActionResult> Nuevo(DTOEstadosMovimientosStock estado)
+            internal static async Task<IActionResult> Guardar(DTOEstadosMovimientosStock estado)
             {
+                string insert = "INSERT INTO ESTADOS_MOVIMIENTOS_STOCK (DESCRIPCION) VALUES (@DESCRIPCION)";
                 try
                 {
                     using (AponusContext AponusDbContext = new AponusContext())
                     {
-                        //var Existente = AponusDbContext.
-                        EstadosMovimientosStock Estado = new EstadosMovimientosStock()
+                        var Existe = AponusDbContext.EstadoMovimientosStock.Find(estado.idEstado);
+
+                        if (Existe != null)
                         {
-                            Descripcion = estado.Descripcion,
-                        };
+                            Existe.IdEstadoPropio = estado.IdEstadoPropio ?? Existe.IdEstadoPropio;
+                            Existe.Descripcion = estado.Descripcion ?? Existe.Descripcion;
+                            Existe.IdEstado = estado.idEstado ?? Existe.IdEstado;   
 
-                        await AponusDbContext.EstadoMovimientosStock.AddAsync(Estado);
-                        await AponusDbContext.SaveChangesAsync();
-                        return new StatusCodeResult(200);
 
+                            AponusDbContext.EstadoMovimientosStock.Update(Existe);
+
+                            await AponusDbContext.SaveChangesAsync();
+                            
+                            return new StatusCodeResult(200);
+
+                        }
+                        else
+                        {
+                            await AponusDbContext.Database.ExecuteSqlRawAsync(insert,
+                                new SqlParameter("@DESCRIPCION", estado.Descripcion.Trim().ToUpper()));
+
+
+                            return new StatusCodeResult(200);
+                        }
                     }
                 }
-                catch (DbUpdateException ex)
+                catch (Exception ex)
                 {
 
                     return new JsonResult(ex.Message);

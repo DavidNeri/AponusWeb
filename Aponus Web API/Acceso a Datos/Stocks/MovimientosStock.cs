@@ -18,9 +18,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         internal class Estados
         {
-            internal static IActionResult Listar(AponusContext AponusDbContext)
+            internal static List<EstadosMovimientosStock> Listar(AponusContext AponusDbContext)
             {
-                return new JsonResult(AponusDbContext.EstadoMovimientosStock.ToList());
+               return AponusDbContext.EstadoMovimientosStock.Where(x=>x.IdEstadoPropio!=0 && !x.Descripcion.ToUpper().Contains("ELIMINADO")).ToList();  
+                
             }
 
           
@@ -100,13 +101,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 .Join(
                     AponusDBContext.Proveedores,
                     movimientos => movimientos.IdProveedorOrigen,
-                    proveedorOrigen => proveedorOrigen.IdProveedor,
+                    proveedorOrigen => proveedorOrigen.IdEntidad,
                     (movimiento, proveedorOrigen) => new { Movimiento = movimiento, ProveedorOrigen = proveedorOrigen }
                 )
                 .Join(
                     AponusDBContext.Proveedores,
                     movimiento_ProveedorOrigen => movimiento_ProveedorOrigen.Movimiento.IdProveedorDestino,
-                    proveedorDestino => proveedorDestino.IdProveedor,
+                    proveedorDestino => proveedorDestino.IdEntidad,
                     (movimiento_ProveedorOrigen, proveedorDestino) => new { Movimiento_ProveedorOrigen = movimiento_ProveedorOrigen, ProveedorDestino = proveedorDestino }
                 )
                 .Join(
@@ -159,7 +160,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                     ProveedorOrigen = new DTOProveedores()
                     {
-                        IdProveedor = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.IdProveedor,
+                        IdEntidad = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.IdEntidad,
                         Nombre = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Nombre,
                         Apellido= result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Apellido,
                         NombreClave = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.NombreClave,
@@ -179,7 +180,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                     ProveedorDestino = new DTOProveedores()
                     {
-                        IdProveedor = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.IdProveedor,
+                        IdEntidad = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.IdEntidad,
                         Nombre = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Nombre,
                         Apellido = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Apellido,
                         NombreClave = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.NombreClave,

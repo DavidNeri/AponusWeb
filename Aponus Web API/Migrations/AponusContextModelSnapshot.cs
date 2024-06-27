@@ -56,6 +56,143 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("ARCHIVOS_STOCK", (string)null);
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.CategoriasClientes", b =>
+                {
+                    b.Property<int>("IdCategoria")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_CATEGORIA")
+                        .HasAnnotation("SqlServer:Identity", "1, 1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCategoria"));
+
+                    b.Property<byte[]>("IdEstado")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(1)")
+                        .HasColumnName("ID_ESTADO")
+                        .HasDefaultValueSql("1");
+
+                    b.Property<string>("NombreCategoria")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NOMBRE");
+
+                    b.HasKey("IdCategoria");
+
+                    b.ToTable("CLIENTES_CATEGORIAS", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.Clientes_Proveedores", b =>
+                {
+                    b.Property<int>("IdEntidad")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ENTIDAD");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEntidad"));
+
+                    b.Property<string>("Altura")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ALTURA");
+
+                    b.Property<string>("Apellido")
+                        .HasColumnType("varchar(max)")
+                        .HasColumnName("APELLIDO");
+
+                    b.Property<string>("Barrio")
+                        .HasColumnType("varchar(max)")
+                        .HasColumnName("BARRIO");
+
+                    b.Property<string>("Calle")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CALLE");
+
+                    b.Property<string>("Ciudad")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CIUDAD");
+
+                    b.Property<string>("CodigoPostal")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CODIGO_POSTAL");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EMAIL");
+
+                    b.Property<DateTime>("FechaRegistro")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("FECHA_REGISTRO");
+
+                    b.Property<int>("IdCategoria")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_CATEGORIA");
+
+                    b.Property<byte[]>("IdEstado")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(1)")
+                        .HasColumnName("ID_ESTADO")
+                        .HasDefaultValueSql("(1)");
+
+                    b.Property<string>("IdFiscal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ID_FISCAL");
+
+                    b.Property<int>("IdTipo")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_TIPO");
+
+                    b.Property<string>("IdUsuarioRegistro")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_USUARIO_REGISTRO");
+
+                    b.Property<string>("Localidad")
+                        .HasColumnType("varchar(MAX)")
+                        .HasColumnName("LOCALIDAD");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("varchar(max)")
+                        .HasColumnName("NOMBRE");
+
+                    b.Property<string>("NombreClave")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NOMBRE_CLAVE");
+
+                    b.Property<string>("Pais")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PAIS");
+
+                    b.Property<string>("Provincia")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PROVINCIA");
+
+                    b.Property<string>("Telefono1")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TELEFONO_1");
+
+                    b.Property<string>("Telefono2")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TELEFONO_2");
+
+                    b.Property<string>("Telefono3")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TELEFONO_3");
+
+                    b.HasKey("IdEntidad");
+
+                    b.HasIndex("IdCategoria");
+
+                    b.HasIndex("IdTipo");
+
+                    b.HasIndex("IdUsuarioRegistro");
+
+                    b.ToTable("CLIENTES_PROVEEDORES", (string)null);
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.ComponentesCuantitativo", b =>
                 {
                     b.Property<string>("IdProducto")
@@ -233,6 +370,73 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("COMPONENTES_PESABLES", (string)null);
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.Compras", b =>
+                {
+                    b.Property<int>("IdCompra")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_COMPRA")
+                        .HasAnnotation("SqlServer:Identity", "1, 1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCompra"));
+
+                    b.Property<DateTime>("FechaHora")
+                        .HasColumnType("datetime")
+                        .HasColumnName("FECHA_HORA");
+
+                    b.Property<int>("IdEstadoCompra")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ESTADO_COMPRA");
+
+                    b.Property<int>("IdProveedor")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_PROVEEDOR");
+
+                    b.Property<string>("IdUsuario")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_USUARIO");
+
+                    b.Property<decimal?>("SaldoCancelado")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SALDO_CANCELADO");
+
+                    b.Property<decimal>("SaldoTotal")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SALDO_TOTAL");
+
+                    b.HasKey("IdCompra");
+
+                    b.HasIndex("IdEstadoCompra");
+
+                    b.HasIndex("IdProveedor");
+
+                    b.HasIndex("IdUsuario");
+
+                    b.ToTable("COMPRAS", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.ComprasDetalles", b =>
+                {
+                    b.Property<int>("IdCompra")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_COMPRA");
+
+                    b.Property<string>("IdInsumo")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_INSUMO");
+
+                    b.Property<decimal>("Cantidad")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("CANTIDAD");
+
+                    b.HasKey("IdCompra", "IdInsumo");
+
+                    b.HasIndex("IdInsumo");
+
+                    b.ToTable("COMPRAS_DETALLES", (string)null);
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.CuantitativosDetalle", b =>
                 {
                     b.Property<string>("IdComponente")
@@ -283,6 +487,57 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("CUANTITATIVOS_DETALLE", (string)null);
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.CuotasVentas", b =>
+                {
+                    b.Property<int>("IdCuota")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_CUOTA")
+                        .HasAnnotation("SqlServer:Identity", "1, 1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCuota"));
+
+                    b.Property<int>("EstadoCuotaIdEstadoCuota")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaPago")
+                        .HasColumnType("datetime")
+                        .HasColumnName("FECHA_PAGO");
+
+                    b.Property<DateTime>("FechaVencimiento")
+                        .HasColumnType("datetime")
+                        .HasColumnName("FECHA_VENCIMIENTO");
+
+                    b.Property<int>("IdEstadoCuota")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ESTADO_CUOTA")
+                        .HasDefaultValueSql("0");
+
+                    b.Property<int>("IdVenta")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_VENTA");
+
+                    b.Property<decimal>("Monto")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("MONTO")
+                        .HasDefaultValueSql("0.00");
+
+                    b.Property<string>("NumeroCuota")
+                        .IsRequired()
+                        .HasColumnType("varchar(max)")
+                        .HasColumnName("NUMERO_CUOTA");
+
+                    b.HasKey("IdCuota");
+
+                    b.HasIndex("EstadoCuotaIdEstadoCuota");
+
+                    b.HasIndex("IdVenta");
+
+                    b.ToTable("CUOTAS_VENTAS", (string)null);
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosArchivosMovimientosStock", b =>
                 {
                     b.Property<byte[]>("IdEstado")
@@ -313,14 +568,67 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("IdEstado");
 
-                    b.ToTable("EstadosComponentesDetalle");
+                    b.ToTable("EstadosComponentesDetalle", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosCompras", b =>
+                {
+                    b.Property<int>("IdEstadoCompra")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ESTADO_COMPRA")
+                        .HasAnnotation("SqlServer:Identity", "1, 1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEstadoCompra"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DESCRIPCION");
+
+                    b.Property<int>("IdEstado")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ESTADO");
+
+                    b.HasKey("IdEstadoCompra");
+
+                    b.ToTable("ESTADOS_COMPRAS", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosCuotasVentas", b =>
+                {
+                    b.Property<int>("IdEstadoCuota")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ESTADO_CUOTA")
+                        .HasAnnotation("SqlServer:Identity", "1, 1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEstadoCuota"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("varchar(MAX)")
+                        .HasColumnName("DESCRIPCION");
+
+                    b.Property<int>("IdEstado")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ESTADO")
+                        .HasDefaultValueSql("1");
+
+                    b.HasKey("IdEstadoCuota");
+
+                    b.ToTable("ESTADOS_CUOTAS_VENTAS", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosMovimientosStock", b =>
                 {
-                    b.Property<byte[]>("IdEstado")
-                        .HasColumnType("varbinary(1)")
+                    b.Property<int?>("IdEstado")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasColumnName("ID_ESTADO");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("IdEstado"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
@@ -328,7 +636,6 @@ namespace AponusWebAPI.Migrations
                         .HasColumnName("DESCRIPCION");
 
                     b.Property<byte[]>("IdEstadoPropio")
-                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("varbinary(1)")
                         .HasColumnName("ID_ESTADO_PROPIO")
@@ -353,7 +660,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("IdEstado");
 
-                    b.ToTable("EstadosProducto");
+                    b.ToTable("EstadosProducto", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductosComponentes", b =>
@@ -370,7 +677,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("IdEstado");
 
-                    b.ToTable("EstadosProductosComponente");
+                    b.ToTable("EstadosProductosComponente", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductosDescripciones", b =>
@@ -423,6 +730,58 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("ESTADOS_PRODUCTOS_TIPOS", (string)null);
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosVentas", b =>
+                {
+                    b.Property<int>("IdEstadoVenta")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ESTADO_VENTA")
+                        .HasAnnotation("SqlServer:Identity", "1, 1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEstadoVenta"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DESCRIPCION");
+
+                    b.Property<int>("IdEstado")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ESTADO");
+
+                    b.HasKey("IdEstadoVenta");
+
+                    b.ToTable("ESTADOS_VENTAS", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.MediosPago", b =>
+                {
+                    b.Property<int>("IdMedioPago")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_MEDIO_PAGO")
+                        .HasAnnotation("SqlServer:Identity", "1,1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdMedioPago"));
+
+                    b.Property<string>("CodigoMPago")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CODIGO_MPAGO");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DESCRIPCION");
+
+                    b.Property<int>("IdEstado")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ESTADO");
+
+                    b.HasKey("IdMedioPago");
+
+                    b.ToTable("MEDIOS_PAGO", (string)null);
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.MensurablesDetalle", b =>
                 {
                     b.Property<string>("IdComponente")
@@ -473,6 +832,102 @@ namespace AponusWebAPI.Migrations
                     b.HasIndex("IdDescripcionNavigationIdDescripcion");
 
                     b.ToTable("MENSURABLES_DETALLE", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.PagosCompras", b =>
+                {
+                    b.Property<int>("IdPago")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_PAGO")
+                        .HasColumnOrder(2)
+                        .HasAnnotation("SqlServer:Identity", "1,1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPago"));
+
+                    b.Property<int?>("CantidadCuotas")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_CUOTAS");
+
+                    b.Property<int?>("CantidadCuotasCanceladas")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_CUOTAS_CANCELADAS");
+
+                    b.Property<int>("IdCompra")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_COMPRA");
+
+                    b.Property<int>("IdMedioPago")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_MEDIO_PAGO");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SUBTOTAL");
+
+                    b.Property<decimal?>("SubtotalCancelado")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SUBTOTAL_CANCELADO");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("TOTAL");
+
+                    b.HasKey("IdPago");
+
+                    b.HasIndex("IdCompra");
+
+                    b.HasIndex("IdMedioPago");
+
+                    b.ToTable("PAGOS_COMPRAS", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.PagosVentas", b =>
+                {
+                    b.Property<int>("IdPago")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_PAGO")
+                        .HasColumnOrder(2)
+                        .HasAnnotation("SqlServer:Identity", "1,1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPago"));
+
+                    b.Property<int?>("CantidadCuotas")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_CUOTAS");
+
+                    b.Property<int?>("CantidadCuotasCanceladas")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_CUOTAS_CANCELADAS");
+
+                    b.Property<int>("IdMedioPago")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_MEDIO_PAGO");
+
+                    b.Property<int>("IdVenta")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_VENTA");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SUBTOTAL");
+
+                    b.Property<decimal?>("SubtotalCancelado")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SUBTOTAL_CANCELADO");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("TOTAL");
+
+                    b.HasKey("IdPago");
+
+                    b.HasIndex("IdMedioPago");
+
+                    b.HasIndex("IdVenta");
+
+                    b.ToTable("PAGOS_VENTAS", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.PesablesDetalle", b =>
@@ -684,104 +1139,6 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("PRODUCTOS_TIPOS_DESCRIPCION", (string)null);
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Models.Proveedores", b =>
-                {
-                    b.Property<int>("IdProveedor")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID_PROVEEDOR");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdProveedor"));
-
-                    b.Property<string>("Altura")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ALTURA");
-
-                    b.Property<string>("Apellido")
-                        .HasColumnType("varchar(max)")
-                        .HasColumnName("APELLIDO");
-
-                    b.Property<string>("Barrio")
-                        .HasColumnType("varchar(max)")
-                        .HasColumnName("BARRIO");
-
-                    b.Property<string>("Calle")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("CALLE");
-
-                    b.Property<string>("Ciudad")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("CIUDAD");
-
-                    b.Property<string>("CodigoPostal")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("CODIGO_POSTAL");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("EMAIL");
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("FECHA_REGISTRO");
-
-                    b.Property<byte[]>("IdEstado")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("varbinary(1)")
-                        .HasColumnName("ID_ESTADO")
-                        .HasDefaultValueSql("(1)");
-
-                    b.Property<string>("IdFiscal")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ID_FISCAL");
-
-                    b.Property<string>("IdUsuarioRegistro")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("ID_USUARIO_REGISTRO");
-
-                    b.Property<string>("Localidad")
-                        .HasColumnType("varchar(MAX)")
-                        .HasColumnName("LOCALIDAD");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("varchar(max)")
-                        .HasColumnName("NOMBRE");
-
-                    b.Property<string>("NombreClave")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("NOMBRE_CLAVE");
-
-                    b.Property<string>("Pais")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("PAIS");
-
-                    b.Property<string>("Provincia")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("PROVINCIA");
-
-                    b.Property<string>("Telefono1")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("TELEFONO_1");
-
-                    b.Property<string>("Telefono2")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("TELEFONO_2");
-
-                    b.Property<string>("Telefono3")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("TELEFONO_3");
-
-                    b.HasKey("IdProveedor");
-
-                    b.HasIndex("IdUsuarioRegistro");
-
-                    b.ToTable("PROVEEDORES", (string)null);
-                });
-
             modelBuilder.Entity("Aponus_Web_API.Models.StockCuantitativo", b =>
                 {
                     b.Property<string>("IdComponente")
@@ -943,10 +1300,9 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("datetime2(7)")
                         .HasColumnName("FECHA_HORA_ULTIMA_MODIFICACION");
 
-                    b.Property<byte[]>("IdEstado")
-                        .IsRequired()
+                    b.Property<int>("IdEstado")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("Varbinary(1)")
+                        .HasColumnType("int")
                         .HasColumnName("ID_ESTADO")
                         .HasDefaultValueSql("1");
 
@@ -979,7 +1335,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasIndex("IdProveedorOrigen");
 
-                    b.ToTable("Stock_Movimientos");
+                    b.ToTable("Stock_Movimientos", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.SuministrosMovimientosStock", b =>
@@ -1026,6 +1382,33 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("SUMINISTROS_MOVIMIENTOS_STOCK", (string)null);
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.TiposClientes", b =>
+                {
+                    b.Property<int>("IdTipo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_TIPO")
+                        .HasAnnotation("SqlServer:Identity", "1, 1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdTipo"));
+
+                    b.Property<byte[]>("IdEstado")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(1)")
+                        .HasColumnName("ID_ESTADO")
+                        .HasDefaultValueSql("1");
+
+                    b.Property<string>("NombreTipo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NOMBRE");
+
+                    b.HasKey("IdTipo");
+
+                    b.ToTable("CLIENTES_TIPOS", (string)null);
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.Usuarios", b =>
                 {
                     b.Property<string>("Usuario")
@@ -1048,7 +1431,74 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("Usuario");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.Ventas", b =>
+                {
+                    b.Property<int>("IdVenta")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID_VENTA")
+                        .HasAnnotation("SqlServer:Identity", "1, 1");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdVenta"));
+
+                    b.Property<DateTime>("FechaHora")
+                        .HasColumnType("datetime")
+                        .HasColumnName("FECHA_HORA");
+
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_PROVEEDOR");
+
+                    b.Property<int>("IdEstadoVenta")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_ESTADO_VENTA");
+
+                    b.Property<string>("IdUsuario")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_USUARIO");
+
+                    b.Property<decimal?>("SaldoCancelado")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SALDO_CANCELADO");
+
+                    b.Property<decimal>("SaldoTotal")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SALDO_TOTAL");
+
+                    b.HasKey("IdVenta");
+
+                    b.HasIndex("IdCliente");
+
+                    b.HasIndex("IdEstadoVenta");
+
+                    b.HasIndex("IdUsuario");
+
+                    b.ToTable("VENTAS", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.VentasDetalles", b =>
+                {
+                    b.Property<int>("IdVenta")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_VENTA");
+
+                    b.Property<string>("IdProducto")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_PRODUCTO");
+
+                    b.Property<decimal>("Cantidad")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("CANTIDAD");
+
+                    b.HasKey("IdVenta", "IdProducto");
+
+                    b.HasIndex("IdProducto");
+
+                    b.ToTable("VENTAS_DETALLES", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ArchivosMovimientosStock", b =>
@@ -1068,6 +1518,33 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("ArchivosMovimientosStockNavigation");
 
                     b.Navigation("StockMovimiento");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.Clientes_Proveedores", b =>
+                {
+                    b.HasOne("Aponus_Web_API.Models.CategoriasClientes", "CategoriaCliente")
+                        .WithMany("Clientes")
+                        .HasForeignKey("IdCategoria")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.TiposClientes", "TipoCliente")
+                        .WithMany("Clientes")
+                        .HasForeignKey("IdTipo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.Usuarios", "UsuarioRegistro")
+                        .WithMany("IdUsuarioRegistroNavigation")
+                        .HasForeignKey("IdUsuarioRegistro")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CategoriaCliente");
+
+                    b.Navigation("TipoCliente");
+
+                    b.Navigation("UsuarioRegistro");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ComponentesCuantitativo", b =>
@@ -1144,6 +1621,52 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("IdComponenteNavigation");
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.Compras", b =>
+                {
+                    b.HasOne("Aponus_Web_API.Models.EstadosCompras", "Estado")
+                        .WithMany("compras")
+                        .HasForeignKey("IdEstadoCompra")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.Clientes_Proveedores", "Proveedor")
+                        .WithMany("compras")
+                        .HasForeignKey("IdProveedor")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.Usuarios", "Usuario")
+                        .WithMany("Compras")
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Estado");
+
+                    b.Navigation("Proveedor");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.ComprasDetalles", b =>
+                {
+                    b.HasOne("Aponus_Web_API.Models.Compras", "Compra")
+                        .WithMany("DetallesCompra")
+                        .HasForeignKey("IdCompra")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.ComponentesDetalle", "DetallesInsumo")
+                        .WithMany("ComprasNavigation")
+                        .HasForeignKey("IdInsumo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Compra");
+
+                    b.Navigation("DetallesInsumo");
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.CuantitativosDetalle", b =>
                 {
                     b.HasOne("Aponus_Web_API.Models.ComponentesDescripcion", "IdDescripcionNavigation")
@@ -1151,6 +1674,25 @@ namespace AponusWebAPI.Migrations
                         .HasForeignKey("IdDescripcionNavigationIdDescripcion");
 
                     b.Navigation("IdDescripcionNavigation");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.CuotasVentas", b =>
+                {
+                    b.HasOne("Aponus_Web_API.Models.EstadosCuotasVentas", "EstadoCuota")
+                        .WithMany("IdEstadoCuotaNavigation")
+                        .HasForeignKey("EstadoCuotaIdEstadoCuota")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.Ventas", "Venta")
+                        .WithMany("Cuotas")
+                        .HasForeignKey("IdVenta")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EstadoCuota");
+
+                    b.Navigation("Venta");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.MensurablesDetalle", b =>
@@ -1168,6 +1710,44 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("IdComponenteNavigation");
 
                     b.Navigation("IdDescripcionNavigation");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.PagosCompras", b =>
+                {
+                    b.HasOne("Aponus_Web_API.Models.Compras", "Compra")
+                        .WithMany("Pagos")
+                        .HasForeignKey("IdCompra")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.MediosPago", "MedioPago")
+                        .WithMany("PagosComprasNavigation")
+                        .HasForeignKey("IdMedioPago")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Compra");
+
+                    b.Navigation("MedioPago");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.PagosVentas", b =>
+                {
+                    b.HasOne("Aponus_Web_API.Models.MediosPago", "MedioPago")
+                        .WithMany("PagosVentasNavigation")
+                        .HasForeignKey("IdMedioPago")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.Ventas", "Venta")
+                        .WithMany("Pagos")
+                        .HasForeignKey("IdVenta")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MedioPago");
+
+                    b.Navigation("Venta");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.PesablesDetalle", b =>
@@ -1239,17 +1819,6 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("IdEstadoNavigation");
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Models.Proveedores", b =>
-                {
-                    b.HasOne("Aponus_Web_API.Models.Usuarios", "UsuarioRegistro")
-                        .WithMany("IdUsuarioRegistroNavigation")
-                        .HasForeignKey("IdUsuarioRegistro")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UsuarioRegistro");
-                });
-
             modelBuilder.Entity("Aponus_Web_API.Models.StockCuantitativo", b =>
                 {
                     b.HasOne("Aponus_Web_API.Models.CuantitativosDetalle", "IdComponenteNavigation")
@@ -1280,13 +1849,13 @@ namespace AponusWebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aponus_Web_API.Models.Proveedores", "ProveedorDestino")
+                    b.HasOne("Aponus_Web_API.Models.Clientes_Proveedores", "ProveedorDestino")
                         .WithMany("MovimientosDestino")
                         .HasForeignKey("IdProveedorDestino")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aponus_Web_API.Models.Proveedores", "ProveedorOrigen")
+                    b.HasOne("Aponus_Web_API.Models.Clientes_Proveedores", "ProveedorOrigen")
                         .WithMany("MovimientosOrigen")
                         .HasForeignKey("IdProveedorOrigen")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1316,6 +1885,80 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("EstadosSuministrosMovimientosStockNavigation");
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.Ventas", b =>
+                {
+                    b.HasOne("Aponus_Web_API.Models.Clientes_Proveedores", "Cliente")
+                        .WithMany("ventas")
+                        .HasForeignKey("IdCliente")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.EstadosVentas", "Estado")
+                        .WithMany("ventas")
+                        .HasForeignKey("IdEstadoVenta")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.Usuarios", "Usuario")
+                        .WithMany("Ventas")
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Estado");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.VentasDetalles", b =>
+                {
+                    b.HasOne("Aponus_Web_API.Models.Producto", "IdProductoNavigation")
+                        .WithMany("Ventas")
+                        .HasForeignKey("IdProducto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aponus_Web_API.Models.Ventas", "Venta")
+                        .WithMany("DetallesVenta")
+                        .HasForeignKey("IdVenta")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdProductoNavigation");
+
+                    b.Navigation("Venta");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.CategoriasClientes", b =>
+                {
+                    b.Navigation("Clientes");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.Clientes_Proveedores", b =>
+                {
+                    b.Navigation("MovimientosDestino");
+
+                    b.Navigation("MovimientosOrigen");
+
+                    b.Navigation("compras");
+
+                    b.Navigation("ventas");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.ComponentesDetalle", b =>
+                {
+                    b.Navigation("ComprasNavigation");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.Compras", b =>
+                {
+                    b.Navigation("DetallesCompra");
+
+                    b.Navigation("Pagos");
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.CuantitativosDetalle", b =>
                 {
                     b.Navigation("ComponentesCuantitativos");
@@ -1331,6 +1974,16 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosComponentesDetalles", b =>
                 {
                     b.Navigation("ComponentesDetalle");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosCompras", b =>
+                {
+                    b.Navigation("compras");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosCuotasVentas", b =>
+                {
+                    b.Navigation("IdEstadoCuotaNavigation");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosMovimientosStock", b =>
@@ -1363,6 +2016,18 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("ProductosTipos");
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.EstadosVentas", b =>
+                {
+                    b.Navigation("ventas");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.MediosPago", b =>
+                {
+                    b.Navigation("PagosComprasNavigation");
+
+                    b.Navigation("PagosVentasNavigation");
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.MensurablesDetalle", b =>
                 {
                     b.Navigation("ComponentesMensurables");
@@ -1378,6 +2043,8 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.Producto", b =>
                 {
                     b.Navigation("ComponentesCuantitativos");
+
+                    b.Navigation("Ventas");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosDescripcion", b =>
@@ -1388,13 +2055,6 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosTipo", b =>
                 {
                     b.Navigation("Productos");
-                });
-
-            modelBuilder.Entity("Aponus_Web_API.Models.Proveedores", b =>
-                {
-                    b.Navigation("MovimientosDestino");
-
-                    b.Navigation("MovimientosOrigen");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.StockCuantitativo", b =>
@@ -1419,9 +2079,27 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("Suministros");
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Models.TiposClientes", b =>
+                {
+                    b.Navigation("Clientes");
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Models.Usuarios", b =>
                 {
+                    b.Navigation("Compras");
+
                     b.Navigation("IdUsuarioRegistroNavigation");
+
+                    b.Navigation("Ventas");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Models.Ventas", b =>
+                {
+                    b.Navigation("Cuotas");
+
+                    b.Navigation("DetallesVenta");
+
+                    b.Navigation("Pagos");
                 });
 #pragma warning restore 612, 618
         }

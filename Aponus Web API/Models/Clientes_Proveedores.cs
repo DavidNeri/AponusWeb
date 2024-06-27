@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Models
 {
-    public class Proveedores
+    public class Clientes_Proveedores
     {
         [Key]
-        [Column("ID_PROVEEDOR")]
-        public int IdProveedor { get; set; }
+        [Column("ID_ENTIDAD")]
+        public int IdEntidad { get; set; }
 
         [Column("NOMBRE_CLAVE")]
         public string NombreClave{ get;set; }
@@ -63,13 +63,22 @@ namespace Aponus_Web_API.Models
         [ForeignKey("ID_USUARIO_REGISTRO")]
         public string IdUsuarioRegistro{ get; set; }
 
+        [ForeignKey("ID_CATEGORIA")]
+        public int IdCategoria{ get; set; }
+
+        [ForeignKey("ID_TIPO")]
+        public int IdTipo{ get; set; }
+
         [Column("ID_ESTADO")]
         public byte IdEstado { get; set; }
 
-        public ICollection<Stock_Movimientos> MovimientosOrigen { get; set; }
-        public ICollection<Stock_Movimientos> MovimientosDestino { get; set; }
-
-        public Usuarios UsuarioRegistro { get; set; }
+        public virtual ICollection<Stock_Movimientos> MovimientosOrigen { get; set; } = new HashSet<Stock_Movimientos>();
+        public virtual ICollection<Stock_Movimientos> MovimientosDestino { get; set; } = new HashSet<Stock_Movimientos>();       
+        public virtual ICollection<Compras> compras { get; set; } = new HashSet<Compras>(); 
+        public virtual ICollection<Ventas> ventas{ get; set; } = new HashSet<Ventas>();
+        public virtual Usuarios UsuarioRegistro { get; set; }
+        public virtual CategoriasClientes CategoriaCliente { get; set; }
+        public virtual TiposClientes TipoCliente { get; set; }
 
     }
 }
