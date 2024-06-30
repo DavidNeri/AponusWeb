@@ -1,15 +1,8 @@
-﻿using Aponus_Web_API.Acceso_a_Datos.Sistema;
-using Aponus_Web_API.Data_Transfer_Objects;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
-using DataScope.Stemmer.NETStandart;
+﻿using System.Text.RegularExpressions;
 using Annytab.Stemmer;
-using System.Data.SqlClient;
-using Microsoft.Extensions.FileProviders.Physical;
 using Aponus_Web_API.Models;
 
-namespace Aponus_Web_API.Services
+namespace Aponus_Web_API.Support
 {
     public class CategoriesServices
     {

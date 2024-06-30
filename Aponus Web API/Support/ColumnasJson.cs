@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Aponus_Web_API.Data_Transfer_Objects;
 
-namespace Aponus_Web_API.Services
+namespace Aponus_Web_API.Support
 {
     public class ColumnasJson
     {

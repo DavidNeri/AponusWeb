@@ -1,6 +1,6 @@
 ﻿using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
-using Aponus_Web_API.Services;
+using Aponus_Web_API.Support;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Business
@@ -9,33 +9,30 @@ namespace Aponus_Web_API.Business
     {
         internal static async Task<IActionResult> Guardar(DTOVentas Venta)
         {
-            ICollection<VentasDetalles> NvaVtaDet = new List<VentasDetalles>();
-            ICollection<PagosVentas> NvaVtaPagos = new List<PagosVentas>();
-            ICollection<DTOCuotasVentas>  NvaVtaCuotas = await GenerarCuotasVenta(5);
+            Venta.Cuotas = await CalcularCuotas(5, Venta.Monto);
 
             Ventas NuevaVenta = new Ventas()
             {
                 IdCliente = Venta.IdCliente,
                 FechaHora = Fechas.ObtenerFechaHora(),
                 IdUsuario = Venta.IdUsuario,
-                SaldoTotal = Venta.SaldoTotal,
+                SaldoTotal = Venta.Monto,
                 SaldoCancelado = Venta.SaldoCancelado,
+
             };
 
-
             foreach (var vta in Venta.DetallesVenta)
-            {
-                NvaVtaDet.Add(new VentasDetalles()
+            {               
+                 NuevaVenta.DetallesVenta.Add(new VentasDetalles()
                 {
                     IdProducto = vta.IdProducto,
                     Cantidad = vta.Cantidad,
 
                 });
             }
-
             foreach (var vtaPagos in Venta.Pagos)
             {
-                NvaVtaPagos.Add(new PagosVentas()
+                NuevaVenta.Pagos.Add(new PagosVentas()
                 {
                     IdMedioPago = vtaPagos.IdMedioPago,
                     Subtotal = vtaPagos.Subtotal,
@@ -45,25 +42,54 @@ namespace Aponus_Web_API.Business
                     CantidadCuotasCanceladas = vtaPagos.CantidadCuotasCanceladas
                 });
             }
-
-
-            foreach (var vtaCuotas in Venta.Cuotas)
+            foreach (var Cuota in Venta.Cuotas)
             {
-                for (int CuotaNumero =1; CuotaNumero <= (Venta.Pagos.Select(x=>x.CantidadCuotas).FirstOrDefault() ?? 0 ); CuotaNumero++)
+                NuevaVenta.Cuotas.Add(new CuotasVentas()
                 {
+                    NumeroCuota = Cuota.NumeroCuota,
+                    Monto = Cuota.Monto,
+                    FechaVencimiento = Cuota.FechaVencimiento,
 
-                }
+                });
             }
+
+
+
 
 
             return null;
 
         }
-
-
-        public static async Task<ICollection<DTOCuotasVentas>> GenerarCuotasVenta (int TotalCuotas)
+        public static async Task<ICollection<DTOCuotasVentas>> CalcularCuotas( int TotalCuotas, decimal MontoVenta, decimal interes = 0)
         {
             ICollection<CuotasVentas> NvaVtaCuotas = new List<CuotasVentas>();
+            DateTime Vencimiento = Fechas.ObtenerFechaHora();
+
+            decimal MontoCuota = (MontoVenta + (MontoVenta * interes)) / TotalCuotas;
+            decimal Resto = MontoVenta % TotalCuotas;
+
+            for (int i = 1; i <= TotalCuotas; i++)
+            {
+                Vencimiento = i switch
+                {
+                    1 => Vencimiento,
+                    _ => Vencimiento.AddDays(30)
+                };
+
+                NvaVtaCuotas.Add(new CuotasVentas()
+                {
+                    NumeroCuota = $"{i}/{TotalCuotas}",
+                   
+                    Monto = i switch
+                    {
+                        int n when n == TotalCuotas => MontoCuota + Resto,
+                        _ => MontoCuota,
+                    },
+
+                    FechaVencimiento = Vencimiento
+
+                });
+            }
 
 
             return null;

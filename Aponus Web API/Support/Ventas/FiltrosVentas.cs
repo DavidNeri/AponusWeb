@@ -1,4 +1,4 @@
-﻿namespace Aponus_Web_API.Services.Ventas
+﻿namespace Aponus_Web_API.Support.Ventas
 {
     public class FiltrosVentas
     {

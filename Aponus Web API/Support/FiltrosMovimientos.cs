@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Linq.Expressions;
 
-namespace Aponus_Web_API.Services
+namespace Aponus_Web_API.Support
 {
     public class FiltrosMovimientos
     {

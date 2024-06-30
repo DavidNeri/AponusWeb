@@ -1,7 +1,7 @@
 ﻿using Aponus_Web_API.Business;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
-using Aponus_Web_API.Services.Ventas;
+using Aponus_Web_API.Support.Ventas;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
@@ -23,7 +23,7 @@ namespace Aponus_Web_API.Controllers
         [Route("Save")]
         public async Task<IActionResult> Guardar (DTOVentas Venta)
         {
-            if(Venta.SaldoTotal.Equals(0))
+            if(Venta.Monto.Equals(0))
                 return new ContentResult()
                 {
                     Content="El valor de la venta no puede ser 0.00",
@@ -39,6 +39,7 @@ namespace Aponus_Web_API.Controllers
 
         }
 
+        //Traer 'Calcular Cuotas' 
 
 
 

@@ -2,11 +2,11 @@
 using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
-using Aponus_Web_API.Services.Movimientos;
+using Aponus_Web_API.Support.Movimientos;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace Aponus_Web_API.Services.Movimientos
+namespace Aponus_Web_API.Support.Movimientos
 {
     public class Suministros
     {

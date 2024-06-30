@@ -1,7 +1,7 @@
 ﻿using NtpClient;
 using System.Net.NetworkInformation;
 
-namespace Aponus_Web_API.Services
+namespace Aponus_Web_API.Support
 {
     public class Fechas
     {

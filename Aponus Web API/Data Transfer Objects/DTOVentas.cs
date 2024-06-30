@@ -19,11 +19,11 @@ namespace Aponus_Web_API.Data_Transfer_Objects
 
         public int? IdEstadoVenta { get; set; }
 
-        public decimal SaldoTotal { get; set; } = 0;
+        public decimal Monto { get; set; } = 0;
 
         public decimal? SaldoCancelado { get; set; }
 
-        public decimal SaldoPendiente => SaldoTotal - (SaldoCancelado ?? 0);
+        public decimal SaldoPendiente => Monto - (SaldoCancelado ?? 0);
 
         public ICollection<DTOVentasDetalles> DetallesVenta { get; set; } = new HashSet<DTOVentasDetalles>();
         public ICollection<DTOPagosVentas> Pagos { get; set; } = new HashSet<DTOPagosVentas>();
