@@ -127,7 +127,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
 
             if (DescripcionAnterior!=null)
             {
-                DescripcionAnterior.DescripcionProducto = actualizarCategorias.Nueva.Descripcion;
+                DescripcionAnterior.DescripcionProducto = actualizarCategorias.Nueva?.Descripcion;
                 AponusDBContext.SaveChanges();
             }
         }

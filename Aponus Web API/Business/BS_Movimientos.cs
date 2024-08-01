@@ -1,4 +1,4 @@
-﻿using Aponus_Web_API.Acceso_a_Datos.Proveedores;
+﻿using Aponus_Web_API.Acceso_a_Datos.Entidades;
 using Aponus_Web_API.Acceso_a_Datos.Stocks;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
@@ -228,7 +228,7 @@ namespace Aponus_Web_API.Business
                 {
                     //Obtener los datos completos del movimiento
                     DTOMovimientosStock? DatosMovimiento = new MovimientosStock().ObtenerDatosMovimiento(ArchivosMovimiento.IdMovimiento ?? -1);
-                    List<DTOProveedores>? Proveedores = new List<DTOProveedores>();
+                    List<DTOEntidades>? Proveedores = new List<DTOEntidades>();
 
                     if (DatosMovimiento != null)
                     {
@@ -238,10 +238,11 @@ namespace Aponus_Web_API.Business
                         //Si existe el movimiento pero no hay rutas de archivos, es decir, no se guardaron archivos antes entonces genero la ruta
                         if (RutaCompleta.IsNullOrEmpty())
                         {
-                            IActionResult ProveedoresActionResult = new ABM_Proveedores().Listar();
-                            DTOProveedores proveedor = new DTOProveedores();
+                            IActionResult ProveedoresActionResult = BS_Entidades.Listar(ArchivosMovimiento.IdProveedorDestino, null, null);
 
-                            if (ProveedoresActionResult is JsonResult jsonProveedores && jsonProveedores.Value != null && jsonProveedores.Value is IEnumerable<DTOProveedores> ProveedoresList)
+                            DTOEntidades proveedor = new DTOEntidades();
+
+                            if (ProveedoresActionResult is JsonResult jsonProveedores && jsonProveedores.Value != null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)
                             {
                                 proveedor = ProveedoresList.FirstOrDefault(x => x.IdEntidad == ArchivosMovimiento.IdProveedorDestino);
                                 RutaCompleta = stocks.CrearDirectorioMovimientos(!string.IsNullOrEmpty(proveedor.NombreClave) ? proveedor.NombreClave : proveedor.Apellido + " " + proveedor.Nombre);

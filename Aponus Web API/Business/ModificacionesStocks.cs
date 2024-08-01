@@ -1,5 +1,5 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Componentes;
-using Aponus_Web_API.Acceso_a_Datos.Proveedores;
+using Aponus_Web_API.Acceso_a_Datos.Entidades;
 using Aponus_Web_API.Acceso_a_Datos.Stocks;
 using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Data_Transfer_Objects;
@@ -422,10 +422,10 @@ namespace Aponus_Web_API.Business
                     if (!stocks.GuardarSuministrosMovimiento(AponusDbContext, Suministros)) Rollback = true;
 
                     //Obtener el Nombre del Proveedor de Destino
-                    IActionResult Proveedores = new ABM_Proveedores().Listar();
-                    DTOProveedores? proveedor = new DTOProveedores();
+                    IActionResult Proveedores =  BS_Entidades.Listar(Movimiento.IdProveedorDestino, null, null);
+                    DTOEntidades? proveedor = new DTOEntidades();
 
-                    if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value!=null && jsonProveedores.Value is IEnumerable<DTOProveedores> ProveedoresList)
+                    if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value!=null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)
                     {
                         proveedor = ProveedoresList.FirstOrDefault(x => x.IdEntidad == Movimiento.IdProveedorDestino);
                         

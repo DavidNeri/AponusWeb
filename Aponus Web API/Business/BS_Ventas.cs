@@ -1,17 +1,19 @@
-﻿using Aponus_Web_API.Data_Transfer_Objects;
+﻿using Aponus_Web_API.Acceso_a_Datos.Ventas;
+using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
+using Humanizer.Localisation.TimeToClockNotation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Business
 {
     public class BS_Ventas
     {
-        internal static async Task<IActionResult> Guardar(DTOVentas Venta)
+        internal static async Task<IActionResult> ProcesarDatosVenta(DTOVentas Venta)
         {
             Venta.Cuotas = await CalcularCuotas(5, Venta.Monto);
 
-            Ventas NuevaVenta = new Ventas()
+            Models.Ventas NuevaVenta = new Models.Ventas()
             {
                 IdCliente = Venta.IdCliente,
                 FechaHora = Fechas.ObtenerFechaHora(),
@@ -53,12 +55,16 @@ namespace Aponus_Web_API.Business
                 });
             }
 
+            int Resultado =await new Acceso_a_Datos.Ventas.Ventas().Guardar(NuevaVenta);
 
-
-
-
-            return null;
-
+            return new ContentResult()
+            {
+                Content = Resultado > 0 ? "Datos Guardadaos" : "Error interno, no se guardaron los datos",
+                ContentType = "Application/Json",
+                StatusCode = Resultado > 0 ? 200 : 500
+                
+                
+            };
         }
         public static async Task<ICollection<DTOCuotasVentas>> CalcularCuotas( int TotalCuotas, decimal MontoVenta, decimal interes = 0)
         {

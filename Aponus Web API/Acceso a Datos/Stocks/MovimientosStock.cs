@@ -99,13 +99,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
            
             IQueryable<DTOMovimientosStock> ListadoMovimientos = AponusDBContext.Stock_Movimientos
                 .Join(
-                    AponusDBContext.Proveedores,
+                    AponusDBContext.Entidades,
                     movimientos => movimientos.IdProveedorOrigen,
                     proveedorOrigen => proveedorOrigen.IdEntidad,
                     (movimiento, proveedorOrigen) => new { Movimiento = movimiento, ProveedorOrigen = proveedorOrigen }
                 )
                 .Join(
-                    AponusDBContext.Proveedores,
+                    AponusDBContext.Entidades,
                     movimiento_ProveedorOrigen => movimiento_ProveedorOrigen.Movimiento.IdProveedorDestino,
                     proveedorDestino => proveedorDestino.IdEntidad,
                     (movimiento_ProveedorOrigen, proveedorDestino) => new { Movimiento_ProveedorOrigen = movimiento_ProveedorOrigen, ProveedorDestino = proveedorDestino }
@@ -158,7 +158,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     })
                     .ToList(),
 
-                    ProveedorOrigen = new DTOProveedores()
+                    ProveedorOrigen = new DTOEntidades()
                     {
                         IdEntidad = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.IdEntidad,
                         Nombre = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Nombre,
@@ -178,7 +178,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                     },
 
-                    ProveedorDestino = new DTOProveedores()
+                    ProveedorDestino = new DTOEntidades()
                     {
                         IdEntidad = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.IdEntidad,
                         Nombre = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Nombre,

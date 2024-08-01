@@ -27,7 +27,7 @@ public partial class AponusContext : DbContext
     public virtual DbSet<StockMensurable> StockMensurables { get; set; }
     public virtual DbSet<StockPesable> StockPesables { get; set; }
     public virtual DbSet<Usuarios> Usuarios { get; set; } 
-    public virtual DbSet<Clientes_Proveedores> Proveedores { get; set; }
+    public virtual DbSet<Entidades> Entidades { get; set; }
     public virtual DbSet<SuministrosMovimientosStock> SuministrosMovimientoStock { get; set; }
     public virtual DbSet<EstadosProductos> EstadosProducto { get; set; }
     public virtual DbSet<EstadosProductosComponentes> EstadosProductosComponente { get; set; }
@@ -37,8 +37,9 @@ public partial class AponusContext : DbContext
     public virtual DbSet<EstadosMovimientosStock> EstadoMovimientosStock { get; set; }
     public virtual DbSet<EstadosArchivosMovimientosStock> EstadoArchivosMovimientosStock { get; set; }
     public virtual DbSet<EstadosSuministrosMovimientosStock> EstadoSuministrosMovimientosStock { get; set; }
-    public virtual DbSet<CategoriasClientes> CategoriasClientes { get; set; }
-    public virtual DbSet<TiposClientes> tiposClientes { get; set; }
+    public virtual DbSet<EntidadesCategorias> CategoriasEntidades { get; set; }
+    public virtual DbSet<EntidadesTipos> TiposEntidades { get; set; }
+    public virtual DbSet<EntidadesTiposCategorias> EntidadeTiposCategorias { get; set; }
     public virtual DbSet<Compras> compras{ get; set; }
     public virtual DbSet<PagosCompras> PagosCompra { get; set; }
     public virtual DbSet<ComprasDetalles> ComprasDetalle { get; set; }
@@ -61,6 +62,24 @@ public partial class AponusContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
+
+        modelBuilder.Entity<EntidadesTiposCategorias>(entity =>
+        {
+            entity.ToTable("ENTIDADES_TIPOS_CATEGORIAS");
+            entity.HasKey(PK => new
+            {
+                PK.idTipoEntidad,
+                PK.IdCategoriaEntidad
+            });
+
+            entity.Property(p => p.idTipoEntidad)
+            .HasColumnName("ID_TIPO")
+            .HasColumnType("int");
+
+            entity.Property(p => p.IdCategoriaEntidad)
+            .HasColumnName("ID_CATEGORIA")
+            .HasColumnType("int");
+        });
 
         modelBuilder.Entity<EstadosCuotasVentas>(entity =>
         {
@@ -490,9 +509,9 @@ public partial class AponusContext : DbContext
             .HasForeignKey(p => p.IdCompra);
         });
            
-        modelBuilder.Entity<TiposClientes>(entity =>
+        modelBuilder.Entity<EntidadesTipos>(entity =>
         {
-            entity.ToTable("CLIENTES_TIPOS");
+            entity.ToTable("ENTIDADES_TIPOS");
 
             entity.HasKey(PK => PK.IdTipo);
 
@@ -510,19 +529,26 @@ public partial class AponusContext : DbContext
             .HasColumnName("NOMBRE")
             .HasColumnType("nvarchar(max)");
 
-            entity.HasMany(p => p.Clientes)
-            .WithOne(p => p.TipoCliente)
+            entity.HasMany(p => p.Entidades)
+            .WithOne(p => p.TipoEntidad)
             .HasForeignKey(FK => FK.IdTipo);
+
+            entity.HasMany(p => p.TiposCategoriasNavigation)
+            .WithOne(p => p.TipoEntidad)
+            .HasPrincipalKey(PK => PK.IdTipo)
+            .HasForeignKey(FK => FK.idTipoEntidad);
+
 
         });
 
-        modelBuilder.Entity<CategoriasClientes>(entity =>
+        modelBuilder.Entity<EntidadesCategorias>(entity =>
         {
-            entity.ToTable("CLIENTES_CATEGORIAS");
+            entity.ToTable("ENTIDADES_CATEGORIAS");
 
             entity.HasKey(PK => PK.IdCategoria);
 
             entity.Property(P => P.IdCategoria)
+            .HasColumnName("ID_CATEGORIA")
             .ValueGeneratedOnAdd()
             .HasAnnotation("SqlServer:Identity", "1, 1");
 
@@ -532,12 +558,17 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_ESTADO");
 
             entity.Property(p => p.NombreCategoria)
-            .HasColumnName("NOMBRE")
+            .HasColumnName("NOMBRE_CATEGORIA")
             .HasColumnType("nvarchar(max)");
 
-            entity.HasMany(p => p.Clientes)
-            .WithOne(p => p.CategoriaCliente)
+            entity.HasMany(p => p.Entidades)
+            .WithOne(p => p.CategoriaEntidad)
             .HasForeignKey(FK => FK.IdCategoria);
+
+            entity.HasMany(p=>p.TiposCategoriasNavigation)
+            .WithOne(p=>p.CategoriaEntidad)
+            .HasPrincipalKey(PK=>PK.IdCategoria)
+            .HasForeignKey(FK=>FK.IdCategoriaEntidad);
 
         });
 
@@ -1376,10 +1407,10 @@ public partial class AponusContext : DbContext
 
         });
 
-        modelBuilder.Entity<Clientes_Proveedores>(entity =>
+        modelBuilder.Entity<Entidades>(entity =>
         {
             entity.HasKey(e => e.IdEntidad);
-            entity.ToTable("CLIENTES_PROVEEDORES");
+            entity.ToTable("ENTIDADES");
 
             entity.Property(e => e.IdEntidad)
                 .HasColumnName("ID_ENTIDAD");

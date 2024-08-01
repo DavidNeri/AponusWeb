@@ -31,7 +31,7 @@ namespace Aponus_Web_API.Models
         [NotMapped]
         public decimal SaldoPendiente => SaldoTotal - (SaldoCancelado ?? 0);       
 
-        public Clientes_Proveedores Proveedor = new();
+        public Entidades Proveedor = new();
 
         public Usuarios Usuario = new();
 

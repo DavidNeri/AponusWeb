@@ -33,13 +33,15 @@ namespace Aponus_Web_API.Controllers
             else
             {
                 
-                return await BS_Ventas.Guardar(Venta);
+                return await BS_Ventas.ProcesarDatosVenta(Venta);
             }
 
 
         }
 
         //Traer 'Calcular Cuotas' 
+        //Agregar Estados Ventas
+        //Agregar TIPO y  CATEGORIA de ENTIDADES , en 'Entidades'
 
 
 

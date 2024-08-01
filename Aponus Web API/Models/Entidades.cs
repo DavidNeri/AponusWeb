@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Models
 {
-    public class Clientes_Proveedores
+    public class Entidades
     {
         [Key]
         [Column("ID_ENTIDAD")]
@@ -77,8 +77,8 @@ namespace Aponus_Web_API.Models
         public virtual ICollection<Compras> compras { get; set; } = new HashSet<Compras>(); 
         public virtual ICollection<Ventas> ventas{ get; set; } = new HashSet<Ventas>();
         public virtual Usuarios UsuarioRegistro { get; set; }
-        public virtual CategoriasClientes CategoriaCliente { get; set; }
-        public virtual TiposClientes TipoCliente { get; set; }
+        public virtual EntidadesCategorias CategoriaEntidad { get; set; }
+        public virtual EntidadesTipos TipoEntidad { get; set; }
 
     }
 }

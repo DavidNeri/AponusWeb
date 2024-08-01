@@ -100,7 +100,7 @@ namespace Aponus_Web_API.Support
                     var PropNombreProveedor = Expression.Property(PropProveedor, "NombreProveedor");
 
                     // Crear un parámetro para los elementos dentro de la lista Proveedores
-                    var paramProveedor = Expression.Parameter(typeof(DTOProveedores));
+                    var paramProveedor = Expression.Parameter(typeof(DTOEntidades));
 
                     // Acceder a la propiedad NombreProveedor de los elementos dentro de la lista Proveedores
                     var NombreProveedor = Expression.Property(paramProveedor, "NombreProveedor");

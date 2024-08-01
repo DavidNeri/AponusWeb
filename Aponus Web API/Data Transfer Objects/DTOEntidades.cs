@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Data_Transfer_Objects
 {
-    public class DTOProveedores
+    public class DTOEntidades
     {
         [JsonProperty(Order=100, PropertyName = "idEntidad", NullValueHandling = NullValueHandling.Ignore)] 
         public int? IdEntidad { get; set; }
@@ -61,6 +61,12 @@ namespace Aponus_Web_API.Data_Transfer_Objects
 
         [JsonProperty(Order = 18, PropertyName = "idUsuarioRegistro", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdUsuarioRegistro { get; set; }
+
+        [JsonProperty(Order = 19, PropertyName = "idTipo", NullValueHandling = NullValueHandling.Ignore)]
+        public int IdTipo { get; set; }
+
+        [JsonProperty(Order = 19, PropertyName = "idCategoria", NullValueHandling = NullValueHandling.Ignore)]
+        public int IdCategoria{ get; set; }
 
         [JsonProperty(Order = 19, PropertyName = "idEstado", NullValueHandling = NullValueHandling.Ignore)]
         public bool? IdEstado { get; set; }

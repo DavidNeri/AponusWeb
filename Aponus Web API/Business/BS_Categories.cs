@@ -15,7 +15,7 @@ namespace Aponus_Web_API.Business
        
         internal IActionResult AgregarDescripcion(DTOCategorias NuevaCategoria)
         {
-            NuevaCategoria.Descripcion = NuevaCategoria.Descripcion.ToUpper();
+            NuevaCategoria.Descripcion = NuevaCategoria.Descripcion?.ToUpper();
             try
             {
                 Categorias categorias = new Categorias();
@@ -77,7 +77,7 @@ namespace Aponus_Web_API.Business
             catch (DbUpdateException e)
             {
 
-                string Mensaje = e.InnerException.Message;
+                string? Mensaje = e.InnerException?.Message;
                 return new JsonResult(Mensaje);
             }
 
@@ -88,8 +88,8 @@ namespace Aponus_Web_API.Business
         {
             try
             {
-                NuevaCategoria.IdTipo = new CategoriesServices().GenerarIdTipo(NuevaCategoria.DescripcionTipo);
-                NuevaCategoria.DescripcionTipo = NuevaCategoria.DescripcionTipo.ToUpper();
+                NuevaCategoria.IdTipo = new CategoriesServices().GenerarIdTipo(NuevaCategoria.DescripcionTipo??"");
+                NuevaCategoria.DescripcionTipo = NuevaCategoria.DescripcionTipo?.ToUpper();
                 new Categorias().NuevoTipo(NuevaCategoria);
 
                 return new JsonResult(NuevaCategoria.IdTipo);
@@ -97,7 +97,7 @@ namespace Aponus_Web_API.Business
             }
             catch (DbUpdateException ex)
             {
-                return new JsonResult(ex.InnerException.Message.ToString());
+                return new JsonResult(ex.InnerException?.Message.ToString());
             }
 
         }
@@ -159,9 +159,9 @@ namespace Aponus_Web_API.Business
 
                 }
                 //Si no hay ID_TIPOS verifico si existe diferencia entre las DECRIPTIONS para actualizarlas
-                else if (ActualizarCategorias.Anterior.IdTipo==null&&ActualizarCategorias.Nueva.IdTipo==null) 
+                else if (ActualizarCategorias.Anterior.IdTipo==null&&ActualizarCategorias.Nueva?.IdTipo==null) 
                 {
-                    if (ActualizarCategorias.Nueva.Descripcion!=null && ActualizarCategorias.Anterior.IdDescripcion!=null)
+                    if (ActualizarCategorias.Nueva?.Descripcion!=null && ActualizarCategorias.Anterior?.IdDescripcion!=null)
                     {
                         ActualizarCategorias.Nueva.Descripcion = ActualizarCategorias.Nueva.Descripcion.TrimEnd().ToUpper();
 
@@ -185,7 +185,7 @@ namespace Aponus_Web_API.Business
                             };
                         }
                     }
-                    else if (ActualizarCategorias.Nueva.Descripcion== null)
+                    else if (ActualizarCategorias.Nueva?.Descripcion== null)
                     {
 
                         return new ContentResult()
@@ -210,7 +210,7 @@ namespace Aponus_Web_API.Business
                 } 
                 // Axtualizar Descripcion (cambiar el TIPO al que pertenece)
                 else if (ActualizarCategorias.Anterior.IdTipo!=null 
-                    && ActualizarCategorias.Nueva.IdTipo != null
+                    && ActualizarCategorias.Nueva?.IdTipo != null
                     && (ActualizarCategorias.Anterior.IdTipo != ActualizarCategorias.Nueva.IdTipo)
                     && ActualizarCategorias.Anterior.IdDescripcion == ActualizarCategorias.Nueva.IdDescripcion)
                 {                   
@@ -264,7 +264,7 @@ namespace Aponus_Web_API.Business
                 {
                     return new ContentResult()
                     {
-                        Content = ex.InnerException.Message,
+                        Content = ex.InnerException?.Message,
                         ContentType = "text/plain",
                         StatusCode = 400,
                     
@@ -296,7 +296,7 @@ namespace Aponus_Web_API.Business
                 {
                     return new ContentResult()
                     {
-                        Content = ex.InnerException.Message,
+                        Content = ex.InnerException?.Message,
                         ContentType = "text/plain",
                         StatusCode = 400,
 
@@ -324,5 +324,7 @@ namespace Aponus_Web_API.Business
         {
             return new Categorias.Productos().EliminarDescripcion(idDescription);
         }
+
+       
     }
 }
