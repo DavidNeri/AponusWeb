@@ -238,7 +238,7 @@ namespace Aponus_Web_API.Business
                         //Si existe el movimiento pero no hay rutas de archivos, es decir, no se guardaron archivos antes entonces genero la ruta
                         if (RutaCompleta.IsNullOrEmpty())
                         {
-                            IActionResult ProveedoresActionResult = BS_Entidades.Listar(ArchivosMovimiento.IdProveedorDestino, null, null);
+                            IActionResult ProveedoresActionResult = BS_Entidades.Listar(ArchivosMovimiento.IdProveedorDestino ?? 0 , 0, 0);
 
                             DTOEntidades proveedor = new DTOEntidades();
 

@@ -422,7 +422,7 @@ namespace Aponus_Web_API.Business
                     if (!stocks.GuardarSuministrosMovimiento(AponusDbContext, Suministros)) Rollback = true;
 
                     //Obtener el Nombre del Proveedor de Destino
-                    IActionResult Proveedores =  BS_Entidades.Listar(Movimiento.IdProveedorDestino, null, null);
+                    IActionResult Proveedores =  BS_Entidades.Listar(Movimiento.IdProveedorDestino ?? 0, 0, 0);
                     DTOEntidades? proveedor = new DTOEntidades();
 
                     if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value!=null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)

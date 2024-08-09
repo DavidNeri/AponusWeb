@@ -2,8 +2,10 @@
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
+using Aponus_Web_API.Support.Ventas;
 using Humanizer.Localisation.TimeToClockNotation;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.Entity;
 
 namespace Aponus_Web_API.Business
 {
@@ -55,7 +57,7 @@ namespace Aponus_Web_API.Business
                 });
             }
 
-            int Resultado =await new Acceso_a_Datos.Ventas.Ventas().Guardar(NuevaVenta);
+            int Resultado =await new Acceso_a_Datos.Ventas.ABM_Ventas().Guardar(NuevaVenta);
 
             return new ContentResult()
             {
@@ -101,6 +103,37 @@ namespace Aponus_Web_API.Business
             return null;
         }
 
+        internal async static Task<IActionResult> Filtrar(FiltrosVentas? filtros)
+        {
+            try
+            {
 
+                IQueryable<Ventas> QueryVentas = new ABM_Ventas().ListarVentas();
+
+                if (filtros?.IdCliente != null)
+                    QueryVentas = QueryVentas.Where(x => x.IdCliente == filtros.IdCliente);
+                if (filtros?.Desde != null)
+                    QueryVentas = QueryVentas.Where(X => X.FechaHora >= filtros.Desde);
+                if (filtros?.Hasta != null)
+                    QueryVentas = QueryVentas.Where(X => X.FechaHora >= filtros.Hasta);
+
+
+
+                return new JsonResult(QueryVentas.ToList());
+            }
+            catch (Exception ex)
+            {
+
+                return new ContentResult()
+                {
+                    Content = ex.InnerException?.Message ?? ex.Message,
+                    ContentType = "application/json",
+                    StatusCode = 400
+                };
+            }
+
+
+            
+        }
     }
 }

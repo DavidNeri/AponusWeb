@@ -160,7 +160,7 @@ public partial class AponusContext : DbContext
             .HasAnnotation("SqlServer:Identity", "1, 1");
 
             entity.Property(p => p.IdCliente)
-            .HasColumnName("ID_PROVEEDOR")
+            .HasColumnName("ID_CLIENTE")
             .HasColumnType("int");
 
             entity.Property(p => p.FechaHora)

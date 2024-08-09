@@ -8,16 +8,18 @@ namespace Aponus_Web_API.Controllers
 {
     [Route("Aponus/[Controller]")]
     [ApiController]
+
+    //Se agregó 'Default Value' =1 en ID_ESTADO tablas MEDIOS_PAGO y ESTADOS_VENTAS  --> MNodificar en DBContexdt
     public class SalesController : Controller
     {
         [HttpGet]
         [Route("List")]
         public async Task<IActionResult> List(FiltrosVentas? Filtros)
         {
-            return null;
+            return await BS_Ventas.Filtrar(Filtros);
 
         }
-
+        //
 
         [HttpPost]
         [Route("Save")]

@@ -94,7 +94,14 @@ namespace Aponus_Web_API.Controllers
             return BS_Entidades.Guardar(Entidad);
         }
 
-        // 
+
+        [HttpGet]
+        [Route("List/{typeId=0}/{CategoryId=0}/{EntityId=0}")]
+        public async Task<IActionResult> Listar(int TypeId, int CategoryId, int EntityId)
+        {
+            
+            return BS_Entidades.Listar(TypeId, CategoryId, EntityId);
+        }       
 
         [HttpPost]
         [Route("Delete/{Id}")]
@@ -102,20 +109,5 @@ namespace Aponus_Web_API.Controllers
         {
             return BS_Entidades.Eliminar(Id);
         }
-
-        [HttpGet]
-        [Route("List/{typeId?}/{CategoryId?}/{EntityId?}")]
-        public async Task<IActionResult> Listar(int? TypeId, int?CategoryId, int? EntityId)
-        {
-            return BS_Entidades.Listar(TypeId, CategoryId, EntityId);
-        }
-
-        
-
-       
-
-   
-
-       
     }
 }

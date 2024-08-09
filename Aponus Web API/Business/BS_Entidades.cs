@@ -34,17 +34,17 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal static IActionResult Listar(int? IdEntidad, int? IdTipo, int? IdCategoria)
+        internal static IActionResult Listar(int IdTipo, int IdCategoria, int IdEntidad )
         {
             try
             {
                 IQueryable<Entidades> QueryEntidades = new ABM_Entidades().Listar();
 
-                if (IdEntidad != null)
+                if (IdEntidad != 0)
                     QueryEntidades = QueryEntidades.Where(x => x.IdEntidad == IdEntidad);
-                if (IdTipo != null)
+                if (IdTipo != 0)
                     QueryEntidades = QueryEntidades.Where(x => x.IdTipo == IdTipo);
-                if (IdCategoria != null)
+                if (IdCategoria != 0)
                     QueryEntidades = QueryEntidades.Where(x => x.IdCategoria == IdCategoria);
 
                 List<DTOEntidades> Listado =  QueryEntidades
@@ -71,8 +71,6 @@ namespace Aponus_Web_API.Business
                         IdUsuarioRegistro = x.IdUsuarioRegistro,
                         IdTipo = x.IdTipo,
                         IdCategoria = x.IdCategoria
-                        //TipoEntidad = x.TipoEntidad,
-                        //CategoriaEntidad = x.CategoriaEntidad,
                     })
                     .ToList();
                 return new JsonResult(Listado);

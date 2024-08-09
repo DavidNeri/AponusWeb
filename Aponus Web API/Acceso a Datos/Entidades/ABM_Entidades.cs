@@ -150,10 +150,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
 
         internal IQueryable<Aponus_Web_API.Models.Entidades> Listar()
         {
-            IQueryable<Aponus_Web_API.Models.Entidades> QueryListado =  AponusDBContext.Entidades
-                .Where(x => x.IdEstado != 0)
-                .Include(x=>x.TipoEntidad)
-                .Include(x => x.CategoriaEntidad);
+            IQueryable<Aponus_Web_API.Models.Entidades> QueryListado = AponusDBContext.Entidades.Where(x => x.IdEstado != 0);
             
             return QueryListado;
            
