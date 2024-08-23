@@ -29,7 +29,7 @@ namespace Aponus_Web_API.Models
 
         public byte IdEstado { get; set; }
 
-        public EstadosSuministrosMovimientosStock? EstadosSuministrosMovimientosStockNavigation { get; set; }
+        public virtual EstadosSuministrosMovimientosStock? EstadosSuministrosMovimientosStockNavigation { get; set; } = new();
 
 
     }

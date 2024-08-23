@@ -24,7 +24,7 @@ namespace Aponus_Web_API.Models
 
         public virtual EstadosComponentesDetalles IdEstadoNavigation { get; set; }
 
-        public  ICollection<ComprasDetalles> ComprasNavigation= new HashSet<ComprasDetalles>();
+        public  virtual ICollection<ComprasDetalles> ComprasNavigation { get; set; } = new HashSet<ComprasDetalles>();
 
     }
 }

@@ -500,7 +500,7 @@ namespace AponusWebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCuota"));
 
-                    b.Property<int>("EstadoCuotaIdEstadoCuota")
+                    b.Property<int>("IdEstadoCuota")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaPago")
@@ -534,7 +534,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("IdCuota");
 
-                    b.HasIndex("EstadoCuotaIdEstadoCuota");
+                    b.HasIndex("IdEstadoCuota");
 
                     b.HasIndex("IdVenta");
 
@@ -1683,7 +1683,7 @@ namespace AponusWebAPI.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Models.EstadosCuotasVentas", "EstadoCuota")
                         .WithMany("IdEstadoCuotaNavigation")
-                        .HasForeignKey("EstadoCuotaIdEstadoCuota")
+                        .HasForeignKey("IdEstadoCuota")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

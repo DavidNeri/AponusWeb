@@ -32,10 +32,9 @@ namespace Aponus_Web_API.Models
         [NotMapped]
         public decimal SaldoPendiente => SaldoTotal - (SaldoCancelado ?? 0);
 
-        public virtual Entidades Cliente { get; set; }
-        
-        public Usuarios Usuario = new();
-        public virtual ICollection<VentasDetalles> DetallesVenta{ get; set; } = new HashSet<VentasDetalles>();
+        public virtual Entidades Cliente { get; set; } = new();        
+        public virtual Usuarios Usuario { get; set; } = new();
+        public virtual ICollection<VentasDetalles> DetallesVenta { get; set; } = new HashSet<VentasDetalles>();
         public virtual ICollection<PagosVentas> Pagos { get; set; } = new HashSet<PagosVentas>();
         public virtual ICollection<CuotasVentas> Cuotas { get; set; } = new HashSet<CuotasVentas>();
         public virtual EstadosVentas Estado { get; set; } = new();

@@ -18,7 +18,10 @@ namespace AponusWebAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("Modern_Spanish_CI_AI")
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -360,10 +363,7 @@ namespace AponusWebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCuota"));
 
-                    b.Property<int>("EstadoCuotaIdEstadoCuota")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaPago")
+                    b.Property<DateTime?>("FechaPago")
                         .HasColumnType("datetime")
                         .HasColumnName("FECHA_PAGO");
 
@@ -375,7 +375,7 @@ namespace AponusWebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID_ESTADO_CUOTA")
-                        .HasDefaultValueSql("0");
+                        .HasDefaultValueSql("1");
 
                     b.Property<int>("IdVenta")
                         .HasColumnType("int")
@@ -394,7 +394,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("IdCuota");
 
-                    b.HasIndex("EstadoCuotaIdEstadoCuota");
+                    b.HasIndex("IdEstadoCuota");
 
                     b.HasIndex("IdVenta");
 
@@ -790,7 +790,9 @@ namespace AponusWebAPI.Migrations
                         .HasColumnName("DESCRIPCION");
 
                     b.Property<int>("IdEstado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasDefaultValue(1)
                         .HasColumnName("ID_ESTADO");
 
                     b.HasKey("IdEstadoVenta");
@@ -818,7 +820,9 @@ namespace AponusWebAPI.Migrations
                         .HasColumnName("DESCRIPCION");
 
                     b.Property<int>("IdEstado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasDefaultValue(1)
                         .HasColumnName("ID_ESTADO");
 
                     b.HasKey("IdMedioPago");
@@ -1670,7 +1674,7 @@ namespace AponusWebAPI.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Models.EstadosCuotasVentas", "EstadoCuota")
                         .WithMany("IdEstadoCuotaNavigation")
-                        .HasForeignKey("EstadoCuotaIdEstadoCuota")
+                        .HasForeignKey("IdEstadoCuota")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

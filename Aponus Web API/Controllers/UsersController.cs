@@ -11,7 +11,7 @@ namespace Aponus_Web_API.Controllers
     {
         [HttpPost]
         [Route("Validation")]
-        public UsuariosMapping? ValiadarUsuario(UsuariosMapping Usuario) 
+        public DTOUsuarios? ValiadarUsuario(DTOUsuarios Usuario) 
         {
             return new Validaciones().ValidarUsuario(Usuario);
         }

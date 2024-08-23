@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Aponus_Web_API.Models
 {
@@ -16,8 +17,10 @@ namespace Aponus_Web_API.Models
         [Column("CANTIDAD")]
         public int Cantidad { get; set; }
 
-        public virtual Producto IdProductoNavigation { get; set; } = new Producto();
-        public virtual Ventas Venta { get; set; } = new Ventas();
+        
+        public virtual Producto IdProductoNavigation { get; set; }
+
+        public virtual Ventas Venta { get; set; }
 
 
     }

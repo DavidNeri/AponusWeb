@@ -395,3 +395,5 @@ D:\Aponus SA\Aponus Web API\obj\Debug\net6.0\refint\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\obj\Debug\net6.0\Aponus Web API.pdb
 D:\Aponus SA\Aponus Web API\obj\Debug\net6.0\Aponus Web API.genruntimeconfig.cache
 D:\Aponus SA\Aponus Web API\obj\Debug\net6.0\ref\Aponus Web API.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Castle.Core.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Proxies.dll

@@ -56,6 +56,7 @@ public partial class AponusContext : DbContext
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         optionsBuilder
             .UseSqlServer("Server=DAVID\\DATABASESERVER19; Database=Aponus;User Id=Administrador;Password=AponusIng;Trusted_Connection=True; TrustServerCertificate=True;")
+            .UseLazyLoadingProxies()
             .EnableSensitiveDataLogging();
     }    
 
@@ -103,7 +104,8 @@ public partial class AponusContext : DbContext
 
             entity.HasMany(p => p.IdEstadoCuotaNavigation)
             .WithOne(p => p.EstadoCuota)
-            .HasPrincipalKey(p => p.IdEstadoCuota);
+            .HasPrincipalKey(p => p.IdEstadoCuota)
+            .HasForeignKey(FK=>FK.IdEstadoCuota);
 
 
         });
@@ -141,7 +143,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.IdEstadoCuota)
             .HasColumnName("ID_ESTADO_CUOTA")            
-            .HasDefaultValueSql("0");
+            .HasDefaultValueSql("1");
 
             entity.Property(p => p.FechaPago)
             .HasColumnName("FECHA_PAGO")
@@ -309,7 +311,8 @@ public partial class AponusContext : DbContext
 
             entity.Property(P => P.IdEstado)
             .HasColumnName("ID_ESTADO")
-            .HasColumnType("int");
+            .HasColumnType("int")
+            .HasDefaultValue("1");
 
             entity.Property(P => P.Descripcion)
             .HasColumnName("DESCRIPCION")
@@ -373,7 +376,8 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.IdEstado)
             .HasColumnType("int")
-            .HasColumnName("ID_ESTADO");
+            .HasColumnName("ID_ESTADO")
+            .HasDefaultValue("1");
         });
 
         modelBuilder.Entity<PagosCompras>(entity =>

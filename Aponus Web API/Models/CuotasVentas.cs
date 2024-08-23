@@ -22,13 +22,13 @@ namespace Aponus_Web_API.Models
         [Column("FECHA_VENCIMIENTO")]
         public DateTime FechaVencimiento { get; set; }
 
-        [Column("ID_ESTADO_CUOTA")]
+        [ForeignKey("ID_ESTADO_CUOTA")]
         public int IdEstadoCuota { get; set; }
 
         [Column("FECHA_PAGO")]
-        public DateTime FechaPago { get; set; }
+        public DateTime? FechaPago { get; set; }
 
-        public Ventas Venta { get; set; } = new Ventas();
+        public virtual Ventas Venta { get; set; } = new Ventas();
 
         public virtual EstadosCuotasVentas EstadoCuota { get; set; }  = new EstadosCuotasVentas();
 

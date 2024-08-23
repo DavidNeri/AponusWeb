@@ -38,7 +38,7 @@ namespace Aponus_Web_API.Models
         [NotMapped]
         public decimal CantidadCuotasPendientes => (CantidadCuotas ?? 0)- (CantidadCuotasCanceladas ?? 0);
         public virtual MediosPago MedioPago { get; set; } = new();        
-        public Compras Compra = new();
+        public virtual Compras Compra { get; set; } = new();
 
 
     }

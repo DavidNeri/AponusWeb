@@ -10,17 +10,17 @@ namespace Aponus_Web_API.Acceso_a_Datos.Validaciones
         private readonly AponusContext AponusDBContext;
         public Login() { AponusDBContext = new AponusContext(); }
 
-        internal UsuariosMapping? Validar(UsuariosMapping usuario)
+        internal DTOUsuarios? Validar(DTOUsuarios usuario)
         {
-            List<UsuariosMapping>? ListUsuario = new List<UsuariosMapping>();
-            UsuariosMapping? Usuario = new UsuariosMapping();
+            List<DTOUsuarios>? ListUsuario = new List<DTOUsuarios>();
+            DTOUsuarios? Usuario = new DTOUsuarios();
 
 
             if (usuario.Usuario.Contains("@")==true)
             {
                 ListUsuario = AponusDBContext.Usuarios
                    .Where(x => x.correo == usuario.Usuario && x.Contraseña == usuario.Contraseña)
-                   .Select(x => new UsuariosMapping
+                   .Select(x => new DTOUsuarios
                    {
                        Usuario = x.Usuario,                      
                        IdPerfil = x.IdPerfil
@@ -40,7 +40,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Validaciones
 
                 ListUsuario = AponusDBContext.Usuarios
                    .Where(x => x.Usuario == usuario.Usuario && x.Contraseña == usuario.Contraseña)
-                   .Select(x => new UsuariosMapping
+                   .Select(x => new DTOUsuarios
                    {
                        Usuario = x.Usuario,
                        Contraseña = x.Contraseña,

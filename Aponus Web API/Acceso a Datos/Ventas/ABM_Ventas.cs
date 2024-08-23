@@ -22,7 +22,26 @@ namespace Aponus_Web_API.Acceso_a_Datos.Ventas
 
         public IQueryable<Models.Ventas> ListarVentas()
         {
-            return AponusDBContext.ventas.AsQueryable().Include(x => x.DetallesVenta).Include(x => x.Usuario);
+            return AponusDBContext.ventas
+                .Where(Estado=>Estado.IdEstadoVenta != 0)
+                .Include(x=>x.DetallesVenta)
+                .Include(x=>x.Cuotas)
+                .Include(x=>x.Pagos)
+                .Include(Cli=>Cli.Cliente)
+                .AsQueryable();
+        }
+
+        internal async Task GuardarEstado(EstadosVentas nuevoEstado)
+        {
+            //if (nuevoEstado.IdEstadoVenta)
+            //{
+
+            //}
+            //var Existe = AponusDBContext.estadosVentas.FirstOrDefault(x => x.Descripcion.Equals(nuevoEstado.Descripcion));
+
+            
+
+
         }
     }
 }
