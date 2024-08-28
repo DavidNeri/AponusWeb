@@ -16,14 +16,6 @@ namespace Aponus_Web_API.Controllers
             return await BS_Entidades.Tipos.Listar();
         }
 
-        [HttpGet]
-        [Route("Categories/List/{IdTipo?}")]
-
-        public async Task<IActionResult> ListarCategoriasEntidades(int? IdTipo)
-        {
-            return await BS_Entidades.Categorias.Listar(IdTipo);
-        }
-
         [HttpPost]
         [Route("Types/Save")]
 
@@ -37,11 +29,22 @@ namespace Aponus_Web_API.Controllers
                     ContentType = "application/json",
                     StatusCode = 400
                 };
-            } else
+            }
+            else
             {
                 return await BS_Entidades.Tipos.Guardar(TipoEntidad);
             }
         }
+
+
+        [HttpGet]
+        [Route("Categories/List/{IdTipo?}")]
+
+        public async Task<IActionResult> ListarCategoriasEntidades(int? IdTipo)
+        {
+            return await BS_Entidades.Categorias.Listar(IdTipo);
+        }
+       
 
         [HttpPost]
         [Route("Categories/Save")]
@@ -69,7 +72,7 @@ namespace Aponus_Web_API.Controllers
             }
             else
             {
-                return await BS_Entidades.Categorias.Guardar(NuevaCategoria);
+                return await BS_Entidades.Categorias.ValidarDatosCategoria(NuevaCategoria);
             }
         }
         [HttpPost]

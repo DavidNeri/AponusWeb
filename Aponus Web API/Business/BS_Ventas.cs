@@ -6,6 +6,7 @@ using Aponus_Web_API.Support;
 using Aponus_Web_API.Support.Ventas;
 using Humanizer.Localisation.TimeToClockNotation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Data.Entity;
 using System.Text.RegularExpressions;
 
@@ -15,14 +16,44 @@ namespace Aponus_Web_API.Business
     {
         public static class Estados
         {
-            internal static async Task<IActionResult> ValidarDatos(DTOEstadosVentas Estados)
+            internal static IActionResult Eliminar(int id)
+            {
+                try
+                {
+                    new ABM_Ventas().EliminarEstado(new EstadosVentas()
+                    {
+                        IdEstadoVenta = id
+                    });
+                    return new StatusCodeResult(200);
+                }
+                catch (Exception ex)
+                {
+
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException?.Message ?? ex.Message,
+                        ContentType = "application/json",
+                        StatusCode = 100
+                    };
+                }
+            }
+
+            internal static async Task<IActionResult> ValidarDatos(DTOEstadosVentas Estado)
             {
                 try
                 {
 
-                    EstadosVentas NuevoEstado = new EstadosVentas(); 
-                    NuevoEstado.Descripcion = Regex.Replace(Estados.Descripcion, @"\s+", " ").Trim().ToUpper();
-                    await new ABM_Ventas().GuardarEstado(NuevoEstado);
+                    Estado.Descripcion = Regex.Replace(Estado.Descripcion ?? "", @"\s+", " ").Trim().ToUpper();
+
+                    if (Estado.Descripcion.IsNullOrEmpty())
+                        return new ContentResult()
+                        {
+                            Content = "El estado no puede estar vacío",
+                            ContentType = "application/json",
+                            StatusCode = 400
+                        };
+
+                    await new ABM_Ventas().GuardarEstado(Estado);
                     return new StatusCodeResult(200);
 
                 }

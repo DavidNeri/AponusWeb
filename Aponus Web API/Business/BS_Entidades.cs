@@ -238,7 +238,7 @@ namespace Aponus_Web_API.Business
                 }
             }
 
-            internal static async Task<IActionResult> Guardar(DTOEntidadesCategorias nuevaCategoria)
+            internal static async Task<IActionResult> ValidarDatosCategoria(DTOEntidadesCategorias nuevaCategoria)
             {
                 nuevaCategoria.NombreCategoria = !string.IsNullOrEmpty(nuevaCategoria.NombreCategoria) ?  Regex.Replace(nuevaCategoria.NombreCategoria, @"\s+", " ").Trim().ToUpper() : "";
                 try

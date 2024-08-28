@@ -20,9 +20,7 @@ namespace Aponus_Web_API.Business
             try
             {
                 Stocks Stocks = new Stocks();
-                List<StockInsumos> Suministros = new List<StockInsumos>();
-
-                
+                List<StockInsumos> Suministros = new List<StockInsumos>();                
 
                 foreach (DTOSuministrosMovimientosStock Suministro in Movimiento.Suministros)
                 {
@@ -49,9 +47,9 @@ namespace Aponus_Web_API.Business
                                                         Cantidad = x.suministrosMovimientosStock.Cantidad,                                                        
 
                                                         ValorAnteriorOrigen = (x.suministrosStockInsumos
-                                                            .GetType()
-                                                            .GetProperties()
-                                                            .FirstOrDefault(y => y.Name.ToUpper().Contains(Movimiento.Origen.ToUpper()))
+                                                            .GetType()?
+                                                            .GetProperties()?
+                                                            .FirstOrDefault(y => y.Name.ToUpper().Contains(Movimiento.Origen.ToUpper()))?
                                                             .GetValue(x.suministrosStockInsumos) ?? 0)
                                                             .ToString(),                                                        
                                                             

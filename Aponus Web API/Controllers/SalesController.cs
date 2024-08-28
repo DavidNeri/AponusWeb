@@ -26,8 +26,6 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-
-
                 ICollection<DTOCuotasVentas> ListadoCuotas = await BS_Ventas.CalcularCuotas(Parametros);
 
                 return new JsonResult(ListadoCuotas);
@@ -47,10 +45,17 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpPost]
-        [Route("States/New")]
+        [Route("States/Save")]
         public async Task<IActionResult> GuardarEstadoVenta(DTOEstadosVentas Estados)
         {
             return await BS_Ventas.Estados.ValidarDatos(Estados);
+        }
+
+        [HttpPost]
+        [Route("States/{Id}/Delete")]
+        public IActionResult EliminarEstadoVenta(int Id)
+        {
+            return BS_Ventas.Estados.Eliminar(Id);
         }
 
         //
@@ -77,8 +82,6 @@ namespace Aponus_Web_API.Controllers
 
         }
 
-        //Agregar Estados Ventas
-        //Agregar TIPO y  CATEGORIA de ENTIDADES , en 'Entidades'
 
 
 

@@ -2,6 +2,7 @@
 using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Entity;
+using Z.EntityFramework.Plus;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Ventas
 {
@@ -31,17 +32,58 @@ namespace Aponus_Web_API.Acceso_a_Datos.Ventas
                 .AsQueryable();
         }
 
-        internal async Task GuardarEstado(EstadosVentas nuevoEstado)
+        internal void EliminarEstado(EstadosVentas EstadoVenta)
         {
-            //if (nuevoEstado.IdEstadoVenta)
-            //{
-
-            //}
-            //var Existe = AponusDBContext.estadosVentas.FirstOrDefault(x => x.Descripcion.Equals(nuevoEstado.Descripcion));
-
+            var Estado = AponusDBContext.estadosVentas.Find(typeof(EstadosVentas), EstadoVenta.IdEstadoVenta);
             
+            if (Estado != null)
+            {
+                Estado.IdEstado = 0;
+                AponusDBContext.SaveChanges();
 
+            }
+        }
 
+        internal async Task<IActionResult> GuardarEstado(DTOEstadosVentas NuevoEstado)
+        {
+            if (NuevoEstado.IdEstadoVenta != null)
+            {
+                EstadosVentas? Estado = await AponusDBContext.estadosVentas.FirstOrDefaultAsync(x => x.IdEstadoVenta == NuevoEstado.IdEstado && x.IdEstado!=0);
+                if (Estado != null)
+                {
+                    Estado.Descripcion = NuevoEstado.Descripcion ?? Estado.Descripcion;
+                    Estado.IdEstado = NuevoEstado.IdEstado ?? Estado.IdEstado;
+                    await AponusDBContext.SaveChangesAsync();
+                    
+                }
+                else
+                {
+                    await AponusDBContext.estadosVentas.AddAsync(new EstadosVentas()
+                    {
+                        Descripcion = NuevoEstado.Descripcion
+                    });
+                }
+                return new StatusCodeResult(200);
+            }
+            else
+            {
+                var Existe = AponusDBContext.estadosVentas.FirstOrDefault(x => x.Descripcion.Equals(NuevoEstado.Descripcion) && x.IdEstado!=0);
+                if (Existe != null)
+                    return new ContentResult()
+                    {
+                        Content = "Nombre de Estado Existente. No se aplicarion los cambios",
+                        ContentType = "application/json",
+                        StatusCode = 400
+                    };
+                else
+                {
+                    await AponusDBContext.estadosVentas.AddAsync(new EstadosVentas()
+                    {
+                        Descripcion = NuevoEstado.Descripcion
+                    });
+                    return new StatusCodeResult(200);
+                }
+            }
         }
     }
 }

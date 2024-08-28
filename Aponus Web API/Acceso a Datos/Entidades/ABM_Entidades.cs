@@ -161,7 +161,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
         {
             try
             {
-                var Entidades = await AponusDBContext.TiposEntidades.Where(x=>x.IdEstado==1).ToListAsync();
+                var Entidades = await AponusDBContext.TiposEntidades.Where(x=>x.IdEstado!=0).ToListAsync();
 
                 return new JsonResult(Entidades);   
             }
@@ -183,7 +183,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
 
                     if (NuevotipoEntidad.IdTipo != null)
                     {
-                        EntidadesTipos? ExisteId = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == NuevotipoEntidad.IdTipo);
+                        EntidadesTipos? ExisteId = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == NuevotipoEntidad.IdTipo & x.IdEstado!=0);
 
                         if ( ExisteId?.IdTipo != null && !string.IsNullOrEmpty(NuevotipoEntidad.Nombre))
                         {
@@ -197,7 +197,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
                     }
                     else
                     {
-                        EntidadesTipos? ExisteNombre = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.NombreTipo == NuevotipoEntidad.Nombre);
+                        EntidadesTipos? ExisteNombre = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.NombreTipo == NuevotipoEntidad.Nombre && x.IdEstado!=0);
 
                         if (string.IsNullOrEmpty(ExisteNombre?.NombreTipo) && !string.IsNullOrEmpty(NuevotipoEntidad.Nombre))
                         {
@@ -289,36 +289,67 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
             {
                 try
                 {
-                     await AponusDBContext.CategoriasEntidades.AddAsync(new EntidadesCategorias()
+                    var CategoriaExistente = await AponusDBContext.CategoriasEntidades.FirstOrDefaultAsync(x => x.NombreCategoria.Equals(nuevaCategoria.NombreCategoria) && x.IdEstado!=0);
+
+                    if (CategoriaExistente == null)
                     {
-                        NombreCategoria = nuevaCategoria.NombreCategoria ?? "",
-                    });
+                        await AponusDBContext.CategoriasEntidades.AddAsync(new EntidadesCategorias()
+                        {
+                            NombreCategoria = nuevaCategoria.NombreCategoria ?? "",
+                        });
 
-                    await AponusDBContext.SaveChangesAsync();
+                        await AponusDBContext.SaveChangesAsync();
 
-                    EntidadesCategorias? Cat = await AponusDBContext.CategoriasEntidades.FirstOrDefaultAsync(x=>x.NombreCategoria == nuevaCategoria.NombreCategoria);
-                    EntidadesTipos? Tipo = await AponusDBContext.TiposEntidades.FirstOrDefaultAsync(x=>x.IdTipo==nuevaCategoria.IdTipo);
-                    nuevaCategoria.IdCategoria = Cat?.IdCategoria;
+                        EntidadesCategorias? Cat = await AponusDBContext.CategoriasEntidades.FirstOrDefaultAsync(x => x.NombreCategoria == nuevaCategoria.NombreCategoria && x.IdEstado != 0);
+                        EntidadesTipos? Tipo = await AponusDBContext.TiposEntidades.FirstOrDefaultAsync(x => x.IdTipo == nuevaCategoria.IdTipo && x.IdEstado != 0);
+                        nuevaCategoria.IdCategoria = Cat?.IdCategoria;
 
-                    rollback = await VincularTiposCategorias(Tipo, Cat);
-                        
+                        rollback = await VincularTiposCategorias(Tipo, Cat);
 
-                    if (!rollback)
-                    { 
-                        await transaccion.CommitAsync();
-                        return new StatusCodeResult(200);
+
+                        if (!rollback)
+                        {
+                            await transaccion.CommitAsync();
+                            return new StatusCodeResult(200);
+                        }
+                        else
+                        {
+                            await transaccion.RollbackAsync();
+                            return new ContentResult()
+                            {
+                                Content = "Error interno, no se aplicaron lo cambios",
+                                ContentType = "application/json",
+                                StatusCode = 400,
+                            };
+                        }
                     }
                     else
                     {
-                        await transaccion.RollbackAsync();
-                        return new ContentResult()
+                        EntidadesTiposCategorias Vinculo = new EntidadesTiposCategorias()
                         {
-                            Content = "Error interno, no se aplicaron lo cambios",
-                            ContentType = "application/json",
-                            StatusCode = 400,
+                            IdCategoriaEntidad = CategoriaExistente.IdCategoria,
+                            idTipoEntidad = nuevaCategoria.IdTipo ?? 0
                         };
+                        
+                        if (AponusDBContext.EntidadeTiposCategorias.AddRangeAsync(Vinculo) != null)
+                        {
+                            return new ContentResult()
+                            {
+                                Content = "La realacion 'Tipo / Categoria' ya existe",
+                                ContentType = "application/json",
+                                StatusCode = 400,
+                            };
+                        }
+                        else
+                        {
+                            await AponusDBContext.EntidadeTiposCategorias.AddAsync(Vinculo);
+                            await AponusDBContext.SaveChangesAsync();
+                            await transaccion.CommitAsync();
+                            return new StatusCodeResult(200);
+
+                        }
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
