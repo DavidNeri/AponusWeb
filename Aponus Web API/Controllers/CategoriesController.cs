@@ -28,12 +28,12 @@ namespace Aponus_Web_API.Controllers
 
             List<ProductosTipo> TipoProductos = await AponusDBContext.ProductosTipos
                 .OrderBy(x=> x.DescripcionTipo)
-                .Where(x=>Convert.ToInt32(x.IdEstado)==Convert.ToInt32("0x01",16))
+                .Where(x=>x.IdEstado!=0)
                 .Select(x=> new ProductosTipo()
                 {
                     IdTipo= x.IdTipo,
                     DescripcionTipo= x.DescripcionTipo,
-                    IdEstado= Convert.ToInt32(x.IdEstado),
+                    IdEstado= x.IdEstado,
                 })
                 .ToListAsync();
 

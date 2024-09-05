@@ -1,13 +1,10 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Ventas;
 using Aponus_Web_API.Data_Transfer_Objects;
-using Aponus_Web_API.Mapping;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
 using Aponus_Web_API.Support.Ventas;
-using Humanizer.Localisation.TimeToClockNotation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Data.Entity;
 using System.Text.RegularExpressions;
 
 namespace Aponus_Web_API.Business
@@ -73,61 +70,88 @@ namespace Aponus_Web_API.Business
 
         internal static async Task<IActionResult> ProcesarDatosVenta(DTOVentas Venta)
         {
+            decimal saldoPendiente = Venta.Total; 
+
+            if (Venta.DetallesVenta == null || (Venta.Pagos == null && Venta.Cuotas != null) || Venta.Cuotas == null && Venta.Pagos == null)
+            {
+                return new ContentResult()
+                {
+                    Content="Faltan Datos",
+                    ContentType = "application/json",
+                    StatusCode = 400,
+                };
+            }
+            else
+            {
+                Models.Ventas NuevaVenta = new Models.Ventas()
+                {
+                    IdCliente = Venta.IdCliente,
+                    FechaHora = Fechas.ObtenerFechaHora(),
+                    IdUsuario = Venta.IdUsuario,
+                    IdEstadoVenta = Venta.IdEstadoVenta,
+                    Total = Venta.Total,
+                    
+                };
+
+                if (Venta.DetallesVenta != null)
+                {
+                    foreach (var vta in Venta.DetallesVenta)
+                    {
+                        NuevaVenta.DetallesVenta.Add(new VentasDetalles()
+                        {
+                            IdProducto = vta.IdProducto,
+                            Cantidad = vta.Cantidad,
+                            Precio = vta.Precio,
+                            IdProductoNavigation = new Producto { IdProducto = vta.IdProducto}
+
+                        });
+                    }
+                }
+                if (Venta.Pagos != null)
+                {
+                    foreach (var vtaPagos in Venta.Pagos)
+                    {
+                        saldoPendiente = saldoPendiente - vtaPagos.Monto;
+
+                        NuevaVenta.Pagos.Add(new PagosVentas()
+                        {
+                            Fecha = vtaPagos.FechaPago ?? Fechas.ObtenerFechaHora(),
+                            Monto = vtaPagos.Monto,
+                            IdMedioPago = vtaPagos.IdMedioPago,                           
+                            
+                        });
+                    }
+
+                    NuevaVenta.SaldoPendiente = saldoPendiente;
+                }
+                if (Venta.Cuotas != null)
+                {
+                    foreach (var Cuota in Venta.Cuotas)
+                    {
+                        NuevaVenta.Cuotas.Add(new CuotasVentas()
+                        {
+                            NumeroCuota = Cuota.NumeroCuota,
+                            Monto = Cuota.Monto,
+                            FechaVencimiento = Cuota.FechaVencimiento,
+                            IdEstadoCuota = Cuota.IdEstadoCuota,
+
+                        });
+                    }
+                }
+                
+
+                bool Resultado = await new Acceso_a_Datos.Ventas.ABM_Ventas().Guardar(NuevaVenta);
+
+
+                return new ContentResult()
+                {
+                    Content = Resultado ? "Datos Guardados" : "Error interno, no se guardaron los datos",
+                    ContentType = "Application/Json",
+                    StatusCode = Resultado ? 200 : 500
+                };
+            }
 
             
-
-            Models.Ventas NuevaVenta = new Models.Ventas()
-            {
-                IdCliente = Venta.IdCliente,
-                FechaHora = Fechas.ObtenerFechaHora(),
-                IdUsuario = Venta.IdUsuario,
-                SaldoTotal = Venta.Monto,
-                SaldoCancelado = Venta.SaldoCancelado,
-
-            };
-
-            foreach (var vta in Venta.DetallesVenta)
-            {               
-                 NuevaVenta.DetallesVenta.Add(new VentasDetalles()
-                {
-                    IdProducto = vta.IdProducto,
-                    Cantidad = vta.Cantidad,
-
-                });
-            }
-            foreach (var vtaPagos in Venta.Pagos)
-            {
-                NuevaVenta.Pagos.Add(new PagosVentas()
-                {
-                    IdMedioPago = vtaPagos.IdMedioPago,
-                    Subtotal = vtaPagos.Subtotal,
-                    Total = vtaPagos.Total,
-                    SubtotalCancelado = vtaPagos.SubtotalCancelado,
-                    CantidadCuotas = vtaPagos.CantidadCuotas,
-                    CantidadCuotasCanceladas = vtaPagos.CantidadCuotasCanceladas
-                });
-            }
-            foreach (var Cuota in Venta.Cuotas)
-            {
-                NuevaVenta.Cuotas.Add(new CuotasVentas()
-                {
-                    NumeroCuota = Cuota.NumeroCuota,
-                    Monto = Cuota.Monto,
-                    FechaVencimiento = Cuota.FechaVencimiento,
-
-                });
-            }
-
-            int Resultado =await new Acceso_a_Datos.Ventas.ABM_Ventas().Guardar(NuevaVenta);
-
-            return new ContentResult()
-            {
-                Content = Resultado > 0 ? "Datos Guardadaos" : "Error interno, no se guardaron los datos",
-                ContentType = "Application/Json",
-                StatusCode = Resultado > 0 ? 200 : 500
-                
-                
-            };
         }
         public static async Task<ICollection<DTOCuotasVentas>> CalcularCuotas( ParametrosCalcularCuotas Parametros
             )
@@ -148,7 +172,7 @@ namespace Aponus_Web_API.Business
 
                 NvaVtaCuotas.Add(new CuotasVentas()
                 {
-                    NumeroCuota = $"{i}/{Parametros.CantidadCuotas}",
+                    NumeroCuota = i,
                    
                     Monto = i switch
                     {
@@ -186,8 +210,8 @@ namespace Aponus_Web_API.Business
                     FechaHora = x.FechaHora,
                     IdUsuario = x.IdUsuario,
                     IdEstadoVenta = x.IdEstadoVenta,
-                    Monto = x.SaldoTotal,
-                    SaldoCancelado = x.SaldoCancelado,
+                    Total = x.Total,
+                    SaldoPendiente = x.SaldoPendiente,
                     DetallesVenta = x.DetallesVenta.Select(y => new DTOVentasDetalles()
                     {
                         Cantidad = y.Cantidad,
@@ -220,16 +244,10 @@ namespace Aponus_Web_API.Business
 
                     Pagos = x.Pagos.Select(Pagos=> new DTOPagosVentas()
                     {
-                        CantidadCuotas = Pagos.CantidadCuotas,
-                        CantidadCuotasCanceladas = Pagos.CantidadCuotasCanceladas,
                         IdMedioPago = Pagos.IdMedioPago,
                         IdPago = Pagos.IdPago,
                         IdVenta = Pagos.IdVenta,
-                        Subtotal = Pagos.Subtotal,
-                        SubtotalCancelado = Pagos.SubtotalCancelado,
-                        SubtotalPendiente = Pagos.SubtotalPendiente,
-                        Total = Pagos.Total,
-                        Venta = null,
+                        Monto = Pagos.Monto,
                         MedioPago = new DTOMediosPago()
                         {
                             Descripcion = Pagos.MedioPago.Descripcion,

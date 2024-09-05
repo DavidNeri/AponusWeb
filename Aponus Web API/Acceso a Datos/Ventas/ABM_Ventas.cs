@@ -1,5 +1,7 @@
-﻿using Aponus_Web_API.Data_Transfer_Objects;
+﻿using Aponus_Web_API.Data_Transfer_objects;
+using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
+using Aponus_Web_API.Support;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Entity;
 using Z.EntityFramework.Plus;
@@ -11,14 +13,48 @@ namespace Aponus_Web_API.Acceso_a_Datos.Ventas
         private readonly AponusContext AponusDBContext;
         public ABM_Ventas() { AponusDBContext = new AponusContext(); }
 
-        public async Task<int> Guardar(Models.Ventas Venta)
+        public async Task<bool> Guardar(Models.Ventas Venta)
         {
-            await AponusDBContext.ventas.AddAsync(Venta);
-            int Resultado = await AponusDBContext.SaveChangesAsync();
+            bool roolbackResult = false;
+            using (var transaccion = AponusDBContext.Database.BeginTransaction())
+            {
+                Venta.Cliente = AponusDBContext.Entidades.Find(Venta.IdCliente) ?? new Models.Entidades();
+                Venta.Usuario = AponusDBContext.Usuarios.Find(Venta.IdUsuario) ?? new Usuarios();
+                Venta.Estado = AponusDBContext.estadosVentas.Find(Venta.IdEstadoVenta) ?? new EstadosVentas();
 
-           return Resultado;
+                if (Venta.Pagos != null)
+                    Venta.Pagos.ToList().ForEach(item => { item.MedioPago = AponusDBContext.MediosPagos.Find(item.IdMedioPago) ?? new MediosPago(); });
+                if (Venta.DetallesVenta != null)
+                    Venta.DetallesVenta.ToList().ForEach(item => { item.IdProductoNavigation = AponusDBContext.Productos.Find(item.IdProducto) ?? new Producto(); });
+                if (Venta.Cuotas != null)
+                    Venta.Cuotas.ToList().ForEach(item => { item.EstadoCuota = AponusDBContext.estadosCuotasVentas.Find(item.IdEstadoCuota) ?? new EstadosCuotasVentas(); });
 
+                await AponusDBContext.ventas.AddAsync(Venta);
 
+                foreach (VentasDetalles item in Venta.DetallesVenta ?? Enumerable.Empty<VentasDetalles>())
+                {
+                    roolbackResult = new Stocks.Stocks().RestarProducto( new ActualizacionStock()
+                    {
+                        IdExistencia = item.IdProducto,
+                        Valor = item.Cantidad,
+                    }, AponusDBContext);
+                }
+
+                if (roolbackResult)
+                {
+                    await AponusDBContext.SaveChangesAsync();
+                    await transaccion.CommitAsync();
+                    await AponusDBContext.DisposeAsync();
+                    return true;
+
+                }
+                else
+                {
+                    transaccion.Rollback();
+                    await AponusDBContext.DisposeAsync();
+                    return false;
+                }
+            }
         }
 
         public IQueryable<Models.Ventas> ListarVentas()

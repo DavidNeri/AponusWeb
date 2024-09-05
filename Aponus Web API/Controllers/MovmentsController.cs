@@ -13,11 +13,11 @@ namespace Aponus_Web_API.Controllers
     {
         [HttpPost]
         [Route("New")]
-        public IActionResult NewActualizarStock ([FromForm]DTOMovimientosStock Actualizacion)
+        public IActionResult NuevoMovimiento ([FromForm]DTOMovimientosStock Actualizacion)
         {
             try
             {
-                return new BS_Movimientos().NewActualizarStock(Actualizacion);
+                return new BS_Movimientos().ProcesarDatosMovimiento(Actualizacion);
                 
             }
             catch (Exception)

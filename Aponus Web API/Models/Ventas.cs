@@ -20,17 +20,14 @@ namespace Aponus_Web_API.Models
         [ForeignKey("ID_USUARIO")]
         public string IdUsuario { get; set; }
 
+        [Column("TOTAL")]
+        public decimal Total { get; set; }
+
+        [Column("SALDO_PENDIENTE")]
+        public decimal SaldoPendiente{ get; set; }
+
         [Column("ID_ESTADO_VENTA")]
-        public int IdEstadoVenta{ get; set; }
-
-        [Column("SALDO_TOTAL")]
-        public decimal SaldoTotal { get; set; }
-
-        [Column("SALDO_CANCELADO")]
-        public decimal? SaldoCancelado { get; set; }
-
-        [NotMapped]
-        public decimal SaldoPendiente => SaldoTotal - (SaldoCancelado ?? 0);
+        public int IdEstadoVenta { get; set; }
 
         public virtual Entidades Cliente { get; set; } = new();        
         public virtual Usuarios Usuario { get; set; } = new();
@@ -39,6 +36,5 @@ namespace Aponus_Web_API.Models
         public virtual ICollection<CuotasVentas> Cuotas { get; set; } = new HashSet<CuotasVentas>();
         public virtual EstadosVentas Estado { get; set; } = new();
 
-
-    }
+    }   
 }

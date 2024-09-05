@@ -472,7 +472,7 @@ namespace Aponus_Web_API.Business
         
         }
 
-        internal IActionResult newActualizarStockProducto(ActualizacionStock Actualizacion)
+        internal IActionResult ActualizarStockProducto(ActualizacionStock Actualizacion)
         {
             List<(
                 string IdComponente,

@@ -4,6 +4,7 @@ using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20240902133120_check")]
+    partial class check
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -692,6 +695,7 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductos", b =>
                 {
                     b.Property<byte[]>("IdEstado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("varbinary(1)")
                         .HasColumnName("ID_ESTADO");
 
@@ -725,6 +729,7 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductosDescripciones", b =>
                 {
                     b.Property<byte[]>("IdEstado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("varbinary(1)")
                         .HasColumnName("ID_ESTADO");
 
@@ -757,6 +762,7 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosTiposProductos", b =>
                 {
                     b.Property<byte[]>("IdEstado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("varbinary(1)")
                         .HasColumnName("ID_ESTADO");
 
@@ -1498,10 +1504,6 @@ namespace AponusWebAPI.Migrations
                     b.Property<decimal>("Cantidad")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("CANTIDAD");
-
-                    b.Property<int>("Entregados")
-                        .HasColumnType("int")
-                        .HasColumnName("ENTREGADOS");
 
                     b.Property<decimal>("Precio")
                         .HasColumnType("decimal(18,2)")

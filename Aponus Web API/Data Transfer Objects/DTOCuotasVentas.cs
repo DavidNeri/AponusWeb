@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public int? IdVenta { get; set; }
 
         [JsonProperty(PropertyName = "numeroCuota", NullValueHandling = NullValueHandling.Ignore)]
-        public string NumeroCuota { get; set; }
+        public int NumeroCuota { get; set; }
 
         [JsonProperty(PropertyName = "monto", NullValueHandling = NullValueHandling.Ignore)]
         public decimal Monto { get; set; }
@@ -25,9 +25,9 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public int IdEstadoCuota { get; set; }
 
         [JsonProperty(PropertyName = "fechaPago", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? FechaPago { get; set; }
+        public DateTime? FechaPago { get; set; }    
 
         [JsonProperty(PropertyName = "estadoCuota", NullValueHandling = NullValueHandling.Ignore)]
-        public virtual DTOEstadosCuotasVentas EstadoCuota { get; set; } = new DTOEstadosCuotasVentas();
+        public virtual DTOEstadosCuotasVentas? EstadoCuota { get; set; }
     }
 }

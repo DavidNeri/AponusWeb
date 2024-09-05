@@ -20,30 +20,31 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         [Required(ErrorMessage = "El campo 'Usuario' es obligatorio"), JsonProperty(PropertyName = "idUsuario", NullValueHandling = NullValueHandling.Ignore)]
         public string IdUsuario { get; set; }
 
-        [JsonProperty(PropertyName = "idEstadoVenta", NullValueHandling = NullValueHandling.Ignore)]
-        public int? IdEstadoVenta { get; set; }
-
-        [JsonProperty(PropertyName = "monto", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal Monto { get; set; } = 0;
-
-        [JsonProperty(PropertyName = "saldoCancelado", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? SaldoCancelado { get; set; }
+        [JsonProperty(PropertyName = "total", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal Total { get; set; } = 0;
 
         [JsonProperty(PropertyName = "saldoPendiente", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal SaldoPendiente => Monto - (SaldoCancelado ?? 0);
+        public decimal? SaldoPendiente { get; set; }
+
+        [JsonProperty(PropertyName = "idEstadoVenta", NullValueHandling = NullValueHandling.Ignore)]
+        public int IdEstadoVenta { get; set; }
 
         [JsonProperty(PropertyName = "cliente", NullValueHandling = NullValueHandling.Ignore)]
-        public DTOEntidades Cliente { get; set; } = new DTOEntidades();
+        public DTOEntidades? Cliente { get; set; } 
 
         [JsonProperty(PropertyName = "detallesVenta", NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<DTOVentasDetalles>? DetallesVenta { get; set; } = new HashSet<DTOVentasDetalles>();
+        public ICollection<DTOVentasDetalles>? DetallesVenta { get; set; }
 
         [JsonProperty(PropertyName = "pagos", NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<DTOPagosVentas>? Pagos { get; set; } = new HashSet<DTOPagosVentas>();
-
+        public ICollection<DTOPagosVentas>? Pagos { get; set; }
 
         [JsonProperty(PropertyName = "cuotas", NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<DTOCuotasVentas>? Cuotas { get; set; } = new HashSet<DTOCuotasVentas>();
+        public ICollection<DTOCuotasVentas>? Cuotas { get; set; }
+
+        [JsonProperty(PropertyName = "estado", NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<DTOEstadosVentas>? Estado { get; set; }
+
+
 
     }
 }

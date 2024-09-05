@@ -4,6 +4,7 @@ using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20240902061109_Cuotas")]
+    partial class Cuotas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -692,6 +695,7 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductos", b =>
                 {
                     b.Property<byte[]>("IdEstado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("varbinary(1)")
                         .HasColumnName("ID_ESTADO");
 
@@ -725,6 +729,7 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductosDescripciones", b =>
                 {
                     b.Property<byte[]>("IdEstado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("varbinary(1)")
                         .HasColumnName("ID_ESTADO");
 
@@ -757,6 +762,7 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosTiposProductos", b =>
                 {
                     b.Property<byte[]>("IdEstado")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("varbinary(1)")
                         .HasColumnName("ID_ESTADO");
 
@@ -937,9 +943,13 @@ namespace AponusWebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPago"));
 
-                    b.Property<DateTime?>("Fecha")
-                        .HasColumnType("datetime")
-                        .HasColumnName("FECHA");
+                    b.Property<int?>("CantidadCuotas")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_CUOTAS");
+
+                    b.Property<int?>("CantidadCuotasCanceladas")
+                        .HasColumnType("int")
+                        .HasColumnName("CANTIDAD_CUOTAS_CANCELADAS");
 
                     b.Property<int>("IdMedioPago")
                         .HasColumnType("int")
@@ -949,9 +959,17 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID_VENTA");
 
-                    b.Property<decimal>("Monto")
+                    b.Property<decimal>("Subtotal")
                         .HasColumnType("decimal(18,2)")
-                        .HasColumnName("MONTO");
+                        .HasColumnName("SUBTOTAL");
+
+                    b.Property<decimal?>("SubtotalCancelado")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SUBTOTAL_CANCELADO");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("TOTAL");
 
                     b.HasKey("IdPago");
 
@@ -1466,13 +1484,13 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("ID_USUARIO");
 
-                    b.Property<decimal>("SaldoPendiente")
+                    b.Property<decimal?>("SaldoCancelado")
                         .HasColumnType("decimal(18,2)")
-                        .HasColumnName("SALDO_PENDIENTE");
+                        .HasColumnName("SALDO_CANCELADO");
 
-                    b.Property<decimal>("Total")
+                    b.Property<decimal>("SaldoTotal")
                         .HasColumnType("decimal(18,2)")
-                        .HasColumnName("TOTAL");
+                        .HasColumnName("SALDO_TOTAL");
 
                     b.HasKey("IdVenta");
 
@@ -1498,14 +1516,6 @@ namespace AponusWebAPI.Migrations
                     b.Property<decimal>("Cantidad")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("CANTIDAD");
-
-                    b.Property<int>("Entregados")
-                        .HasColumnType("int")
-                        .HasColumnName("ENTREGADOS");
-
-                    b.Property<decimal>("Precio")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("PRECIO");
 
                     b.HasKey("IdVenta", "IdProducto");
 
@@ -1950,8 +1960,7 @@ namespace AponusWebAPI.Migrations
                         .WithMany("Ventas")
                         .HasForeignKey("IdProducto")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_VENTAS_DETALLES_PRODUCTOS_ID_PRODUCTO");
+                        .IsRequired();
 
                     b.HasOne("Aponus_Web_API.Models.Ventas", "Venta")
                         .WithMany("DetallesVenta")

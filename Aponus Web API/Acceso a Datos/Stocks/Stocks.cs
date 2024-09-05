@@ -683,8 +683,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             return resultado;
         }
 
-        internal bool RestarProducto(ActualizacionStock Actualizacion)
+        internal bool RestarProducto(ActualizacionStock Actualizacion, AponusContext? AponusDBContext = null)
         {
+            if (AponusDBContext == null)
+                AponusDBContext = new AponusContext();
+
             bool resultado = true;
             try
             {
@@ -698,9 +701,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             catch (Exception)
             {
 
-                resultado=false;
+                resultado = false;
             }
-
+            finally
+            {
+            }
             return resultado;
            
         }
@@ -1082,7 +1087,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                                              new SqlParameter("@ID_PROVEEDOR_DESTINO", Movimiento.IdProveedorDestino),
                                                              new SqlParameter("@USUARIO_MODIFICA", Movimiento.ModificadoUsuario));
                 
-                return AponusDBContext.Stock_Movimientos.Select(x => x.IdMovimiento).Max();
+                int? IdMovimiento = AponusDBContext.Stock_Movimientos.Select(x => x.IdMovimiento).Max();
+
+                return IdMovimiento;
             }
             catch (DbUpdateException ex )
             {
@@ -1144,7 +1151,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                         IdDescripcion = pd.IdDescripcion,
                         NombreDescripcion = pd.DescripcionProducto,
                         Productos = pd.Productos
-                        .Where(prod => prod.IdDescripcion == pd.IdDescripcion && prod.IdTipo == x.auxPtd.ptd.IdTipo && Convert.ToInt32(prod.IdEstado)== Convert.ToInt32("0x01", 16))
+                        .Where(prod => prod.IdDescripcion == pd.IdDescripcion && prod.IdTipo == x.auxPtd.ptd.IdTipo && prod.IdEstado != 0)
                         .Select(x => new DTOStockProductos()
                         {
                             IdProducto = x.IdProducto,

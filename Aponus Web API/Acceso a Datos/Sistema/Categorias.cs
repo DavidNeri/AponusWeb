@@ -282,7 +282,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
                     //Cambiar el estado del  Id Tipo a INACTIVO
                     if (TipoProdEliminar != null)
                     {
-                        TipoProdEliminar.IdEstado = Convert.ToInt32("0x00", 16);
+                        TipoProdEliminar.IdEstado = 0;
                         categorias.AponusDBContext.ProductosTipos.Update(TipoProdEliminar);
                     }
 
@@ -299,7 +299,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
 
                     if (DescripcionProdEliminar != null)
                     {
-                        DescripcionProdEliminar?.ForEach(x => x.IdEstado = Convert.ToInt32("0x00", 16));
+                        DescripcionProdEliminar?.ForEach(x => x.IdEstado = 0);
                         categorias.AponusDBContext.ProductosDescripcions.UpdateRange(DescripcionProdEliminar);
 
                         List<(string IdTIpo, int IdDescripcion)> ListaCategoriasProductos = DescripcionProdEliminar
@@ -312,7 +312,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
                             {
                                 Cantidad = P.Cantidad,
                                 IdDescripcion = P.IdDescripcion,
-                                IdEstado = Convert.ToInt32("0x00", 16),
+                                IdEstado = 0,
                                 IdTipo = P.IdTipo,
                                 DiametroNominal = P.DiametroNominal,
                                 IdProducto = P.IdProducto,
@@ -386,7 +386,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
                     //Cambiar el estado del IdDescripcion INACTIVO
                     if (IdDescripcionEliminar != null)
                     {
-                        IdDescripcionEliminar.IdEstado = Convert.ToInt32("0x00", 16);
+                        IdDescripcionEliminar.IdEstado = 0;
                         categorias.AponusDBContext.ProductosDescripcions.Update(IdDescripcionEliminar);
 
                         //Busco Los PRODUCTOS relacioandos 
@@ -396,7 +396,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
                             {
                                 Cantidad = P.Cantidad,
                                 IdDescripcion = P.IdDescripcion,
-                                IdEstado = Convert.ToInt32("0x00", 16),
+                                IdEstado = 0,
                                 IdTipo = P.IdTipo,
                                 DiametroNominal = P.DiametroNominal,
                                 IdProducto = P.IdProducto,

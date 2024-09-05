@@ -27,12 +27,12 @@ public partial class Producto
     public decimal? PorcentajeGanancia { get; set; }
 
     [ForeignKey("ID_ESTADO")]
-    public int IdEstado { get; set; }
+    public byte IdEstado { get; set; }
 
     public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }  = null!;
     public virtual ProductosTipo IdTipoNavigation { get; set; } = null!;
     public virtual EstadosProductos IdEstadoNavigation { get; set; }
-    public virtual ICollection<ComponentesCuantitativo>? ComponentesCuantitativos { get; set;} = new List<ComponentesCuantitativo>();
-    public virtual ICollection<VentasDetalles>? Ventas { get; set; } = new HashSet<VentasDetalles>();
+    public virtual ICollection<ComponentesCuantitativo>? ComponentesCuantitativos { get; set;}
+    public virtual ICollection<VentasDetalles> Ventas { get; set; }
 
 }

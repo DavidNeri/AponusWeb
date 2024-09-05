@@ -14,28 +14,13 @@ namespace Aponus_Web_API.Models
         public int IdVenta{ get; set; }
 
         [ForeignKey("ID_MEDIO_PAGO")]
-        public int IdMedioPago { get; set; }
+        public int IdMedioPago { get; set; }      
 
-        [Column("CANTIDAD_CUOTAS")]
-        public int? CantidadCuotas { get; set; }
+        [Column("MONTO")]
+        public decimal Monto{ get; set; } 
 
-        [Column("CANTIDAD_CUOTAS_CANCELADAS")]
-        public int? CantidadCuotasCanceladas { get; set; }
-
-        [Column("SUBTOTAL")]
-        public decimal Subtotal { get; set; }
-
-        [Column("TOTAL")]
-        public decimal Total { get; set; }
-
-        [Column("SUBTOTAL_CANCELADO")]
-        public decimal? SubtotalCancelado { get; set; }
-
-        [NotMapped]
-        public decimal SubtotalPendiente => Subtotal - (SubtotalCancelado ?? 0);
-
-        [NotMapped]
-        public decimal CantidadCuotasPendientes => (CantidadCuotas ?? 0) - (CantidadCuotasCanceladas ?? 0);
+        [Column("FECHA")]
+        public DateTime? Fecha { get; set; }
         public virtual MediosPago MedioPago { get; set; } = new();
         public virtual Ventas Venta { get; set; } = new ();
     }

@@ -107,10 +107,7 @@ public partial class AponusContext : DbContext
             .HasPrincipalKey(p => p.IdEstadoCuota)
             .HasForeignKey(FK=>FK.IdEstadoCuota);
 
-
         });
-
-
 
         modelBuilder.Entity<CuotasVentas>(entity =>
         {
@@ -129,7 +126,7 @@ public partial class AponusContext : DbContext
 
 
             entity.Property(p => p.NumeroCuota)
-            .HasColumnType("varchar(max)")
+            .HasColumnType("int")
             .HasColumnName("NUMERO_CUOTA");
 
             entity.Property(p => p.Monto)
@@ -173,23 +170,19 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_USUARIO")
             .HasColumnType("varchar(50)");
 
-            entity.HasOne(p => p.Usuario)
-            .WithMany(p => p.Ventas)
-            .HasForeignKey(FK => FK.IdUsuario)
-            .HasPrincipalKey(PK => PK.Usuario)
-            .OnDelete(DeleteBehavior.NoAction);
+            entity.Property(p => p.Total)
+            .HasColumnName("TOTAL")
+            .HasColumnType("decimal(18,2)");
 
             entity.Property(p => p.IdEstadoVenta)
             .HasColumnName("ID_ESTADO_VENTA")
             .HasColumnType("int");
 
-            entity.Property(p => p.SaldoTotal)
-            .HasColumnType("decimal(18,2)")
-            .HasColumnName("SALDO_TOTAL");
-
-            entity.Property(p => p.SaldoCancelado)
-            .HasColumnType("decimal(18,2)")
-            .HasColumnName("SALDO_CANCELADO");
+            entity.HasOne(p => p.Usuario)
+            .WithMany(p => p.Ventas)
+            .HasForeignKey(FK => FK.IdUsuario)
+            .HasPrincipalKey(PK => PK.Usuario)
+            .OnDelete(DeleteBehavior.NoAction);
 
             entity.HasOne(p => p.Estado)
             .WithMany(p => p.ventas)
@@ -235,6 +228,10 @@ public partial class AponusContext : DbContext
             .HasColumnType("decimal(18,2)")
             .HasColumnName("CANTIDAD");
 
+            entity.Property(p => p.Precio)
+            .HasColumnType("decimal(18,2)")
+            .HasColumnName("PRECIO");
+
             entity.HasOne(p => p.Venta)
             .WithMany(p => p.DetallesVenta)
             .HasPrincipalKey(PK => PK.IdVenta)
@@ -243,7 +240,8 @@ public partial class AponusContext : DbContext
             entity.HasOne(p => p.IdProductoNavigation)
             .WithMany(p => p.Ventas)
             .HasForeignKey(FK => FK.IdProducto)
-            .HasPrincipalKey(PK => PK.IdProducto);
+            .HasPrincipalKey(PK => PK.IdProducto)
+            .HasConstraintName("FK_VENTAS_DETALLES_PRODUCTOS_ID_PRODUCTO");
 
         });
 
@@ -266,26 +264,13 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_MEDIO_PAGO")
             .HasColumnType("int");
 
-            entity.Property(p => p.CantidadCuotas)
-           .HasColumnName("CANTIDAD_CUOTAS")
-           .HasColumnType("int");
-
-            entity.Property(p => p.CantidadCuotasCanceladas)
-            .HasColumnName("CANTIDAD_CUOTAS_CANCELADAS")
-            .HasColumnType("int");
-
-            entity.Property(p => p.Subtotal)
-            .HasColumnName("SUBTOTAL")
+            entity.Property(p => p.Monto)
+            .HasColumnName("MONTO")
             .HasColumnType("decimal(18,2)");
 
-            entity.Property(p => p.Total)
-            .HasColumnName("TOTAL")
-            .HasColumnType("decimal(18,2)");
-
-            entity.Property(p => p.SubtotalCancelado)
-            .HasColumnName("SUBTOTAL_CANCELADO")
-            .HasColumnType("decimal(18,2)");
-
+            entity.Property(p => p.Fecha)
+            .HasColumnName("FECHA")
+            .HasColumnType("datetime");
 
             entity.HasOne(p => p.MedioPago)
             .WithMany(p => p.PagosVentasNavigation)
@@ -1159,6 +1144,13 @@ public partial class AponusContext : DbContext
                 .HasForeignKey(d => d.IdTipo)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PRODUCTOS_PRODUCTOS_TIPOS");
+
+            entity.HasMany(p => p.Ventas).WithOne(p => p.IdProductoNavigation)
+            .HasForeignKey(FK => FK.IdProducto)
+            .HasPrincipalKey(PK => PK.IdProducto)
+            .HasConstraintName("FK_VENTAS_DETALLES_PRODUCTOS_ID_PRODUCTO");
+
+
         });
 
         modelBuilder.Entity<ProductosDescripcion>(entity =>

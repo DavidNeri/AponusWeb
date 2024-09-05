@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Business
 {
     public class BS_Movimientos
     {
-        internal IActionResult NewActualizarStock(DTOMovimientosStock Movimiento)
+        internal IActionResult ProcesarDatosMovimiento(DTOMovimientosStock Movimiento)
         {
 
            

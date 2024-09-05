@@ -66,7 +66,7 @@ namespace Aponus_Web_API.Controllers
         {
              // If Venta.Cuotas es nulo errror 
 
-            if(Venta.Monto.Equals(0))
+            if(Venta.Total.Equals(0))
                 return new ContentResult()
                 {
                     Content="El valor de la venta no puede ser 0.00",
@@ -75,8 +75,20 @@ namespace Aponus_Web_API.Controllers
                 };
             else
             {
+                try
+                {
+                    return await BS_Ventas.ProcesarDatosVenta(Venta);
+                }
+                catch (Exception ex )
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException?.Message ?? ex.Message,
+                        ContentType="applcation/json",
+                        StatusCode=400
+                    };
+                }  
                 
-                return await BS_Ventas.ProcesarDatosVenta(Venta);
             }
 
 

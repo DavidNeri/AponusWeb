@@ -14,7 +14,7 @@ namespace Aponus_Web_API.Models
         public int IdVenta { get; set; }
 
         [Column("NUMERO_CUOTA")]
-        public string NumeroCuota { get; set; }
+        public int NumeroCuota { get; set; }
 
         [Column("MONTO")]
         public decimal Monto { get; set; }
@@ -26,7 +26,7 @@ namespace Aponus_Web_API.Models
         public int IdEstadoCuota { get; set; }
 
         [Column("FECHA_PAGO")]
-        public DateTime? FechaPago { get; set; }
+        public DateTime? FechaPago { get; set; }        
 
         public virtual Ventas Venta { get; set; } = new Ventas();
 
