@@ -33,7 +33,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Ventas
 
                 foreach (VentasDetalles item in Venta.DetallesVenta ?? Enumerable.Empty<VentasDetalles>())
                 {
-                    roolbackResult = new Stocks.Stocks().RestarProducto( new ActualizacionStock()
+                    roolbackResult = new Stocks.Stocks().DisminuirStockProducto( new ActualizacionStock()
                     {
                         IdExistencia = item.IdProducto,
                         Valor = item.Cantidad,

@@ -74,29 +74,14 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal int? ObtenerTablaInsumo(Insumos Insumo)
-        {
-
-            try
-            {
-                return new TablaInsumo().ObtenerTabla(Insumo);
-            }
-            catch (Exception)
-            {
-
-                return null;
-            }
-            
-
-
-        }
+      
 
         internal IActionResult ListarNombresFormateados()
         {
             List<TipoInsumos>? InsumosAgrupados = new List<TipoInsumos>();
             List<FormatoSuministros> InsumosDesagrupados = new List<FormatoSuministros>();
 
-            IActionResult InusmosActionResult = new Stocks().Listar();
+            IActionResult InusmosActionResult = new Stocks().ListarInsumosProducto();
 
             if (InusmosActionResult is JsonResult InsumosJsonResult)
             {
@@ -104,22 +89,22 @@ namespace Aponus_Web_API.Business
             }
 
 
-            foreach (TipoInsumos insumo in InsumosAgrupados)
+            foreach (TipoInsumos insumo in InsumosAgrupados ?? Enumerable.Empty<TipoInsumos>())
             {
 
-                foreach (DTOComponenteFormateado item in insumo.especificacionesFormato)
+                foreach (DTOComponenteFormateado item in insumo.especificacionesFormato ?? Enumerable.Empty<DTOComponenteFormateado>())
                 {
                     InsumosDesagrupados.Add(new FormatoSuministros()
                     {
-                        IdSuministro = item.idComponente,
+                        IdSuministro = item.idComponente ?? string.Empty,
                         Descripcion = insumo.Descripcion,
-                        Altura = !string.IsNullOrEmpty(item.Altura) && !item.Altura.Contains("-") ? Convert.ToDecimal(item.Altura.Replace("mm","")) : null,
-                        Diametro = !string.IsNullOrEmpty(item.Altura) && !item.Altura.Contains("-") ? Convert.ToDecimal(item.Altura.Replace("mm", "")) : null,
-                        DiametroNominal = !string.IsNullOrEmpty(item.DiametroNominal) && !item.DiametroNominal.Contains("-") ? Convert.ToInt32(item.DiametroNominal.Replace("mm", "")) : null,
-                        Espesor = !string.IsNullOrEmpty(item.Espesor) && !item.Espesor.Contains("-") ? Convert.ToDecimal(item.Espesor.Replace("mm", "")) : null,
-                        Longitud = !string.IsNullOrEmpty(item.Longitud) && !item.Longitud.Contains("-") ? Convert.ToDecimal(item.Longitud.Replace("mm", "")) : null,
-                        Perfil = !string.IsNullOrEmpty(item.Perfil) && !item.Perfil.Contains("-") ? Convert.ToInt32(item.Perfil) : null,
-                        Tolerancia = item.Tolerancia.Equals("-") ? "" : item.Tolerancia,
+                        Altura = !string.IsNullOrEmpty(item.Altura) && !item.Altura.Contains('-') ? Convert.ToDecimal(item.Altura.Replace("mm","")) : null,
+                        Diametro = !string.IsNullOrEmpty(item.Altura) && !item.Altura.Contains('-') ? Convert.ToDecimal(item.Altura.Replace("mm", "")) : null,
+                        DiametroNominal = !string.IsNullOrEmpty(item.DiametroNominal) && !item.DiametroNominal.Contains('-') ? Convert.ToInt32(item.DiametroNominal.Replace("mm", "")) : null,
+                        Espesor = !string.IsNullOrEmpty(item.Espesor) && !item.Espesor.Contains('-') ? Convert.ToDecimal(item.Espesor.Replace("mm", "")) : null,
+                        Longitud = !string.IsNullOrEmpty(item.Longitud) && !item.Longitud.Contains('-') ? Convert.ToDecimal(item.Longitud.Replace("mm", "")) : null,
+                        Perfil = !string.IsNullOrEmpty(item.Perfil) && !item.Perfil.Contains('-') ? Convert.ToInt32(item.Perfil) : null,
+                        Tolerancia = (item.Tolerancia?.Equals('-') ?? false )? "" : item.Tolerancia,
                         UnidadAlmacenamiento= !string.IsNullOrEmpty(item.idAlmacenamiento) ? item.idAlmacenamiento : null,
                         UnidadFraccionamiento = !string.IsNullOrEmpty(item.idFraccionamiento) ? item.idFraccionamiento : null,
                     });

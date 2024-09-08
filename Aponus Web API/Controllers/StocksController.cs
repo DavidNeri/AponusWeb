@@ -10,64 +10,13 @@ namespace Aponus_Web_API.Controllers
         [ApiController]
     public class StocksController : Controller
     {
-        [HttpGet]
-        [Route("List/All")]
-
-        public async Task<List<TipoInsumos>> Listar()
-        {
-            return await new BS_Stocks().Listar();
-
-        }
-      
-        [HttpGet]
-        [Route("List/{idDescription}")]
-
-        public async Task<List<TipoInsumos>> Listar(int? idDescription)
-        {
-            return await new BS_Stocks().Listar(idDescription);
-
-        }
-
-        [HttpGet]
-        [Route("List/{idDescription}/{dn}")]
-
-        public async Task<List<TipoInsumos>> Listar(int? idDescription, int? Dn)
-        {
-            return await new BS_Stocks().Listar(idDescription, Dn);
-
-        }       
-
-        /// <summary>
-        /// Reemplzo de List/All && List/{idDescription} && List/{idDescription}/{dn} Tablas Nuevas 
-        /// Reemplaza 3 "/all - /iDDescripcion y  /iddescripcicion+DN
-        /// </summary>
-        /// <returns></returns>
-        /// 
-        /// 
 
         [HttpGet]
         [Route("Supplies/List/{idDescription?}")]
         public IActionResult NewListar(int? idDescription)
         {
             return  new BS_Stocks().NewListar(idDescription);
-
-        }
-
-        ////
-        ////
-        ///
-
-       
-
-        
-        [HttpGet]
-        [Route("List/Diameters/{idDescription}/")]
-
-        public async Task<JsonResult> ListarDiametros(int? idDescription)
-        {
-            return await new BS_Stocks().ListarDiametros(idDescription);
-
-        }
+        } 
 
 
         [HttpGet]
@@ -84,7 +33,6 @@ namespace Aponus_Web_API.Controllers
             return await new BS_Stocks().LIstarPerfilesJuntas();
         }
 
-
         [HttpGet]
         [Route("Products/List/{TypeId?}/{IdDescription?}")]
         public JsonResult ListProducts(string? TypeId, int? IdDescription)
@@ -97,8 +45,6 @@ namespace Aponus_Web_API.Controllers
             {
                 throw;
             }
-
-
         }
 
 

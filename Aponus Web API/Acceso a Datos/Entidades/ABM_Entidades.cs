@@ -16,11 +16,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
         public ABM_Entidades() { AponusDBContext = new AponusContext(); }
 
         public IActionResult GuardarEntidad(DTOEntidades Entidad)
-        {
-            //Entidad.NombreClave = !string.IsNullOrEmpty(Entidad.NombreClave) ?
-            //                        Regex.Replace(Entidad.NombreClave, @"\s+", " ").Trim().ToUpper() :
-            //                        Regex.Replace(Entidad.Apellido  ?? "", @"\s+", " ").Trim().ToUpper() + " " +
-            //                        Regex.Replace(Entidad.Nombre ?? "", @"\s+", " ").Trim().ToUpper();           
+        {     
             
             try
             {

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Aponus Web API.props" />
+</Project>

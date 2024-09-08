@@ -10,7 +10,7 @@ namespace Aponus_Web_API.Support.Movimientos
 {
     public class Suministros
     {
-        internal static List<SuministrosMovimientosStock>? MapeoSuministrosDB(List<DTOSuministrosMovimientosStock> Suministros,string Origen, string Destino)
+        internal static List<SuministrosMovimientosStock>? MapeoSuministrosDB(List<DTOSuministrosMovimientosStock>? Suministros,string? Origen, string? Destino)
         {
             Stocks Stocks = new Stocks();
             List<StockInsumos> StockSuministros = new List<StockInsumos>();

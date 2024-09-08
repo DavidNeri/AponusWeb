@@ -34,10 +34,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                         DbContext.Componentes_Productos.Add(componente);
                         DbContext.SaveChanges();
                     }
-                
-               
             }
-
 
         }
 
@@ -238,12 +235,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
                 productos.Add(productoComponente);
             }
-
-            //var ComponentesProdIds = ComponentesProducto.Select(x => x.IdComponente).ToList();
-
-            //PropertyInfo[] propsSTock = new DTOStocks().GetType().GetProperties();
-           
-
                       
 
             foreach (var producto in productos)
@@ -268,9 +259,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                 .Where(x => x.idComponente.Contains(producto.IdComponente))
                 .Select(x => x.idFraccionamiento)
                 .FirstOrDefault();
-
-                //Dictionary<string, bool> propiedadesModificadas = new Dictionary<string, bool>();
-
 
                 foreach (var item in producto.StockFormateado)
                 {
@@ -299,9 +287,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                                     //Si el componente no tiene diametro, ni espesor, ni altura, ni DN, es decir si es una junta
                                     if (Componente.Diametro == null && Componente.Perfil != null && Componente.Espesor == null && Componente.Altura == null && Componente.DiametroNominal == null && !Regex.IsMatch(CantidadRequerida, "[a-zA-Z]"))
                                     {
-                                        //var LargoRequerido= item.
-                                      
-
                                         var TotalInsumosStock = Decimal.Parse(item.Total, CultureInfo.InvariantCulture);
                                         var LongitudInsumo = Componente.Longitud;
                                         var _CantidadRequerida = Decimal.Parse(CantidadRequerida, CultureInfo.InvariantCulture);
@@ -351,14 +336,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                                 item.GetType().GetProperty(propiedad.Name)?
                                   .SetValue(item, item.GetType().GetProperty(propiedad.Name)?.GetValue(item)
                                   + " " + SiglaAlmacenamiento);
-                            }                           
-                         
-                            
+                            } 
                         }
-                        
                     }
-
-
                 }
             }
 

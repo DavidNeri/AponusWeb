@@ -19,68 +19,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
     {
         private readonly AponusContext AponusDBContext;
         public Productos() { AponusDBContext = new AponusContext(); }
-        internal void EliminarComponententesCuantitativos(DatosProducto producto, List<DTOComponentesProducto> componentes)
-        {
-            throw new NotImplementedException();
-        }
+      
 
-        internal void EliminarComponententesMensurables(DatosProducto producto, List<DTOComponentesProducto> componentes)
-        {
-            throw new NotImplementedException();
-        }
+       
 
-        internal void EliminarComponententesPesables(DatosProducto producto, List<DTOComponentesProducto> componentes)
-        {
-            throw new NotImplementedException();
-        }
+       
 
-        internal void EliminarProducto(DatosProducto producto)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void GuardarComponententesCuantitativos(DTOComponentesProducto componente)
-        {
-            AponusDBContext.ComponentesCuantitativos
-                   .Add(new ComponentesCuantitativo
-                   {
-                       IdProducto = componente.IdProducto,
-                       IdComponente = componente.IdComponente,
-                       Cantidad = (int)componente.Cantidad
-
-                   });
-
-            AponusDBContext.SaveChanges();
-                      
-        }
-
-        internal void GuardarComponententesMensurables(DTOComponentesProducto componente)
-        {
-            AponusDBContext.ComponentesMensurables
-                .Add(new ComponentesMensurable
-                {
-                    IdProducto = componente.IdProducto,
-                    IdComponente = componente.IdComponente,
-                    Largo = componente.Largo,
-
-                });
-            AponusDBContext.SaveChanges(); 
-        }
-
-        internal void GuardarComponententesPesables(DTOComponentesProducto componente)
-        {
-
-            AponusDBContext.ComponentesPesables
-                   .Add(new ComponentesPesable
-                   {
-                       IdProducto = componente.IdProducto,
-                       IdComponente = componente.IdComponente,
-                       Cantidad = componente.Cantidad,
-                       Peso = componente.Peso
-                   });
-            AponusDBContext.SaveChanges();
-
-        }
+     
 
         internal void GuardarProducto(DTODetallesProducto producto)
         {
@@ -123,7 +68,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Productos
         internal void GuardarComponentes(List<DTOComponentesProducto> Componentes)
         {
             bool ChkIdProd = Componentes.All(x => x.IdProducto != null);
-            ComponentesProductos GuardarComponente = new ComponentesProductos();
+            ComponentesProductos GuardarComponente = new ();
 
 
             if (ChkIdProd)

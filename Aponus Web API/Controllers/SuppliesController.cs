@@ -11,21 +11,7 @@ namespace Aponus_Web_API.Controllers
     [ApiController]
     public class SuppliesController : Controller
     {
-        [HttpPost]
-        [Route("GetTableID")]
-        public int? ObtenerTabla(Data_Transfer_objects.Insumos Insumo)
-        {
-            try
-            {
-                return new BS_Supplies().ObtenerTablaInsumo(Insumo);
-            }
-            catch (Exception)
-            {
-
-                return null;
-            }
-            
-        }
+     
         [HttpGet]
         [Route("new-id/{sypplyName}/")]
         public async Task<JsonResult> GenerarIdInsumo(string? sypplyName)

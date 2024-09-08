@@ -20,7 +20,7 @@ namespace Aponus_Web_API.Business
             try
             {
                 Stocks Stocks = new Stocks();
-                List<StockInsumos> Suministros = new List<StockInsumos>();                
+                List<StockInsumos> Suministros = new();                
 
                 foreach (DTOSuministrosMovimientosStock Suministro in Movimiento.Suministros)
                 {
@@ -49,15 +49,15 @@ namespace Aponus_Web_API.Business
                                                         ValorAnteriorOrigen = (x.suministrosStockInsumos
                                                             .GetType()?
                                                             .GetProperties()?
-                                                            .FirstOrDefault(y => y.Name.ToUpper().Contains(Movimiento.Origen.ToUpper()))?
+                                                            .FirstOrDefault(y => y.Name.ToUpper().Contains(Movimiento?.Origen?.ToUpper() ?? string.Empty))?
                                                             .GetValue(x.suministrosStockInsumos) ?? 0)
                                                             .ToString(),                                                        
                                                             
 
                                                         ValorAnteriorDestino = (x.suministrosStockInsumos
-                                                            .GetType()
-                                                            .GetProperties()
-                                                            .FirstOrDefault(y => y.Name.ToUpper().Contains(Movimiento.Destino.ToUpper()))
+                                                            .GetType()?
+                                                            .GetProperties()?
+                                                            .FirstOrDefault(y => y.Name.ToUpper().Contains(Movimiento?.Destino?.ToUpper() ?? string.Empty))?
                                                             .GetValue(x.suministrosStockInsumos)?? 0)
                                                             .ToString()
 
@@ -128,18 +128,18 @@ namespace Aponus_Web_API.Business
         internal IActionResult ActualizarSuministros(DTOMovimientosStock Movimiento)
         {
             //SuministrosMovimientosStock Suministros = new SuministrosMovimientosStock();
-            MovimientosStock Movimientos = new MovimientosStock();
+            MovimientosStock Movimientos = new();
             Stocks stocks = new Stocks();
             bool RollBack = false;
 
-            foreach (var Suministro in Movimiento.Suministros)
+            foreach (var Suministro in Movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
             {
                 Suministro.IdMovimiento = Movimiento.IdMovimiento;
             }
-            List<SuministrosMovimientosStock> suministros = Suministros.MapeoSuministrosDB(Movimiento.Suministros, Movimiento.Origen, Movimiento.Destino);
+            List<SuministrosMovimientosStock>? suministros = Suministros.MapeoSuministrosDB(Movimiento.Suministros, Movimiento.Origen, Movimiento.Destino);
 
 
-            foreach (SuministrosMovimientosStock suministro in suministros)
+            foreach (SuministrosMovimientosStock suministro in suministros ?? Enumerable.Empty<SuministrosMovimientosStock>())
             {
                 if (suministro.ValorNuevoOrigen< 0)
                     return new ContentResult()
@@ -150,7 +150,7 @@ namespace Aponus_Web_API.Business
                         StatusCode = 400,
                     };
 
-                suministro.IdMovimiento = (int)Movimiento.IdMovimiento;
+                suministro.IdMovimiento = Movimiento.IdMovimiento ?? -1;
             }
 
             using (AponusContext AponusDbContext = new AponusContext())
@@ -159,7 +159,7 @@ namespace Aponus_Web_API.Business
 
                 using (var transaccion = AponusDbContext.Database.BeginTransaction())
                 {
-                    if (!stocks.GuardarSuministrosMovimiento(AponusDbContext, suministros)) RollBack = true;
+                    if (!stocks.GuardarSuministrosMovimiento(AponusDbContext, suministros )) RollBack = true;
                     if (!Movimientos.RegistrarModificacion(AponusDbContext, Movimiento)) RollBack = true;
 
                     if (RollBack)

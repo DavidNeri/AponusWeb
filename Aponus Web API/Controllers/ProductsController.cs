@@ -24,8 +24,6 @@ namespace Aponus_Web_API.Controllers
             {
                 throw;
             }
-
-
         }
 
         [HttpGet]
@@ -41,95 +39,7 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
-        //[HttpGet]
-        //[Route("ListProducts/{TypeId}")]
-        //public Task<JsonResult> ListProducts(string? TypeId)
-        //{
-        //    try
-        //    {
-
-        //        return new BS_Products().ListarProductos(TypeId);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-
-
-        //}
-        //Reemplazar por estos
-        //[HttpGet]
-        //[Route("ListProducts/{TypeId}/{IdDescription}")]
-        //public Task<JsonResult> ListProducts(string? TypeId, int? IdDescription)
-        //{
-        //    try
-        //    {
-
-        //        return new BS_Products().ListarProductos(TypeId, IdDescription);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
-
-        //[HttpGet]
-        //[Route("ListProducts/{TypeId}/{IdDescription}/{dn}")]
-        //public Task<JsonResult> ListProducts(string? TypeId, int? IdDescription, int Dn)
-        //{
-        //    try
-        //    {
-
-        //        return new BS_Products().ListarProductos(TypeId, IdDescription, Dn);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-
-
-        //}
-        //Reemplazar por estos
-
-        //Ver y eliminar
-        /* [HttpGet]
-         [Route("ListProducts/{TypeId}/{DN}")]
-         public  Task<DatosProducto> ListProducts(string? TypeId,int?dN)
-         {
-             try
-             {
-
-                 return new BS_Products().ListarProductos(TypeId, dN);
-             }
-             catch (Exception )
-             {
-                 throw;
-             }
-
-
-         }*/
-
-        //Ver y eliminar
-
-        //[HttpGet]
-        //[Route("ListParts/{productId}/{q=1}")]
-        //public async Task<JsonResult> ListParts(string? ProductId,int Q=1)
-        //{
-        //    try
-        //    {
-        //        return new BS_Products().ListarInsumos(ProductId, Q);
-
-        //        //return Json(a, new Newtonsoft.Json.JsonSerializerSettings());
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return Json(e);
-        //    }
-        //}
-
-
         [HttpPost]
-        //Reemplaza a ListParts
         [Route("NewListComponents")]
         public JsonResult NewListComponents(DTODetallesProducto Producto)
         {
@@ -144,7 +54,6 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
-        //Ver y eliminar
         [HttpGet]
         [Route("ListDN/{TypeId}")]
         public async Task<JsonResult> ListarDN(string? TypeId)
@@ -158,11 +67,8 @@ namespace Aponus_Web_API.Controllers
             {
                 throw;
             }
-
         }
-        //Ver y eliminar
 
-        //Reemplazar por este
         [HttpGet]
         [Route("ListDN/{TypeId}/{IdDescription}")]
         public async Task<JsonResult> ListarDN(string? TypeId, int?IdDescription)
@@ -178,25 +84,6 @@ namespace Aponus_Web_API.Controllers
             }
 
         }
-        //Reemplazar por este
-
-
-        [HttpPost]
-        [Route("SaveProduct")]
-        public IActionResult GuardarProducto(DTOProducto Producto)
-        {
-            try
-            {
-                new BS_Products().GuardarProducto(Producto);
-                return new StatusCodeResult(StatusCodes.Status200OK); 
-            }
-            catch (DbUpdateException e ) 
-            {   
-                string Mensaje = e.InnerException.Message;
-                return new JsonResult(Mensaje);
-            }
-        }
-
 
         [HttpPost]
         [Route("NewSaveProduct")]
@@ -214,9 +101,8 @@ namespace Aponus_Web_API.Controllers
         }
 
 
-
         [HttpPost]
-        [Route("UpdateComponents")] // Guarda o actualiza los componentes
+        [Route("UpdateComponents")]
         public IActionResult ActualizarComponentes(List<DTOComponentesProducto> Producto)
         {
             try
@@ -235,7 +121,6 @@ namespace Aponus_Web_API.Controllers
                 }
                 else
                 {
-
                     return new ContentResult()
                     {
                         Content = ex.Message,
@@ -244,9 +129,6 @@ namespace Aponus_Web_API.Controllers
                 }
             }
         }
-
-
-       
 
     }
 }
