@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
+// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
@@ -29,6 +29,15 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod();
     });
 });
+
+// Puerto y el host
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    // Configurar Kestrel para escuchar en todas las interfaces
+    serverOptions.ListenAnyIP(Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? "5000"));
+});
+
+
 var connectionString = builder.Configuration.GetConnectionString("Server=DAVID\\DATABASESERVER19; Database=Aponus;User Id=Administrador;Password=AponusIng;Trusted_Connection=True; TrustServerCertificate=True;");
 builder.Services.AddDbContext<AponusContext>(options => options.UseSqlServer(connectionString));
 //builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -40,7 +49,6 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = int.MaxValue;
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -51,9 +59,6 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("NuevaPolitca");
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

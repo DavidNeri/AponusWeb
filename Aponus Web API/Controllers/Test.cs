@@ -18,6 +18,5 @@ namespace Aponus_Web_API.Controllers
                 ContentType="application/json"
             };
         }
-
     }
 }
