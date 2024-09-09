@@ -12,20 +12,11 @@ public partial class AponusContext : DbContext
     public virtual DbSet<Stock_Movimientos> Stock_Movimientos { get; set; }
     public virtual DbSet<ArchivosMovimientosStock> ArchivosStock { get; set; }
     public virtual DbSet<StockInsumos> stockInsumos { get; set; }
-    public virtual DbSet<ComponentesCuantitativo> ComponentesCuantitativos { get; set; }
     public virtual DbSet<ComponentesDescripcion> ComponentesDescripcions { get; set; }
-    public virtual DbSet<ComponentesMensurable> ComponentesMensurables { get; set; }
-    public virtual DbSet<ComponentesPesable> ComponentesPesables { get; set; }
-    public virtual DbSet<CuantitativosDetalle> CuantitativosDetalles { get; set; }
-    public virtual DbSet<MensurablesDetalle> MensurablesDetalles { get; set; }
-    public virtual DbSet<PesablesDetalle> PesablesDetalles { get; set; }
     public virtual DbSet<Producto> Productos { get; set; }
     public virtual DbSet<ProductosDescripcion> ProductosDescripcions { get; set; }
     public virtual DbSet<ProductosTipo> ProductosTipos { get; set; }
     public virtual DbSet<Productos_Tipos_Descripcion> Producto_Tipo_Descripcion { get; set; }
-    public virtual DbSet<StockCuantitativo> StockCuantitativos { get; set; }
-    public virtual DbSet<StockMensurable> StockMensurables { get; set; }
-    public virtual DbSet<StockPesable> StockPesables { get; set; }
     public virtual DbSet<Usuarios> Usuarios { get; set; } 
     public virtual DbSet<Entidades> Entidades { get; set; }
     public virtual DbSet<SuministrosMovimientosStock> SuministrosMovimientoStock { get; set; }
@@ -890,35 +881,7 @@ public partial class AponusContext : DbContext
         });
 
 
-        modelBuilder.Entity<ComponentesCuantitativo>(entity =>
-        {
-            entity.HasKey(e => new { e.IdProducto, e.IdComponente });
-
-            entity.ToTable("COMPONENTES_CUANTITATIVOS");
-
-            entity.Property(e => e.IdProducto)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_PRODUCTO");
-            entity.Property(e => e.IdComponente)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_COMPONENTE");
-            entity.Property(e => e.Cantidad)
-                .HasColumnType("int")
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("CANTIDAD");
-
-            entity.HasOne(d => d.IdComponenteNavigation).WithMany(p => p.ComponentesCuantitativos)
-                .HasForeignKey(d => d.IdComponente)
-                .OnDelete(DeleteBehavior.ClientSetNull)                
-                .HasConstraintName("FK_COMPONENTES_CUANTITATIVOS_CUANTITATIVOS_DETALLE");
-
-            entity.HasOne(d => d.IdComponente1).WithMany(p => p.ComponentesCuantitativos)
-                .HasForeignKey(d => d.IdComponente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_COMPONENTES_CUANTITATIVOS_STOCK_CUANTITATIVOS");
-        });        
+      
 
         modelBuilder.Entity<ComponentesDescripcion>(entity =>
         {
@@ -938,164 +901,7 @@ public partial class AponusContext : DbContext
 
         });
 
-        modelBuilder.Entity<ComponentesMensurable>(entity =>
-        {
-            entity.HasKey(e => new { e.IdProducto, e.IdComponente });
-
-            entity.ToTable("COMPONENTES_MENSURABLES");
-
-            entity.Property(e => e.IdProducto)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_PRODUCTO");
-            entity.Property(e => e.IdComponente)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_COMPONENTE");
-            entity.Property(e => e.Altura)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("ALTURA");
-            entity.Property(e => e.Largo)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("LARGO");
-
-            entity.HasOne(d => d.IdComponenteNavigation).WithMany(p => p.ComponentesMensurables)
-                .HasForeignKey(d => d.IdComponente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_COMPONENTES_MENSURABLES_MENSURABLES_DETALLE");
-
-            entity.HasOne(d => d.IdComponente1).WithMany(p => p.ComponentesMensurables)
-                .HasForeignKey(d => d.IdComponente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_COMPONENTES_MENSURABLES_STOCK_MENSURABLES");
-        });
-
-        modelBuilder.Entity<ComponentesPesable>(entity =>
-        {
-            entity.HasKey(e => new { e.IdProducto, e.IdComponente });
-
-            entity.ToTable("COMPONENTES_PESABLES");
-
-            entity.Property(e => e.IdProducto)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_PRODUCTO");
-            entity.Property(e => e.IdComponente)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_COMPONENTE");
-            entity.Property(e => e.Peso)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("PESO");
-            entity.Property(e => e.Cantidad)
-            .HasColumnName("CANTIDAD")
-            .HasColumnType("decimal(18, 2)")
-            .HasDefaultValueSql("NULL");
-
-            entity.HasOne(d => d.IdComponenteNavigation).WithMany(p => p.ComponentesPesables)
-                .HasForeignKey(d => d.IdComponente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_COMPONENTES_PESABLES_PESABLES_DETALLE1");
-
-            entity.HasOne(d => d.IdComponente1).WithMany(p => p.ComponentesPesables)
-                .HasForeignKey(d => d.IdComponente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_COMPONENTES_PESABLES_STOCK_PESABLES");
-        });
-
-        modelBuilder.Entity<CuantitativosDetalle>(entity =>
-        {
-            entity.HasKey(e => e.IdComponente);
-
-            entity.ToTable("CUANTITATIVOS_DETALLE");
-
-            entity.Property(e => e.IdComponente)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_COMPONENTE");
-            entity.Property(e => e.Altura)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("ALTURA");
-            entity.Property(e => e.Diametro)
-                .HasDefaultValueSql("((0))")                
-                .HasColumnName("DIAMETRO");
-
-            entity.Property(e => e.Espesor)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("ESPESOR");
-
-            entity.Property(e => e.Perfil)
-            .IsRequired(false)
-            .HasDefaultValueSql("null")
-            .HasColumnName("PERFIL");
-
-            entity.Property(e => e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
-            entity.Property(e => e.Perfil).HasColumnName("PERFIL");            
-            entity.Property(e => e.Tolerancia)
-            .HasColumnName("TOLERANCIA");
-        });
-
-        modelBuilder.Entity<MensurablesDetalle>(entity =>
-        {
-            entity.HasKey(e => e.IdComponente);
-
-            entity.ToTable("MENSURABLES_DETALLE");
-
-            entity.Property(e => e.IdComponente)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_COMPONENTE");
-            entity.Property(e => e.Altura)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("ALTURA");
-            entity.Property(e => e.Ancho)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("ANCHO");
-            entity.Property(e => e.Espesor)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("ESPESOR");
-            entity.Property(e => e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
-            entity.Property(e => e.Largo)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("LARGO");
-            entity.Property(e => e.Perfil)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("PERFIL");
-
-            entity.HasOne(d => d.IdComponenteNavigation).WithOne(p => p.MensurablesDetalle)
-                .HasForeignKey<MensurablesDetalle>(d => d.IdComponente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_MENSURABLES_DETALLE_STOCK_MENSURABLES");
-        });
-
-        modelBuilder.Entity<PesablesDetalle>(entity =>
-        {
-            entity.HasKey(e => e.IdComponente);
-
-            entity.ToTable("PESABLES_DETALLE");
-
-            entity.Property(e => e.IdComponente)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_COMPONENTE");
-            entity.Property(e => e.Altura)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("ALTURA");
-            entity.Property(e => e.Diametro)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("DIAMETRO");
-            entity.Property(e => e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
-        });
+       
 
         modelBuilder.Entity<Producto>(entity =>
         {
@@ -1201,85 +1007,6 @@ public partial class AponusContext : DbContext
             entity.Property(e=>e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
             entity.HasKey(Key => new { Key.IdTipo, Key.IdDescripcion });
 
-        });
-        
-        modelBuilder.Entity<StockCuantitativo>(entity =>
-        {
-            entity.HasKey(e => e.IdComponente);
-
-            entity.ToTable("STOCK_CUANTITATIVOS");
-
-            entity.Property(e => e.IdComponente)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_COMPONENTE");
-            entity.Property(e => e.CantidadGranallado)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("CANTIDAD_GRANALLADO");
-            entity.Property(e => e.CantidadPintura)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("CANTIDAD_PINTURA");
-            entity.Property(e => e.CantidadProceso)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("CANTIDAD_PROCESO");
-            entity.Property(e => e.CantidadRecibido)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("CANTIDAD_RECIBIDO");
-            entity.Property(e => e.CantidadMoldeado)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("CANTIDAD_MOLDEADO");
-
-            entity.HasOne(d => d.IdComponenteNavigation).WithOne(p => p.StockCuantitativo)
-                .HasForeignKey<StockCuantitativo>(d => d.IdComponente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_STOCK_CUANTITATIVOS_CUANTITATIVOS_DETALLE");
-        });
-
-        modelBuilder.Entity<StockMensurable>(entity =>
-        {
-            entity.HasKey(e => e.IdComponente);
-
-            entity.ToTable("STOCK_MENSURABLES");
-
-            entity.Property(e => e.IdComponente)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_COMPONENTE");
-            entity.Property(e => e.CantidadProceso)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("CANTIDAD_PROCESO");
-            entity.Property(e => e.CantidadRecibido)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("CANTIDAD_RECIBIDO");
-        });
-
-        modelBuilder.Entity<StockPesable>(entity =>
-        {
-            entity.HasKey(e => e.IdComponente);
-
-            entity.ToTable("STOCK_PESABLES");
-
-            entity.Property(e => e.IdComponente)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("ID_COMPONENTE");
-            entity.Property(e => e.CantidadPintura)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("CANTIDAD_PINTURA");
-            entity.Property(e => e.CantidadProceso)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("CANTIDAD_PROCESO");
-            entity.Property(e => e.CantidadRecibido)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("CANTIDAD_RECIBIDO");
-
-            entity.HasOne(d => d.IdComponenteNavigation).WithOne(p => p.StockPesable)
-                .HasForeignKey<StockPesable>(d => d.IdComponente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_STOCK_PESABLES_PESABLES_DETALLE");
         });
 
         modelBuilder.Entity<Usuarios>(entity =>

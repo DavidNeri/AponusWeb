@@ -18,21 +18,6 @@ namespace Aponus_Web_API.Controllers
             return  new BS_Stocks().NewListar(idDescription);
         } 
 
-
-        [HttpGet]
-        [Route("List/Bolts")]
-        public async Task<List<Insumos>> ListarBulones()
-        {
-            return await new BS_Stocks().ListarBulones();
-        }
-
-        [HttpGet]
-        [Route("List/GasketsProfiles")]
-        public async Task<List<Insumos>> ListarPerfilesJuntas()
-        {
-            return await new BS_Stocks().LIstarPerfilesJuntas();
-        }
-
         [HttpGet]
         [Route("Products/List/{TypeId?}/{IdDescription?}")]
         public JsonResult ListProducts(string? TypeId, int? IdDescription)

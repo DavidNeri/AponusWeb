@@ -94,34 +94,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
            
         }
 
-        internal async Task<List<Data_Transfer_objects.Insumos>> ListarBulones()
-        {
-            List<Data_Transfer_objects.Insumos> Bulones= new();
-            Bulones = await AponusDBContext.PesablesDetalles
-                .Where(x=>x.IdComponente.Contains("BUL")==true)
-                .Select(x=>new Data_Transfer_objects.Insumos
-                {
-                    IdInsumo = x.IdComponente,
-                    Nombre = x.Altura.ToString(),
-                }).ToListAsync();
-
-            return Bulones;
-        }
-
-        internal async Task<List<Data_Transfer_objects.Insumos>> ListarPerfilesJuntas()
-        {
-            List<Data_Transfer_objects.Insumos> PerfilesJuntas = new();
-            PerfilesJuntas = await AponusDBContext.MensurablesDetalles
-                .Where(x => x.IdComponente.Contains("JUN") == true)
-                .Select(x => new Data_Transfer_objects.Insumos
-                {
-                    IdInsumo = x.IdComponente,
-                    Nombre = x.Perfil.ToString(),
-                }).ToListAsync();
-
-            return PerfilesJuntas;
-        }
-
 
 
         internal  IActionResult ListarInsumosProducto(int? IdDescripcion=null)

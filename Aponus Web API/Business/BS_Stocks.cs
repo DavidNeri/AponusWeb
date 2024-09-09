@@ -13,19 +13,7 @@ using System.Collections;
 namespace Aponus_Web_API.Business
 {
     public class BS_Stocks
-    { 
-
-
-        internal Task<List<Insumos>> ListarBulones()
-        {
-            return new Stocks().ListarBulones();
-        }
-
-        internal Task<List<Insumos>> LIstarPerfilesJuntas()
-        {
-            return new Stocks().ListarPerfilesJuntas();
-
-        }
+    {     
 
         internal IActionResult NewListar(int? IdDescripcion)
         {
