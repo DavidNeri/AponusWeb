@@ -3,11 +3,11 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 
 # Copia el archivo del proyecto (.csproj) y restaura las dependencias
-COPY ["Aponus Web API.csproj", "./"]
+COPY ["Aponus Web API/Aponus Web API.csproj", "./"]
 RUN dotnet restore "./Aponus Web API.csproj"
 
 # Copia todo el código fuente y compila la aplicación
-COPY . .
+COPY Aponus Web API/ ./
 WORKDIR "/src/"
 RUN dotnet build "Aponus Web API.csproj" -c Release -o /app/build
 
