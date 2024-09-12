@@ -70,7 +70,7 @@ namespace Aponus_Web_API.Models
         public int IdTipo{ get; set; }
 
         [Column("ID_ESTADO")]
-        public byte IdEstado { get; set; }
+        public int IdEstado { get; set; }
 
         public virtual ICollection<Stock_Movimientos> MovimientosOrigen { get; set; } = new HashSet<Stock_Movimientos>();
         public virtual ICollection<Stock_Movimientos> MovimientosDestino { get; set; } = new HashSet<Stock_Movimientos>();       

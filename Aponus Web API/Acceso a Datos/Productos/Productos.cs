@@ -1,16 +1,7 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Componentes;
 using Aponus_Web_API.Data_Transfer_objects;
-using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System.Data.Entity;
-using System.Data.Entity.Validation;
-using System.Reflection;
-using System.Reflection.Metadata;
-using System.Text.RegularExpressions;
+
 
 namespace Aponus_Web_API.Acceso_a_Datos.Productos
 {

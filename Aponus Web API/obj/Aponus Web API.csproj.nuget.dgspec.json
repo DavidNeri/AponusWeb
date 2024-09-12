@@ -73,13 +73,9 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.1, )"
+              "version": "[7.0.11, )"
             },
             "Microsoft.EntityFrameworkCore.Proxies": {
-              "target": "Package",
-              "version": "[7.0.1, )"
-            },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[7.0.1, )"
             },
@@ -92,6 +88,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[6.0.11, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSql": {
+              "target": "Package",
+              "version": "[7.0.11, )"
             },
             "NtpClient": {
               "target": "Package",

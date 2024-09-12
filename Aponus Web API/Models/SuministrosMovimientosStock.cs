@@ -27,7 +27,7 @@ namespace Aponus_Web_API.Models
         [Column("CANTIDAD")]
         public decimal Cantidad{ get; set; }
 
-        public byte IdEstado { get; set; }
+        public int IdEstado { get; set; }
 
         public virtual EstadosSuministrosMovimientosStock? EstadosSuministrosMovimientosStockNavigation { get; set; } = new();
 

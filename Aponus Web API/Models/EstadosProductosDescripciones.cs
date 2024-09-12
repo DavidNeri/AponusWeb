@@ -7,7 +7,7 @@ namespace Aponus_Web_API.Models
     {
         [Key]
         [Column("ID_ESTADO")]
-        public byte IdEstado { get; set; }
+        public int IdEstado { get; set; }
 
         [Column("DESCRIPCION")]
         public string Descripcion { get; set; }

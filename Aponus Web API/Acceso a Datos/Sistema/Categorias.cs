@@ -1,13 +1,7 @@
-﻿using Aponus_Web_API.Data_Transfer_objects;
-using Aponus_Web_API.Data_Transfer_Objects;
+﻿using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Sistema
 
@@ -58,7 +52,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
                  return IdDescripcion;
                 
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
                 return 0;
 

@@ -4,7 +4,6 @@ using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
 using Aponus_Web_API.Support.Ventas;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
 
 namespace Aponus_Web_API.Business
@@ -42,7 +41,7 @@ namespace Aponus_Web_API.Business
 
                     Estado.Descripcion = Regex.Replace(Estado.Descripcion ?? "", @"\s+", " ").Trim().ToUpper();
 
-                    if (Estado.Descripcion.IsNullOrEmpty())
+                    if (string.IsNullOrEmpty(Estado.Descripcion))
                         return new ContentResult()
                         {
                             Content = "El estado no puede estar vacío",

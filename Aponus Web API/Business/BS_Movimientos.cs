@@ -1,13 +1,11 @@
-﻿using Aponus_Web_API.Acceso_a_Datos.Entidades;
-using Aponus_Web_API.Acceso_a_Datos.Stocks;
+﻿using Aponus_Web_API.Acceso_a_Datos.Stocks;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
 using Aponus_Web_API.Support.Movimientos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Data.SqlClient;
+using System.Data.SqlClient;
 
 namespace Aponus_Web_API.Business
 {
@@ -234,7 +232,7 @@ namespace Aponus_Web_API.Business
                         string? RutaCompleta = DatosMovimiento.DatosArchivos.Select(x => x.Path).First();
 
                         //Si existe el movimiento pero no hay rutas de archivos, es decir, no se guardaron archivos antes entonces genero la ruta
-                        if (RutaCompleta.IsNullOrEmpty())
+                        if (string.IsNullOrEmpty(RutaCompleta))
                         {
                             IActionResult ProveedoresActionResult = BS_Entidades.Listar(ArchivosMovimiento.IdProveedorDestino ?? 0 , 0, 0);
 
@@ -384,13 +382,13 @@ namespace Aponus_Web_API.Business
                 {
                     using (AponusContext AponusDbContext = new AponusContext())
                     {
-                        var Existe = AponusDbContext.EstadoMovimientosStock.Find(estado.idEstado);
+                        var Existe = AponusDbContext.EstadoMovimientosStock.Find(estado.idEstadoMovimiento);
 
                         if (Existe != null)
                         {
-                            Existe.IdEstadoPropio = estado.IdEstadoPropio ?? Existe.IdEstadoPropio;
+                            Existe.IdEstado = estado.IdEstado ?? Existe.IdEstado;
                             Existe.Descripcion = estado.Descripcion ?? Existe.Descripcion;
-                            Existe.IdEstado = estado.idEstado ?? Existe.IdEstado;   
+                            Existe.IdEstadoMovimiento = estado.idEstadoMovimiento ?? Existe.IdEstadoMovimiento;   
 
 
                             AponusDbContext.EstadoMovimientosStock.Update(Existe);

@@ -1,6 +1,4 @@
 ﻿using Aponus_Web_API.Data_Transfer_Objects;
-using Aponus_Web_API.Models;
-using Microsoft.IdentityModel.Tokens;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Linq.Expressions;
 

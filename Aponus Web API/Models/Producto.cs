@@ -27,7 +27,7 @@ public partial class Producto
     public decimal? PorcentajeGanancia { get; set; }
 
     [ForeignKey("ID_ESTADO")]
-    public byte IdEstado { get; set; }
+    public int IdEstado { get; set; }
 
     public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }  = null!;
     public virtual ProductosTipo IdTipoNavigation { get; set; } = null!;

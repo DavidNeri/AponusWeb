@@ -46,7 +46,7 @@ public partial class AponusContext : DbContext
     {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         optionsBuilder
-            .UseSqlServer("Server=DAVID\\DATABASESERVER19; Database=Aponus;User Id=Administrador;Password=AponusIng;Trusted_Connection=True; TrustServerCertificate=True;")
+            .UseNpgsql("Host=autorack.proxy.rlwy.net;Database=railway;Username=postgres;Password=IZeICnXcFWmXjVngimVzxaoXrwHoiaKC;Port=26059;SSL Mode=Prefer;Trust Server Certificate=True;")
             .UseLazyLoadingProxies()
             .EnableSensitiveDataLogging();
     }    
@@ -497,12 +497,10 @@ public partial class AponusContext : DbContext
 
             entity.Property(P => P.IdTipo)
             .HasColumnName("ID_TIPO")
-            .ValueGeneratedOnAdd()
-            .HasAnnotation("SqlServer:Identity", "1, 1");
+            .UseIdentityColumn();
 
             entity.Property(P => P.IdEstado)
             .HasDefaultValueSql("1")
-            .HasColumnType("varbinary(1)")
             .HasColumnName("ID_ESTADO");
 
             entity.Property(p => p.NombreTipo)
@@ -534,7 +532,6 @@ public partial class AponusContext : DbContext
 
             entity.Property(P => P.IdEstado)
             .HasDefaultValueSql("1")
-            .HasColumnType("varbinary(1)")
             .HasColumnName("ID_ESTADO");
 
             entity.Property(p => p.NombreCategoria)
@@ -557,16 +554,15 @@ public partial class AponusContext : DbContext
         {
             entity.ToTable("ESTADOS_MOVIMIENTOS_STOCK");
 
-            entity.HasKey(PK => PK.IdEstado);
+            entity.HasKey(PK => PK.IdEstadoMovimiento);
 
-            entity.Property(p => p.IdEstado)
-            .HasColumnName("ID_ESTADO")
+            entity.Property(p => p.IdEstadoMovimiento)
+            .HasColumnName("ID_ESTADO_MOVIMIENTO")
             .HasColumnType("int")
             .ValueGeneratedOnAdd();
 
-            entity.Property(p => p.IdEstadoPropio)
-            .HasColumnName("ID_ESTADO_PROPIO")
-            .HasColumnType("varbinary(1)")
+            entity.Property(p => p.IdEstado)
+            .HasColumnName("ID_ESTADO")
             .HasDefaultValueSql("1");
 
             entity.Property(p => p.Descripcion)
@@ -586,7 +582,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.IdEstado)
             .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)");
+            .UseIdentityColumn();
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
@@ -604,8 +600,7 @@ public partial class AponusContext : DbContext
             entity.HasKey(PK => PK.IdEstado);
 
             entity.Property(p => p.IdEstado)
-            .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)");
+            .HasColumnName("ID_ESTADO");
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
@@ -623,8 +618,7 @@ public partial class AponusContext : DbContext
             entity.HasKey(PK => PK.IdEstado);
 
             entity.Property(p => p.IdEstado)
-            .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)");
+            .HasColumnName("ID_ESTADO");
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
@@ -642,8 +636,7 @@ public partial class AponusContext : DbContext
             entity.HasKey(PK => PK.IdEstado);
 
             entity.Property(e => e.IdEstado)
-            .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)");
+            .HasColumnName("ID_ESTADO");
 
             entity.Property(e => e.Descripcion)
             .HasColumnType("nvarchar(max)")
@@ -656,11 +649,11 @@ public partial class AponusContext : DbContext
 
         modelBuilder.Entity<EstadosComponentesDetalles>(entity =>
         {
+            entity.ToTable("ESTADOS_COMPONENTES_DETALLES");
             entity.HasKey(e => e.IdEstado);
 
             entity.Property(e => e.IdEstado)
-            .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)");
+            .HasColumnName("ID_ESTADO");
 
             entity.Property(e => e.Descripcion)
             .HasColumnType("nvarchar(max)")
@@ -673,11 +666,11 @@ public partial class AponusContext : DbContext
 
         modelBuilder.Entity<EstadosProductosComponentes>(entity =>
         {
+            entity.ToTable("ESTADOS_PRODUCTOS_COMPONENTES");
             entity.HasKey(PK => PK.IdEstado);
 
             entity.Property(e => e.IdEstado)
-            .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)");
+            .HasColumnName("ID_ESTADO");
 
             entity.Property(e => e.Descripcion)
             .HasColumnType("nvarchar(max)")
@@ -690,11 +683,11 @@ public partial class AponusContext : DbContext
 
         modelBuilder.Entity<EstadosProductos>(entity =>
         {
+            entity.ToTable("ESTADOS_PRODUCTOS");
             entity.HasKey(PK => PK.IdEstado);
 
             entity.Property(entity => entity.IdEstado)
-            .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)");
+            .HasColumnName("ID_ESTADO");
 
             entity.Property(e => e.Descripcion)
             .HasColumnType("nvarchar(max)")
@@ -744,7 +737,6 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.IdEstado)
            .HasColumnName("ID_ESTADO")
-           .HasColumnType("Varbinary(1)")
            .HasDefaultValueSql("1");
         });
 
@@ -814,7 +806,6 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.IdEstado)
             .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)")
             .HasDefaultValueSql("1");
         });
 
@@ -868,7 +859,6 @@ public partial class AponusContext : DbContext
             .HasColumnType("decimal(18,3)");
 
             entity.Property(e => e.IdEstado)
-            .HasColumnType("varbinary(1)")
             .HasDefaultValueSql("1");
 
             entity.Property(e => e.IdFraccionamiento)
@@ -885,14 +875,13 @@ public partial class AponusContext : DbContext
 
         modelBuilder.Entity<ComponentesDescripcion>(entity =>
         {
-            entity.HasKey(e => e.IdDescripcion);
-            
+            entity.HasKey(e => e.IdDescripcion);            
 
             entity.ToTable("COMPONENTES_DESCRIPCION");
 
             entity.Property(e => e.IdDescripcion)
                 .HasColumnName("ID_DESCRIPCION")
-                .UseIdentityColumn(1, 1);
+                .UseIdentityColumn();
 
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(50)
@@ -937,7 +926,6 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.IdEstado)
             .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)")
             .HasDefaultValueSql("1");
 
             entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.Productos)
@@ -966,22 +954,22 @@ public partial class AponusContext : DbContext
             entity.ToTable("PRODUCTOS_DESCRIPCION");
 
             entity.Property(e => e.IdDescripcion)
-                .HasColumnName("ID_DESCRIPCION");
+                .HasColumnName("ID_DESCRIPCION")
+                .UseIdentityColumn();
 
             entity.Property(e => e.DescripcionProducto)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("DESCRIPCION");
+            .HasMaxLength(50)
+            .IsUnicode(false)
+            .HasColumnName("DESCRIPCION");
 
             entity.Property(e => e.IdEstado)
             .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)")
             .HasDefaultValueSql("1");
         });
 
         modelBuilder.Entity<ProductosTipo>(entity =>
         {
-            entity.HasKey(e => e.IdTipo).HasName("PK_Table_1");
+            entity.HasKey(e => e.IdTipo).HasName("PK_PRODUCTOS_TIPOS");
 
             entity.ToTable("PRODUCTOS_TIPOS");
 
@@ -996,7 +984,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.IdEstado)
             .HasColumnName("ID_ESTADO")
-            .HasColumnType("varbinary(1)")
+            .UseIdentityColumn()
             .HasDefaultValueSql("1");
         });
 
@@ -1011,6 +999,7 @@ public partial class AponusContext : DbContext
 
         modelBuilder.Entity<Usuarios>(entity =>
         {
+            entity.ToTable("USUARIOS");
             entity.HasKey(e => e.Usuario);
 
             entity.Property(e => e.Usuario)
@@ -1037,6 +1026,8 @@ public partial class AponusContext : DbContext
 
         modelBuilder.Entity<Stock_Movimientos>(entity =>
         {
+            entity.ToTable("STOCK_MOVIMIENTOS");
+
             entity.HasKey(e => e.IdMovimiento);
 
             entity.Property(e => e.IdMovimiento)
@@ -1125,7 +1116,6 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.IdEstado)
            .HasColumnName("ID_ESTADO")
-           .HasColumnType("Varbinary(1)")
            .HasDefaultValueSql("1");
 
         });
@@ -1205,7 +1195,6 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.IdEstado)
                 .HasColumnName("ID_ESTADO")
-                .HasColumnType("varbinary(1)")
                 .HasDefaultValueSql("(1)");
         });
 

@@ -10,7 +10,7 @@ namespace Aponus_Web_API.Models
         public string HashArchivo { get; set; }
         public string PathArchivo { get; set; }
         public string? MimeType{ get; set; }
-        public byte IdEstado { get; set; } = 1;
+        public int IdEstado { get; set; } = 1;
 
         [ForeignKey("IdMovimiento")]
         public virtual Stock_Movimientos StockMovimiento { get; set; }

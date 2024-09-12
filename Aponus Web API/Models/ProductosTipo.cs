@@ -16,7 +16,7 @@ public partial class ProductosTipo
     public string? DescripcionTipo { get; set; }
 
     [ForeignKey("ID_ESTADO")]
-    public byte IdEstado { get; set; }
+    public int IdEstado { get; set; }
     
     public virtual ICollection<Producto> Productos{ get; set;} = new List<Producto>();
   

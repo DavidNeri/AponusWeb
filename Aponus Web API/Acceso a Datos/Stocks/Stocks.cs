@@ -1,22 +1,12 @@
-﻿using Aponus_Web_API.Acceso_a_Datos.Insumos;
-using Aponus_Web_API.Business;
-using Aponus_Web_API.Data_Transfer_objects;
+﻿using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NtpClient;
-using System.Collections;
-using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
-using System.Net.NetworkInformation;
 using System.Reflection;
-using System.Text;
-using System.Text.Json;
+using System.Data.SqlClient;
+
 
 namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 {

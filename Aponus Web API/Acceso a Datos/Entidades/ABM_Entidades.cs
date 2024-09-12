@@ -1,8 +1,6 @@
 ﻿using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
-using AponusWebAPI.Migrations;
-using DataScope.Stemmer.NETStandart.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
@@ -185,8 +183,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
                         {
                             ExisteId.NombreTipo = NuevotipoEntidad.Nombre;
                             AponusDBContext.TiposEntidades.Update(ExisteId);
-                            transaccion.Commit();
+                            
                             AponusDBContext.SaveChanges();
+                            transaccion.Commit();
                             return new StatusCodeResult(200);
 
                         }
@@ -202,8 +201,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
                                 NombreTipo = NuevotipoEntidad.Nombre
                             }); ;
 
-                            _ = transaccion.CommitAsync();
-                            _ = AponusDBContext.SaveChangesAsync();
+                           
+                            await AponusDBContext.SaveChangesAsync();
+                            await transaccion.CommitAsync();
                             return new StatusCodeResult(200);
                         }
                         else

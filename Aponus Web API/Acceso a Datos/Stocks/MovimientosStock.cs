@@ -20,7 +20,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
         {
             internal static List<EstadosMovimientosStock> Listar(AponusContext AponusDbContext)
             {
-               return AponusDbContext.EstadoMovimientosStock.Where(x=>x.IdEstadoPropio!=0 && !x.Descripcion.ToUpper().Contains("ELIMINADO")).ToList();  
+               return AponusDbContext.EstadoMovimientosStock.Where(x=>x.IdEstado!=0 && !x.Descripcion.ToUpper().Contains("ELIMINADO")).ToList();  
                 
             }
 
@@ -127,7 +127,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 .Join(
                     AponusDBContext.EstadoMovimientosStock,
                     Mov_Prov_Sum_Det=> Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdEstado,
-                    Estados=>Estados.IdEstado,
+                    Estados=>Estados.IdEstadoMovimiento,
                     (Mov_Prov_Sum_Det,Estados)=> new { Mov_Prov_Sum_Det, Estados })
 
                 .Where(x=>x.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdEstado!=0)

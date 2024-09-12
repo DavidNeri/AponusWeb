@@ -1,9 +1,6 @@
 ﻿using Aponus_Web_API.Business;
 using Aponus_Web_API.Data_Transfer_objects;
-using Aponus_Web_API.Data_Transfer_Objects;
-using Aponus_Web_API.Mapping;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aponus_Web_API.Controllers

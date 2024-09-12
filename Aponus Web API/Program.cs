@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Any;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Features;
+using System.Data.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,17 +31,22 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 // Puerto y el host
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     // Configurar Kestrel para escuchar en todas las interfaces
     serverOptions.ListenAnyIP(Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? "5000"));
+
+    serverOptions.ListenAnyIP(5001, listenOptions =>
+    {
+        listenOptions.UseHttps();
+    });
 });
 
+var ConnectionString = builder.Configuration.GetConnectionString("AponusConnectionString");
+builder.Services.AddDbContext<AponusContext>(options => options.UseNpgsql(ConnectionString).EnableSensitiveDataLogging(false));
 
-var connectionString = builder.Configuration.GetConnectionString("Server=DAVID\\DATABASESERVER19; Database=Aponus;User Id=Administrador;Password=AponusIng;Trusted_Connection=True; TrustServerCertificate=True;");
-builder.Services.AddDbContext<AponusContext>(options => options.UseSqlServer(connectionString));
-//builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MemoryBufferThreshold = int.MaxValue;

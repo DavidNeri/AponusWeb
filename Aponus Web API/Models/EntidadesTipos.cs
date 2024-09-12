@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Models
         public string NombreTipo { get; set; }
 
         [Column("ID_ESTADO")]
-        public byte IdEstado { get; set; }
+        public int IdEstado { get; set; }
 
         public virtual ICollection<Entidades> Entidades { get; set; }
         public virtual ICollection<EntidadesTiposCategorias> TiposCategoriasNavigation { get; set; }
