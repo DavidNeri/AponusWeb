@@ -38,10 +38,10 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     // Configurar Kestrel para escuchar en todas las interfaces
     serverOptions.ListenAnyIP(Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? "5000"));
 
-    //serverOptions.ListenAnyIP(5001, listenOptions =>
-    //{
-    //    listenOptions.UseHttps();
-    //});
+    serverOptions.ListenAnyIP(5001, listenOptions =>
+    {
+        listenOptions.UseHttps();
+    });
 });
 
 var ConnectionString = builder.Configuration.GetConnectionString("AponusConnectionString");

@@ -868,6 +868,8 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.IdAlmacenamiento)
             .HasColumnName("ID_ALMACENAMIENTO")
             .HasColumnType("nvarchar(50)");
+
+
         });
 
 
@@ -1112,7 +1114,8 @@ public partial class AponusContext : DbContext
 
             entity.HasOne(e => e.StockMovimiento).WithMany()
             .HasForeignKey(e => e.IdMovimiento)
-            .HasPrincipalKey(p => p.IdMovimiento);
+            .HasPrincipalKey(p => p.IdMovimiento)
+            .HasConstraintName("FK_ARCHIVOS_STOCK_STOCK_MOVIMIENTOS_ID_MOVIMIENTO");
 
             entity.Property(e => e.IdEstado)
            .HasColumnName("ID_ESTADO")

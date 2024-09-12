@@ -1,0 +1,1446 @@
+[
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "EliminarTipoProducto",
+    "RelativePath": "Aponus/Categories/Products/Descriptions/{IdDescription}/Delete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdDescription",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "ListarDescripciones",
+    "RelativePath": "Aponus/Categories/Products/Descriptions/List/{idTipo}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdTipo",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_Objects.DTODescripciones, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "AgregarDescripcion",
+    "RelativePath": "Aponus/Categories/Products/Descriptions/New",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "NuevaCategoria",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOCategorias",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "ActualizarCategorias",
+    "RelativePath": "Aponus/Categories/Products/Type-or-Description/Update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ActualizarCategorias",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOActualizarCategorias",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "EliminarTipoProducto",
+    "RelativePath": "Aponus/Categories/Products/Types/{TypeId}/Delete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdTipo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "TypeId",
+        "Type": "",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "ListCategories",
+    "RelativePath": "Aponus/Categories/Products/Types/List",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "AgregarTipo_Descripcion",
+    "RelativePath": "Aponus/Categories/Products/Types/New",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "NuevaCategoria",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOCategorias",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "ListarNombreComponentes",
+    "RelativePath": "Aponus/Categories/Supplies/Descriptions/List",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "AgregarDescripcionCompoente",
+    "RelativePath": "Aponus/Categories/Supplies/Descriptions/New",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nombreComponente",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "ModificarDescripcionCompoente",
+    "RelativePath": "Aponus/Categories/Supplies/Descriptions/Update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Descripcion",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTODescripcionComponentes",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ComponentsController",
+    "Method": "ObtenerAlmacenamiento",
+    "RelativePath": "Aponus/Components/FetchUnities",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ComponentsController",
+    "Method": "ObtenerPropsComponentes",
+    "RelativePath": "Aponus/Components/GetProperties",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ComponentsController",
+    "Method": "ListarComponentes",
+    "RelativePath": "Aponus/Components/List/{IdDescripcion}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdDescripcion",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EndpointsController",
+    "Method": "Get",
+    "RelativePath": "Aponus/Endpoints/Get",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
+    "Method": "EliminarCategoria",
+    "RelativePath": "Aponus/Entities/Categories/Delete/{Id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
+    "Method": "ListarCategoriasEntidades",
+    "RelativePath": "Aponus/Entities/Categories/List/{IdTipo}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdTipo",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
+    "Method": "GuardarCategoria",
+    "RelativePath": "Aponus/Entities/Categories/Save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "NuevaCategoria",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEntidadesCategorias",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
+    "Method": "Eliminar",
+    "RelativePath": "Aponus/Entities/Delete/{Id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
+    "Method": "Listar",
+    "RelativePath": "Aponus/Entities/List/{typeId}/{CategoryId}/{EntityId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TypeId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategoryId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "EntityId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
+    "Method": "Nuevo",
+    "RelativePath": "Aponus/Entities/Save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Entidad",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEntidades",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
+    "Method": "EliminarTipo",
+    "RelativePath": "Aponus/Entities/Types/Delete/{Id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
+    "Method": "ListarTiposEntidades",
+    "RelativePath": "Aponus/Entities/Types/List",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
+    "Method": "GuardarTipoEntidad",
+    "RelativePath": "Aponus/Entities/Types/Save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TipoEntidad",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEntidadesTipos",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.MovmentsController",
+    "Method": "EliminarMovimiento",
+    "RelativePath": "Aponus/Movments/{IdMovimiento}/Delete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdMovimiento",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.MovmentsController",
+    "Method": "EliminarArchivo",
+    "RelativePath": "Aponus/Movments/Files/Delete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Archivos",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOMovimientosStock",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.MovmentsController",
+    "Method": "AgregarArchivo",
+    "RelativePath": "Aponus/Movments/Files/New",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdMovimiento",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "UsuarioCreacion",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "UsuarioModificacion",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FechaHoraCreado",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "FechaHoraUltimaModificacion",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdProveedorOrigen",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdProveedorDestino",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Origen",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Destino",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Tipo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdEntidad",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.NombreClave",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Nombre",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Apellido",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Pais",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Ciudad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Provincia",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Localidad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Calle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Altura",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.CodigoPostal",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Barrio",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Telefono1",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Telefono2",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Telefono3",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdFiscal",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.FechaRegistro",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdUsuarioRegistro",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdTipo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdCategoria",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdEstado",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdEntidad",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.NombreClave",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Nombre",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Apellido",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Pais",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Ciudad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Provincia",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Localidad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Calle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Altura",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.CodigoPostal",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Barrio",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Telefono1",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Telefono2",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Telefono3",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdFiscal",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.FechaRegistro",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdUsuarioRegistro",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdTipo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdCategoria",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdEstado",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Suministros",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_Objects.DTOSuministrosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "DatosArchivos",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_Objects.DTODatosArchivosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Archivos",
+        "Type": "System.Collections.Generic.List\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdEstado",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Estado",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.MovmentsController",
+    "Method": "Listar",
+    "RelativePath": "Aponus/Movments/List",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Filtros",
+        "Type": "Aponus_Web_API.Support.FiltrosMovimientos",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.MovmentsController",
+    "Method": "NuevoMovimiento",
+    "RelativePath": "Aponus/Movments/New",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdMovimiento",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "UsuarioCreacion",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "UsuarioModificacion",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FechaHoraCreado",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "FechaHoraUltimaModificacion",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdProveedorOrigen",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdProveedorDestino",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Origen",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Destino",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Tipo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdEntidad",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.NombreClave",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Nombre",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Apellido",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Pais",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Ciudad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Provincia",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Localidad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Calle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Altura",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.CodigoPostal",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Barrio",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Telefono1",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Telefono2",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Telefono3",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdFiscal",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.FechaRegistro",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdUsuarioRegistro",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdTipo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdCategoria",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorDestino.IdEstado",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdEntidad",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.NombreClave",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Nombre",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Apellido",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Pais",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Ciudad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Provincia",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Localidad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Calle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Altura",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.CodigoPostal",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Barrio",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Telefono1",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Telefono2",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Telefono3",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdFiscal",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.FechaRegistro",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdUsuarioRegistro",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdTipo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdCategoria",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProveedorOrigen.IdEstado",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Suministros",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_Objects.DTOSuministrosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "DatosArchivos",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_Objects.DTODatosArchivosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Archivos",
+        "Type": "System.Collections.Generic.List\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdEstado",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Estado",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.MovmentsController",
+    "Method": "ListarEstados",
+    "RelativePath": "Aponus/Movments/States/List",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.MovmentsController",
+    "Method": "NuevoEstado",
+    "RelativePath": "Aponus/Movments/States/Save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Estado",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEstadosMovimientosStock",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.MovmentsController",
+    "Method": "ActualizarInsumos",
+    "RelativePath": "Aponus/Movments/Supplies/Update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Movimiento",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOMovimientosStock",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.MovmentsController",
+    "Method": "ActualizarProveedor",
+    "RelativePath": "Aponus/Movments/Update",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Movimiento",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOMovimientosStock",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
+    "Method": "ListProducts",
+    "RelativePath": "Aponus/Products/List/{TypeId}/{IdDescription}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TypeId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdDescription",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
+    "Method": "ListarDN",
+    "RelativePath": "Aponus/Products/ListDN/{TypeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TypeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
+    "Method": "ListarDN",
+    "RelativePath": "Aponus/Products/ListDN/{TypeId}/{IdDescription}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TypeId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "IdDescription",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
+    "Method": "ListProducts",
+    "RelativePath": "Aponus/Products/ListProducts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
+    "Method": "NewListComponents",
+    "RelativePath": "Aponus/Products/NewListComponents",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Producto",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesProducto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
+    "Method": "NuevoGuardarProducto",
+    "RelativePath": "Aponus/Products/NewSaveProduct",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Producto",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesProducto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
+    "Method": "ActualizarComponentes",
+    "RelativePath": "Aponus/Products/UpdateComponents",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Producto",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_objects.DTOComponentesProducto, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SalesController",
+    "Method": "List",
+    "RelativePath": "Aponus/Sales/List",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Filtros",
+        "Type": "Aponus_Web_API.Support.Ventas.FiltrosVentas",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SalesController",
+    "Method": "GenerarCuotas",
+    "RelativePath": "Aponus/Sales/Quotation",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Parametros",
+        "Type": "Aponus_Web_API.Support.ParametrosCalcularCuotas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SalesController",
+    "Method": "Guardar",
+    "RelativePath": "Aponus/Sales/Save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Venta",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOVentas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SalesController",
+    "Method": "EliminarEstadoVenta",
+    "RelativePath": "Aponus/Sales/States/{Id}/Delete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SalesController",
+    "Method": "GuardarEstadoVenta",
+    "RelativePath": "Aponus/Sales/States/Save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Estados",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEstadosVentas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.StocksController",
+    "Method": "ListProducts",
+    "RelativePath": "Aponus/Stocks/Products/List/{TypeId}/{IdDescription}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TypeId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdDescription",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.StocksController",
+    "Method": "NewListar",
+    "RelativePath": "Aponus/Stocks/Supplies/List/{idDescription}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idDescription",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SuppliesController",
+    "Method": "ObtenerPropsComponentes",
+    "RelativePath": "Aponus/Supplies/Create-or-Update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "InsumoProducto",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOComponente",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SuppliesController",
+    "Method": "ObtenerId",
+    "RelativePath": "Aponus/Supplies/GetId",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Especificaciones",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOComponente",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SuppliesController",
+    "Method": "ListarInsumosFormateados",
+    "RelativePath": "Aponus/Supplies/ListFormatted",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SuppliesController",
+    "Method": "Listar",
+    "RelativePath": "Aponus/Supplies/ListProp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Especificaciones",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOComponente",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SuppliesController",
+    "Method": "GenerarIdInsumo",
+    "RelativePath": "Aponus/Supplies/new-id/{sypplyName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sypplyName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SuppliesController",
+    "Method": "GuardarComponentesProducto",
+    "RelativePath": "Aponus/Supplies/SaveProductComponents",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ComponentesProd",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_objects.DTOComponentesProducto, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.Test",
+    "Method": "Prueba",
+    "RelativePath": "Aponus/Test/Test",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.UsersController",
+    "Method": "ValiadarUsuario",
+    "RelativePath": "Aponus/Users/Validation",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Usuario",
+        "Type": "Aponus_Web_API.Mapping.DTOUsuarios",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Aponus_Web_API.Mapping.DTOUsuarios",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
