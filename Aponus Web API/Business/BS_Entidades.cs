@@ -244,7 +244,7 @@ namespace Aponus_Web_API.Business
                 try
                 {
                     _= await new ABM_Entidades().GuardarCategoria(nuevaCategoria);
-                    return new StatusCodeResult(20);
+                    return new StatusCodeResult(200);
                 }
                 catch (Exception ex)
                 {

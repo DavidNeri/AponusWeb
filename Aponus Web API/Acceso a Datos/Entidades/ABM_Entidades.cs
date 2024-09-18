@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 using Z.EntityFramework.Plus;
+using static Aponus_Web_API.Business.BS_Entidades;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Entidades
 {
@@ -321,29 +322,22 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
                     }
                     else
                     {
-                        EntidadesTiposCategorias Vinculo = new EntidadesTiposCategorias()
-                        {
-                            IdCategoriaEntidad = CategoriaExistente.IdCategoria,
-                            idTipoEntidad = nuevaCategoria.IdTipo ?? 0
-                        };
+                        CategoriaExistente.NombreCategoria = nuevaCategoria.NombreCategoria ?? "";
+                        var ValidarVinculo = await AponusDBContext.EntidadeTiposCategorias.FindAsync(nuevaCategoria.IdTipo ?? 0, CategoriaExistente.IdCategoria);
+                        AponusDBContext.CategoriasEntidades.Update(CategoriaExistente);
                         
-                        if (AponusDBContext.EntidadeTiposCategorias.AddRangeAsync(Vinculo) != null)
+                        if (ValidarVinculo== null)
                         {
-                            return new ContentResult()
+                            await AponusDBContext.EntidadeTiposCategorias.AddAsync(new EntidadesTiposCategorias()
                             {
-                                Content = "La realacion 'Tipo / Categoria' ya existe",
-                                ContentType = "application/json",
-                                StatusCode = 400,
-                            };
+                                idTipoEntidad = nuevaCategoria.IdTipo ?? 0,
+                                IdCategoriaEntidad = CategoriaExistente.IdCategoria,
+                            });
                         }
-                        else
-                        {
-                            await AponusDBContext.EntidadeTiposCategorias.AddAsync(Vinculo);
-                            await AponusDBContext.SaveChangesAsync();
-                            await transaccion.CommitAsync();
-                            return new StatusCodeResult(200);
-
-                        }
+                        
+                        await AponusDBContext.SaveChangesAsync();
+                        await transaccion.CommitAsync();
+                        return new StatusCodeResult(200);
                     }
 
                 }
