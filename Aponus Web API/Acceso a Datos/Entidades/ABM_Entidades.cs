@@ -75,7 +75,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
                         FechaRegistro = Entidad.FechaRegistro ?? Fechas.ObtenerFechaHora(),
                         IdUsuarioRegistro = Entidad.IdUsuarioRegistro ?? "",
                         IdTipo = Entidad.IdTipo,
-                        IdCategoria = Entidad.IdCategoria
+                        IdCategoria = Entidad.IdCategoria,
+                        CategoriaEntidad = AponusDBContext.CategoriasEntidades.FirstOrDefault(x=>x.IdCategoria==Entidad.IdCategoria) ?? new EntidadesCategorias(),
+                        TipoEntidad = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == Entidad.IdTipo) ?? new EntidadesTipos(),
+                        UsuarioRegistro = AponusDBContext.Usuarios.FirstOrDefault(x => x.Usuario == Entidad.IdUsuarioRegistro) ?? new Models.Usuarios(),
+
 
                     };
 
