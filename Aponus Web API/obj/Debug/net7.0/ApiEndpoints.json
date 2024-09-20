@@ -1419,6 +1419,22 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.UsersController",
+    "Method": "Nuevo",
+    "RelativePath": "Aponus/Users/New",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Usuario",
+        "Type": "Aponus_Web_API.Mapping.DTOUsuarios",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.UsersController",
     "Method": "ValiadarUsuario",
     "RelativePath": "Aponus/Users/Validation",
     "HttpMethod": "POST",

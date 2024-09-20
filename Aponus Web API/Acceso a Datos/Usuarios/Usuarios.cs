@@ -66,6 +66,8 @@ namespace Aponus_Web_API.Acceso_a_Datos.Usuarios
         
         public async Task Nuevo(Models.Usuarios Usuario)
         {
+            Usuario.Perfil = AponusDBContext.perfilesUsuarios.FirstOrDefault(x => x.IdPerfil == Usuario.IdPerfil) ?? new PerfilesUsuarios();
+
             using( var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
             {
                 try

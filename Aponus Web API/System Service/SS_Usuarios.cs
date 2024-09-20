@@ -13,12 +13,13 @@ namespace Aponus_Web_API.System
 
         public static async Task<IActionResult> NuevoUsuario(DTOUsuarios Usuario)
         {
+
             Models.Usuarios _Usuario = new Models.Usuarios()
             {
                 Usuario = Usuario.Usuario ?? "",
                 IdPerfil = Usuario.IdPerfil ?? 0,
                 correo = Usuario.Correo ?? "",
-                Contraseña = Usuario.Contraseña ?? ""
+                Contraseña = Usuario.Contraseña ?? "",
             };
 
             try
