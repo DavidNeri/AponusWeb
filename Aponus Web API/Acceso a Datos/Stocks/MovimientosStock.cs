@@ -44,6 +44,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     IdProveedorDestino = x.IdProveedorDestino,
                     UsuarioModificacion = x.ModificadoUsuario,
 
+
                     DatosArchivos = AponusDBContext.ArchivosStock
                     .Where(x => x.IdMovimiento == x.IdMovimiento && x.IdEstado==1)
                     .Select(x => new DTODatosArchivosMovimientosStock()

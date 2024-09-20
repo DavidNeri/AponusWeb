@@ -19,7 +19,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Ventas
             using (var transaccion = AponusDBContext.Database.BeginTransaction())
             {
                 Venta.Cliente = AponusDBContext.Entidades.Find(Venta.IdCliente) ?? new Models.Entidades();
-                Venta.Usuario = AponusDBContext.Usuarios.Find(Venta.IdUsuario) ?? new Usuarios();
+                Venta.Usuario = AponusDBContext.Usuarios.Find(Venta.IdUsuario) ?? new Models.Usuarios();
                 Venta.Estado = AponusDBContext.estadosVentas.Find(Venta.IdEstadoVenta) ?? new EstadosVentas();
 
                 if (Venta.Pagos != null)

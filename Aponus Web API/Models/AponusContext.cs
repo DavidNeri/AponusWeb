@@ -41,6 +41,8 @@ public partial class AponusContext : DbContext
     public virtual DbSet<EstadosVentas> estadosVentas { get; set; }
     public virtual DbSet<CuotasVentas> cuotasVentas{ get; set; }
     public virtual DbSet<EstadosCuotasVentas> estadosCuotasVentas { get; set; }
+    public virtual DbSet<PerfilesUsuarios> perfilesUsuarios { get; set; }
+    
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -54,6 +56,27 @@ public partial class AponusContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
+
+        modelBuilder.Entity<PerfilesUsuarios>(entity =>
+        {
+            entity.ToTable("USUARIOS_PERFILES");
+
+            entity.HasKey(PK => PK.IdPerfil);
+
+            entity.Property(p => p.IdPerfil)
+            .HasColumnName("ID_PERFIL")
+            .HasColumnType("integer")
+            .UseIdentityColumn();
+
+            entity.Property(p => p.Descripcion)
+            .HasColumnType("varcahr(100)")
+            .HasColumnName("DESCRIPCION");
+
+            entity.Property(p => p.IdEstado)
+            .HasColumnType("integer")
+            .HasColumnName("ID_ESTADO");
+
+        });
 
         modelBuilder.Entity<EntidadesTiposCategorias>(entity =>
         {
@@ -82,7 +105,7 @@ public partial class AponusContext : DbContext
             entity.Property(p => p.IdEstadoCuota)
             .HasColumnType("int")
             .HasColumnName("ID_ESTADO_CUOTA")
-            .HasAnnotation("SqlServer:Identity", "1, 1");
+            .UseIdentityColumn();
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
@@ -109,7 +132,7 @@ public partial class AponusContext : DbContext
             entity.Property(p => p.IdCuota)
             .HasColumnType("int")
             .HasColumnName("ID_CUOTA")
-            .HasAnnotation("SqlServer:Identity", "1, 1");
+            .UseIdentityColumn();
 
             entity.Property(p => p.IdVenta)
             .HasColumnType("int")
@@ -147,7 +170,7 @@ public partial class AponusContext : DbContext
             entity.Property(p => p.IdVenta)
             .HasColumnName("ID_VENTA")
             .HasColumnType("int")
-            .HasAnnotation("SqlServer:Identity", "1, 1");
+            .UseIdentityColumn();
 
             entity.Property(p => p.IdCliente)
             .HasColumnName("ID_CLIENTE")
@@ -245,7 +268,7 @@ public partial class AponusContext : DbContext
             entity.Property(P => P.IdPago)
             .HasColumnName("ID_PAGO")
             .HasColumnType("int")
-            .HasAnnotation("SqlServer:Identity", "1,1");
+            .UseIdentityColumn();
 
             entity.Property(p => p.IdVenta)
             .HasColumnType("int")
@@ -283,7 +306,7 @@ public partial class AponusContext : DbContext
             entity.Property(P => P.IdEstadoVenta)
             .HasColumnName("ID_ESTADO_VENTA")
             .HasColumnType("int")
-            .HasAnnotation("SqlServer:Identity", "1, 1");
+            .UseIdentityColumn();
 
             entity.Property(P => P.IdEstado)
             .HasColumnName("ID_ESTADO")
@@ -340,7 +363,7 @@ public partial class AponusContext : DbContext
             entity.Property(p => p.IdMedioPago)
             .HasColumnName("ID_MEDIO_PAGO")
             .HasColumnType("int")
-            .HasAnnotation("SqlServer:Identity", "1,1");
+            .UseIdentityColumn();
 
             entity.Property(p => p.CodigoMPago)
             .HasColumnType("nvarchar(max)")
@@ -365,7 +388,7 @@ public partial class AponusContext : DbContext
             entity.Property(P => P.IdPago)
             .HasColumnName("ID_PAGO")
             .HasColumnType("int")
-            .HasAnnotation("SqlServer:Identity", "1,1");
+            .UseIdentityColumn();
 
             entity.Property(p => p.IdCompra)
             .HasColumnType("int")
@@ -441,7 +464,7 @@ public partial class AponusContext : DbContext
             entity.Property(p => p.IdCompra)
             .HasColumnName("ID_COMPRA")
             .HasColumnType("int")
-            .HasAnnotation("SqlServer:Identity", "1, 1");
+            .UseIdentityColumn();
 
             entity.Property(p => p.IdProveedor)
             .HasColumnName("ID_PROVEEDOR")
@@ -528,7 +551,7 @@ public partial class AponusContext : DbContext
             entity.Property(P => P.IdCategoria)
             .HasColumnName("ID_CATEGORIA")
             .ValueGeneratedOnAdd()
-            .HasAnnotation("SqlServer:Identity", "1, 1");
+            .UseIdentityColumn();
 
             entity.Property(P => P.IdEstado)
             .HasDefaultValueSql("1")
@@ -1024,6 +1047,15 @@ public partial class AponusContext : DbContext
             entity.HasMany(e => e.IdUsuarioRegistroNavigation)
             .WithOne(u => u.UsuarioRegistro)
             .HasForeignKey(e => e.IdUsuarioRegistro);
+
+            entity.HasOne(p=>p.Perfil)
+            .WithMany(p=>p.UsuariosNavigation)
+            .HasConstraintName("FK_USUARIOS_PERFILES_USUARIOS_ID_PERFIL")
+            .HasPrincipalKey(PK=>PK.IdPerfil)
+            .HasForeignKey(FK=>FK.IdPerfil);
+
+
+
         });
 
         modelBuilder.Entity<Stock_Movimientos>(entity =>
@@ -1126,13 +1158,14 @@ public partial class AponusContext : DbContext
         modelBuilder.Entity<Entidades>(entity =>
         {
             entity.HasKey(e => e.IdEntidad);
+
             entity.ToTable("ENTIDADES");
 
             entity.Property(e => e.IdEntidad)
-                .HasColumnName("ID_ENTIDAD");
+            .HasColumnName("ID_ENTIDAD");
 
             entity.Property(e => e.NombreClave)
-                .HasColumnName("NOMBRE_CLAVE");
+            .HasColumnName("NOMBRE_CLAVE");
 
             entity.Property(e => e.Nombre)
             .HasColumnName("NOMBRE")
@@ -1143,41 +1176,41 @@ public partial class AponusContext : DbContext
             .HasColumnType("varchar(max)");
 
             entity.Property(e => e.Pais)
-                .HasColumnName("PAIS");
+            .HasColumnName("PAIS");
 
             entity.Property(e => e.Ciudad)
-                .HasColumnName("CIUDAD");
+            .HasColumnName("CIUDAD");
 
             entity.Property(e => e.Localidad)
-                .HasColumnName("LOCALIDAD")
-                .HasColumnType("varchar(MAX)");
+            .HasColumnName("LOCALIDAD")
+            .HasColumnType("varchar(MAX)");
 
             entity.Property(e => e.Calle)
-                .HasColumnName("CALLE");
+            .HasColumnName("CALLE");
 
             entity.Property(e => e.Altura)
-                .HasColumnName("ALTURA");
+            .HasColumnName("ALTURA");
 
             entity.Property(e => e.CodigoPostal)
-                .HasColumnName("CODIGO_POSTAL");
+            .HasColumnName("CODIGO_POSTAL");
 
             entity.Property(e => e.Telefono1)
-                .HasColumnName("TELEFONO_1");
+            .HasColumnName("TELEFONO_1");
 
             entity.Property(e => e.Telefono2)
-                .HasColumnName("TELEFONO_2");
+            .HasColumnName("TELEFONO_2");
 
             entity.Property(e => e.Telefono3)
-                .HasColumnName("TELEFONO_3");
+            .HasColumnName("TELEFONO_3");
 
             entity.Property(e => e.Email)
-                .HasColumnName("EMAIL");
+            .HasColumnName("EMAIL");
 
             entity.Property(e => e.IdFiscal)
-                .HasColumnName("ID_FISCAL");
+            .HasColumnName("ID_FISCAL");
 
             entity.Property(e => e.FechaRegistro)
-                .HasColumnName("FECHA_REGISTRO");
+            .HasColumnName("FECHA_REGISTRO");
 
             entity.Property(e => e.IdUsuarioRegistro)
             .HasColumnName("ID_USUARIO_REGISTRO")
@@ -1197,8 +1230,8 @@ public partial class AponusContext : DbContext
             .HasColumnType("int");
 
             entity.Property(e => e.IdEstado)
-                .HasColumnName("ID_ESTADO")
-                .HasDefaultValueSql("(1)");
+            .HasColumnName("ID_ESTADO")
+            .HasDefaultValueSql("(1)");
         });
 
         OnModelCreatingPartial(modelBuilder);

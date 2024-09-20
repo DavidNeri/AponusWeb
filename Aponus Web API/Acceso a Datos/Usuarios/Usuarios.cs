@@ -3,14 +3,14 @@ using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
-namespace Aponus_Web_API.Acceso_a_Datos.Validaciones
+namespace Aponus_Web_API.Acceso_a_Datos.Usuarios
 {
-    public class Login
+    public class Usuarios
     {
         private readonly AponusContext AponusDBContext;
-        public Login() { AponusDBContext = new AponusContext(); }
+        public Usuarios() { AponusDBContext = new AponusContext(); }
 
-        internal DTOUsuarios? Validar(DTOUsuarios usuario)
+        internal DTOUsuarios? ValidarCredenciales(DTOUsuarios usuario)
         {
             List<DTOUsuarios>? ListUsuario = new List<DTOUsuarios>();
             DTOUsuarios? Usuario = new DTOUsuarios();
@@ -59,6 +59,25 @@ namespace Aponus_Web_API.Acceso_a_Datos.Validaciones
             }else
             {
                 return null;
+            }
+
+        }
+
+        
+        public async Task Nuevo(Models.Usuarios Usuario)
+        {
+            using( var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    await AponusDBContext.Usuarios.AddAsync(Usuario);
+                    await AponusDBContext.SaveChangesAsync();
+                    await transaccion.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaccion.RollbackAsync();
+                }
             }
 
         }
