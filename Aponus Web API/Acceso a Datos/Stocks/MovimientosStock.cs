@@ -23,12 +23,15 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                return AponusDbContext.EstadoMovimientosStock.Where(x=>x.IdEstado!=0 && !x.Descripcion.ToUpper().Contains("ELIMINADO")).ToList();  
                 
             }
-
           
         }
 
+
         internal DTOMovimientosStock? ObtenerDatosMovimiento(int idMovimiento)
         {
+
+            CloudinaryService cloudinary = new CloudinaryService();
+
             DTOMovimientosStock? Movimiento = AponusDBContext.Stock_Movimientos
                 .Where(x => x.IdMovimiento == idMovimiento)
                 .Select(x => new DTOMovimientosStock()
@@ -50,8 +53,8 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                         MimeType = x.MimeType,
                         Path = x.PathArchivo,
                         Extension = Path.GetExtension(x.PathArchivo),
-                        DatosArchivo = DescargarArchivo(x.PathArchivo)
-                        
+                        DatosArchivo = cloudinary.DescargarArchivo(x.PathArchivo)
+
                     }).ToList()
                 })
                 .FirstOrDefault();
@@ -240,6 +243,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
             
             var MovimientosIds = ListadoMovimientos.Select(m=>m.IdMovimiento).Distinct().ToList();
+            CloudinaryService cloudinary = new CloudinaryService();
            
             List<DTODatosArchivosMovimientosStock> InfoArchivosMovimientos = AponusDBContext.ArchivosStock
                 .Where(Id=>MovimientosIds.Contains(Id.IdMovimiento))
@@ -250,7 +254,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     Path = Reg.PathArchivo,
                     Extension = Path.GetExtension(Reg.PathArchivo),
                     MimeType = ObtenerMimeType(Reg.PathArchivo),
-                    DatosArchivo = DescargarArchivo(Reg.PathArchivo)
+                    DatosArchivo = cloudinary.DescargarArchivo(Reg.PathArchivo),
                     
                 })
                 .ToList();
@@ -268,7 +272,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         }
 
-        private static byte[] DescargarArchivo(string url)
+        private static byte[] DescargarArchivoMovimiento_Local(string url)
         {
             WebClient webClient = new WebClient();
             byte[] archivoBites = webClient.DownloadData(url);            

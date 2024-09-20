@@ -61,7 +61,7 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal IActionResult newActualizarStockInsumo(DTOMovimientosStock Movimiento)
+        internal IActionResult ProcesarDatosMovimiento(DTOMovimientosStock Movimiento)
         {
 
             List<ActualizacionStock> ListaSuministros = new List<ActualizacionStock>();
@@ -152,19 +152,23 @@ namespace Aponus_Web_API.Business
                         
                     }
 
-                    string? NombreCompletoProveedor = proveedor.Apellido + " " + proveedor.Nombre;//ListaProveedores.Where(x => x.IdProveedor == Movimiento.IdProveedorDestino).Select(x => x.Apellido + " " + x.Nombre).FirstOrDefault();
-                    string? NombreClave = proveedor.NombreClave; //ListaProveedores.Where(x => x.IdProveedor == Movimiento.IdProveedorDestino).Select(x => x.NombreClave).FirstOrDefault();
+                    string? NombreCompletoProveedor = proveedor.Apellido + " " + proveedor.Nombre;
+                    string? NombreClave = proveedor.NombreClave; 
                     //Obtener el Nombre del Proveedor de Destino
 
-                    string Ruta = stocks.CrearDirectorioMovimientos(string.IsNullOrEmpty(NombreClave) ? NombreCompletoProveedor : NombreClave);
+                    if (Movimiento.Archivos != null && Movimiento.Archivos.Count>0)
+                    {
+                        List<ArchivosMovimientosStock> DatosArchivosMovimiento = new CloudinaryService().SubirArchivosMovimiento(Movimiento.Archivos,
+                        string.IsNullOrEmpty(NombreClave) ? NombreCompletoProveedor : NombreClave);
 
-                    List<ArchivosMovimientosStock> DatosArchivosMovimiento = stocks.CopiarArchivosMovimientos(Movimiento.Archivos, Ruta);
+                        if (DatosArchivosMovimiento.Count == 0) Rollback = true;
 
-                    if (DatosArchivosMovimiento.Count == 0) Rollback = true;
 
-                    DatosArchivosMovimiento.ForEach(x => x.IdMovimiento = (int)IdMovimiento);
+                        DatosArchivosMovimiento.ForEach(x => x.IdMovimiento = (int)IdMovimiento);
+                        if (!stocks.GuardarDatosArchivosMovimiento(AponusDbContext, DatosArchivosMovimiento)) Rollback = true;
 
-                    if (!stocks.GuardarDatosArchivosMovimiento(AponusDbContext,DatosArchivosMovimiento)) Rollback = true;
+                    }
+                    
                     if (new MovimientosStock().RegistrarModificacion(AponusDbContext, Movimiento)) Rollback = true;
 
                     if (Rollback)
@@ -180,11 +184,9 @@ namespace Aponus_Web_API.Business
                     {
                         AponusDbContext.Database.CommitTransaction();
                         AponusDbContext.SaveChanges();
+                        AponusDbContext.Dispose();
                         return new StatusCodeResult(200);
-                    }                   
-
-
-
+                    }              
                     
                 }
 

@@ -316,7 +316,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
         }
 
-        internal string? CrearDirectorioMovimientos(string Proveedor)
+        internal string? CrearDirectorioMovimientos_Local(string Proveedor)
         {
             try
             {
@@ -342,7 +342,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         }
 
-        internal List<ArchivosMovimientosStock> CopiarArchivosMovimientos(List<IFormFile> Archivos, string Directorio)
+        internal List<ArchivosMovimientosStock> CopiarArchivosMovimientos_Local(List<IFormFile> Archivos, string Directorio)
         {
             List<ArchivosMovimientosStock> MovimientosStockArchivosList = new();
             string[] NombresArchivos = new string[Archivos.Count];

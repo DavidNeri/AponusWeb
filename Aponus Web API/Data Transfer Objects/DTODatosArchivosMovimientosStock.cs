@@ -20,6 +20,6 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public string? Extension { get; set; }
 
         [JsonProperty(PropertyName = "datosArchivo", NullValueHandling = NullValueHandling.Ignore)]
-        public byte[]? DatosArchivo { get; set; }
+        public Task<byte[]>? DatosArchivo { get; set; }
     }
 }

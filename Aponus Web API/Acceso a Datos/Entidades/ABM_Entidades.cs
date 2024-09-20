@@ -320,25 +320,20 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
                             };
                         }
                     }
-                    else
+                    else if (nuevaCategoria.IdCategoria != null)
                     {
-                        CategoriaExistente.NombreCategoria = nuevaCategoria.NombreCategoria ?? "";
-                        var ValidarVinculo = await AponusDBContext.EntidadeTiposCategorias.FindAsync(nuevaCategoria.IdTipo ?? 0, CategoriaExistente.IdCategoria);
-                        AponusDBContext.CategoriasEntidades.Update(CategoriaExistente);
-                        
-                        if (ValidarVinculo== null)
-                        {
-                            await AponusDBContext.EntidadeTiposCategorias.AddAsync(new EntidadesTiposCategorias()
-                            {
-                                idTipoEntidad = nuevaCategoria.IdTipo ?? 0,
-                                IdCategoriaEntidad = CategoriaExistente.IdCategoria,
-                            });
-                        }
+
+                        CategoriaExistente = await AponusDBContext.CategoriasEntidades.FirstOrDefaultAsync(x => x.IdCategoria.Equals(nuevaCategoria.IdCategoria ) && x.IdEstado != 0);
+
+                        if ( CategoriaExistente != null )
+                            CategoriaExistente.NombreCategoria = nuevaCategoria.NombreCategoria ?? "";
                         
                         await AponusDBContext.SaveChangesAsync();
                         await transaccion.CommitAsync();
-                        return new StatusCodeResult(200);
                     }
+
+                    return new StatusCodeResult(200);
+
 
                 }
                 catch (Exception ex)

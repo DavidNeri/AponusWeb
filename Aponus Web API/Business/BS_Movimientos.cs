@@ -63,7 +63,7 @@ namespace Aponus_Web_API.Business
                                                     .ToList();
 
 
-                    return new ModificacionesStocks().newActualizarStockInsumo(Movimiento);
+                    return new ModificacionesStocks().ProcesarDatosMovimiento(Movimiento);
                 }                   
                 
                 else
@@ -241,14 +241,14 @@ namespace Aponus_Web_API.Business
                             if (ProveedoresActionResult is JsonResult jsonProveedores && jsonProveedores.Value != null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)
                             {
                                 proveedor = ProveedoresList.FirstOrDefault(x => x.IdEntidad == ArchivosMovimiento.IdProveedorDestino);
-                                RutaCompleta = stocks.CrearDirectorioMovimientos(!string.IsNullOrEmpty(proveedor.NombreClave) ? proveedor.NombreClave : proveedor.Apellido + " " + proveedor.Nombre);
+                                RutaCompleta = stocks.CrearDirectorioMovimientos_Local(!string.IsNullOrEmpty(proveedor.NombreClave) ? proveedor.NombreClave : proveedor.Apellido + " " + proveedor.Nombre);
 
                             }
                           
                         }
 
                         //Copiar los archivos 
-                        List<ArchivosMovimientosStock> DatosArchivos = stocks.CopiarArchivosMovimientos(ArchivosMovimiento.Archivos, Path.GetDirectoryName(RutaCompleta));
+                        List<ArchivosMovimientosStock> DatosArchivos = stocks.CopiarArchivosMovimientos_Local(ArchivosMovimiento.Archivos, Path.GetDirectoryName(RutaCompleta));
                         DatosArchivos.ForEach(x => x.IdMovimiento = (int)ArchivosMovimiento.IdMovimiento);
 
                         //Guardar los datos los archivos previamente copiados
