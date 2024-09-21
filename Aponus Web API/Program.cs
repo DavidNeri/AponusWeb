@@ -33,6 +33,7 @@ builder.Services.AddCors(options =>
 
 
 //Puerto y el host
+
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     // Configurar Kestrel para escuchar en todas las interfaces
