@@ -7,7 +7,7 @@ namespace Aponus_Web_API.Support
     {
         public static DateTime ObtenerFechaHora()
         {
-            DateTime FechaHora = new DateTime();
+            DateTime FechaHora = DateTime.Now;
             string[] servidoresNTP = { "Time.Windows.com", "pool.ntp.org", "south-america.pool.ntp.org", "Time.Windows.com" }; // Lista de servidores NTP
             bool ConexionExistosa = false;
 
@@ -15,18 +15,16 @@ namespace Aponus_Web_API.Support
             {
                 try
                 {
-                    Ping ping = new Ping();
-                    PingReply Respuesta = ping.Send(Servidor, 1000);
+                    INtpConnection Conexion = new NtpConnection(Servidor);
+                    FechaHora = Conexion.GetUtc().AddHours(-3);
+                    ConexionExistosa = true;
 
-                    if (Respuesta != null && Respuesta.Status == IPStatus.Success)
-                    {
-                        INtpConnection Conexion = new NtpConnection(Servidor);
-                        FechaHora = Conexion.GetUtc().AddHours(-3);
-                        ConexionExistosa = true;
-                        break;
-                    }
+                    break;                        
                 }
-                catch (PingException) { }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al conectarse al servidor NTP {Servidor}: {ex.Message}");
+                }
             }
 
             if (!ConexionExistosa)FechaHora = DateTime.Now;
