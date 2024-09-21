@@ -70,7 +70,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
         {
             string IdComponente="";
             List<string> IdComponenteList = await AponusDbContex.ComponentesDetalles
-                .Where(x=>x.IdInsumo.Contains(componentDescription.Substring(0,3)))
+                .Where(x=>x.IdInsumo.Contains(componentDescription.Substring(0,3).ToUpper()))
                 .Select(x=>x.IdInsumo.Substring(3)) 
                 .ToListAsync();
 
@@ -78,11 +78,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
             {
                 List<int> numeros = IdComponenteList.Select(int.Parse).ToList();
                 int valorMaximo = numeros.Max() + 1;
-                IdComponente = componentDescription.Substring(0, 3) + valorMaximo;
+                IdComponente = componentDescription.Substring(0, 3).ToUpper()+"_" + valorMaximo;
             }
             else
             {
-                IdComponente = componentDescription.Substring(0, 3) + 1;
+                IdComponente = componentDescription.Substring(0, 3).ToUpper()+"_" + 1;
             }
 
            
