@@ -150,7 +150,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.FechaVencimiento)
             .HasColumnName("FECHA_VENCIMIENTO")
-            .HasColumnType("datetime");
+            .HasColumnType("timestamp");
 
             entity.Property(p => p.IdEstadoCuota)
             .HasColumnName("ID_ESTADO_CUOTA")            
@@ -158,7 +158,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.FechaPago)
             .HasColumnName("FECHA_PAGO")
-            .HasColumnType("datetime");        
+            .HasColumnType("timestamp");        
         });
 
         modelBuilder.Entity<Ventas>(entity =>
@@ -178,7 +178,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.FechaHora)
             .HasColumnName("FECHA_HORA")
-            .HasColumnType("datetime");
+            .HasColumnType("timestamp");
 
             entity.Property(p => p.IdUsuario)
             .HasColumnName("ID_USUARIO")
@@ -284,7 +284,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.Fecha)
             .HasColumnName("FECHA")
-            .HasColumnType("datetime");
+            .HasColumnType("timestamp");
 
             entity.HasOne(p => p.MedioPago)
             .WithMany(p => p.PagosVentasNavigation)
@@ -472,7 +472,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.FechaHora)
             .HasColumnName("FECHA_HORA")
-            .HasColumnType("datetime");
+            .HasColumnType("timestamp");
 
             entity.Property(p => p.IdUsuario)
             .HasColumnName("ID_USUARIO")
@@ -1079,11 +1079,11 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.FechaHoraCreado)
             .HasColumnName("FECHA_HORA_CREADO")
-            .HasColumnType("datetime2(7)");
+            .HasColumnType("timestamp");
 
             entity.Property(e => e.FechaHoraUltimaModificacion)
             .HasColumnName("FECHA_HORA_ULTIMA_MODIFICACION")
-            .HasColumnType("datetime2(7)");
+            .HasColumnType("timestamp");
 
             entity.Property(e => e.IdProveedorOrigen)
             .HasColumnName("ID_PROVEEDOR_ORIGEN")

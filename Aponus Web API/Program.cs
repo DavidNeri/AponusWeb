@@ -32,13 +32,13 @@ builder.Services.AddCors(options =>
 });
 
 
-// Puerto y el host
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    // Configurar Kestrel para escuchar en todas las interfaces
-    serverOptions.ListenAnyIP(Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? "5000"));
+//// Puerto y el host
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    // Configurar Kestrel para escuchar en todas las interfaces
+//    serverOptions.ListenAnyIP(Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? "5000"));
 
-});
+//});
 
 var ConnectionString = builder.Configuration.GetConnectionString("AponusConnectionString");
 builder.Services.AddDbContext<AponusContext>(options => options.UseNpgsql(ConnectionString).EnableSensitiveDataLogging(false));

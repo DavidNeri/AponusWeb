@@ -115,7 +115,7 @@ namespace Aponus_Web_API.Business
 
                     foreach ( PropertyInfo prop in Entidad.GetType().GetProperties())
                     {
-                        if (prop.PropertyType == typeof(string) && !prop.Name.ToLower().Equals("idfiscal"))
+                        if (prop.PropertyType == typeof(string) && !prop.Name.ToLower().Equals("idfiscal") && !prop.Name.ToLower().Equals("idusuarioregistro"))
                         {
                             string? valor = (string?)prop.GetValue(Entidad);
                             string ValorNormalizado = Regex.Replace(valor ?? "", @"\s+ ", " ").Trim().ToUpper();
