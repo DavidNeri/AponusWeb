@@ -1337,7 +1337,7 @@
     "ContainingType": "Aponus_Web_API.Controllers.SuppliesController",
     "Method": "ObtenerId",
     "RelativePath": "Aponus/Supplies/GetId",
-    "HttpMethod": "POST",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [

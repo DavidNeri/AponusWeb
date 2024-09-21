@@ -64,7 +64,7 @@ namespace Aponus_Web_API.Controllers
 
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetId")]
 
         public JsonResult? ObtenerId(DTOComponente Especificaciones)
