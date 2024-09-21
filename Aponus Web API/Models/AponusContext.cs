@@ -1210,7 +1210,8 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_FISCAL");
 
             entity.Property(e => e.FechaRegistro)
-            .HasColumnName("FECHA_REGISTRO");
+            .HasColumnName("FECHA_REGISTRO")
+            .HasColumnType("timestamp");
 
             entity.Property(e => e.IdUsuarioRegistro)
             .HasColumnName("ID_USUARIO_REGISTRO")
