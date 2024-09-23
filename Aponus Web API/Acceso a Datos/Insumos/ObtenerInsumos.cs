@@ -49,7 +49,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Insumos
                 .ToList();
 
 
-            ///Buscar Detalle Suministros (Productos)            
+            ///Buscar Detalle Suministros (Insumos)            
             List<FormatoSuministros> formatoSuminitrosProductos= AponusDBContext.Productos
                .Join(
                    AponusDBContext.ProductosDescripcions,

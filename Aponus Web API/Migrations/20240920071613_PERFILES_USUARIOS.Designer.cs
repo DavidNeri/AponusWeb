@@ -1398,19 +1398,19 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.Producto", b =>
                 {
                     b.HasOne("Aponus_Web_API.Models.ProductosDescripcion", "IdDescripcionNavigation")
-                        .WithMany("Productos")
+                        .WithMany("Insumos")
                         .HasForeignKey("IdDescripcion")
                         .IsRequired()
                         .HasConstraintName("FK_PRODUCTOS_PRODUCTOS_DESCRIPCION");
 
                     b.HasOne("Aponus_Web_API.Models.EstadosProductos", "IdEstadoNavigation")
-                        .WithMany("Productos")
+                        .WithMany("Insumos")
                         .HasForeignKey("IdEstado")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Aponus_Web_API.Models.ProductosTipo", "IdTipoNavigation")
-                        .WithMany("Productos")
+                        .WithMany("Insumos")
                         .HasForeignKey("IdTipo")
                         .IsRequired()
                         .HasConstraintName("FK_PRODUCTOS_PRODUCTOS_TIPOS");
@@ -1622,7 +1622,7 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductos", b =>
                 {
-                    b.Navigation("Productos");
+                    b.Navigation("Insumos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductosComponentes", b =>
@@ -1669,12 +1669,12 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosDescripcion", b =>
                 {
-                    b.Navigation("Productos");
+                    b.Navigation("Insumos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosTipo", b =>
                 {
-                    b.Navigation("Productos");
+                    b.Navigation("Insumos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.Stock_Movimientos", b =>

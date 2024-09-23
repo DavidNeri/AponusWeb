@@ -28,7 +28,7 @@ namespace Aponus_Web_API.Controllers
         public async Task<JsonResult> ListProducts() {
             try
             {
-                return  new BS_Products().ListarProductos();
+                return  new BS_Productos().ListarProductos();
             }
             catch (Exception e )
             { 
@@ -42,7 +42,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_Products().NewListarComponentesProducto(Producto);
+                return new BS_Productos().NewListarComponentesProducto(Producto);
 
             }
             catch (Exception e)
@@ -58,7 +58,7 @@ namespace Aponus_Web_API.Controllers
             try
             {
 
-                return await new BS_Products().ListarDN(TypeId);
+                return await new BS_Productos().ListarDN(TypeId);
             }
             catch (Exception)
             {
@@ -73,7 +73,7 @@ namespace Aponus_Web_API.Controllers
             try
             {
 
-                return await new BS_Products().ListarDN(TypeId, IdDescription);
+                return await new BS_Productos().ListarDN(TypeId, IdDescription);
             }
             catch (Exception)
             {
@@ -88,7 +88,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_Products().NuevoGuardarProducto(Producto);
+                return new BS_Productos().NuevoGuardarProducto(Producto);
             }
             catch (DbUpdateException e)
             {
@@ -104,7 +104,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_Products().ActualizarComponentes(Producto);
+                return new BS_Productos().ActualizarComponentes(Producto);
             }
             catch (DbUpdateException ex)
             {

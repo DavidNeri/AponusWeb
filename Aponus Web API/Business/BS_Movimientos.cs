@@ -63,7 +63,7 @@ namespace Aponus_Web_API.Business
                                                     .ToList();
 
 
-                    return new ModificacionesStocks().ProcesarDatosMovimiento(Movimiento);
+                    return new BS_Stocks().ProcesarDatosMovimiento(Movimiento);
                 }                   
                 
                 else

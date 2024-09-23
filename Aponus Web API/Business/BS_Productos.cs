@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Aponus_Web_API.Business
 {
-    public class BS_Products 
+    public class BS_Productos 
     {
         internal  async Task<JsonResult> ListarDN(string? typeId)
         {
@@ -119,6 +119,7 @@ namespace Aponus_Web_API.Business
             try
             {
                 Producto? ProductoOriginal = OP.BuscarProducto(ActualizarProducto.IdProducto);
+                ProductoOriginal.IdEstado = 1;
                 PropertyInfo[]? PropsActualizarProducto = ActualizarProducto
                     .GetType()
                     .GetProperties()

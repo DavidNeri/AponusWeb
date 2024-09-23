@@ -3,6 +3,7 @@ using Aponus_Web_API.Business;
 using Aponus_Web_API.Data_Transfer_objects;
 using System.IO;
 using System.Drawing.Drawing2D;
+using Aponus_Web_API.Data_Transfer_Objects;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -15,7 +16,7 @@ namespace Aponus_Web_API.Controllers
         [Route("Supplies/List/{idDescription?}")]
         public IActionResult NewListar(int? idDescription)
         {
-            return  new BS_Stocks().NewListar(idDescription);
+            return  new BS_Stocks().ObtenerDatosInsumos(idDescription);
         } 
 
         [HttpGet]
@@ -32,6 +33,18 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("Supplies/Update")]
+        public async Task<IActionResult> Actualizar(DTOStock StockInsumo)
+        {
+            return await BS_Stocks.Productos.Insumos.Actualizar(StockInsumo);
+        }
 
+        [HttpPost]
+        [Route("Products/Update")]
+        public async Task<IActionResult> Actualizar(DTOStockProductos StockProducto)
+        {
+            return await BS_Stocks.Productos.Actualizar(StockProducto);
+        }
     }
 }

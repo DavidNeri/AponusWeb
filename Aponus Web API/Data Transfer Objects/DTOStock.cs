@@ -2,19 +2,19 @@
 
 namespace Aponus_Web_API.Data_Transfer_Objects
 {
-    public class NewStocks
+    public class DTOStock
     {
         [JsonProperty(PropertyName = "idInsumo", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdInsumo { get; set; }
 
-        [JsonProperty(PropertyName = "pesoReq", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? PesoReq{ get; set; }
+        [JsonProperty(PropertyName = "peso", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? Peso{ get; set; }
 
-        [JsonProperty(PropertyName = "CantidadReq", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? CantidadReq{ get; set; }
+        [JsonProperty(PropertyName = "cantidad", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? Cantidad{ get; set; }
 
-        [JsonProperty(PropertyName = "longReq", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? LongReq { get; set; }
+        [JsonProperty(PropertyName = "longitud", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? Longitud { get; set; }
 
         [JsonProperty(PropertyName = "recibido", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Recibido { get; set; }
@@ -30,6 +30,9 @@ namespace Aponus_Web_API.Data_Transfer_Objects
 
         [JsonProperty(PropertyName = "proceso", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Proceso { get; set; }
+
+        [JsonProperty(PropertyName = "pendientes", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? Pendientes { get; set; }
 
         [JsonProperty(PropertyName = "total", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Total { get; set; }

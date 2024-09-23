@@ -97,7 +97,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                             _Largo = _JoinResult._DetComponentes._Componentes.Longitud ?? null,
 
 
-                            StockComponente = new DTOStocks
+                            StockComponente = new DTOStockFormateado
                             {
                                 IdInsumo = _StockComponentes.IdInsumo,
                                 Recibido = _StockComponentes.Recibido != null ? _StockComponentes.Recibido.ToString(): "Sin Stock",
@@ -113,9 +113,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                                         (_StockComponentes.Granallado ?? 0)).ToString(),
 
                                 Requerido = ((_JoinResult._DetComponentes._Componentes.Cantidad ?? 0) * Producto.Cantidad).ToString(),
-                                // PesoReq=(_JoinResult._DetComponentes._Componentes.PesoComponente ?? 0) *Producto.CantidadRequerida Eliminar??,
-                                // CantidadReq = (_JoinResult._DetComponentes._Componentes.CantidadRequerida ?? 0) * Producto.CantidadRequerida,
-                                // LongReq = (_JoinResult._DetComponentes._Componentes.LongitudInsumo ?? 0) * Producto.CantidadRequerida,*/
+                                // Peso=(_JoinResult._DetComponentes._Componentes.PesoComponente ?? 0) *Producto.CantidadRequerida Eliminar??,
+                                // Cantidad = (_JoinResult._DetComponentes._Componentes.CantidadRequerida ?? 0) * Producto.CantidadRequerida,
+                                // Longitud = (_JoinResult._DetComponentes._Componentes.LongitudInsumo ?? 0) * Producto.CantidadRequerida,*/
 
 
                             }

@@ -2,6 +2,7 @@
 using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Sistema
 
@@ -29,34 +30,60 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
 
         }
 
-        internal int NuevaDescripcion(DTOCategorias nuevaCategoria)
+        internal async Task<IActionResult> NuevaDescripcion(ProductosDescripcion Categoria, string IdTipo)
         {
-            try
+            using (var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
             {
-                AponusDBContext.ProductosDescripcions
-                               .Add(new ProductosDescripcion
-                               {
-                                   DescripcionProducto = nuevaCategoria.Descripcion.ToUpper() 
-                               }) ;
+                try
+                {
+                    AponusDBContext.ProductosDescripcions.Add(new ProductosDescripcion
+                    {
+                        DescripcionProducto = Categoria.DescripcionProducto,
+                    });
 
-                AponusDBContext.SaveChanges();
-                
+                    await AponusDBContext.SaveChangesAsync();
 
-                int? IdDescripcionNullable = AponusDBContext.ProductosDescripcions
-                    .Where(x => x.DescripcionProducto == nuevaCategoria.Descripcion)
-                    .Select(x => x.IdDescripcion).FirstOrDefault();
+                    int? IdDescripcion = AponusDBContext.ProductosDescripcions
+                            .Where(x => x.DescripcionProducto == Categoria.DescripcionProducto)
+                            .Select(x => x.IdDescripcion).FirstOrDefault();
 
-                int IdDescripcion = IdDescripcionNullable ?? 0;
+                    if (IdDescripcion != null && !string.IsNullOrEmpty(IdTipo))
+                    {
+                        AponusDBContext.Producto_Tipo_Descripcion.Add(new Productos_Tipos_Descripcion()
+                        {
+                            IdDescripcion = IdDescripcion,
+                            IdTipo = IdTipo
+                        });
+
+                        AponusDBContext.SaveChanges();
+                        await transaccion.CommitAsync();
+                        return new StatusCodeResult(200);
+                    }
+                    else
+                    {
+                        await transaccion.RollbackAsync();
+                        return new ContentResult()
+                        {
+                            Content="Error interno, no se aplicaron los cambios",
+                            ContentType="application/json",
+                            StatusCode=400
+                        };
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException?.Message ?? ex.Message,
+                        ContentType="application/json",
+                        StatusCode=400
+                    };
+                }
 
 
-                 return IdDescripcion;
-                
             }
-            catch (Exception ex)
-            {
-                return 0;
-
-            }
+                
            
 
         }
@@ -88,17 +115,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
             return TipoAnteriorExiste;
         }
 
-        public void VincularCategorias(DTOCategorias nuevaCategoria)
-        {
-            AponusDBContext.Producto_Tipo_Descripcion
-                .Add(new Productos_Tipos_Descripcion
-                {
-                    IdTipo = nuevaCategoria.IdTipo,
-                    IdDescripcion = nuevaCategoria.IdDescripcion,
-                });
-            AponusDBContext.SaveChanges();
-
-        }
+     
 
         internal void ActualizarTipoProd(DTOActualizarCategorias actualizarCategorias)
         {

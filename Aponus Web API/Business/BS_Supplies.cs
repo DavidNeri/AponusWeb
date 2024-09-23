@@ -73,7 +73,6 @@ namespace Aponus_Web_API.Business
             }
 
         }
-
       
 
         internal IActionResult ListarNombresFormateados()

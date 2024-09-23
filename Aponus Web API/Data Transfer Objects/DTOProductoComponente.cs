@@ -39,10 +39,10 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public string? Tolerancia { get; set; }
 
         [JsonProperty(PropertyName = "stockComponente", NullValueHandling = NullValueHandling.Ignore)]
-        public List<NewStocks>? StockComponente { get; set; }
+        public List<DTOStock>? StockComponente { get; set; }
 
         [JsonProperty(PropertyName = "stockFormateado", NullValueHandling = NullValueHandling.Ignore)]
-        public List<DTOStocks>? StockFormateado { get; set; }
+        public List<DTOStockFormateado>? StockFormateado { get; set; }
 
 
     }

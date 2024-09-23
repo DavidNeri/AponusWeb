@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Data_Transfer_Objects
 {
-    public class DTOStockProductos : DTOStocks
+    public class DTOStockProductos : DTOStockFormateado
     {
        
         [JsonProperty(Order= 1, PropertyName = "idProducto", NullValueHandling = NullValueHandling.Ignore)]

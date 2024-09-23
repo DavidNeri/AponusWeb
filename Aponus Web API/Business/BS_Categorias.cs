@@ -7,79 +7,42 @@ using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Aponus_Web_API.Business
 {
-    public class BS_Categories
+    public class BS_Categorias
     {
        
-        internal IActionResult AgregarDescripcion(DTOCategorias NuevaCategoria)
+        internal async Task<IActionResult> AgregarDescripcion(DTOCategorias NuevaCategoria)
         {
-            NuevaCategoria.Descripcion = NuevaCategoria.Descripcion?.ToUpper();
+
             try
             {
-                Categorias categorias = new Categorias();
-
-                //Inserta la Descripcion y obtiene el id
-                NuevaCategoria.IdDescripcion = categorias.NuevaDescripcion(NuevaCategoria);
-
-                if (NuevaCategoria.IdDescripcion != 0)
+                ProductosDescripcion DescripcionProductoDB = new ProductosDescripcion()
                 {
-                    try
-                    {
-                        categorias.VincularCategorias(NuevaCategoria);
-                        return new StatusCodeResult(StatusCodes.Status200OK);
+                    DescripcionProducto = Regex.Replace(NuevaCategoria.Descripcion ?? "", @"\s+", " ").Trim().ToUpper(),  //Inserta la Descripcion y obtiene el id
+                };
 
-                    }
-                    catch (DbUpdateException ex)
-                    {
-                        string Mensaje;
-                        if (ex.InnerException != null) Mensaje = ex.InnerException.Message; else Mensaje = ex.Message;
-
-                        return new ContentResult
-                        {
-                            StatusCode = 500,
-                            Content = "Ocurrió un error: " + Mensaje,
-                            ContentType = "text/plain"
-                        };
-
-
-
-                    }
-                    catch (Exception ex)
-                    {
-                        string Mensaje;
-                        if (ex.InnerException != null) Mensaje = ex.InnerException.Message; else Mensaje = ex.Message;
-
-                        return new ContentResult
-                        {
-                            StatusCode = 500,
-                            Content = "Ocurrió un error: " + Mensaje,
-                            ContentType = "text/plain"
-                        };
-
-                    }
-                }
-                else
-                {
-                    return new ContentResult
-                    {
-                        StatusCode = 400,
-                        Content = "Error: El campo 'Descripcion' no puede ser nulo ",
-                        ContentType = "text/plain"
-                    };
-                }
-
-
-
-
+                return await new Categorias().NuevaDescripcion(DescripcionProductoDB, NuevaCategoria.IdTipo ?? "");
+                
             }
-            catch (DbUpdateException e)
+            catch (Exception ex)
             {
-
-                string? Mensaje = e.InnerException?.Message;
-                return new JsonResult(Mensaje);
+                return new ContentResult()
+                {
+                    Content = ex.InnerException?.Message ?? ex.Message,
+                    ContentType = "application/json",
+                    StatusCode = 400
+                };
             }
+            
+
+            
+
+
+
+         
 
 
         }

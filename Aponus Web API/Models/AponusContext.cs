@@ -883,7 +883,8 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.IdEstado)
             .HasDefaultValueSql("1")
-            .HasColumnName("ID_ESTADO");
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("int");
 
             entity.Property(e => e.IdFraccionamiento)
             .HasColumnName("ID_FRACCIONAMIENTO")

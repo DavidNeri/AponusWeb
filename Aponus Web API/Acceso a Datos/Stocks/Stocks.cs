@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Data.SqlClient;
+using Z.EntityFramework.Plus;
 
 
 namespace Aponus_Web_API.Acceso_a_Datos.Stocks
@@ -16,10 +17,63 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
         public Stocks() { AponusDBContext = new AponusContext(); }
         int? ValorAnteriorInt=null;
         decimal? ValorAnteriorDec=null;
-     
+
+        public class Productos : Stocks
+        {
+            public async Task<bool> Actualizar(Producto Producto)
+            {
+                using (var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        var Existe = await AponusDBContext.Productos.FindAsync(Producto.IdProducto);
+
+                        if (Existe != null)
+                            AponusDBContext.Entry(Existe).CurrentValues.SetValues(Producto);
+                        else
+                            await AponusDBContext.Productos.AddAsync(Producto);
+
+                        await AponusDBContext.SaveChangesAsync();
+                        await transaccion.CommitAsync();
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        public class Insumos : Stocks
+        {
+            public async Task<bool> Actualizar(StockInsumos stockInsumo)
+            {
+                using (var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        var Existe = await AponusDBContext.stockInsumos.FindAsync(stockInsumo.IdInsumo);
+
+                        if (Existe != null)
+                            AponusDBContext.Entry(Existe).CurrentValues.SetValues(stockInsumo);
+                        else
+                            await AponusDBContext.stockInsumos.AddAsync(stockInsumo);
+
+                        await AponusDBContext.SaveChangesAsync();
+                        await transaccion.CommitAsync();
+                        return true;
+                    }
+                    catch (Exception)
+                    {                        
+                        return false;
+                    }
+                }
+            }
+        }
+        
 
 
-        internal bool IncrementarStockProducto(ActualizacionStock Actualizacion)
+            internal bool IncrementarStockProducto(ActualizacionStock Actualizacion)
         {
             bool resultado = true;
             try
