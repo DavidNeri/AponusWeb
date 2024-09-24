@@ -1303,6 +1303,22 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.StocksController",
+    "Method": "Actualizar",
+    "RelativePath": "Aponus/Stocks/Products/Update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "StockProducto",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOStockProductos",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.StocksController",
     "Method": "NewListar",
     "RelativePath": "Aponus/Stocks/Supplies/List/{idDescription}",
     "HttpMethod": "GET",
@@ -1319,7 +1335,7 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.StocksController",
-    "Method": "ActualizarStockInsumo",
+    "Method": "Actualizar",
     "RelativePath": "Aponus/Stocks/Supplies/Update",
     "HttpMethod": "POST",
     "IsController": true,

@@ -23,7 +23,6 @@ public partial class ProductosTipo
     public virtual EstadosTiposProductos IdEstadoNavigation { get; set; }
 
     //Navigation Propertires
-
-    //public  ICollection<Productos_Tipos_Descripcion> Producto_Tipo_Descripcione { get; set; }
+    public virtual ICollection<Productos_Tipos_Descripcion> Producto_Tipo_Descripcione { get; set; } = new HashSet<Productos_Tipos_Descripcion>();
 
 }

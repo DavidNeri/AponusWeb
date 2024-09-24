@@ -12,6 +12,6 @@ namespace Aponus_Web_API.Models
         [Column("DESCRIPCION")]
         public string Descripcion { get; set; }
 
-        public virtual ICollection<ProductosDescripcion> ProductosDescripcions{ get; set; }
+        public virtual ICollection<ProductosDescripcion> ProductosDescripcions { get; set; }
     }
 }

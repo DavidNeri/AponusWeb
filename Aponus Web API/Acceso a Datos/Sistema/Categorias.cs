@@ -39,6 +39,8 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
                     AponusDBContext.ProductosDescripcions.Add(new ProductosDescripcion
                     {
                         DescripcionProducto = Categoria.DescripcionProducto,
+                        IdEstadoNavigation = await AponusDBContext.EstadosProductosDescripcione.FirstOrDefaultAsync(X=>X.IdEstado == 1)
+                        
                     });
 
                     await AponusDBContext.SaveChangesAsync();
@@ -52,7 +54,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Sistema
                         AponusDBContext.Producto_Tipo_Descripcion.Add(new Productos_Tipos_Descripcion()
                         {
                             IdDescripcion = IdDescripcion,
-                            IdTipo = IdTipo
+                            IdTipo = IdTipo,
+                            
+                            
                         });
 
                         AponusDBContext.SaveChanges();

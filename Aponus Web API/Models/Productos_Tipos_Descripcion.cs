@@ -7,13 +7,11 @@ namespace Aponus_Web_API.Models
         [Column("ID_DESCRIPCION")]
         public int? IdDescripcion { get; set; }
 
-        [Column("ID_DTIPO")]
-        public string IdTipo { get; set; }
+        [Column("ID_TIPO")]
+        public string IdTipo { get; set; }        
 
-        //Navigation Properties
-
-        //public  ProductosTipo IdTipoNavigation { get; set; }
-        //public ProductosDescripcion IdDescripcionNavigation { get; set; }
+        public  virtual ProductosTipo IdTipoNavigation { get; set; }
+        public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }
 
 
     }

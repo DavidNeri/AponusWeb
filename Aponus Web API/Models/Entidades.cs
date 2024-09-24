@@ -10,7 +10,7 @@ namespace Aponus_Web_API.Models
         public int IdEntidad { get; set; }
 
         [Column("NOMBRE_CLAVE")]
-        public string NombreClave{ get;set; }
+        public string? NombreClave{ get;set; }
 
         [Column("NOMBRE")]
         public string? Nombre { get; set; }

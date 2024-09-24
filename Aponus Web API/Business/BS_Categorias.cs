@@ -36,14 +36,6 @@ namespace Aponus_Web_API.Business
                     StatusCode = 400
                 };
             }
-            
-
-            
-
-
-
-         
-
 
         }
 

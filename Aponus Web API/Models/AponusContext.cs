@@ -641,7 +641,8 @@ public partial class AponusContext : DbContext
             entity.HasKey(PK => PK.IdEstado);
 
             entity.Property(p => p.IdEstado)
-            .HasColumnName("ID_ESTADO");
+            .HasColumnName("ID_ESTADO")
+            .HasDefaultValueSql("1");
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
@@ -1018,9 +1019,28 @@ public partial class AponusContext : DbContext
         modelBuilder.Entity<Productos_Tipos_Descripcion>(entity =>
         {
             entity.ToTable("PRODUCTOS_TIPOS_DESCRIPCION");
-            entity.Property(e=>e.IdTipo).HasColumnName("ID_TIPO");
-            entity.Property(e=>e.IdDescripcion).HasColumnName("ID_DESCRIPCION");
             entity.HasKey(Key => new { Key.IdTipo, Key.IdDescripcion });
+
+            entity.Property(e=>e.IdTipo)
+            .HasColumnName("ID_TIPO")
+            .HasColumnType("varchar(50)");
+
+            entity.Property(e=>e.IdDescripcion)
+            .HasColumnName("ID_DESCRIPCION");
+            
+
+            entity.HasOne(p => p.IdTipoNavigation)
+            .WithMany(p => p.Producto_Tipo_Descripcione)
+            .HasForeignKey(FK=>FK.IdTipo)
+            .HasConstraintName("FK_PRODUCTOS_TIPOS_DESCRIPCION_ID_TIPO")
+            .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(p => p.IdDescripcionNavigation)
+            .WithMany(p => p.Producto_Tipo_Descripcione)
+            .HasForeignKey(FK=>FK.IdDescripcion)
+            .HasConstraintName("FK_PRODUCTOS_TIPOS_DESCRIPCION_ID_DESCRIPCION")
+            .OnDelete(DeleteBehavior.NoAction);
+
 
         });
 
