@@ -35,7 +35,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public string? Tipo{ get; set; }
 
         [JsonProperty(PropertyName = "proveedorDestino", NullValueHandling = NullValueHandling.Ignore)]
-        public DTOEntidades? ProveedorDestino { get; set; }
+        public DTOEntidades? Proveedor { get; set; }
 
         [JsonProperty(PropertyName = "proveedorOrigen", NullValueHandling = NullValueHandling.Ignore)]
         public DTOEntidades? ProveedorOrigen { get; set; }

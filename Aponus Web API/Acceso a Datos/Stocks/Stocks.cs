@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Data.SqlClient;
 using Z.EntityFramework.Plus;
+using Npgsql;
+using NpgsqlTypes;
+using Castle.Components.DictionaryAdapter;
 
 
 namespace Aponus_Web_API.Acceso_a_Datos.Stocks
@@ -230,88 +233,55 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
 
         }       
-        internal bool IncrementarStockInsumo(AponusContext AponusDBContext, ActualizacionStock Actualizacion, string Prop)
+        internal bool ActualizarStockInsumo(AponusContext? AponusDBContext, ActualizacionStock Actualizacion)//, string Prop)
         {
-            bool result = false;
-            bool saveChanges = false;
-
-            PropertyInfo? Propiedad = typeof(StockInsumos).GetProperties().FirstOrDefault(p => p.Name.ToUpper().Contains(Prop.ToUpper()));
             if (AponusDBContext == null)
-            {
                 AponusDBContext = new AponusContext();
-                saveChanges = true;
-            }
-                
 
-            try
+            string Origen = Actualizacion.Origen?.ToUpper() ?? "";
+            string Destino = Actualizacion.Destino?.ToUpper() ?? "";
+            decimal Cantidad = Actualizacion.Valor ?? 0;
+
+            StockInsumos? Insumo = AponusDBContext.stockInsumos.FirstOrDefault(x => x.IdInsumo.Equals(Actualizacion.Id));
+            if (Insumo != null)
             {
-                var elementos = AponusDBContext.stockInsumos.Where(x => x.IdInsumo == Actualizacion.Id).ToList();
-                
-                foreach (var elemento in elementos)
+                PropertyInfo[] PropiedadesInsumo = Insumo.GetType().GetProperties();
+                PropertyInfo? origen = PropiedadesInsumo.FirstOrDefault(x => x.Name.ToUpper().Contains(Origen));
+                PropertyInfo? destino = PropiedadesInsumo.FirstOrDefault(x => x.Name.ToUpper().Contains(Destino));
+
+                if (string.IsNullOrEmpty(Actualizacion.Origen) && (Actualizacion.Destino?.ToUpper() ?? "").Contains("PENDIENTE")) //Compra con mercaderia pendiente de entrega
                 {
-                        decimal? valorSumar = Actualizacion.Valor ?? 0;
-                        var valorActual = (decimal?)Propiedad?.GetValue(elemento);
-
-                        if (valorActual == null)
-                            valorActual = 0;
-
-                        decimal? nuevoValor = (valorActual ?? 0) + valorSumar;
-
-                        if (Propiedad != null)
-                            Propiedad.SetValue(elemento, nuevoValor);
-
-                    if (saveChanges)
-                        AponusDBContext.SaveChanges();
-
+                    return false;                  
                 }
-                
-                result = true;
-                return result;
-                
-            }
-            catch (Exception){return false;}
-        }
-
-        internal bool DescontarStockInsumo(AponusContext AponusDBContext, ActualizacionStock Actualizacion, string Prop)
-        {
-            bool result = false;
-            bool saveChanges = false;
-
-            PropertyInfo? Propiedad = typeof(StockInsumos).GetProperties().FirstOrDefault(p => p.Name.ToUpper().Contains(Prop.ToUpper()));
-            if (AponusDBContext == null)
-            {
-                AponusDBContext = new AponusContext();
-                saveChanges = true;
-            }
-                
-
-            try
-            {
-                var elementos = AponusDBContext.stockInsumos.Where(x => x.IdInsumo == Actualizacion.Id).ToList();
-                
-                foreach (var elemento in elementos)
-                
+                else if (string.IsNullOrEmpty(Actualizacion.Origen) && (Actualizacion.Destino?.ToUpper() ?? "").Contains("RECIBIDO")) //Compra con Mercaderia entregada al momento de la compra
                 {
-                        decimal? valorSumar = Actualizacion.Valor ?? 0;
-                        var valorActual     = (decimal?)Propiedad?.GetValue(elemento);
+                    return false;
+                }
+                else if (!string.IsNullOrEmpty(Actualizacion.Origen) && !string.IsNullOrEmpty(Actualizacion.Destino)) //Movimiento interno/Ingreso de Mercaderia 
+                {
+                    decimal CantidadOrigen = (origen?.GetValue(Insumo) as decimal? ?? 0) -   Cantidad;
 
-                        if (valorActual     == null)
-                            valorActual     = 0;
-
-                        decimal? nuevoValor = (valorActual ?? 0) - valorSumar;
-
-                        if (Propiedad != null)
-                            Propiedad.SetValue(elemento, nuevoValor);
+                    if (CantidadOrigen < 0)
+                        return false;
                     
-                    if (saveChanges)
-                        AponusDBContext.SaveChanges();
-                
+                    decimal CantidadDestino = (destino?.GetValue(Insumo) as decimal? ?? 0) + Cantidad;
+                    origen?.SetValue(Insumo, CantidadOrigen);
+                    destino?.SetValue(Insumo, CantidadDestino);
+                    AponusDBContext.Entry(Insumo).State =EntityState.Modified;
+                    AponusDBContext.SaveChanges();
+                    return true;
+
                 }
-                    result = true;
-                    return result;
-                                   
+                else
+                {
+                    return false;
+                }
+
             }
-            catch (Exception){return false;}
+            else
+            {
+                return false;
+            }
         }
 
         public StockInsumos? BuscarInsumo(string Insumo)
@@ -439,34 +409,34 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
         {
             try
             {
-                    AponusDBContext.ArchivosStock.AddRange(DatosArchivos);
-                    return true;
-
-                    }
-                    catch (Exception)
-                    {   
-
-                    return false;
-            }
-            
                 
-            
+                AponusDBContext.ArchivosStock.AddRange(DatosArchivos);
+                AponusDBContext.SaveChanges();
 
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            };
         }
 
         internal int? GuardarDatosMovimiento(AponusContext AponusDBContext, Stock_Movimientos Movimiento)
         {
-            string insertQuery = "INSERT INTO Stock_Movimientos (USUARIO_CREADO, FECHA_HORA_CREADO,  ID_PROVEEDOR_ORIGEN, ID_PROVEEDOR_DESTINO, ID_ESTADO,  USUARIO_MODIFICA) " +
-                                                        "VALUES (@USUARIO_CREADO, @FECHA_HORA_CREADO,  @ID_PROVEEDOR_ORIGEN, @ID_PROVEEDOR_DESTINO, 1,  @USUARIO_MODIFICA)";
+            string insertQuery = @"INSERT INTO ""STOCK_MOVIMIENTOS"" (""USUARIO_CREADO"", ""FECHA_HORA_CREADO"",""ORIGEN"",""DESTINO"",""ID_PROVEEDOR_ORIGEN"", ""ID_PROVEEDOR_DESTINO"", ""ID_ESTADO_MOVIMIENTO"") 
+                                    VALUES (@USUARIO_CREADO, @FECHA_HORA_CREADO,@ORIGEN,@DESTINO,  @ID_PROVEEDOR_ORIGEN, @ID_PROVEEDOR_DESTINO, 1)";
+
 
             try
             {
-                AponusDBContext.Database.ExecuteSqlRaw(insertQuery,
-                                                             new SqlParameter("@USUARIO_CREADO", Movimiento.CreadoUsuario),
-                                                             new SqlParameter("@FECHA_HORA_CREADO", Movimiento.FechaHoraCreado),
-                                                             new SqlParameter("@ID_PROVEEDOR_ORIGEN", Movimiento.IdProveedorOrigen),
-                                                             new SqlParameter("@ID_PROVEEDOR_DESTINO", Movimiento.IdProveedorDestino),
-                                                             new SqlParameter("@USUARIO_MODIFICA", Movimiento.ModificadoUsuario));
+                    AponusDBContext.Database.ExecuteSqlRaw(insertQuery,
+                                                             new NpgsqlParameter("@USUARIO_CREADO", Movimiento.CreadoUsuario){NpgsqlDbType = NpgsqlDbType.Varchar},
+                                                             new NpgsqlParameter("@FECHA_HORA_CREADO", Movimiento.FechaHoraCreado) { NpgsqlDbType = NpgsqlDbType.Timestamp },
+                                                             new NpgsqlParameter("@ORIGEN", Movimiento.Origen) { NpgsqlDbType = NpgsqlDbType.Varchar},
+                                                             new NpgsqlParameter("@DESTINO", Movimiento.Destino) { NpgsqlDbType = NpgsqlDbType.Varchar },
+                                                             new NpgsqlParameter("@ID_PROVEEDOR_ORIGEN", Movimiento.IdProveedorOrigen) { NpgsqlDbType = NpgsqlDbType.Integer},
+                                                             new NpgsqlParameter("@ID_PROVEEDOR_DESTINO", Movimiento.IdProveedorDestino) { NpgsqlDbType = NpgsqlDbType.Integer}
+                                                             /*new NpgsqlParameter("@USUARIO_MODIFICA", Movimiento.ModificadoUsuario) { NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Varchar}*/);
                 
                 int? IdMovimiento = AponusDBContext.Stock_Movimientos.Select(x => x.IdMovimiento).Max();
 
@@ -480,25 +450,30 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
         }
 
 
-        internal  bool GuardarSuministrosMovimiento(AponusContext AponusDBContext, List<SuministrosMovimientosStock> Suministros)
+        internal bool GuardarSuministrosMovimiento(AponusContext AponusDBContext, List<SuministrosMovimientosStock> Suministros)
         {
-            Suministros.ForEach(x=>x.IdEstado= 1);
+
+            foreach (var item in Suministros)
+            {
+                item.IdEstado = 1;
+                item.EstadosSuministrosMovimientosStockNavigation = AponusDBContext.EstadoSuministrosMovimientosStock.FirstOrDefault(x => x.IdEstado == 1);
+            }            
+            
             try
             {
                 foreach (var suministro in Suministros)
                 {
-                    var Existente =  AponusDBContext.SuministrosMovimientoStock.Where(x=>x.IdMovimiento==suministro.IdMovimiento && x.IdSuministro==suministro.IdSuministro).FirstOrDefault();
+                    var Existente =  AponusDBContext.SuministrosMovimientoStock
+                        .Where(x=>x.IdMovimiento==suministro.IdMovimiento && x.IdSuministro==suministro.IdSuministro)
+                        .FirstOrDefault();
                     
-
                     if (Existente != null)
-                    {
                         AponusDBContext.Entry(Existente).CurrentValues.SetValues(suministro);
-                    }else
-                    {
-                        AponusDBContext.SuministrosMovimientoStock.Add(suministro);
-                    }
+                    else
+                        AponusDBContext.Add(suministro);
                 }
 
+                AponusDBContext.SaveChanges();
                 return true;
             }
             catch (Exception)

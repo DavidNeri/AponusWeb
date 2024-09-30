@@ -26,15 +26,19 @@ namespace Aponus_Web_API.Support
         public List<ArchivosMovimientosStock> SubirArchivosMovimiento(List<IFormFile> Archivos, string Proveedor)
         {
             List<ArchivosMovimientosStock> DatosArchivosMovimiento = new List<ArchivosMovimientosStock>();
+            DateTime FechaHora = Fechas.ObtenerFechaHora();
+            string Fecha = FechaHora.ToString("yyyyMMdd");
+            string Hora = FechaHora.ToString("HHmmss");
 
             foreach (var Archivo in Archivos)
             {
+                
                 using(var stream = Archivo.OpenReadStream())
                 {
                     var DatosSubida = new RawUploadParams()
                     {
                         File = new FileDescription(Archivo.FileName, stream),
-                        PublicId = $"Aponus/Movimientos_Documentos/{Proveedor}"
+                        PublicId = $"Aponus/Movimientos_Documentos/{Proveedor}/{Archivo.FileName}_{Fecha}_{Hora}"
                     };
 
                     var Resultado = _cloudinary.Upload(DatosSubida);
@@ -43,6 +47,7 @@ namespace Aponus_Web_API.Support
                     {
                         HashArchivo = Archivo.FileName,
                         PathArchivo = Resultado.SecureUrl.ToString(),
+                        
 
                     });
 
@@ -52,12 +57,22 @@ namespace Aponus_Web_API.Support
             return DatosArchivosMovimiento;
         }
 
-        public async Task<byte[]> DescargarArchivo(string publicId)
+        public async Task<(byte[]? Archivo, string? error)> DescargarArchivo(string publicId)
         {
-            var url = _cloudinary.Api.UrlImgUp.BuildUrl(publicId);
-            byte[] ArchivoBytes = await _httpClient.GetByteArrayAsync(url);
+            try
+            {
+                var url = _cloudinary.Api.UrlImgUp.BuildUrl(publicId);
+                byte[] ArchivoBytes = await _httpClient.GetByteArrayAsync(url);
+                return (ArchivoBytes, null);
 
-            return ArchivoBytes;
+            }
+            catch (Exception ex )
+            {
+
+                Console.WriteLine($"Error al descargar archivo de Cloudinary: {ex.InnerException?.Message ?? ex.Message}");
+                return (null, $"Error al objener datos del archivo: {ex.InnerException?.Message ?? ex.Message}");
+                
+            }
         
         }
 

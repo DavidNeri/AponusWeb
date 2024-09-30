@@ -1,14 +1,23 @@
 ﻿using Aponus_Web_API.Data_Transfer_Objects;
+using Newtonsoft.Json;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Linq.Expressions;
+using System.Text.Json.Serialization;
 
 namespace Aponus_Web_API.Support
 {
     public class FiltrosMovimientos
     {
-        public string? Proveedor{ get; set; }
+        [JsonPropertyName("idProveedor")]
+        public int? IdProveedor{ get; set; }
+
+        [JsonPropertyName("etapa")]
         public string? Etapa { get; set; }
+
+        [JsonPropertyName("desde")]
         public DateTime? Desde { get; set; }
+
+        [JsonPropertyName("hasta")]
         public DateTime? Hasta { get; set; }
 
         public Expression<Func<DTOMovimientosStock, bool>> ConstruirCondicionWhere(FiltrosMovimientos filtros)
@@ -88,11 +97,11 @@ namespace Aponus_Web_API.Support
                     // Agregar la condición a la lista general de condiciones
                     Condiciones.Add(CondicionCampoStockDestinoLista);
                 }
-                else if (Prop.Name.Equals("Proveedor"))
+                else if (Prop.Name.Equals("IdProveedor"))
                 {
-                    Propiedad = "ProveedorDestino";
+                    Propiedad = "IdProveedor";
 
-                    //Obtener la prop ProveedorDestino de DTOMovimientosSTock
+                    //Obtener la prop IdProveedor de DTOMovimientosSTock
                     var PropProveedor = Expression.Property(EntidadParametro, Propiedad);
 
                     var PropNombreProveedor = Expression.Property(PropProveedor, "NombreProveedor");
@@ -103,12 +112,12 @@ namespace Aponus_Web_API.Support
                     // Acceder a la propiedad NombreProveedor de los elementos dentro de la lista Proveedores
                     var NombreProveedor = Expression.Property(paramProveedor, "NombreProveedor");
 
-                    // Construir la condición para la propiedad NombreProveedor dentro de ProveedorDestino en DTOMovimientosSTock
+                    // Construir la condición para la propiedad NombreProveedor dentro de IdProveedor en DTOMovimientosSTock
                     var metodoContains = typeof(string).GetMethod("Contains", new[] { typeof(string) });
 
                     var condicionNombreProveedor = Expression.Call(PropNombreProveedor,   // El objeto o expresión sobre el cual se llama el método
                         metodoContains,                                             // El método que se va a llamar (en este caso, el método Contains)
-                        Expression.Constant(filtros.Proveedor, typeof(string)));    // El argumento que se pasa al método
+                        Expression.Constant(filtros.IdProveedor, typeof(string)));    // El argumento que se pasa al método
 
 
                     Condiciones.Add(condicionNombreProveedor);

@@ -457,112 +457,112 @@
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdEntidad",
+        "Name": "Proveedor.IdEntidad",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.NombreClave",
+        "Name": "Proveedor.NombreClave",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Nombre",
+        "Name": "Proveedor.Nombre",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Apellido",
+        "Name": "Proveedor.Apellido",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Pais",
+        "Name": "Proveedor.Pais",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Ciudad",
+        "Name": "Proveedor.Ciudad",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Provincia",
+        "Name": "Proveedor.Provincia",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Localidad",
+        "Name": "Proveedor.Localidad",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Calle",
+        "Name": "Proveedor.Calle",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Altura",
+        "Name": "Proveedor.Altura",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.CodigoPostal",
+        "Name": "Proveedor.CodigoPostal",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Barrio",
+        "Name": "Proveedor.Barrio",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Telefono1",
+        "Name": "Proveedor.Telefono1",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Telefono2",
+        "Name": "Proveedor.Telefono2",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Telefono3",
+        "Name": "Proveedor.Telefono3",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Email",
+        "Name": "Proveedor.Email",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdFiscal",
+        "Name": "Proveedor.IdFiscal",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.FechaRegistro",
+        "Name": "Proveedor.FechaRegistro",
         "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdUsuarioRegistro",
+        "Name": "Proveedor.IdUsuarioRegistro",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdTipo",
+        "Name": "Proveedor.IdTipo",
         "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdCategoria",
+        "Name": "Proveedor.IdCategoria",
         "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdEstado",
+        "Name": "Proveedor.IdEstado",
         "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
@@ -779,112 +779,112 @@
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdEntidad",
+        "Name": "Proveedor.IdEntidad",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.NombreClave",
+        "Name": "Proveedor.NombreClave",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Nombre",
+        "Name": "Proveedor.Nombre",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Apellido",
+        "Name": "Proveedor.Apellido",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Pais",
+        "Name": "Proveedor.Pais",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Ciudad",
+        "Name": "Proveedor.Ciudad",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Provincia",
+        "Name": "Proveedor.Provincia",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Localidad",
+        "Name": "Proveedor.Localidad",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Calle",
+        "Name": "Proveedor.Calle",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Altura",
+        "Name": "Proveedor.Altura",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.CodigoPostal",
+        "Name": "Proveedor.CodigoPostal",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Barrio",
+        "Name": "Proveedor.Barrio",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Telefono1",
+        "Name": "Proveedor.Telefono1",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Telefono2",
+        "Name": "Proveedor.Telefono2",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Telefono3",
+        "Name": "Proveedor.Telefono3",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.Email",
+        "Name": "Proveedor.Email",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdFiscal",
+        "Name": "Proveedor.IdFiscal",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.FechaRegistro",
+        "Name": "Proveedor.FechaRegistro",
         "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdUsuarioRegistro",
+        "Name": "Proveedor.IdUsuarioRegistro",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdTipo",
+        "Name": "Proveedor.IdTipo",
         "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdCategoria",
+        "Name": "Proveedor.IdCategoria",
         "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "ProveedorDestino.IdEstado",
+        "Name": "Proveedor.IdEstado",
         "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },

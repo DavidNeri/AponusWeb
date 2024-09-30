@@ -39,7 +39,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("HASH_ARCHIVO");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
@@ -56,7 +56,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("IdMovimiento", "HashArchivo");
 
-                    b.HasIndex("IdEstado");
+                    b.HasIndex("IdEstadoMovimiento");
 
                     b.ToTable("ARCHIVOS_STOCK", (string)null);
                 });
@@ -111,7 +111,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("ID_DESCRIPCION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID_ESTADO")
@@ -140,7 +140,7 @@ namespace AponusWebAPI.Migrations
                     b.HasKey("IdInsumo")
                         .HasName("PK_ID_INSUMO");
 
-                    b.HasIndex("IdEstado");
+                    b.HasIndex("IdEstadoMovimiento");
 
                     b.ToTable("COMPONENTES_DETALLE", (string)null);
                 });
@@ -302,7 +302,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID_CATEGORIA");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
@@ -375,7 +375,7 @@ namespace AponusWebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdCategoria"));
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
@@ -400,7 +400,7 @@ namespace AponusWebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdTipo"));
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
@@ -435,38 +435,38 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosArchivosMovimientosStock", b =>
                 {
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstado"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.HasKey("IdEstado");
+                    b.HasKey("IdEstadoMovimiento");
 
                     b.ToTable("ESTADOS_ARCHIVOS_MOVIMIENTOS_STOCK", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosComponentesDetalles", b =>
                 {
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstado"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.HasKey("IdEstado");
+                    b.HasKey("IdEstadoMovimiento");
 
                     b.ToTable("ESTADOS_COMPONENTES_DETALLES", (string)null);
                 });
@@ -486,7 +486,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .HasColumnType("int")
                         .HasColumnName("ID_ESTADO");
 
@@ -509,7 +509,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varchar(MAX)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID_ESTADO")
@@ -534,7 +534,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
@@ -547,45 +547,45 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductos", b =>
                 {
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstado"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.HasKey("IdEstado");
+                    b.HasKey("IdEstadoMovimiento");
 
                     b.ToTable("ESTADOS_PRODUCTOS", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductosComponentes", b =>
                 {
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstado"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.HasKey("IdEstado");
+                    b.HasKey("IdEstadoMovimiento");
 
                     b.ToTable("ESTADOS_PRODUCTOS_COMPONENTES", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductosDescripciones", b =>
                 {
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
@@ -596,45 +596,45 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.HasKey("IdEstado");
+                    b.HasKey("IdEstadoMovimiento");
 
                     b.ToTable("ESTADOS_PRODUCTOS_DESCRIPCIONES", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosSuministrosMovimientosStock", b =>
                 {
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstado"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.HasKey("IdEstado");
+                    b.HasKey("IdEstadoMovimiento");
 
                     b.ToTable("ESTADOS_SUMINISTROS_MOVIMIENTOS_STOCK", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosTiposProductos", b =>
                 {
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstado"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.HasKey("IdEstado");
+                    b.HasKey("IdEstadoMovimiento");
 
                     b.ToTable("ESTADOS_PRODUCTOS_TIPOS", (string)null);
                 });
@@ -653,7 +653,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(1)
@@ -682,7 +682,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(1)
@@ -789,7 +789,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varcahr(100)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO");
 
@@ -820,7 +820,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("ID_DESCRIPCION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
@@ -855,7 +855,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasIndex("IdDescripcion");
 
-                    b.HasIndex("IdEstado");
+                    b.HasIndex("IdEstadoMovimiento");
 
                     b.HasIndex("IdTipo");
 
@@ -877,7 +877,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
@@ -885,7 +885,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("IdDescripcion");
 
-                    b.HasIndex("IdEstado");
+                    b.HasIndex("IdEstadoMovimiento");
 
                     b.ToTable("PRODUCTOS_DESCRIPCION", (string)null);
                 });
@@ -904,18 +904,18 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("DESCRIPCION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
                         .HasDefaultValueSql("1");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstado"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
                     b.HasKey("IdTipo")
                         .HasName("PK_PRODUCTOS_TIPOS");
 
-                    b.HasIndex("IdEstado");
+                    b.HasIndex("IdEstadoMovimiento");
 
                     b.ToTable("PRODUCTOS_TIPOS", (string)null);
                 });
@@ -934,7 +934,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("CANTIDAD");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
@@ -951,7 +951,7 @@ namespace AponusWebAPI.Migrations
                     b.HasKey("IdProducto", "IdComponente")
                         .HasName("PK_PRODUCTOS_COMPONENTES");
 
-                    b.HasIndex("IdEstado");
+                    b.HasIndex("IdEstadoMovimiento");
 
                     b.ToTable("PRODUCTOS_COMPONENTES", (string)null);
                 });
@@ -1035,13 +1035,13 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("timestamp")
                         .HasColumnName("FECHA_HORA_ULTIMA_MODIFICACION");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID_ESTADO")
                         .HasDefaultValueSql("1");
 
-                    b.Property<int>("IdProveedorDestino")
+                    b.Property<int>("IdEntidad")
                         .HasColumnType("int")
                         .HasColumnName("ID_PROVEEDOR_DESTINO");
 
@@ -1064,9 +1064,9 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("IdMovimiento");
 
-                    b.HasIndex("IdEstado");
+                    b.HasIndex("IdEstadoMovimiento");
 
-                    b.HasIndex("IdProveedorDestino");
+                    b.HasIndex("IdEntidad");
 
                     b.HasIndex("IdProveedorOrigen");
 
@@ -1087,7 +1087,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("CANTIDAD");
 
-                    b.Property<int>("IdEstado")
+                    b.Property<int>("IdEstadoMovimiento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
@@ -1111,7 +1111,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasKey("IdMovimiento", "IdSuministro");
 
-                    b.HasIndex("IdEstado");
+                    b.HasIndex("IdEstadoMovimiento");
 
                     b.ToTable("SUMINISTROS_MOVIMIENTOS_STOCK", (string)null);
                 });
@@ -1221,7 +1221,7 @@ namespace AponusWebAPI.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Models.EstadosArchivosMovimientosStock", "ArchivosMovimientosStockNavigation")
                         .WithMany("ArchivosMovimientoStock")
-                        .HasForeignKey("IdEstado")
+                        .HasForeignKey("IdEstadoMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1241,7 +1241,7 @@ namespace AponusWebAPI.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Models.EstadosComponentesDetalles", "IdEstadoNavigation")
                         .WithMany("ComponentesDetalle")
-                        .HasForeignKey("IdEstado")
+                        .HasForeignKey("IdEstadoMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1256,7 +1256,7 @@ namespace AponusWebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aponus_Web_API.Models.Entidades", "Proveedor")
+                    b.HasOne("Aponus_Web_API.Models.Entidades", "IdProveedor")
                         .WithMany("compras")
                         .HasForeignKey("IdProveedor")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1270,7 +1270,7 @@ namespace AponusWebAPI.Migrations
 
                     b.Navigation("Estado");
 
-                    b.Navigation("Proveedor");
+                    b.Navigation("IdProveedor");
 
                     b.Navigation("Usuario");
                 });
@@ -1407,7 +1407,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasOne("Aponus_Web_API.Models.EstadosProductos", "IdEstadoNavigation")
                         .WithMany("Productos")
-                        .HasForeignKey("IdEstado")
+                        .HasForeignKey("IdEstadoMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1428,7 +1428,7 @@ namespace AponusWebAPI.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Models.EstadosProductosDescripciones", "IdEstadoNavigation")
                         .WithMany("ProductosDescripcions")
-                        .HasForeignKey("IdEstado")
+                        .HasForeignKey("IdEstadoMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1439,7 +1439,7 @@ namespace AponusWebAPI.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Models.EstadosTiposProductos", "IdEstadoNavigation")
                         .WithMany("ProductosTipos")
-                        .HasForeignKey("IdEstado")
+                        .HasForeignKey("IdEstadoMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1450,7 +1450,7 @@ namespace AponusWebAPI.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Models.EstadosProductosComponentes", "IdEstadoNavigation")
                         .WithMany("ProductosComponentes")
-                        .HasForeignKey("IdEstado")
+                        .HasForeignKey("IdEstadoMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1482,13 +1482,13 @@ namespace AponusWebAPI.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Models.EstadosMovimientosStock", "estadoMovimiento")
                         .WithMany("movimientosStock")
-                        .HasForeignKey("IdEstado")
+                        .HasForeignKey("IdEstadoMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aponus_Web_API.Models.Entidades", "ProveedorDestino")
+                    b.HasOne("Aponus_Web_API.Models.Entidades", "IdProveedor")
                         .WithMany("MovimientosDestino")
-                        .HasForeignKey("IdProveedorDestino")
+                        .HasForeignKey("IdEntidad")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1498,7 +1498,7 @@ namespace AponusWebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProveedorDestino");
+                    b.Navigation("IdProveedor");
 
                     b.Navigation("ProveedorOrigen");
 
@@ -1509,7 +1509,7 @@ namespace AponusWebAPI.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Models.EstadosSuministrosMovimientosStock", "EstadosSuministrosMovimientosStockNavigation")
                         .WithMany("SuministrosMovimientoStock")
-                        .HasForeignKey("IdEstado")
+                        .HasForeignKey("IdEstadoMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

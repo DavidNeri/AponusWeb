@@ -1,11 +1,13 @@
 ﻿using NtpClient;
 using System.Net.NetworkInformation;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Aponus_Web_API.Support
 {
     public class Fechas
     {
-        public static DateTime ObtenerFechaHora()
+        public static DateTime ObtenerFechaHora()   
         {
             DateTime FechaHora = DateTime.Now;
             string[] servidoresNTP = { "Time.Windows.com", "pool.ntp.org", "south-america.pool.ntp.org", "Time.Windows.com" }; // Lista de servidores NTP
@@ -32,5 +34,8 @@ namespace Aponus_Web_API.Support
             return FechaHora;
 
         }
+        
     }
+
+   
 }

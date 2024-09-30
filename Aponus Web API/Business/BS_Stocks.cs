@@ -125,86 +125,52 @@ namespace Aponus_Web_API.Business
         }        
         internal IActionResult ProcesarDatosMovimiento(DTOMovimientosStock Movimiento)
         {
-
-            List<ActualizacionStock> ListaSuministros = new List<ActualizacionStock>();
             Stocks stocks = new Stocks();
-
-            foreach (DTOSuministrosMovimientosStock suministro in Movimiento.Suministros)
-            {
-                decimal valorNuevoOrigen = (suministro.ValorAnteriorOrigen != null ? Convert.ToDecimal(suministro.ValorAnteriorOrigen) : 0) - Convert.ToDecimal(suministro.Cantidad);
-                decimal valorNuevoDestino= (suministro.ValorAnteriorDestino!= null ? Convert.ToDecimal(suministro.ValorAnteriorOrigen) : 0) + Convert.ToDecimal(suministro.Cantidad);
-
-
-                if(valorNuevoOrigen < 0)
-                    return new ContentResult()
-                    {
-                        Content = $"La cantidad en del Suministro Id:{suministro.IdSuministro} Disponible en " +
-                                    $"{Movimiento.Origen} es inferior a la cantidad en {Movimiento.Destino}",
-                        ContentType = "Aplication/Json",
-                        StatusCode = 400,
-                    };
-
-                suministro.ValorNuevoOrigen = valorNuevoOrigen.ToString();
-                suministro.ValorNuevoDestino = valorNuevoDestino.ToString();
-
-                ListaSuministros.Add(new ActualizacionStock()
-                {
-                    Id = suministro.IdSuministro,
-                    Origen = Movimiento.Origen,
-                    Destino = Movimiento.Destino,
-                    Valor = Convert.ToDecimal(suministro.Cantidad)
-
-                });
-                
-            }
-
+            bool Rollback = false;
+            
             using (AponusContext AponusDbContext = new AponusContext())
             {
                 using (var transaccion = AponusDbContext.Database.BeginTransaction())
                 {
-                    bool Rollback = false;
-
-                    foreach (ActualizacionStock suministro in ListaSuministros)
+                    foreach (DTOSuministrosMovimientosStock suministro in Movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
                     {
-                        if (!stocks.IncrementarStockInsumo(AponusDbContext, suministro, suministro.Destino.ToUpper()))
+                        if (!stocks.ActualizarStockInsumo(AponusDbContext,new ActualizacionStock()
                         {
+                            Id = suministro.IdSuministro,
+                            Origen = Movimiento.Origen,
+                            Destino = Movimiento.Destino,
+                            Valor = Convert.ToDecimal(suministro.Cantidad)
+                        }))
                             Rollback = true;
-                        }
-
-                        if (!Rollback && !stocks.DescontarStockInsumo(AponusDbContext, suministro, suministro.Origen.ToUpper()))
-                        {
-                            Rollback = true;
-                        }
-
                     }
+
                     int? IdMovimiento = stocks.GuardarDatosMovimiento(AponusDbContext, new Stock_Movimientos
                     {
-                        CreadoUsuario = Movimiento.UsuarioCreacion,
+                        CreadoUsuario = Movimiento.UsuarioCreacion ?? "ERROR",
                         ModificadoUsuario = Movimiento.UsuarioModificacion,
                         FechaHoraCreado = Fechas.ObtenerFechaHora(),
-                        IdProveedorOrigen = (int)Movimiento.IdProveedorOrigen,
-                        IdProveedorDestino = (int)Movimiento.IdProveedorDestino,
+                        IdProveedorOrigen = Movimiento.IdProveedorOrigen ?? 0,
+                        IdProveedorDestino = Movimiento.IdProveedorDestino ?? 0,
+                        Tipo = Movimiento.Tipo,
+                        Destino = !string.IsNullOrEmpty(Movimiento.Destino) ? Movimiento.Destino.ToUpper() : "",
+                        Origen = !string.IsNullOrEmpty(Movimiento.Origen) ? Movimiento.Origen.ToUpper() : "",
                     });
 
                     if (IdMovimiento == null) Rollback = true;
 
-                    List<SuministrosMovimientosStock> Suministros = Movimiento.Suministros
+                    List<SuministrosMovimientosStock> Suministros = (Movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
                         .Select(x => new SuministrosMovimientosStock()
                         {
-                            IdMovimiento = (int)IdMovimiento,
+                            IdMovimiento = IdMovimiento ?? 0,
                             Cantidad = Convert.ToDecimal(x.Cantidad),
-                            IdSuministro = x.IdSuministro,
-                            ValorAnteriorOrigen = Convert.ToDecimal(x.ValorAnteriorOrigen),
-                            ValorAnteriorDestino = Convert.ToDecimal(x.ValorAnteriorDestino),
-                            ValorNuevoOrigen = Convert.ToDecimal(x.ValorNuevoOrigen),
-                            ValorNuevoDestino = Convert.ToDecimal(x.ValorNuevoDestino)
+                            IdSuministro = x.IdSuministro,                           
 
                         })
                         .ToList();
 
                     if (!stocks.GuardarSuministrosMovimiento(AponusDbContext, Suministros)) Rollback = true;
 
-                    //Obtener el Nombre del Proveedor de Destino
+                    //Obtener el Nombre del IdProveedor de Destino
                     IActionResult Proveedores =  BS_Entidades.Listar(Movimiento.IdProveedorDestino ?? 0, 0, 0);
                     DTOEntidades? proveedor = new DTOEntidades();
 
@@ -213,25 +179,22 @@ namespace Aponus_Web_API.Business
                         proveedor = ProveedoresList.FirstOrDefault(x => x.IdEntidad == Movimiento.IdProveedorDestino);
                         
                     }
+                    string? NombreCompletoProveedor = proveedor?.Apellido + "_" + proveedor?.Nombre;
+                    string? NombreClave = proveedor?.NombreClave; 
+                    //Obtener el Nombre del IdProveedor de Destino
 
-                    string? NombreCompletoProveedor = proveedor.Apellido + " " + proveedor.Nombre;
-                    string? NombreClave = proveedor.NombreClave; 
-                    //Obtener el Nombre del Proveedor de Destino
-
-                    if (Movimiento.Archivos != null && Movimiento.Archivos.Count>0)
+                    if (Movimiento.Archivos != null && Movimiento.Archivos.Count > 0)
                     {
                         List<ArchivosMovimientosStock> DatosArchivosMovimiento = new CloudinaryService().SubirArchivosMovimiento(Movimiento.Archivos,
                         string.IsNullOrEmpty(NombreClave) ? NombreCompletoProveedor : NombreClave);
 
                         if (DatosArchivosMovimiento.Count == 0) Rollback = true;
 
-
-                        DatosArchivosMovimiento.ForEach(x => x.IdMovimiento = (int)IdMovimiento);
+                        Movimiento.IdMovimiento = IdMovimiento;
+                        DatosArchivosMovimiento.ForEach(x => x.IdMovimiento = IdMovimiento ?? 0);
                         if (!stocks.GuardarDatosArchivosMovimiento(AponusDbContext, DatosArchivosMovimiento)) Rollback = true;
 
-                    }
-                    
-                    if (new MovimientosStock().RegistrarModificacion(AponusDbContext, Movimiento)) Rollback = true;
+                    }                    
 
                     if (Rollback)
                     {
@@ -272,6 +235,7 @@ namespace Aponus_Web_API.Business
             switch (Actualizacion.Operador)
             {
                 case "+":
+                    
 
                     JsonResult Componentes = new ComponentesProductos().ObtenerComponentesFormateados(new DTODetallesProducto()
                     {
@@ -294,7 +258,10 @@ namespace Aponus_Web_API.Business
                                 ActualizacionStock ComponenteActualizar = new ActualizacionStock()
                                 {
                                     Id = Componente.IdInsumo,
-                                    Valor = Componente.Longitud
+                                    Valor = Componente.Longitud,
+                                    Origen = "PINTURA",
+                                    Destino="PROCESO",
+
                                 };
 
                                 StockInsumos? StockComponente = new Stocks().BuscarInsumo(Componente.IdInsumo);
@@ -383,7 +350,7 @@ namespace Aponus_Web_API.Business
                                     //infomar que no se realizaron modificaciones por error en la db . con try catch
 
                                     var elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                    elemento.resultado = new Stocks().DescontarStockInsumo(null, ComponenteActualizar, "Proceso");
+                                    elemento.resultado = new Stocks().ActualizarStockInsumo(null, ComponenteActualizar);
 
                                 }
                                 else if (Componente.Peso != null)
@@ -395,7 +362,7 @@ namespace Aponus_Web_API.Business
                                     };
 
                                     var elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                    elemento.resultado = new Stocks().DescontarStockInsumo(null, ComponenteActualizar, "Proceso");
+                                    elemento.resultado = new Stocks().ActualizarStockInsumo(null, ComponenteActualizar);
 
 
                                 }
@@ -408,7 +375,7 @@ namespace Aponus_Web_API.Business
                                     };
 
                                     var elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                    elemento.resultado = new Stocks().DescontarStockInsumo(null, ComponenteActualizar, "Proceso");
+                                    elemento.resultado = new Stocks().ActualizarStockInsumo(null, ComponenteActualizar);
                                 }
                             }
                         }
@@ -431,7 +398,12 @@ namespace Aponus_Web_API.Business
                                     };
 
                                     var _elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                    _elemento.resultado = new Stocks().IncrementarStockInsumo(null,ComponenteActualizar, "Proceso");
+
+                                    //
+                                   
+
+                                    //Continuar aca
+                                    _elemento.resultado = new Stocks().ActualizarStockInsumo(null,ComponenteActualizar);
                                 }
                             }
 

@@ -109,7 +109,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
-            .HasColumnType("varchar(MAX)");
+            .HasColumnType("text");
 
             entity.Property(p => p.IdEstado)
             .HasColumnType("int")
@@ -315,7 +315,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(P => P.Descripcion)
             .HasColumnName("DESCRIPCION")
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("text");
         });
 
 
@@ -366,11 +366,11 @@ public partial class AponusContext : DbContext
             .UseIdentityColumn();
 
             entity.Property(p => p.CodigoMPago)
-            .HasColumnType("nvarchar(max)")
+            .HasColumnType("text")
             .HasColumnName("CODIGO_MPAGO");
 
             entity.Property(p => p.Descripcion)
-            .HasColumnType("nvarchar(max)")
+            .HasColumnType("text")
             .HasColumnName("DESCRIPCION");
 
             entity.Property(p => p.IdEstado)
@@ -450,7 +450,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(P => P.Descripcion)
             .HasColumnName("DESCRIPCION")
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("text");
 
         });
 
@@ -528,7 +528,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.NombreTipo)
             .HasColumnName("NOMBRE")
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("text");
 
             entity.HasMany(p => p.Entidades)
             .WithOne(p => p.TipoEntidad)
@@ -559,7 +559,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.NombreCategoria)
             .HasColumnName("NOMBRE_CATEGORIA")
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("text");
 
             entity.HasMany(p => p.Entidades)
             .WithOne(p => p.CategoriaEntidad)
@@ -590,11 +590,11 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("text");
 
             entity.HasMany(p => p.movimientosStock)
             .WithOne(p => p.estadoMovimiento)
-            .HasForeignKey(p => p.IdEstado);
+            .HasForeignKey(p => p.IdEstadoMovimiento);
         });
 
         modelBuilder.Entity<EstadosArchivosMovimientosStock>(entity =>
@@ -609,7 +609,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
-            .HasColumnType("nvarchar(max)");           
+            .HasColumnType("text");           
 
             entity.HasMany(p => p.ArchivosMovimientoStock)
             .WithOne(p => p.ArchivosMovimientosStockNavigation)
@@ -627,11 +627,12 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("text");
 
             entity.HasMany(p => p.SuministrosMovimientoStock)
             .WithOne(p => p.EstadosSuministrosMovimientosStockNavigation)
-            .HasForeignKey(p => p.IdEstado);
+            .HasForeignKey(p => p.IdEstado)
+            .HasConstraintName("FK_SUMINISTROS_MOVIMIENTOS_STOCK_ESTADOS_SUMINISTROS_MOVIMIENTO");
         });
 
         modelBuilder.Entity<EstadosProductosDescripciones>(entity =>
@@ -646,7 +647,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("text");
 
             entity.HasMany(p => p.ProductosDescripcions)
             .WithOne(p => p.IdEstadoNavigation)
@@ -663,7 +664,7 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_ESTADO");
 
             entity.Property(e => e.Descripcion)
-            .HasColumnType("nvarchar(max)")
+            .HasColumnType("text")
             .HasColumnName("DESCRIPCION");
 
             entity.HasMany(e => e.ProductosTipos)
@@ -680,7 +681,7 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_ESTADO");
 
             entity.Property(e => e.Descripcion)
-            .HasColumnType("nvarchar(max)")
+            .HasColumnType("text")
             .HasColumnName("DESCRIPCION");
 
             entity.HasMany(e => e.ComponentesDetalle)
@@ -697,7 +698,7 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_ESTADO");
 
             entity.Property(e => e.Descripcion)
-            .HasColumnType("nvarchar(max)")
+            .HasColumnType("text")
             .HasColumnName("DESCRIPCION");
 
             entity.HasMany(e => e.ProductosComponentes)
@@ -714,7 +715,7 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_ESTADO");
 
             entity.Property(e => e.Descripcion)
-            .HasColumnType("nvarchar(max)")
+            .HasColumnType("text")
             .HasColumnName("DESCRIPCION");
 
             entity.HasMany(e => e.Productos)
@@ -737,7 +738,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(e=>e.IdSuministro)
             .HasColumnName("ID_SUMINISTRO")
-            .HasColumnType("nvarchar(50)");
+            .HasColumnType("varchar(50)");
       
             entity.Property(e => e.ValorAnteriorOrigen)
            .HasColumnType("VALOR_ANTERIOR_ORIGEN")
@@ -889,11 +890,11 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.IdFraccionamiento)
             .HasColumnName("ID_FRACCIONAMIENTO")
-            .HasColumnType("nvarchar(50)");
+            .HasColumnType("varchar(50)");
             
             entity.Property(e => e.IdAlmacenamiento)
             .HasColumnName("ID_ALMACENAMIENTO")
-            .HasColumnType("nvarchar(50)");
+            .HasColumnType("varchar(50)");
 
 
         });
@@ -1093,11 +1094,11 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.CreadoUsuario)
             .HasColumnName("USUARIO_CREADO")
-            .HasColumnType("nvarchar(50)");
+            .HasColumnType("varchar(50)");
 
             entity.Property(e => e.ModificadoUsuario)
             .HasColumnName("USUARIO_MODIFICA")
-            .HasColumnType("nvarchar(50)");
+            .HasColumnType("varchar(50)");
 
             entity.Property(e => e.FechaHoraCreado)
             .HasColumnName("FECHA_HORA_CREADO")
@@ -1115,8 +1116,8 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_PROVEEDOR_DESTINO")
             .HasColumnType("int");
 
-            entity.Property(e => e.IdEstado)
-            .HasColumnName("ID_ESTADO")
+            entity.Property(e => e.IdEstadoMovimiento)
+            .HasColumnName("ID_ESTADO_MOVIMIENTO")
             .HasColumnType("int")
             .HasDefaultValueSql("1");
 
@@ -1134,11 +1135,17 @@ public partial class AponusContext : DbContext
 
             entity.HasOne(e => e.ProveedorOrigen)
             .WithMany(e => e.MovimientosOrigen)
-            .HasForeignKey(e=>e.IdProveedorOrigen);
+            .HasForeignKey(e => e.IdProveedorOrigen)
+            .HasPrincipalKey(PK => PK.IdEntidad)
+            .HasForeignKey(FK => FK.IdProveedorOrigen)
+            .HasConstraintName("FK_STOCK_MOVIMIENTOS_ENTIDADES_ID_PROVEEDOR_ORIGEN");
 
             entity.HasOne(e => e.ProveedorDestino)
             .WithMany(e => e.MovimientosDestino)
-            .HasForeignKey(e => e.IdProveedorDestino);
+            .HasForeignKey(e => e.IdProveedorDestino)
+            .HasPrincipalKey(PK => PK.IdEntidad)
+            .HasForeignKey(FK => FK.IdProveedorDestino)
+            .HasConstraintName("FK_STOCK_MOVIMIENTOS_ENTIDADES_ID_PROVEEDOR_DESTINO");
 
         });
 
@@ -1160,11 +1167,11 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.PathArchivo)
             .HasColumnName("PATH")
-            .HasColumnType("varchar(MAX)");
+            .HasColumnType("text");
 
             entity.Property(e => e.MimeType)
            .HasColumnName("MIME_TYPE")
-           .HasColumnType("varchar(MAX)");
+           .HasColumnType("text");
 
             entity.HasOne(e => e.StockMovimiento).WithMany()
             .HasForeignKey(e => e.IdMovimiento)
@@ -1191,11 +1198,11 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.Nombre)
             .HasColumnName("NOMBRE")
-            .HasColumnType("varchar(max)");
+            .HasColumnType("text");
 
             entity.Property(e => e.Apellido)
             .HasColumnName("APELLIDO")
-            .HasColumnType("varchar(max)");
+            .HasColumnType("text");
 
             entity.Property(e => e.Pais)
             .HasColumnName("PAIS");
@@ -1205,7 +1212,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.Localidad)
             .HasColumnName("LOCALIDAD")
-            .HasColumnType("varchar(MAX)");
+            .HasColumnType("text");
 
             entity.Property(e => e.Calle)
             .HasColumnName("CALLE");
@@ -1242,7 +1249,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(x => x.Barrio)
             .HasColumnName("BARRIO")
-            .HasColumnType("varchar(max)");
+            .HasColumnType("text");
 
             entity.Property(x => x.IdTipo)
             .HasColumnName("ID_TIPO")

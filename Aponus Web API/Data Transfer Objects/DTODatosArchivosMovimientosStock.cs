@@ -19,7 +19,10 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         [JsonProperty(PropertyName = "Extension", NullValueHandling = NullValueHandling.Ignore)]
         public string? Extension { get; set; }
 
+        [JsonProperty(PropertyName = "mensajeError", NullValueHandling = NullValueHandling.Ignore)]
+        public string? MensajeError { get; set; }
+
         [JsonProperty(PropertyName = "datosArchivo", NullValueHandling = NullValueHandling.Ignore)]
-        public Task<byte[]>? DatosArchivo { get; set; }
+        public byte[]? DatosArchivo { get; set; }
     }
 }

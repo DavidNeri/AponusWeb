@@ -34,10 +34,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List")]
-        public IActionResult Listar(FiltrosMovimientos? Filtros)
+        public async Task<IActionResult> Listar(FiltrosMovimientos? Filtros)
         {
-
-            return new BS_Movimientos().Listar(Filtros);
+            return await new BS_Movimientos().Listar(Filtros);
         }
 
         [HttpPost]
@@ -63,15 +62,17 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpPost]
-        [Route("Files/New")]
-        public IActionResult AgregarArchivo([FromForm] DTOMovimientosStock Archivos)
+        [Route("Files/New")]      
+
+        public async Task<IActionResult> AgregarArchivo([FromForm] DTOMovimientosStock Archivos)
         {
-            return new BS_Movimientos.Archivos().Agregar(Archivos);
+            return await new BS_Movimientos.Archivos().Agregar(Archivos);
         }
+
+        
 
         [HttpPut]
         [Route("Update")]
-
         public IActionResult ActualizarProveedor(DTOMovimientosStock Movimiento)
         {
             return new BS_Movimientos().Actualizar(Movimiento);

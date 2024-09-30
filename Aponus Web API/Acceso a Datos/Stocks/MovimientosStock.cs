@@ -2,12 +2,14 @@
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
-using Aponus_Web_API.Support.Movimientos;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
+using NuGet.DependencyResolver;
 using System.Data.Entity.Infrastructure;
 using System.Globalization;
 using System.Net;
+using DbUpdateException = Microsoft.EntityFrameworkCore.DbUpdateException;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 {
@@ -27,7 +29,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
         }
 
 
-        internal DTOMovimientosStock? ObtenerDatosMovimiento(int idMovimiento)
+        internal async Task<DTOMovimientosStock?> ObtenerDatosMovimiento(int idMovimiento)
         {
 
             CloudinaryService cloudinary = new CloudinaryService();
@@ -54,19 +56,23 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                         MimeType = x.MimeType,
                         Path = x.PathArchivo,
                         Extension = Path.GetExtension(x.PathArchivo),
-                        DatosArchivo = cloudinary.DescargarArchivo(x.PathArchivo)
-
                     }).ToList()
                 })
                 .FirstOrDefault();
 
+
             foreach (DTODatosArchivosMovimientosStock Archivo in Movimiento.DatosArchivos)
             {
-                if (Archivo.MimeType==null || Archivo.Path!=null)
+                if (Archivo != null)
                 {
-                    Archivo.MimeType = ObtenerMimeType(Archivo.Path); 
+                    var (archivo, error) = await cloudinary.DescargarArchivo(Archivo?.Path ?? "");
+                    Archivo.DatosArchivo = archivo;
+                    Archivo.MensajeError = error;
                 }
+
             }
+
+          
            
 
             return Movimiento;
@@ -98,181 +104,162 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
         }
 
-        public IActionResult Listar(FiltrosMovimientos? Filtros = null)
+        public async Task<List<DTOMovimientosStock>> Listar(FiltrosMovimientos? Filtros = null)
         {
-           
-            IQueryable<DTOMovimientosStock> ListadoMovimientos = AponusDBContext.Stock_Movimientos
+
+            if (Filtros != null)
+            {
+                IQueryable<DTOMovimientosStock> IQMovimientos = AponusDBContext.Stock_Movimientos
+                .Where(movimiento =>
+                    (!Filtros.Desde.HasValue || movimiento.FechaHoraCreado >= Filtros.Desde.Value) &&
+                    (!Filtros.Hasta.HasValue || movimiento.FechaHoraCreado <= Filtros.Hasta.Value) &&
+                    (string.IsNullOrEmpty(Filtros.Etapa) || (movimiento.Destino != null && movimiento.Destino.Contains(Filtros.Etapa))) &&
+                    (!Filtros.IdProveedor.HasValue || movimiento.IdProveedorDestino == Filtros.IdProveedor))
                 .Join(
                     AponusDBContext.Entidades,
-                    movimientos => movimientos.IdProveedorOrigen,
-                    proveedorOrigen => proveedorOrigen.IdEntidad,
-                    (movimiento, proveedorOrigen) => new { Movimiento = movimiento, ProveedorOrigen = proveedorOrigen }
-                )
-                .Join(
-                    AponusDBContext.Entidades,
-                    movimiento_ProveedorOrigen => movimiento_ProveedorOrigen.Movimiento.IdProveedorDestino,
+                    movimientos => movimientos.IdProveedorDestino,
                     proveedorDestino => proveedorDestino.IdEntidad,
-                    (movimiento_ProveedorOrigen, proveedorDestino) => new { Movimiento_ProveedorOrigen = movimiento_ProveedorOrigen, ProveedorDestino = proveedorDestino }
+                    (movimiento, proveedor) => new { Movimiento = movimiento, Proveedor = proveedor }
                 )
                 .Join(
                     AponusDBContext.SuministrosMovimientoStock,
-                    Movimientos_Provedores => Movimientos_Provedores.Movimiento_ProveedorOrigen.Movimiento.IdMovimiento,
+                    Movimiento_Provedor => Movimiento_Provedor.Movimiento.IdMovimiento,
                     SuministrosMovimientos => SuministrosMovimientos.IdMovimiento,
-                    (movimientos_Proveedores, SuministrosMovimientos) => new { movimientos_proveedores = movimientos_Proveedores, suministrosMovimientos = SuministrosMovimientos }
-
+                    (Movimientos_Proveedor, SuministrosMovimientos) => new { movimiento_proveedor = Movimientos_Proveedor, suministrosMovimientos = SuministrosMovimientos }
 
                 )
                 .Join(
                     AponusDBContext.ComponentesDetalles,
-                    Movimientos_Proveedores_Suministros=>Movimientos_Proveedores_Suministros.suministrosMovimientos.IdSuministro,
-                    SuministrosDetalle=> SuministrosDetalle.IdInsumo,
+                    Movimientos_Proveedores_Suministros => Movimientos_Proveedores_Suministros.suministrosMovimientos.IdSuministro,
+                    SuministrosDetalle => SuministrosDetalle.IdInsumo,
                     (movimientos_Proveedores_Suministros, suministrosDetalle) => new { Movimientos_Proveedores_Suministros = movimientos_Proveedores_Suministros, SuministrosDetalle = suministrosDetalle })
 
                 .Join(
                     AponusDBContext.EstadoMovimientosStock,
-                    Mov_Prov_Sum_Det=> Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdEstado,
-                    Estados=>Estados.IdEstadoMovimiento,
-                    (Mov_Prov_Sum_Det,Estados)=> new { Mov_Prov_Sum_Det, Estados })
+                    Mov_Prov_Sum_Det => Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.IdEstadoMovimiento,
+                    Estados => Estados.IdEstadoMovimiento,
+                    (Mov_Prov_Sum_Det, Estados) => new { Mov_Prov_Sum_Det, Estados })
 
-                .Where(x=>x.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdEstado!=0)
+                .Where(x => x.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.IdEstadoMovimiento != 0)
                 .Select(result => new DTOMovimientosStock()
                 {
-                    IdMovimiento = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdMovimiento,
-                    FechaHoraCreado = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.FechaHoraCreado,
-                    UsuarioCreacion = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.CreadoUsuario,
-                    Origen = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.Origen,
-                    Destino= result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.Destino,                    
+                    IdMovimiento = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.IdMovimiento,
+                    FechaHoraCreado = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.FechaHoraCreado,
+                    UsuarioCreacion = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.CreadoUsuario,
+                    Origen = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.Origen,
+                    Destino = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.Destino,
                     Estado = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(result.Estados.Descripcion.ToLower()),
 
                     Suministros = AponusDBContext.SuministrosMovimientoStock
-                    .Where(s => s.IdMovimiento == result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.Movimiento.IdMovimiento && Convert.ToInt32(s.IdEstado)==Convert.ToInt32("0x01",16))
+                    .Where(s => s.IdMovimiento == result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.IdMovimiento && s.IdEstado != 0)
                     .Select(s => new DTOSuministrosMovimientosStock()
                     {
                         IdMovimiento = s.IdMovimiento,
-                        Cantidad = !string.IsNullOrEmpty(s.Cantidad.ToString()) ?
-                            s.Cantidad.ToString() + (result.Mov_Prov_Sum_Det.SuministrosDetalle.IdFraccionamiento ?? result.Mov_Prov_Sum_Det.SuministrosDetalle.IdAlmacenamiento) : 
-                            0.00.ToString() + (result.Mov_Prov_Sum_Det.SuministrosDetalle.IdFraccionamiento ?? result.Mov_Prov_Sum_Det.SuministrosDetalle.IdAlmacenamiento),
-
                         IdSuministro = s.IdSuministro,
-                        ValorAnteriorDestino = !string.IsNullOrEmpty(s.ValorAnteriorDestino.ToString()) ? s.ValorAnteriorDestino.ToString() : 0.00.ToString(),
-                        ValorAnteriorOrigen = !string.IsNullOrEmpty(s.ValorAnteriorOrigen.ToString()) ? s.ValorAnteriorOrigen.ToString() : 0.00.ToString(),
-                        ValorNuevoDestino = !string.IsNullOrEmpty(s.ValorNuevoDestino.ToString()) ? s.ValorNuevoDestino.ToString() : 0.00.ToString(),
-                        ValorNuevoOrigen = !string.IsNullOrEmpty(s.ValorNuevoOrigen.ToString()) ? s.ValorNuevoOrigen.ToString() : 0.00.ToString(),
-
+                        Cantidad = !string.IsNullOrEmpty(s.Cantidad.ToString()) ?
+                            s.Cantidad.ToString() + (result.Mov_Prov_Sum_Det.SuministrosDetalle.IdFraccionamiento ?? result.Mov_Prov_Sum_Det.SuministrosDetalle.IdAlmacenamiento) :
+                            0.00.ToString() + (result.Mov_Prov_Sum_Det.SuministrosDetalle.IdFraccionamiento ?? result.Mov_Prov_Sum_Det.SuministrosDetalle.IdAlmacenamiento),
                     })
                     .ToList(),
 
-                    ProveedorOrigen = new DTOEntidades()
+                    Proveedor = new DTOEntidades()
                     {
-                        IdEntidad = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.IdEntidad,
-                        Nombre = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Nombre,
-                        Apellido= result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Apellido,
-                        NombreClave = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.NombreClave,
-                        Pais = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Pais,
-                        Localidad = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Localidad,
-                        Calle = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Calle,
-                        Altura = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Altura,
-                        CodigoPostal = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.CodigoPostal,
-                        Telefono1 = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Telefono1,
-                        Telefono2 = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Telefono2,
-                        Telefono3 = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Telefono3,
-                        Email = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.Email,
-                        IdFiscal = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.IdFiscal,
-                        FechaRegistro = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.Movimiento_ProveedorOrigen.ProveedorOrigen.FechaRegistro,
-
-                    },
-
-                    ProveedorDestino = new DTOEntidades()
-                    {
-                        IdEntidad = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.IdEntidad,
-                        Nombre = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Nombre,
-                        Apellido = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Apellido,
-                        NombreClave = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.NombreClave,
-                        Pais = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Pais,
-                        Localidad = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Localidad,
-                        Calle = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Calle,
-                        Altura = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Altura,
-                        CodigoPostal = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.CodigoPostal,
-                        Telefono1 = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Telefono1,
-                        Telefono2 = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Telefono2,
-                        Telefono3 = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Telefono3,
-                        Email = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.Email,
-                        IdFiscal = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.IdFiscal,
-                        FechaRegistro = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimientos_proveedores.ProveedorDestino.FechaRegistro,
-
+                        IdEntidad = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Proveedor.IdEntidad,
+                        Nombre = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Proveedor.Nombre,
+                        Apellido = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Proveedor.Apellido,
+                        NombreClave = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Proveedor.NombreClave,
                     }
+                });
+                return await IQMovimientos.ToListAsync();
+            }
+            else
+            {
+                IQueryable<DTOMovimientosStock> IQMovimientos = AponusDBContext.Stock_Movimientos                
+                .Join(
+                    AponusDBContext.Entidades,
+                    movimientos => movimientos.IdProveedorDestino,
+                    proveedorDestino => proveedorDestino.IdEntidad,
+                    (movimiento, proveedor) => new { Movimiento = movimiento, Proveedor = proveedor }
+                )
+                .Join(
+                    AponusDBContext.SuministrosMovimientoStock,
+                    Movimiento_Provedor => Movimiento_Provedor.Movimiento.IdMovimiento,
+                    SuministrosMovimientos => SuministrosMovimientos.IdMovimiento,
+                    (Movimientos_Proveedor, SuministrosMovimientos) => new { movimiento_proveedor = Movimientos_Proveedor, suministrosMovimientos = SuministrosMovimientos }
 
+                )
+                .Join(
+                    AponusDBContext.ComponentesDetalles,
+                    Movimientos_Proveedores_Suministros => Movimientos_Proveedores_Suministros.suministrosMovimientos.IdSuministro,
+                    SuministrosDetalle => SuministrosDetalle.IdInsumo,
+                    (movimientos_Proveedores_Suministros, suministrosDetalle) => new { Movimientos_Proveedores_Suministros = movimientos_Proveedores_Suministros, SuministrosDetalle = suministrosDetalle })
+
+                .Join(
+                    AponusDBContext.EstadoMovimientosStock,
+                    Mov_Prov_Sum_Det => Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.IdEstadoMovimiento,
+                    Estados => Estados.IdEstadoMovimiento,
+                    (Mov_Prov_Sum_Det, Estados) => new { Mov_Prov_Sum_Det, Estados })
+
+                .Where(x => x.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.IdEstadoMovimiento != 0)
+                .Select(result => new DTOMovimientosStock()
+                {
+                    IdMovimiento = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.IdMovimiento,
+                    FechaHoraCreado = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.FechaHoraCreado,
+                    UsuarioCreacion = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.CreadoUsuario,
+                    Origen = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.Origen,
+                    Destino = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.Destino,
+                    Estado = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(result.Estados.Descripcion.ToLower()),
+
+                    Suministros = AponusDBContext.SuministrosMovimientoStock
+                    .Where(s => s.IdMovimiento == result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.IdMovimiento && s.IdEstado != 0)
+                    .Select(s => new DTOSuministrosMovimientosStock()
+                    {
+                        IdMovimiento = s.IdMovimiento,
+                        IdSuministro = s.IdSuministro,
+                        Cantidad = !string.IsNullOrEmpty(s.Cantidad.ToString()) ?
+                            s.Cantidad.ToString() + (result.Mov_Prov_Sum_Det.SuministrosDetalle.IdFraccionamiento ?? result.Mov_Prov_Sum_Det.SuministrosDetalle.IdAlmacenamiento) :
+                            0.00.ToString() + (result.Mov_Prov_Sum_Det.SuministrosDetalle.IdFraccionamiento ?? result.Mov_Prov_Sum_Det.SuministrosDetalle.IdAlmacenamiento),
+                    })
+                    .ToList(),
+
+                    Proveedor = new DTOEntidades()
+                    {
+                        IdEntidad = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Proveedor.IdEntidad,
+                        Nombre = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Proveedor.Nombre,
+                        Apellido = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Proveedor.Apellido,
+                        NombreClave = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Proveedor.NombreClave,
+                    }
                 });
 
-
-            if (Filtros != null)
-            {
-                var CondicionWhere = new FiltrosMovimientos().ConstruirCondicionWhere(Filtros);
-                var Listado = ListadoMovimientos.Where(CondicionWhere);
-                return new JsonResult(Listado);
+                return await IQMovimientos.ToListAsync();
             }
-
-
-            List<string>SuministrosId=ListadoMovimientos
-                .SelectMany(x=>x.Suministros.Select(x=>x.IdSuministro))
-                .ToList();
-
-            List<(string IdSuministro,
-               string NombreFormateado,
-               string? Unidad)> SuministrosFormateados = new ObtenerInsumos().ObtenerDetalleSuministro(SuministrosId);
-
-
-            foreach (var movimiento in ListadoMovimientos)
-            {
-                foreach (var suministro in movimiento.Suministros)
-                {
-                        (string IdSuministro,
-                         string NombreFormateado,
-                         string? Unidad)
-                        SumFormat = SuministrosFormateados.FirstOrDefault(x=>x.IdSuministro==suministro.IdSuministro);
-
-                    suministro.NombreSuministro = SumFormat.NombreFormateado;
-                    suministro.Cantidad = suministro.Cantidad + " " + SumFormat.Unidad;
-                    suministro.ValorNuevoDestino = suministro.ValorNuevoDestino + " " + SumFormat.Unidad;
-                    suministro.ValorNuevoOrigen = suministro.ValorNuevoOrigen + " " + SumFormat.Unidad;
-                    suministro.ValorAnteriorOrigen = suministro.ValorAnteriorOrigen + "" + SumFormat.Unidad;
-                    suministro.ValorAnteriorDestino = suministro.ValorAnteriorDestino + " " + SumFormat.Unidad;
-                }
-            }
-
-          
-
-            
-            var MovimientosIds = ListadoMovimientos.Select(m=>m.IdMovimiento).Distinct().ToList();
-            CloudinaryService cloudinary = new CloudinaryService();
-           
-            List<DTODatosArchivosMovimientosStock> InfoArchivosMovimientos = AponusDBContext.ArchivosStock
-                .Where(Id=>MovimientosIds.Contains(Id.IdMovimiento))
-                .Select(Reg=> new DTODatosArchivosMovimientosStock()
-                {
-                    IdMovimiento= Reg.IdMovimiento,
-                    NombreArchivo = Reg.HashArchivo,
-                    Path = Reg.PathArchivo,
-                    Extension = Path.GetExtension(Reg.PathArchivo),
-                    MimeType = ObtenerMimeType(Reg.PathArchivo),
-                    DatosArchivo = cloudinary.DescargarArchivo(Reg.PathArchivo),
-                    
-                })
-                .ToList();
-
-            foreach (DTOMovimientosStock Movimiento in ListadoMovimientos)
-            {
-                Movimiento.DatosArchivos=InfoArchivosMovimientos
-                    .Where(x=>x.IdMovimiento==Movimiento.IdMovimiento)
-                    .ToList();
-                
-            }
-
-
-            return new JsonResult(ListadoMovimientos);
 
         }
 
+        internal async Task<List<DTODatosArchivosMovimientosStock>> InfoArchivos(List<int?> ListaMovimientos)
+        {
+            try
+            {
+                List<DTODatosArchivosMovimientosStock> InfoArchivosMovimientos = await AponusDBContext.ArchivosStock
+                           .Where(Id => ListaMovimientos.Contains(Id.IdMovimiento))
+                           .Select(Reg => new DTODatosArchivosMovimientosStock()
+                           {
+                               IdMovimiento = Reg.IdMovimiento,
+                               NombreArchivo = Reg.HashArchivo,
+                               Path = Reg.PathArchivo,
+                               Extension = Path.GetExtension(Reg.PathArchivo),
+                               MimeType = ObtenerMimeType(Reg.PathArchivo),
+                           }).ToListAsync();
+
+                return InfoArchivosMovimientos;
+            }
+            catch (Exception)
+            {
+
+                return new List<DTODatosArchivosMovimientosStock>();
+            }
+            
+        }
         private static byte[] DescargarArchivoMovimiento_Local(string url)
         {
             WebClient webClient = new WebClient();
@@ -318,14 +305,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             try
             {
                 if (AponusDbContext == null)
-                {
                     AponusDbContext = new AponusContext();
-                }
+
 
                
                 DateTime FechaHora = Fechas.ObtenerFechaHora();
                 var Movimiento = AponusDBContext.Stock_Movimientos.Where(x=>x.IdMovimiento==Mov.IdMovimiento).FirstOrDefault();
-                Movimiento.FechaHoraUltimaModificacion=FechaHora;
+                Movimiento.FechaHoraUltimaModificacion = FechaHora;
                 Movimiento.ModificadoUsuario=Mov.UsuarioModificacion;                             
                   
                 
@@ -350,7 +336,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 var Movimiento = AponusDBContext.Stock_Movimientos.FirstOrDefault(x => x.IdMovimiento == idMovimiento);
                 if (Movimiento!=null)
                 {
-                    Movimiento.IdEstado = 0;
+                    Movimiento.IdEstadoMovimiento = 0;
                     AponusDBContext.Entry(Movimiento).CurrentValues.SetValues(Movimiento);
                     return true;
                 }
@@ -380,7 +366,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     Movimiento.Origen = actualizacionMovimiento.Origen ?? Movimiento.Origen;
                     Movimiento.Destino = actualizacionMovimiento.Destino ?? Movimiento.Destino;
                     Movimiento.Tipo = actualizacionMovimiento.Tipo ?? Movimiento.Tipo;
-                    Movimiento.IdEstado = actualizacionMovimiento.IdEstado ?? Movimiento.IdEstado;
+                    Movimiento.IdEstadoMovimiento = actualizacionMovimiento.IdEstado ?? Movimiento.IdEstadoMovimiento;
 
                     AponusDBContext.Entry(Movimiento).CurrentValues.SetValues(Movimiento);
                     AponusDBContext.SaveChanges();

@@ -18,7 +18,7 @@ namespace Aponus_Web_API.Models
         public DateTime FechaHoraCreado { get; set; }
 
         [Column("USUARIO_MODIFICA")]
-        public string ModificadoUsuario { get; set; }
+        public string? ModificadoUsuario { get; set; }
 
         [Column("FECHA_HORA_ULTIMA_MODIFICACION")]
         public DateTime? FechaHoraUltimaModificacion { get; set; }
@@ -37,7 +37,9 @@ namespace Aponus_Web_API.Models
 
         [Column("TIPO")]
         public string? Tipo { get; set; }
-        public int IdEstado { get; set; } = 1;
+        
+        [Column("ID_ESTADO_MOVIMIENTO")]
+        public int IdEstadoMovimiento { get; set; } = 1;
 
         public virtual Entidades? ProveedorOrigen { get; set; }
         public virtual Entidades? ProveedorDestino { get; set; }

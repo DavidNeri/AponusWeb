@@ -15,7 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    options.SerializerSettings.DateFormatString = "dd/MM/yyyy HH:mm:ss";
+
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -31,15 +36,14 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 //Puerto y el host
 
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    // Configurar Kestrel para escuchar en todas las interfaces
-    serverOptions.ListenAnyIP(Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? "5000"));
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    // Configurar Kestrel para escuchar en todas las interfaces
+//    serverOptions.ListenAnyIP(Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? "5000"));
 
-});
+//});
 
 var ConnectionString = builder.Configuration.GetConnectionString("AponusConnectionString");
 builder.Services.AddDbContext<AponusContext>(options => options.UseNpgsql(ConnectionString).EnableSensitiveDataLogging(false));
