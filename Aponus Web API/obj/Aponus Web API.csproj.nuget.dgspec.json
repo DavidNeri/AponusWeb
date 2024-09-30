@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Aponus SA\\Aponus Web Api\\Aponus Web API.csproj": {}
+    "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj": {}
   },
   "projects": {
-    "D:\\Aponus SA\\Aponus Web Api\\Aponus Web API.csproj": {
+    "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Aponus SA\\Aponus Web Api\\Aponus Web API.csproj",
+        "projectUniqueName": "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj",
         "projectName": "Aponus Web API",
-        "projectPath": "D:\\Aponus SA\\Aponus Web Api\\Aponus Web API.csproj",
+        "projectPath": "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj",
         "packagesPath": "C:\\Users\\David\\.nuget\\packages\\",
-        "outputPath": "D:\\Aponus SA\\Aponus Web Api\\obj\\",
+        "outputPath": "D:\\Aponus SA\\Aponus Web API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

@@ -1170,8 +1170,8 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
-    "Method": "NuevoGuardarProducto",
-    "RelativePath": "Aponus/Products/NewSaveProduct",
+    "Method": "Guardar",
+    "RelativePath": "Aponus/Products/Save",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -1275,6 +1275,22 @@
       {
         "Name": "Estados",
         "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEstadosVentas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.StocksController",
+    "Method": "Incrementar",
+    "RelativePath": "Aponus/Stocks/Products/Increment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Producto",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOStockUpdate",
         "IsRequired": true
       }
     ],

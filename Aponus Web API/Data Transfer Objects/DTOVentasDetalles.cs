@@ -22,6 +22,6 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public decimal SubTotal => Precio * Cantidad;
 
         [JsonProperty(PropertyName = "datosProducto", NullValueHandling = NullValueHandling.Ignore)]
-        public DatosProducto? datosProducto { get; set; }
+        public DTODatosProducto? datosProducto { get; set; }
     }
 }

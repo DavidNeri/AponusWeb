@@ -51,7 +51,7 @@ namespace Aponus_Web_API.Business
 
         }
 
-        internal IActionResult NuevoGuardarProducto(DTODetallesProducto ActualizarProducto)
+        internal IActionResult ProcesarDatos(DTODetallesProducto ActualizarProducto)
         {
             Productos OP = new Productos();
           

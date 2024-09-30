@@ -29,13 +29,13 @@ namespace Aponus_Web_API.Business
                         Insumos.Add(Insumo);
                 }
 
-                //Si encontré, en stock, todos los suministros
+                //Si encontré, en stock, todos los Suministros
                 if (DTOMovimiento.Suministros?.Count == Insumos.Count)
                     return new BS_Stocks().ProcesarDatosMovimiento(DTOMovimiento);
                 else
                     return new ContentResult()
                     {
-                        Content = "No se encontraron uno o mas suministros\n No se realizaron modificaciones",
+                        Content = "No se encontraron uno o mas Suministros\n No se realizaron modificaciones",
                         ContentType = "application/json",
                         StatusCode = 400,
                     };
@@ -236,7 +236,7 @@ namespace Aponus_Web_API.Business
 
                                 DatosArchivos.ForEach(x => x.IdMovimiento = ArchivosMovimiento.IdMovimiento ?? 0) ;
 
-                                //Guardar info Cloudiary
+                                //ProcesarDatos info Cloudiary
                                 using (var transacccion = AponusDBContext.Database.BeginTransaction())
                                 {
                                     bool RollBack = false;

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Data_Transfer_objects
 {
-    public class ActualizacionStock
+    public class DTOStockUpdate
     {
         [JsonProperty(PropertyName = "id", NullValueHandling = NullValueHandling.Ignore)]
         public string? Id { get; set; }
@@ -23,8 +23,8 @@ namespace Aponus_Web_API.Data_Transfer_objects
         [JsonProperty(PropertyName = "operador", NullValueHandling = NullValueHandling.Ignore)]
         public string? Operador { get; set; }
 
-        [JsonProperty(PropertyName = "valor", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? Valor { get; set; }
+        [JsonProperty(PropertyName = "cantidad", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? Cantidad { get; set; }
 
         [JsonProperty(PropertyName = "idJuntaPerfil", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdJuntaPerfil { get; set; }
@@ -44,8 +44,8 @@ namespace Aponus_Web_API.Data_Transfer_objects
         [JsonProperty(PropertyName = "idEntidad", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdEntidad{ get; set; }
 
-        [JsonProperty(PropertyName = "suministros", NullValueHandling = NullValueHandling.Ignore)]
-        public List <DTOSuministrosMovimientosStock>? suministros { get; set; }
+        [JsonProperty(PropertyName = "Suministros", NullValueHandling = NullValueHandling.Ignore)]
+        public List <DTOSuministrosMovimientosStock>? Suministros { get; set; }
 
 
     }

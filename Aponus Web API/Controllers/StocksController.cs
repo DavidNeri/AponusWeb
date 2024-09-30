@@ -46,5 +46,14 @@ namespace Aponus_Web_API.Controllers
         {
             return await BS_Stocks.Productos.Actualizar(StockProducto);
         }
+
+        [HttpPost]
+        [Route("Products/Increment")]
+        public async Task<IActionResult> Incrementar(DTOStockUpdate Producto)
+        {
+            return await BS_Stocks.Productos.Incrementar(Producto);
+        
+        }
+
     }
 }

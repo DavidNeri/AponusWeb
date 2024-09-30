@@ -74,9 +74,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
         }
         
-
-
-            internal bool IncrementarStockProducto(ActualizacionStock Actualizacion)
+        internal bool IncrementarStockProducto(DTOStockUpdate Actualizacion)
         {
             bool resultado = true;
             try
@@ -86,7 +84,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,
                 AponusDBContext.Productos.
                 Where(x => x.IdProducto == Actualizacion.IdExistencia).
-                Select(x => x.Cantidad).SingleOrDefault() + Actualizacion.Valor));
+                Select(x => x.Cantidad).SingleOrDefault() + Actualizacion.Cantidad));
             }
             catch (Exception)
             {
@@ -94,9 +92,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 resultado=false;
             }
             return resultado;
+        
         }
 
-        internal bool DisminuirStockProducto(ActualizacionStock Actualizacion, AponusContext? AponusDBContext = null)
+        internal bool DisminuirStockProducto(DTOStockUpdate Actualizacion, AponusContext? AponusDBContext = null)
         {
             if (AponusDBContext == null)
                 AponusDBContext = new AponusContext();
@@ -109,36 +108,17 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad,
                AponusDBContext.Productos.
                Where(x => x.IdProducto == Actualizacion.IdExistencia).
-               Select(x => x.Cantidad).SingleOrDefault() - Actualizacion.Valor));
+               Select(x => x.Cantidad).SingleOrDefault() - Actualizacion.Cantidad));
             }
             catch (Exception)
             {
-
                 resultado = false;
             }
             finally
             {
             }
             return resultado;
-           
-        }
 
-        internal bool SetCantidadProducto(ActualizacionStock Actualizacion)
-        {
-            bool resultado = true;
-            try
-            {
-                AponusDBContext.Productos
-               .Where(x => x.IdProducto == Actualizacion.Id)
-               .ExecuteUpdate(x => x.SetProperty(x => x.Cantidad, Actualizacion.Valor));
-            }
-            catch (Exception)
-            {
-
-                resultado=false;
-            }
-            return  resultado;
-           
         }
 
 
@@ -233,14 +213,14 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
 
         }       
-        internal bool ActualizarStockInsumo(AponusContext? AponusDBContext, ActualizacionStock Actualizacion)//, string Prop)
+        internal bool ActualizarStockInsumo(AponusContext? AponusDBContext, DTOStockUpdate Actualizacion)//, string Prop)
         {
             if (AponusDBContext == null)
                 AponusDBContext = new AponusContext();
 
             string Origen = Actualizacion.Origen?.ToUpper() ?? "";
             string Destino = Actualizacion.Destino?.ToUpper() ?? "";
-            decimal Cantidad = Actualizacion.Valor ?? 0;
+            decimal Cantidad = Actualizacion.Cantidad ?? 0;
 
             StockInsumos? Insumo = AponusDBContext.stockInsumos.FirstOrDefault(x => x.IdInsumo.Equals(Actualizacion.Id));
             if (Insumo != null)
@@ -311,7 +291,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
         }
                
             
-        internal bool NewSetearStockInsumo(ActualizacionStock Actualizacion)
+        internal bool NewSetearStockInsumo(DTOStockUpdate Actualizacion)
         {
             PropertyInfo? Propiedad = typeof(StockInsumos).GetProperties().FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino));
             bool resultado = true;
@@ -327,11 +307,11 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                     if (Propiedad != null)
                     {
-                        Propiedad.SetValue(elemento, Actualizacion.Valor);
+                        Propiedad.SetValue(elemento, Actualizacion.Cantidad);
                     }
                 }
 
-                AponusDBContext.SaveChanges(); // Guardar los cambios en la base de datos
+                AponusDBContext.SaveChanges(); // ProcesarDatos los cambios en la base de datos
                 return resultado;
             }
             catch (Exception)

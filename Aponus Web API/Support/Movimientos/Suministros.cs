@@ -22,7 +22,7 @@ namespace Aponus_Web_API.Support.Movimientos
 
             }
 
-            //Si encontré, en stock, todos los suministros
+            //Si encontré, en stock, todos los Suministros
             if (StockSuministros.Count > 0 && Suministros.Count == StockSuministros.Count)
             {
                 SuministrosDbContext = new List<SuministrosMovimientosStock>();

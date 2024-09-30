@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Gpr1Tl1fthk=",
+  "dgSpecHash": "2jORcU07bL0=",
   "success": true,
-  "projectFilePath": "D:\\Aponus SA\\Aponus Web Api\\Aponus Web API.csproj",
+  "projectFilePath": "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\David\\.nuget\\packages\\annytab.stemmer\\1.2.4\\annytab.stemmer.1.2.4.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\castle.core\\5.1.0\\castle.core.5.1.0.nupkg.sha512",

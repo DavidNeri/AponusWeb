@@ -83,12 +83,12 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpPost]
-        [Route("NewSaveProduct")]
-        public IActionResult NuevoGuardarProducto(DTODetallesProducto Producto)
+        [Route("Save")]
+        public IActionResult Guardar(DTODetallesProducto Producto)
         {
             try
             {
-                return new BS_Productos().NuevoGuardarProducto(Producto);
+                return new BS_Productos().ProcesarDatos(Producto);
             }
             catch (DbUpdateException e)
             {
@@ -99,7 +99,7 @@ namespace Aponus_Web_API.Controllers
 
 
         [HttpPost]
-        [Route("UpdateComponents")]
+        [Route("Components/Save")]
         public IActionResult ActualizarComponentes(List<DTOComponentesProducto> Producto)
         {
             try

@@ -40,7 +40,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         [JsonProperty(PropertyName = "proveedorOrigen", NullValueHandling = NullValueHandling.Ignore)]
         public DTOEntidades? ProveedorOrigen { get; set; }
 
-        [JsonProperty(PropertyName = "suministros", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "Suministros", NullValueHandling = NullValueHandling.Ignore)]
         public List<DTOSuministrosMovimientosStock>? Suministros { get; set; }
 
         [JsonProperty(PropertyName = "infoArchivos", NullValueHandling = NullValueHandling.Ignore)]
