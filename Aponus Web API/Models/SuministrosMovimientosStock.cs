@@ -10,24 +10,12 @@ namespace Aponus_Web_API.Models
         public int IdMovimiento { get; set; }
 
         [Key("ID_SUMINISTRO")]
-        public string IdSuministro { get; set; } 
-
-        [Column("VALOR_ANTERIOR_ORIGEN")]
-        public decimal? ValorAnteriorOrigen { get; set; }
-
-        [Column("VALOR_ANTERIOR_DESTINO")]
-        public decimal? ValorAnteriorDestino{ get; set; }
-
-        [Column("VALOR_NUEVO_ORIGEN")]
-        public decimal? ValorNuevoOrigen{ get; set; }
-
-        [Column("VALOR_NUEVO_DESTINO")]
-        public decimal? ValorNuevoDestino{ get; set; }
+        public string IdSuministro { get; set; }        
 
         [Column("CANTIDAD")]
         public decimal Cantidad{ get; set; }
 
-        [Column("ID_ESTADP")]
+        [Column("ID_ESTADO")]
         public int IdEstado { get; set; }
 
         public virtual EstadosSuministrosMovimientosStock? EstadosSuministrosMovimientosStockNavigation { get; set; } = new();

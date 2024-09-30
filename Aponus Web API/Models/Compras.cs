@@ -10,7 +10,7 @@ namespace Aponus_Web_API.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdCompra { get; set; }
 
-        [Column("ID_PROVEEDOR")]
+        //[ForeignKey("ID_PROVEEDOR")]
         public int IdProveedor { get; set; }
 
         [Column("FECHA_HORA")]
@@ -29,9 +29,7 @@ namespace Aponus_Web_API.Models
         public decimal? SaldoCancelado { get; set; }
 
         [NotMapped]
-        public decimal SaldoPendiente => SaldoTotal - (SaldoCancelado ?? 0);       
-
-
+        public decimal SaldoPendiente => SaldoTotal - (SaldoCancelado ?? 0); 
         public virtual Usuarios Usuario { get; set; }  = new();
         public virtual EstadosCompras Estado { get; set; } = new();
         public virtual Entidades Proveedor { get; set; } = new ();

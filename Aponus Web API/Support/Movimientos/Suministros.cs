@@ -39,33 +39,7 @@ namespace Aponus_Web_API.Support.Movimientos
                     .Select(x => new SuministrosMovimientosStock()
                     {
                         IdSuministro = x.SuministrosMovimiento.IdSuministro,
-                        Cantidad = Convert.ToDecimal(x.SuministrosMovimiento.Cantidad),
-
-                        ValorAnteriorOrigen = Convert.ToDecimal(x.StockSuministros
-                            .GetType()
-                            .GetProperties()
-                            .FirstOrDefault(p => p.Name.ToUpper() == Origen.ToUpper())
-                            .GetValue(x.StockSuministros) ?? 0),
-
-                        ValorAnteriorDestino = Convert.ToDecimal(x.StockSuministros
-                            .GetType()
-                            .GetProperties()
-                            .FirstOrDefault(p => p.Name.ToUpper()==Destino.ToUpper())
-                            .GetValue(x.StockSuministros) ?? 0),
-
-                        ValorNuevoOrigen = Convert.ToDecimal(x.StockSuministros
-                            .GetType()
-                            .GetProperties()
-                            .FirstOrDefault(p => p.Name.ToUpper() == Origen.ToUpper())
-                            .GetValue(x.StockSuministros) ?? 0) -
-                            Convert.ToDecimal(x.SuministrosMovimiento.Cantidad),
-
-                        ValorNuevoDestino = Convert.ToDecimal(x.StockSuministros
-                            .GetType()
-                            .GetProperties()
-                            .FirstOrDefault(p => p.Name.ToUpper() == Destino.ToUpper())
-                            .GetValue(x.StockSuministros) ?? 0) -
-                            Convert.ToDecimal(x.SuministrosMovimiento.Cantidad)
+                        Cantidad = Convert.ToDecimal(x.SuministrosMovimiento.Cantidad)                        
 
                     })
                     .ToList();

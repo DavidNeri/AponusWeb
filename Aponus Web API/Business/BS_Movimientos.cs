@@ -135,20 +135,9 @@ namespace Aponus_Web_API.Business
             List<SuministrosMovimientosStock>? suministros = Suministros.MapeoSuministrosDB(Movimiento.Suministros, Movimiento.Origen, Movimiento.Destino);
 
 
-            foreach (SuministrosMovimientosStock suministro in suministros ?? Enumerable.Empty<SuministrosMovimientosStock>())
-            {
-                if (suministro.ValorNuevoOrigen < 0)
-                    return new ContentResult()
-                    {
-                        Content = $"La cantidad en del DTOSuministro Id:{suministro.IdSuministro} Disponible en " +
-                                    $"{Movimiento.Origen} es inferior a la disponible en {Movimiento.Destino}",
-                        ContentType = "Aplication/Json",
-                        StatusCode = 400,
-                    };
-
-                suministro.IdMovimiento = Movimiento.IdMovimiento ?? -1;
-            }
-
+            suministros?.ForEach(x => x.IdMovimiento = Movimiento.IdMovimiento ?? -1);
+            
+            
             using (AponusContext AponusDbContext = new AponusContext())
             {
 

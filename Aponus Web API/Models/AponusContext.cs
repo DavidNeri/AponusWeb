@@ -498,13 +498,12 @@ public partial class AponusContext : DbContext
 
             entity.HasOne(p => p.Estado)
             .WithMany(p => p.compras)
-            .HasForeignKey(FK => FK.IdEstadoCompra)
             .HasPrincipalKey(PK => PK.IdEstadoCompra);            
 
             entity.HasOne(p => p.Proveedor)
             .WithMany(p => p.compras)
-            .HasForeignKey(FK => FK.IdProveedor)
-            .HasPrincipalKey(PK => PK.IdEntidad)
+            .HasForeignKey(p => p.IdProveedor)
+            .HasPrincipalKey(p => p.IdEntidad)
             .OnDelete(DeleteBehavior.NoAction);
 
             entity.HasMany(p => p.Pagos)
@@ -739,22 +738,6 @@ public partial class AponusContext : DbContext
             entity.Property(e=>e.IdSuministro)
             .HasColumnName("ID_SUMINISTRO")
             .HasColumnType("varchar(50)");
-      
-            entity.Property(e => e.ValorAnteriorOrigen)
-           .HasColumnType("VALOR_ANTERIOR_ORIGEN")
-           .HasColumnType("decimal(18,2)");
-
-            entity.Property(e => e.ValorAnteriorDestino)
-            .HasColumnType("VALOR_ANTERIOR_DESTINO")
-            .HasColumnType("decimal(18,2)");
-
-            entity.Property(e => e.ValorNuevoOrigen)
-            .HasColumnType("VALOR_NUEVO_ORIGEN")
-            .HasColumnType("decimal(18,2)");
-
-            entity.Property(e => e.ValorNuevoOrigen)
-            .HasColumnType("VALOR_NUEVO_DESTINO")
-            .HasColumnType("decimal(18,2)");
 
             entity.Property(e => e.Cantidad)
             .HasColumnName("CANTIDAD")
