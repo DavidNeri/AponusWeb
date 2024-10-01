@@ -7,8 +7,8 @@ using Aponus_Web_API.Data_Transfer_Objects;
 
 namespace Aponus_Web_API.Controllers
 {
-        [Route("Aponus/[Controller]")]
-        [ApiController]
+    [Route("Aponus/[Controller]")]
+    [ApiController]
     public class StocksController : Controller
     {
 

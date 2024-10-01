@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "Aponus_Web_API.Controllers.BINServicesController",
+    "Method": "ObtenerInformacionTarjeta",
+    "RelativePath": "Aponus/BINServices/GetCardInfo/{NumeroTarjeta}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "NumeroTarjeta",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
     "Method": "EliminarTipoProducto",
     "RelativePath": "Aponus/Categories/Products/Descriptions/{IdDescription}/Delete",
@@ -361,6 +377,53 @@
       {
         "Name": "TipoEntidad",
         "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEntidadesTipos",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.GeoNamesController",
+    "Method": "ListarProvincias",
+    "RelativePath": "Aponus/GeoNames/Cities/{countryCode}/{adminCode1}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "countryCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "adminCode1",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.GeoNamesController",
+    "Method": "ListarPaises",
+    "RelativePath": "Aponus/GeoNames/Countries",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.GeoNamesController",
+    "Method": "ListarProvincias",
+    "RelativePath": "Aponus/GeoNames/Provinces_States/{geonameId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "geonameId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -1086,6 +1149,22 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
+    "Method": "ActualizarComponentes",
+    "RelativePath": "Aponus/Products/Components/Save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Producto",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_objects.DTOComponentesProducto, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
     "Method": "ListProducts",
     "RelativePath": "Aponus/Products/List/{TypeId}/{IdDescription}",
     "HttpMethod": "GET",
@@ -1179,22 +1258,6 @@
       {
         "Name": "Producto",
         "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesProducto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
-    "Method": "ActualizarComponentes",
-    "RelativePath": "Aponus/Products/UpdateComponents",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Producto",
-        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_objects.DTOComponentesProducto, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],
@@ -1453,16 +1516,6 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Aponus_Web_API.Controllers.Test",
-    "Method": "Prueba",
-    "RelativePath": "Aponus/Test/Test",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": []
   },
   {
