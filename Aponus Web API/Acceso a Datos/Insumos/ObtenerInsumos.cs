@@ -1,8 +1,5 @@
 ﻿using Aponus_Web_API.Models;
-using Aponus_Web_API.Data_Transfer_objects;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 using Aponus_Web_API.Support;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Insumos
@@ -10,13 +7,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Insumos
     public class ObtenerInsumos
     {
         private readonly AponusContext AponusDBContext;
-        public ObtenerInsumos() { AponusDBContext = new AponusContext(); }
-        
-
+        public ObtenerInsumos(AponusContext _aponusDBContext)
+        {
+            AponusDBContext = _aponusDBContext;
+        }
         public List<(string, string, string?)> ObtenerDetalleSuministro(List<string> SuministrosId)
         {
-            ///Buscar Detalle Suministros (Componentes)
-            
+            ///Buscar Detalle Suministros (Componentes)            
 
             var IdSuministrosTodos = SuministrosId.ToList();
 
@@ -49,7 +46,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Insumos
                 .ToList();
 
 
-            ///Buscar Detalle Suministros (Insumos)            
+            ///Buscar Detalle Suministros (StockInsumos)            
             List<FormatoSuministros> formatoSuminitrosProductos= AponusDBContext.Productos
                .Join(
                    AponusDBContext.ProductosDescripcions,

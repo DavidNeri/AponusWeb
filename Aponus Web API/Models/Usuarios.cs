@@ -6,9 +6,9 @@ namespace Aponus_Web_API.Models
 {
     public class Usuarios
     {
-        public string Usuario { get; set; }
-        public  string Contraseña { get; set; }
-        public string correo { get; set; }
+        public string Usuario { get; set; } = "";
+        public string Contraseña { get; set; } = "";
+        public string Correo { get; set; } = "";
         public int IdPerfil { get; set; }
 
         public virtual ICollection<Entidades> IdUsuarioRegistroNavigation { get; set; } = new HashSet<Entidades>();

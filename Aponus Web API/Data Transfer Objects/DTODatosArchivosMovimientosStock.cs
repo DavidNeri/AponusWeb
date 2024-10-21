@@ -24,5 +24,6 @@ namespace Aponus_Web_API.Data_Transfer_Objects
 
         [JsonProperty(PropertyName = "datosArchivo", NullValueHandling = NullValueHandling.Ignore)]
         public byte[]? DatosArchivo { get; set; }
+
     }
 }

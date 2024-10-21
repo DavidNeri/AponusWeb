@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AponusWebAPI.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    [Migration("20240930104033_ModelSnapshotUpdate")]
-    partial class ModelSnapshotUpdate
+    [Migration("20241003104449_ComponentesDescripcion")]
+    partial class ComponentesDescripcion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,6 +75,14 @@ namespace AponusWebAPI.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("DESCRIPCION");
+
+                    b.Property<string>("IdAlmacenamiento")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_ALMACENAMIENTO");
+
+                    b.Property<string>("IdFraccionamiento")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ID_FRACCIONAMIENTO");
 
                     b.HasKey("IdDescripcion");
 

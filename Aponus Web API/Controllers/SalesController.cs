@@ -12,21 +12,27 @@ namespace Aponus_Web_API.Controllers
 
     public class SalesController : Controller
     {
+        private readonly BS_Ventas BsVentas;
+        public SalesController(BS_Ventas bsVentas)
+        {
+            BsVentas = bsVentas;
+        }
+
         [HttpGet]
         [Route("List")]
-        public async Task<IActionResult> List(FiltrosVentas? Filtros)
+        public IActionResult List(FiltrosVentas? Filtros)
         {
-            return await BS_Ventas.Filtrar(Filtros);
+            return BsVentas.Filtrar(Filtros);
 
         }
 
         [HttpGet]
         [Route("Quotation")]
-        public async Task<IActionResult> GenerarCuotas(ParametrosCalcularCuotas Parametros)
+        public IActionResult GenerarCuotas(ParametrosCalcularCuotas Parametros)
         {
             try
             {
-                ICollection<DTOCuotasVentas> ListadoCuotas = await BS_Ventas.CalcularCuotas(Parametros);
+                ICollection<DTOCuotasVentas> ListadoCuotas = BS_Ventas.CalcularCuotas(Parametros);
 
                 return new JsonResult(ListadoCuotas);
 
@@ -48,14 +54,14 @@ namespace Aponus_Web_API.Controllers
         [Route("States/Save")]
         public async Task<IActionResult> GuardarEstadoVenta(DTOEstadosVentas Estados)
         {
-            return await BS_Ventas.Estados.ValidarDatos(Estados);
+            return await BsVentas.EstadosVentas().ValidarDatos(Estados);
         }
 
         [HttpPost]
         [Route("States/{Id}/Delete")]
         public IActionResult EliminarEstadoVenta(int Id)
         {
-            return BS_Ventas.Estados.Eliminar(Id);
+            return BsVentas.EstadosVentas().Eliminar(Id);
         }
 
         //
@@ -77,7 +83,7 @@ namespace Aponus_Web_API.Controllers
             {
                 try
                 {
-                    return await BS_Ventas.ProcesarDatosVenta(Venta);
+                    return await BsVentas.ProcesarDatosVenta(Venta);
                 }
                 catch (Exception ex )
                 {

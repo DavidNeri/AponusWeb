@@ -10,156 +10,145 @@ namespace Aponus_Web_API.Business
 {
     public class BS_Productos 
     {
-        internal  async Task<JsonResult> ListarDN(string? typeId)
+        private readonly ObtenerProductos _obtenerProductos;
+        private readonly ComponentesProductos _componentesProductos;
+        private readonly AD_Productos AdProductos;
+        public BS_Productos(ObtenerProductos obtenerProductos, ComponentesProductos componentesProductos, AD_Productos adProductos)
         {
-             return await new  ObtenerProductos().ListarDN(typeId);
+            _obtenerProductos = obtenerProductos;
+            _componentesProductos = componentesProductos;
+            AdProductos = adProductos;
         }
 
+        internal async Task<JsonResult> ListarDN(string? typeId)
+        {
+             return await _obtenerProductos.ListarDN(typeId ?? "");
+        }
         internal async Task<JsonResult> ListarDN(string? typeId, int? idDescription)
         {
-            return await new ObtenerProductos().ListarDN(typeId, idDescription);
+            return await _obtenerProductos.ListarDN(typeId, idDescription);
         }
-
-        internal JsonResult NewListarComponentesProducto(DTODetallesProducto Producto)
+        internal JsonResult NewListarComponentesProducto(DTOProducto Producto)
         {
 
             Producto.Cantidad ??= 1;
 
-            return new ComponentesProductos().ObtenerComponentesFormateados(Producto);
+            return _componentesProductos.ObtenerComponentesFormateados(Producto);
         }
+        internal JsonResult ListarProductos(string? TypeId) {
 
-        internal Task<JsonResult> ListarProductos(string? TypeId) {
-
-            return new ObtenerProductos().Listar(TypeId);
+            return _obtenerProductos.Listar(TypeId ?? "");
 
         }
-
         internal JsonResult ListarProductos()
         {
-            return new ObtenerProductos().Listar();
+            return _obtenerProductos.Listar();
         }
-
-        internal Task<JsonResult> ListarProductos(string? typeId, int? IdDescription)
+        internal JsonResult ListarProductos(string? typeId, int? IdDescription)
         {
-            return new ObtenerProductos().Listar(typeId, IdDescription);
+            return _obtenerProductos.Listar(typeId, IdDescription);
         }
-
-        internal Task<JsonResult> ListarProductos(string? typeId, int? IdDescription, int? Dn)
+        internal JsonResult ListarProductos(string? typeId, int? IdDescription, int? Dn)
         {
 
-            return new ObtenerProductos().Listar(typeId, IdDescription, Dn);
+            return _obtenerProductos.Listar(typeId, IdDescription, Dn);
 
         }
-
-        internal IActionResult ProcesarDatos(DTODetallesProducto ActualizarProducto)
+        internal IActionResult ProcesarDatos(DTOProducto Producto)
         {
-            Productos OP = new Productos();
-          
-
-            if (ActualizarProducto.IdProducto== null
-                && ActualizarProducto.IdTipo!=null
-                && ActualizarProducto.IdDescripcion!=null
-                && ActualizarProducto.DiametroNominal!=null
-                && ActualizarProducto.Tolerancia!=null)
+            
+            if (Producto.IdProducto == null)
             {
-                //Producto Nuevo
-                ActualizarProducto.IdProducto = OP.GenerarIdProd(ActualizarProducto);
-                Producto? _BuscarProducto = OP.BuscarProducto(ActualizarProducto.IdProducto);
-
-                //Si no encontro el Producto despues de generar el ID, guarda el nuevo
-                if (_BuscarProducto == null) 
-                    OP.GuardarProducto(ActualizarProducto);
-
-                //Si lo encontro despues de haber generado el ID es un actualizar 
-                if (_BuscarProducto != null) 
-                    ProductUpdate(ActualizarProducto);
-
-                return new JsonResult(ActualizarProducto.IdProducto);
-
-            }
-            else if (ActualizarProducto.IdProducto == null
-                && (ActualizarProducto.IdTipo != null
-                || ActualizarProducto.IdDescripcion != null
-                || ActualizarProducto.DiametroNominal != null
-                || ActualizarProducto.Tolerancia != null))
-            {
-                //Si No pasaron el IdProducto (Nuevo) pero falta algun campo necesario para generar el Nuevo Id
-                return new ContentResult()
+                if (Producto.IdTipo != null && Producto.IdDescripcion != null && Producto.DiametroNominal != null && Producto.Tolerancia != null)
                 {
-                    Content = "Faltan Datos",
-                    ContentType = "application/json",
-                    StatusCode = 400,
+                    
+                    Producto.IdProducto = AdProductos.GenerarIdProd(Producto); //Producto Nuevo
+                    Producto? _BuscarProducto = AdProductos.BuscarProducto(Producto.IdProducto);
 
-                };
-            }
-            else if (ActualizarProducto.IdProducto != null)
-            {
-                //Si pasaron el IdProducto
-               
-                return ProductUpdate(ActualizarProducto);
-                
+                    
+                    if (_BuscarProducto == null) //Si no encontro el Producto despues de generar el ID, guarda el nuevo
+                    {
+                        AdProductos.GuardarProducto(Producto);
+                    }
+                    else 
+                    {
+                        ProductUpdate(Producto);
+                    }
+                    
+                    if (Producto.Componentes != null)
+                    {
+                        foreach (var Componente in Producto.Componentes)
+                        {
+                            Componente.IdProducto = Producto.IdProducto;
+                        }
+
+                        ActualizarComponentes(Producto.Componentes);
+                    }
+
+                    return new JsonResult(Producto.IdProducto);
+                }
+                else
+                {
+                    return new ContentResult()
+                    {
+                        Content = "Faltan Datos",
+                        ContentType = "application/json",
+                        StatusCode = 400,
+                    };
+                }
             }
             else
             {
-                return new ContentResult()
-                {
-                    Content = "Faltan Datos, No se realizaron modificaciones",
-                    ContentType = "application/json",
-                    StatusCode=400,
-
-                };
+                return ProductUpdate(Producto);
             }
-
         }
-
-        internal IActionResult ProductUpdate(DTODetallesProducto ActualizarProducto)
+        internal IActionResult ProductUpdate(DTOProducto ActualizarProducto)
         {
-            Productos OP = new Productos();
             bool UpdateIdProd = false;
+
             try
             {
-                Producto? ProductoOriginal = OP.BuscarProducto(ActualizarProducto.IdProducto);
-                ProductoOriginal.IdEstado = 1;
-                PropertyInfo[]? PropsActualizarProducto = ActualizarProducto
-                    .GetType()
-                    .GetProperties()
-                    .Where(prop => prop.GetValue(ActualizarProducto) != null)
-                    .ToArray();
+                Producto? ProductoOriginal = AdProductos.BuscarProducto(ActualizarProducto.IdProducto ?? "");               
+                PropertyInfo[]? PropsActualizarProducto = ActualizarProducto.GetType().GetProperties().Where(prop => prop.GetValue(ActualizarProducto) != null).ToArray();
 
                 if (ProductoOriginal != null)
                 {
+                    ProductoOriginal.IdEstado = 1;
+
                     foreach (PropertyInfo prop in PropsActualizarProducto)
                     {
                         //Modificar atributos del producto existente
                         PropertyInfo? _valorOriginal = ProductoOriginal.GetType().GetProperty(prop.Name);
-                        var valorOriginal = _valorOriginal.GetValue(ProductoOriginal);
-                        var valorNuevo = prop.GetValue(ActualizarProducto);
 
-                        if (!valorOriginal.Equals(valorNuevo) && prop.Name != "idProducto")
+                        if (_valorOriginal != null)
                         {
-                            _valorOriginal.SetValue(ProductoOriginal, valorNuevo);
-                            if (prop.Name.Contains("IdDescripcion") || prop.Name.Contains("Tolerancia") || prop.Name.Contains("IdTipo"))
+                            var valorOriginal = _valorOriginal.GetValue(ProductoOriginal);
+                            var valorNuevo = prop.GetValue(ActualizarProducto);
+
+                            if (valorOriginal != null &&!valorOriginal.Equals(valorNuevo) && prop.Name != "idProducto")
                             {
-                                if (valorNuevo == null)
+                                _valorOriginal.SetValue(ProductoOriginal, valorNuevo);
+                                if (prop.Name.Contains("IdDescripcion") || prop.Name.Contains("Tolerancia") || prop.Name.Contains("IdTipo"))
                                 {
-                                    //Si alguno de los campos necesarios para generar el Nuevo ID es Nulo
-                                    return new ContentResult()
+                                    if (valorNuevo == null)
                                     {
-                                        Content = "Faltan Datos, No se realizaron modificaciones",
-                                        ContentType = "application/json",
-                                        StatusCode = 400,
-
-                                    };
+                                        //Si alguno de los campos necesarios para generar el Nuevo ID es Nulo
+                                        return new ContentResult()
+                                        {
+                                            Content = "Faltan Datos, No se realizaron modificaciones",
+                                            ContentType = "application/json",
+                                            StatusCode = 400,
+                                        };
+                                    }
+                                    else
+                                    {
+                                        UpdateIdProd = true;
+                                    }
                                 }
-                                else
-                                {
-                                    UpdateIdProd = true;
-                                }
-                                
                             }
-
-                        }
+                        }                        
                     }
+
                     //Asignar nuevo Nombre  al objeto 'ProductoOriginal'
                     Producto ProductoOriginalModificado = ProductoOriginal;
                    
@@ -167,21 +156,20 @@ namespace Aponus_Web_API.Business
                     //En caso de corresponder actualizar el IDProducto
                     if (UpdateIdProd == true)
                     {
-                        string IdAnterior = ActualizarProducto.IdProducto;
+                        string IdAnterior = ActualizarProducto.IdProducto ?? "";
 
-                        string NuevoId = OP.GenerarIdProd(new DTODetallesProducto()
+                        string NuevoId = AdProductos.GenerarIdProd(new DTOProducto()
                         {
                             IdProducto = null,
                             DiametroNominal = ProductoOriginalModificado.DiametroNominal,
                             IdDescripcion = ProductoOriginalModificado.IdDescripcion,
                             IdTipo = ProductoOriginalModificado.IdTipo,
                             Tolerancia = ProductoOriginalModificado.Tolerancia
-
                         });
 
                         if (IdAnterior != NuevoId)
                         {
-                            if (OP.BuscarProducto(NuevoId) != null)
+                            if (AdProductos.BuscarProducto(NuevoId) != null)
                             {
                                 return new ContentResult()
                                 {
@@ -192,8 +180,8 @@ namespace Aponus_Web_API.Business
                                 };
                             }
 
-                            OP.ModifyProductDetails(ProductoOriginalModificado);
-                            OP.ActualizarIdProd(IdAnterior, NuevoId);
+                            AdProductos.ModifyProductDetails(ProductoOriginalModificado);
+                            AdProductos.ActualizarIdProd(IdAnterior, NuevoId);
                             
                             return new JsonResult(NuevoId);
                         }
@@ -201,10 +189,10 @@ namespace Aponus_Web_API.Business
                     }
                     else
                     {
-                        if (ProductoOriginalModificado != null)  OP.ModifyProductDetails(ProductoOriginalModificado);
+                        if (ProductoOriginalModificado != null) AdProductos.ModifyProductDetails(ProductoOriginalModificado);
                     }
 
-                    return new JsonResult(ProductoOriginalModificado.IdProducto);
+                    return new JsonResult(ProductoOriginalModificado?.IdProducto ?? null);
                 }
                 else
                 {
@@ -218,9 +206,8 @@ namespace Aponus_Web_API.Business
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 return new ContentResult()
                 {
                     Content = "Producto existente, no se aplicaron los cambios",
@@ -230,46 +217,40 @@ namespace Aponus_Web_API.Business
                 };
             }
         }
-
         internal IActionResult ActualizarComponentes(List<DTOComponentesProducto> Componentes)
         {
-            Productos OP = new Productos();
             List<Productos_Componentes> ListaComponentes = new List<Productos_Componentes>();
-            ComponentesProductos CP = new ComponentesProductos();
 
             try
             {
-                OP.DeleteAllProductComponents(Componentes
-                        .Where(x => x.IdProducto != null)
-                        .Select(x => x.IdProducto)
-                        .First()
-                        .ToString());
+                if(Componentes != null)
+                {
+                    string IdProducto = Componentes.Where(x=>x.IdProducto != null).Select(x=>x.IdProducto).FirstOrDefault() ?? "";
+                    AdProductos.DeleteAllProductComponents(IdProducto);
+                }               
 
-                foreach (DTOComponentesProducto componente in Componentes)
+                foreach (DTOComponentesProducto componente in Componentes ?? Enumerable.Empty<DTOComponentesProducto>())
                 {
                     ListaComponentes.Add(new Productos_Componentes()
                     {
-                        Cantidad = componente.Cantidad,
-                        IdComponente = componente.IdComponente,
-                        IdProducto = componente.IdProducto,
-                        Longitud = componente.Largo,
-                        Peso = componente.Peso,
+                        Cantidad     = componente.Cantidad,
+                        IdComponente = componente.IdComponente ?? "",
+                        IdProducto   = componente.IdProducto   ?? "",
+                        Longitud     = componente.Largo,
+                        Peso         = componente.Peso,
 
                     });
-                }                
-                   
+                }
 
                 foreach (Productos_Componentes Componente in ListaComponentes)
                 {
-                    CP.GuardarComponenteProd(Componente);
-
+                    _componentesProductos.GuardarComponenteProd(Componente);
                 }
-
                 return new StatusCodeResult(200);
             }
             catch (DbUpdateException ex)
             {
-                if (ex.InnerException.Message!=null)
+                if (ex.InnerException?.Message!=null)
                 {
                     return new ContentResult()
                     {
@@ -279,7 +260,6 @@ namespace Aponus_Web_API.Business
                 }
                 else
                 {
-
                     return new ContentResult()
                     {
                         Content = ex.Message,
@@ -288,7 +268,7 @@ namespace Aponus_Web_API.Business
                 }
             }catch(Exception ex)
             {
-                if (ex.InnerException.Message != null)
+                if (ex.InnerException?.Message != null)
                 {
                     return new ContentResult()
                     {
@@ -298,20 +278,13 @@ namespace Aponus_Web_API.Business
                 }
                 else
                 {
-
                     return new ContentResult()
                     {
                         Content = ex.Message,
                         ContentType = "application/json",
                     };
                 }
-            }
-           
-                
+            }                
         }
-
-        
-
-
     }
 }

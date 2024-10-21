@@ -55,13 +55,13 @@ namespace Aponus_Web_API.Models
         public string? Email{ get; set; }
 
         [Column("ID_FISCAL")]        
-        public string IdFiscal { get; set; }
+        public string IdFiscal { get; set; } = string.Empty;
 
         [Column("FECHA_REGISTRO")]
         public DateTime FechaRegistro{ get; set; }
 
         [ForeignKey("ID_USUARIO_REGISTRO")]
-        public string IdUsuarioRegistro{ get; set; }
+        public string IdUsuarioRegistro{ get; set; } = string.Empty;
 
         [ForeignKey("ID_CATEGORIA")]
         public int IdCategoria{ get; set; }
@@ -76,9 +76,9 @@ namespace Aponus_Web_API.Models
         public virtual ICollection<Stock_Movimientos> MovimientosDestino { get; set; } = new HashSet<Stock_Movimientos>();       
         public virtual ICollection<Compras> compras { get; set; } = new HashSet<Compras>(); 
         public virtual ICollection<Ventas> ventas{ get; set; } = new HashSet<Ventas>();
-        public virtual Usuarios UsuarioRegistro { get; set; }
-        public virtual EntidadesCategorias CategoriaEntidad { get; set; }
-        public virtual EntidadesTipos TipoEntidad { get; set; }
+        public virtual Usuarios UsuarioRegistro { get; set; } = new Usuarios();
+        public virtual EntidadesCategorias CategoriaEntidad { get; set; } = new EntidadesCategorias();
+        public virtual EntidadesTipos TipoEntidad { get; set; } = new EntidadesTipos();
 
     }
 }

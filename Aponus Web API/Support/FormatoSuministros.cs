@@ -2,7 +2,7 @@
 {
     public class FormatoSuministros
     {
-        public string IdSuministro { get; set; }
+        public string IdSuministro { get; set; } = string.Empty;
         public string? Descripcion { get; set; }
         public int? DiametroNominal { get; set; }
         public decimal? Diametro{ get; set; }

@@ -13,19 +13,26 @@ namespace Aponus_Web_API.Business
 {
     public class BS_Supplies
     {
+        private readonly OperacionesComponentes Componentes;
+        private readonly Stocks stocks;
 
+        public BS_Supplies(OperacionesComponentes componentes, Stocks _stocks)
+        {
+            Componentes = componentes;
+            stocks = _stocks;
+        }
         internal async Task<JsonResult> ObtenerNuevoIdComponente(string ComponentDescription)
         {
-            return await new OperacionesComponentes().ObtenerNuevoId(ComponentDescription);
+            return await Componentes.ObtenerNuevoId(ComponentDescription);
         }
-        internal IActionResult GuardarInsumoProducto(DTOComponente componente)
+        internal IActionResult GuardarInsumoProducto(DTODetallesComponenteProducto componente)
         {
             try
             {
 
                 if (componente.idComponente != null && componente.IdDescripcion != null)
                 {
-                    new OperacionesComponentes().GuardarComponente(new ComponentesDetalle()
+                    Componentes.GuardarComponente(new ComponentesDetalle()
                     {
                         IdInsumo = componente.idComponente,
                         Diametro = componente.Diametro,
@@ -58,7 +65,7 @@ namespace Aponus_Web_API.Business
             catch (DbUpdateException ex)
             {
                 string Mensaje;
-                if (ex.InnerException.Message != null)
+                if (ex.InnerException?.Message != null)
                     Mensaje = ex.InnerException.Message;
                 else Mensaje = ex.Message;
 
@@ -72,15 +79,13 @@ namespace Aponus_Web_API.Business
 
             }
 
-        }
-      
-
+        }      
         internal IActionResult ListarNombresFormateados()
         {
             List<TipoInsumos>? InsumosAgrupados = new List<TipoInsumos>();
             List<FormatoSuministros> InsumosDesagrupados = new List<FormatoSuministros>();
 
-            IActionResult InusmosActionResult = new Stocks().ListarInsumosProducto();
+            IActionResult InusmosActionResult = stocks.ListarInsumosProducto();
 
             if (InusmosActionResult is JsonResult InsumosJsonResult)
             {

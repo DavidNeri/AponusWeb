@@ -12,7 +12,7 @@ namespace Aponus_Web_API.Models
         public int IdMovimiento { get; set; }
 
         [Column("USUARIO_CREADO")]
-        public string CreadoUsuario { get; set; }
+        public string CreadoUsuario { get; set; } = "";
 
         [Column("FECHA_HORA_CREADO")]
         public DateTime FechaHoraCreado { get; set; }

@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Aponus_Web_API.Data_Transfer_objects
 {
-    public class TipoInsumos : DTOComponente
+    public class TipoInsumos : DTODetallesComponenteProducto
     {
 
         [JsonProperty(PropertyName = "idDescripcion")]
@@ -16,7 +16,7 @@ namespace Aponus_Web_API.Data_Transfer_objects
         public string? Descripcion { get; set; }
 
         [JsonProperty(PropertyName = "especificaciones", NullValueHandling = NullValueHandling.Ignore)]
-        public List<DTOComponente>? Especificaciones { get; set; } = null;
+        public List<DTODetallesComponenteProducto>? Especificaciones { get; set; } = null;
 
 
         [JsonProperty(PropertyName = "especificacionesFormato", NullValueHandling = NullValueHandling.Ignore)]

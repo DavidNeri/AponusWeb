@@ -1,14 +1,8 @@
-﻿using Aponus_Web_API.Acceso_a_Datos.Insumos;
-using Aponus_Web_API.Data_Transfer_Objects;
+﻿using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
-using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.DependencyResolver;
-using System.Data.Entity.Infrastructure;
 using System.Globalization;
-using System.Net;
 using DbUpdateException = Microsoft.EntityFrameworkCore.DbUpdateException;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Stocks
@@ -16,19 +10,66 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
     public class MovimientosStock
     {
         private readonly AponusContext AponusDBContext;
-        public MovimientosStock() { AponusDBContext = new AponusContext(); }
-
-        internal class Estados
+        public MovimientosStock(AponusContext _AponusDbContext)
         {
+            AponusDBContext = _AponusDbContext;
+        }
+
+        public ArchivosMovimientos Archivos()
+        {
+            return new ArchivosMovimientos(AponusDBContext);
+        }
+        public Estados EstadosMovimientos()
+        {
+            return new Estados(AponusDBContext);
+        }
+
+        public class Estados
+        {
+            private readonly AponusContext AponusDbContext;
+            public Estados(AponusContext aponusDbContext)
+            {
+                AponusDbContext = aponusDbContext;
+            }
+
             internal static List<EstadosMovimientosStock> Listar(AponusContext AponusDbContext)
             {
                return AponusDbContext.EstadoMovimientosStock.Where(x=>x.IdEstado!=0 && !x.Descripcion.ToUpper().Contains("ELIMINADO")).ToList();  
                 
-            }
-          
+            }          
         }
 
+        public class ArchivosMovimientos
+        {
+            private readonly AponusContext AponusDBContext;
+            public ArchivosMovimientos(AponusContext _AponusDBContext)
+            {
+                AponusDBContext = _AponusDBContext;
+            }
 
+            public bool Eliminar(AponusContext AponusDB, int IdMov, string Archivo)
+            {
+                try
+                {
+                    var ArchivoExistente = AponusDB.ArchivosStock.Where(x => x.IdMovimiento == IdMov && x.HashArchivo.Contains(Archivo)).FirstOrDefault();
+
+                    if (ArchivoExistente != null)
+                    {
+                        ArchivoExistente.IdEstado = 0;
+                        AponusDB.ArchivosStock.Update(ArchivoExistente);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (DbUpdateException)
+                {
+                    return false;
+                }
+            }
+        }
         internal async Task<DTOMovimientosStock?> ObtenerDatosMovimiento(int idMovimiento)
         {
 
@@ -61,7 +102,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 .FirstOrDefault();
 
 
-            foreach (DTODatosArchivosMovimientosStock Archivo in Movimiento.DatosArchivos)
+            foreach (DTODatosArchivosMovimientosStock Archivo in Movimiento?.DatosArchivos ?? Enumerable.Empty<DTODatosArchivosMovimientosStock>())
             {
                 if (Archivo != null)
                 {
@@ -69,41 +110,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                     Archivo.DatosArchivo = archivo;
                     Archivo.MensajeError = error;
                 }
-
-            }
-
-          
-           
-
+            }  
             return Movimiento;
         }
-
-        public class Archivos
-        {
-            private readonly AponusContext AponusDBContext;
-            public Archivos() { AponusDBContext = new AponusContext(); }
-
-            public bool Eliminar(AponusContext AponusDB,int IdMov, string Archivo)
-            {
-                try
-                    {
-                    var ArchivoExistente = AponusDB.ArchivosStock.Where(x => x.IdMovimiento == IdMov && x.HashArchivo.Contains(Archivo)).FirstOrDefault();
-
-                    ArchivoExistente.IdEstado = 0;
-                    AponusDB.ArchivosStock.Update(ArchivoExistente);
-                    
-                    return true;
-                }
-                catch (DbUpdateException ex)
-                {
-                        return false;
-                }
-                
-                                
-
-            }
-        }
-
         public async Task<List<DTOMovimientosStock>> Listar(FiltrosMovimientos? Filtros = null)
         {
 
@@ -233,9 +242,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                 return await IQMovimientos.ToListAsync();
             }
-
         }
-
         internal async Task<List<DTODatosArchivosMovimientosStock>> InfoArchivos(List<int?> ListaMovimientos)
         {
             try
@@ -260,14 +267,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
             
         }
-        private static byte[] DescargarArchivoMovimiento_Local(string url)
+        private async static Task<byte[]> DescargarArchivoMovimiento_Local(string url)
         {
-            WebClient webClient = new WebClient();
-            byte[] archivoBites = webClient.DownloadData(url);            
+            HttpClient webClient = new HttpClient();
+            byte[] archivoBites = await webClient.GetByteArrayAsync(url);            
 
             return archivoBites;
         }
-
         public static string ObtenerMimeType(string pathArchivo)
         {
             string Extension = Path.GetExtension(pathArchivo).ToLower();
@@ -299,27 +305,27 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
             return mimeTypes.ContainsKey(Extension) ? mimeTypes[Extension] : "application/octet-stream";
         }
-
         internal bool RegistrarModificacion(AponusContext AponusDbContext,DTOMovimientosStock Mov)
         {
             try
             {
-                if (AponusDbContext == null)
-                    AponusDbContext = new AponusContext();
-
-
-               
+                AponusDbContext ??= AponusDBContext;               
                 DateTime FechaHora = Fechas.ObtenerFechaHora();
-                var Movimiento = AponusDBContext.Stock_Movimientos.Where(x=>x.IdMovimiento==Mov.IdMovimiento).FirstOrDefault();
-                Movimiento.FechaHoraUltimaModificacion = FechaHora;
-                Movimiento.ModificadoUsuario=Mov.UsuarioModificacion;                             
-                  
-                
-                AponusDbContext.Stock_Movimientos.Update(Movimiento);
 
+                var Movimiento = AponusDbContext.Stock_Movimientos.Where(x=>x.IdMovimiento==Mov.IdMovimiento).FirstOrDefault();
 
-                return true;
-                
+                if (Movimiento != null)
+                {
+                    Movimiento.FechaHoraUltimaModificacion = FechaHora;
+                    Movimiento.ModificadoUsuario           = Mov.UsuarioModificacion;
+                    AponusDbContext.Stock_Movimientos.Update(Movimiento);
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch (Exception ex)
             {
@@ -328,12 +334,12 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             }
             
         }
-
         internal static bool Eliminar(AponusContext AponusDBContext, int idMovimiento)
         {
             try
             {
                 var Movimiento = AponusDBContext.Stock_Movimientos.FirstOrDefault(x => x.IdMovimiento == idMovimiento);
+
                 if (Movimiento!=null)
                 {
                     Movimiento.IdEstadoMovimiento = 0;
@@ -350,7 +356,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 return false;
             }
         }
-
         internal bool Actualizar(DTOMovimientosStock actualizacionMovimiento)
         {
             try

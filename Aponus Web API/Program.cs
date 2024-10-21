@@ -1,18 +1,40 @@
 using Aponus_Web_API.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Any;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Features;
-using System.Data.Entity;
+using Aponus_Web_API.Acceso_a_Datos.Productos;
+using Aponus_Web_API.Business;
+using Aponus_Web_API.Controllers;
+using Aponus_Web_API.Acceso_a_Datos.Sistema;
+using Aponus_Web_API.Acceso_a_Datos.Componentes;
+using Aponus_Web_API.Acceso_a_Datos.Entidades;
+using Aponus_Web_API.Acceso_a_Datos.Insumos;
+using Aponus_Web_API.Acceso_a_Datos.Stocks;
+using Aponus_Web_API.Acceso_a_Datos.Ventas;
+using Aponus_Web_API.Support.Movimientos;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<ComponentesProductos>();
+builder.Services.AddScoped<ObtenerComponentes>();
+builder.Services.AddScoped<OperacionesComponentes>();
+builder.Services.AddScoped<ABM_Entidades>();
+builder.Services.AddScoped<ObtenerInsumos>();
+builder.Services.AddScoped<AD_Productos>();
+builder.Services.AddScoped<ObtenerProductos>();
+builder.Services.AddScoped<Categorias>();
+builder.Services.AddScoped<MovimientosStock>();
+builder.Services.AddScoped<Stocks>();
+builder.Services.AddScoped<Aponus_Web_API.Acceso_a_Datos.Usuarios.Usuarios>();
+builder.Services.AddScoped<ABM_Ventas>();
+builder.Services.AddScoped<Suministros>();
 
-// Add services to the container.
+builder.Services.AddScoped<BS_Movimientos>();
+builder.Services.AddScoped<BS_Stocks>();
+builder.Services.AddScoped<BS_Entidades>();
+builder.Services.AddScoped<BS_Categorias>();
+
+builder.Services.AddScoped<CategoriesController>();
+
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
 {
@@ -21,7 +43,6 @@ builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
 
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -36,18 +57,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-//Puerto y el host
-
-//builder.WebHost.ConfigureKestrel(serverOptions =>
-//{
-//    // Configurar Kestrel para escuchar en todas las interfaces
-//    serverOptions.ListenAnyIP(Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? "5000"));
-
-//});
-
-var ConnectionString = builder.Configuration.GetConnectionString("AponusConnectionString");
-builder.Services.AddDbContext<AponusContext>(options => options.UseNpgsql(ConnectionString).EnableSensitiveDataLogging(false));
-
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MemoryBufferThreshold = int.MaxValue;
@@ -55,6 +64,22 @@ builder.Services.Configure<FormOptions>(options =>
     options.ValueLengthLimit = int.MaxValue;
     options.MultipartBodyLengthLimit = int.MaxValue;
 });
+
+
+if (builder.Environment.IsProduction())
+{
+    builder.WebHost.ConfigureKestrel(serverOptions =>
+    {
+        serverOptions.ListenAnyIP(Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? "10000"));
+    });
+
+}
+
+
+var ConnectionString = builder.Environment.IsDevelopment() ? Environment.GetEnvironmentVariable("DATABASE_URL", EnvironmentVariableTarget.User) : Environment.GetEnvironmentVariable("DATABASE_URL");
+
+builder.Services.AddDbContext<AponusContext>(options => options.UseNpgsql(ConnectionString).EnableSensitiveDataLogging(false));
+Console.WriteLine($"Cadena de conexión obtenida: {ConnectionString}");
 
 var app = builder.Build();
 

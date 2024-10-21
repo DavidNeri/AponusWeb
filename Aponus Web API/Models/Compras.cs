@@ -17,7 +17,7 @@ namespace Aponus_Web_API.Models
         public DateTime FechaHora { get; set; }
 
         [ForeignKey("ID_USUARIO")]
-        public string IdUsuario { get; set; }
+        public string IdUsuario { get; set; } = string.Empty;
 
         [Column("ID_ESTADO_COMPRA")]
         public int IdEstadoCompra { get; set; }
@@ -34,10 +34,6 @@ namespace Aponus_Web_API.Models
         public virtual EstadosCompras Estado { get; set; } = new();
         public virtual Entidades Proveedor { get; set; } = new ();
         public virtual ICollection<ComprasDetalles> DetallesCompra {  get; set; } = new HashSet<ComprasDetalles>();
-        public virtual ICollection<PagosCompras> Pagos { get; set; } = new HashSet<PagosCompras>();
-
-        
-
-
+        public virtual ICollection<PagosCompras> Pagos { get; set; } = new HashSet<PagosCompras>(); 
     }
 }

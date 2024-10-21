@@ -54,7 +54,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public string? Email { get; set; }
 
         [JsonProperty(Order = 16, PropertyName = "idFiscal", NullValueHandling = NullValueHandling.Ignore)]
-        public string IdFiscal { get; set; }
+        public string IdFiscal { get; set; } = string.Empty;    
 
         [JsonProperty(Order = 17, PropertyName = "fechaRegistro", NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? FechaRegistro { get; set; }

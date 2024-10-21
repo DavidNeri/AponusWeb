@@ -12,7 +12,7 @@ namespace Aponus_Web_API.Models
 
         [Key]
         [ForeignKey("ID_INSUMO")]
-        public string IdInsumo { get; set; }
+        public string IdInsumo { get; set; } = string.Empty;
 
         [Column("CANTIDAD")]
         public int Cantidad { get; set; }       

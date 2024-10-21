@@ -5,11 +5,10 @@ using Aponus_Web_API.Support;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using System.Data.SqlClient;
 using Z.EntityFramework.Plus;
 using Npgsql;
 using NpgsqlTypes;
-using Castle.Components.DictionaryAdapter;
+
 
 
 namespace Aponus_Web_API.Acceso_a_Datos.Stocks
@@ -17,12 +16,28 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
     public class Stocks
     {
         private readonly AponusContext AponusDBContext;
-        public Stocks() { AponusDBContext = new AponusContext(); }
-        int? ValorAnteriorInt=null;
-        decimal? ValorAnteriorDec=null;
-
-        public class Productos : Stocks
+        public Stocks(AponusContext _aponusContext)
         {
+            AponusDBContext = _aponusContext;
+        }
+
+        public Productos StockProductos()
+        {
+            return new Productos(AponusDBContext);
+        }
+
+        public Insumos StockInsumos()
+        {
+            return new Insumos(AponusDBContext);
+        }
+        public class Productos
+        {
+            private readonly AponusContext AponusDBContext;
+            public Productos(AponusContext _aponusContext)
+            {
+                AponusDBContext = _aponusContext;
+            }
+
             public async Task<bool> Actualizar(Producto Producto)
             {
                 using (var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
@@ -47,8 +62,14 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 }
             }
         }
-        public class Insumos : Stocks
+        public class Insumos
         {
+            private readonly AponusContext AponusDBContext;
+            public Insumos(AponusContext _aponusContext)
+            {
+                AponusDBContext = _aponusContext;
+            }
+
             public async Task<bool> Actualizar(StockInsumos stockInsumo)
             {
                 using (var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
@@ -97,8 +118,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         internal bool DisminuirStockProducto(DTOStockUpdate Actualizacion, AponusContext? AponusDBContext = null)
         {
-            if (AponusDBContext == null)
-                AponusDBContext = new AponusContext();
+            AponusDBContext ??= this.AponusDBContext;
 
             bool resultado = true;
             try
@@ -121,12 +141,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
         }
 
-
-
         internal  IActionResult ListarInsumosProducto(int? IdDescripcion=null)
-        {          
+        {
 
-            List<TipoInsumos> tipoInsumosList =   AponusDBContext.ComponentesDetalles
+            List<TipoInsumos> tipoInsumosList = AponusDBContext.ComponentesDetalles
                  .Join(AponusDBContext.ComponentesDescripcions,
                  Detalles => Detalles.IdDescripcion,
                  Descripciones => Descripciones.IdDescripcion,
@@ -143,7 +161,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                             {
                                 new()
                                 {
-                                    //IdDescripcion = JoinResult.Detalles.IdDescripcion,
                                     idComponente = JoinResult.Detalles.IdInsumo,
                                     Largo = JoinResult.Detalles.Longitud != null ? $"{JoinResult.Detalles.Longitud}mm" : "-",
                                     Espesor = JoinResult.Detalles.Espesor != null ? $"{JoinResult.Detalles.Espesor}mm" : "-",
@@ -157,10 +174,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                                     Pintura = Stock.Pintura != null ? Stock.Pintura.ToString() : "-",
                                     Proceso = Stock.Proceso != null ? Stock.Proceso.ToString() : "-",
                                     Moldeado = Stock.Moldeado != null ? Stock.Moldeado.ToString() : "-",
-                                    DiametroNominal = JoinResult.Detalles.DiametroNominal  != null ? JoinResult.Detalles.DiametroNominal.ToString() : "-",                                   
+                                    DiametroNominal = JoinResult.Detalles.DiametroNominal  != null ? JoinResult.Detalles.DiametroNominal.ToString() : "-",
 
                                 }
-                            }
+                            } ?? new List<DTOComponenteFormateado>()
                         })                
                  
                  .GroupBy(Result => new
@@ -192,17 +209,18 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
             }
 
-            tipoInsumosList.SelectMany(x => x.especificacionesFormato)
+
+            _ = tipoInsumosList.SelectMany(x => x.especificacionesFormato  ?? new List<DTOComponenteFormateado>())
                  .Join(Unidades,
                      espec => espec.idComponente,
                      unidad => unidad.IdSuministro,
-                     (espec, unidad) => 
+                     (espec, unidad) =>
                      {
-                         espec.Pintura = !espec.Pintura.Equals("-") ? espec.Pintura + unidad.Unidad : espec.Pintura;
-                         espec.Granallado = !espec.Granallado.Equals("-") ? espec.Granallado + unidad.Unidad : espec.Granallado;
-                         espec.Proceso= !espec.Proceso.Equals("-") ? espec.Proceso + unidad.Unidad : espec.Proceso;
-                         espec.Moldeado= !espec.Moldeado.Equals("-") ? espec.Moldeado + unidad.Unidad : espec.Moldeado;
-                         espec.Recibido = !espec.Recibido.Equals("-") ? espec.Recibido + unidad.Unidad : espec.Recibido;
+                         espec.Pintura    = espec.Pintura    != null && !espec.Pintura   .Equals("-")    ? espec.Pintura    + unidad.Unidad : espec.Pintura;
+                         espec.Granallado = espec.Granallado != null && !espec.Granallado.Equals("-")    ? espec.Granallado + unidad.Unidad : espec.Granallado;
+                         espec.Proceso    = espec.Proceso    != null && !espec.Proceso   .Equals("-")    ? espec.Proceso    + unidad.Unidad : espec.Proceso;
+                         espec.Moldeado   = espec.Moldeado   != null && !espec.Moldeado  .Equals("-")    ? espec.Moldeado   + unidad.Unidad : espec.Moldeado;
+                         espec.Recibido   = espec.Recibido   != null && !espec.Recibido  .Equals("-")    ? espec.Recibido   + unidad.Unidad : espec.Recibido;
 
                          return tipoInsumosList;
 
@@ -212,17 +230,16 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             return new JsonResult(tipoInsumosList);
 
 
-        }       
-        internal bool ActualizarStockInsumo(AponusContext? AponusDBContext, DTOStockUpdate Actualizacion)//, string Prop)
+        }
+        
+        internal bool ActualizarStockInsumo(AponusContext AponusDBContext, DTOStockUpdate Actualizacion)
         {
-            if (AponusDBContext == null)
-                AponusDBContext = new AponusContext();
-
             string Origen = Actualizacion.Origen?.ToUpper() ?? "";
             string Destino = Actualizacion.Destino?.ToUpper() ?? "";
             decimal Cantidad = Actualizacion.Cantidad ?? 0;
+            
+            StockInsumos? Insumo = AponusDBContext?.stockInsumos.FirstOrDefault(x => x.IdInsumo.Equals(Actualizacion.Id));
 
-            StockInsumos? Insumo = AponusDBContext.stockInsumos.FirstOrDefault(x => x.IdInsumo.Equals(Actualizacion.Id));
             if (Insumo != null)
             {
                 PropertyInfo[] PropiedadesInsumo = Insumo.GetType().GetProperties();
@@ -231,7 +248,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                 if (string.IsNullOrEmpty(Actualizacion.Origen) && (Actualizacion.Destino?.ToUpper() ?? "").Contains("PENDIENTE")) //Compra con mercaderia pendiente de entrega
                 {
-                    return false;                  
+                    return false;
                 }
                 else if (string.IsNullOrEmpty(Actualizacion.Origen) && (Actualizacion.Destino?.ToUpper() ?? "").Contains("RECIBIDO")) //Compra con Mercaderia entregada al momento de la compra
                 {
@@ -239,18 +256,28 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 }
                 else if (!string.IsNullOrEmpty(Actualizacion.Origen) && !string.IsNullOrEmpty(Actualizacion.Destino)) //Movimiento interno/Ingreso de Mercaderia 
                 {
-                    decimal CantidadOrigen = (origen?.GetValue(Insumo) as decimal? ?? 0) -   Cantidad;
+                    decimal CantidadOrigen = (origen?.GetValue(Insumo) as decimal? ?? 0) - Cantidad;
 
                     if (CantidadOrigen < 0)
                         return false;
-                    
+
                     decimal CantidadDestino = (destino?.GetValue(Insumo) as decimal? ?? 0) + Cantidad;
                     origen?.SetValue(Insumo, CantidadOrigen);
                     destino?.SetValue(Insumo, CantidadDestino);
-                    AponusDBContext.Entry(Insumo).State =EntityState.Modified;
+                    AponusDBContext!.Entry(Insumo).State = EntityState.Modified;
                     AponusDBContext.SaveChanges();
+
                     return true;
 
+                }
+                else if (!string.IsNullOrEmpty(Actualizacion.Origen) && Destino.Equals("PROCESO")) //Actualizacion de StockComponente Luego de Armar StockProductos
+                {
+                    Insumo.Proceso = Actualizacion.Cantidad;
+                    AponusDBContext!.Entry(Insumo).State = EntityState.Modified;
+                    AponusDBContext?.SaveChanges();
+
+                    return true;
+                    
                 }
                 else
                 {
@@ -262,6 +289,8 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             {
                 return false;
             }
+
+            
         }
 
         public StockInsumos? BuscarInsumo(string Insumo)
@@ -293,7 +322,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             
         internal bool NewSetearStockInsumo(DTOStockUpdate Actualizacion)
         {
-            PropertyInfo? Propiedad = typeof(StockInsumos).GetProperties().FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino));
+            PropertyInfo? Propiedad = typeof(StockInsumos).GetProperties().FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino ?? ""));
             bool resultado = true;
             try
             {
@@ -367,7 +396,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
             {
                 var ExtensionArchivo = Path.GetExtension(Archivo.FileName);
                 string NombreArchivo = NombresArchivos[x];
-                ArchivosMovimientosStock UPDATEMovimientosStock_Archivos = MovimientosStockArchivosList.FirstOrDefault(x => x.HashArchivo.Equals(NombreArchivo));
+                ArchivosMovimientosStock? UPDATEMovimientosStock_Archivos = MovimientosStockArchivosList.FirstOrDefault(x => x.HashArchivo.Equals(NombreArchivo));
 
                 var RutaArchivo = Path.Combine(Directorio, Path.GetFileNameWithoutExtension(NombreArchivo) + ExtensionArchivo);
 
@@ -375,9 +404,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 {
                     Archivo.CopyTo(FlujoArchivos);
                 };
-                UPDATEMovimientosStock_Archivos.PathArchivo = RutaArchivo.ToString();
-                UPDATEMovimientosStock_Archivos.HashArchivo = NombreArchivo;
-                UPDATEMovimientosStock_Archivos.MimeType = MovimientosStock.ObtenerMimeType(RutaArchivo.ToString());
+
+                if (UPDATEMovimientosStock_Archivos != null)
+                {
+                    UPDATEMovimientosStock_Archivos.PathArchivo = RutaArchivo.ToString();
+                    UPDATEMovimientosStock_Archivos.HashArchivo = NombreArchivo;
+                    UPDATEMovimientosStock_Archivos.MimeType = MovimientosStock.ObtenerMimeType(RutaArchivo.ToString());
+                }                
                 x++;
 
             }
@@ -422,7 +455,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
                 return IdMovimiento;
             }
-            catch (DbUpdateException ex )
+            catch (DbUpdateException )
             {
                 return null;
             }
@@ -479,13 +512,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
                 {
 
                     IdTipo = x.auxPtd.ptd.IdTipo,
-                    DescripcionTipo = x.auxPtd.ptd.DescripcionTipo,
+                    DescripcionTipo = x.auxPtd.ptd.DescripcionTipo ?? "",
                     DescripcionProductos = AponusDBContext.ProductosDescripcions
                     .Where(pd => pd.IdDescripcion == x.pDesc.IdDescripcion)
                     .Select(pd => new DTODescripcionesProductos()
                     {
                         IdDescripcion = pd.IdDescripcion,
-                        NombreDescripcion = pd.DescripcionProducto,
+                        NombreDescripcion = pd.DescripcionProducto ?? "",
                         Productos = pd.Productos
                         .Where(prod => prod.IdDescripcion == pd.IdDescripcion && prod.IdTipo == x.auxPtd.ptd.IdTipo && prod.IdEstado != 0)
                         .Select(x => new DTOStockProductos()
@@ -501,7 +534,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Stocks
 
 
                         })
-                        .OrderBy(prod => Convert.ToInt32(prod.DiametroNominal.Replace("mm", "").Replace("-","")))
+                        .OrderBy(prod => Convert.ToInt32(prod.DiametroNominal ?? "".Replace("mm", "").Replace("-","")))
                         .ToList()
 
                     })

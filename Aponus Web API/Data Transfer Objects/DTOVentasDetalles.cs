@@ -11,7 +11,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public int? IdVenta { get; set; }
 
         [JsonProperty(PropertyName = "idProducto", NullValueHandling = NullValueHandling.Ignore)]
-        public string IdProducto { get; set; }
+        public string IdProducto { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "cantidad", NullValueHandling = NullValueHandling.Ignore)]
         public int Cantidad { get; set; }
@@ -20,8 +20,6 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public decimal Precio { get; set; }
 
         public decimal SubTotal => Precio * Cantidad;
-
-        [JsonProperty(PropertyName = "datosProducto", NullValueHandling = NullValueHandling.Ignore)]
-        public DTODatosProducto? datosProducto { get; set; }
+ 
     }
 }

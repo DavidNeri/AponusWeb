@@ -10,20 +10,25 @@ namespace Aponus_Web_API.Support.Movimientos
 {
     public class Suministros
     {
-        internal static List<SuministrosMovimientosStock>? MapeoSuministrosDB(List<DTOSuministrosMovimientosStock>? Suministros,string? Origen, string? Destino)
+        private readonly Stocks _stocks;
+
+        public Suministros(Stocks stocks)
         {
-            Stocks Stocks = new Stocks();
+            _stocks = stocks;
+        }
+
+        internal  List<SuministrosMovimientosStock>? MapeoSuministrosDB(List<DTOSuministrosMovimientosStock>? Suministros,string? Origen, string? Destino)
+        {
             List<StockInsumos> StockSuministros = new List<StockInsumos>();
             List<SuministrosMovimientosStock> SuministrosDbContext;
 
-            foreach (DTOSuministrosMovimientosStock suministro in Suministros)
+            foreach (DTOSuministrosMovimientosStock suministro in Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
             {
-                StockSuministros.Add(Stocks.BuscarInsumo(suministro.IdSuministro));
-
+                StockSuministros.Add(_stocks.BuscarInsumo(suministro.IdSuministro) ?? new StockInsumos());
             }
 
             //Si encontré, en stock, todos los Suministros
-            if (StockSuministros.Count > 0 && Suministros.Count == StockSuministros.Count)
+            if (StockSuministros.Count > 0 && Suministros != null && Suministros.Count == StockSuministros.Count)
             {
                 SuministrosDbContext = new List<SuministrosMovimientosStock>();
 

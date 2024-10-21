@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Mapping
         [JsonProperty(PropertyName = "contraseña", NullValueHandling = NullValueHandling.Ignore)]
         public string? Contraseña{ get; set; }
 
-        [JsonProperty(PropertyName = "correo", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "Correo", NullValueHandling = NullValueHandling.Ignore)]
         public string? Correo { get; set; }
 
         [JsonProperty(PropertyName = "idPerfil", NullValueHandling = NullValueHandling.Ignore)]

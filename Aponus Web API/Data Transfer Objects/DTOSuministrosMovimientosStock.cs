@@ -8,7 +8,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public int? IdMovimiento { get; set; }
 
         [JsonProperty(PropertyName = "idSuministro", NullValueHandling = NullValueHandling.Ignore)]
-        public string IdSuministro { get; set; }
+        public string IdSuministro { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "nombreSuministro", NullValueHandling = NullValueHandling.Ignore)]
         public string? NombreSuministro { get; set; }  

@@ -2,24 +2,35 @@
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
-using Humanizer.Localisation.TimeToClockNotation;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
-using System.Data.Entity;
-using System.Drawing;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Aponus_Web_API.Business
 {
-    public static class BS_Entidades
+    public class BS_Entidades
     {
-        internal static IActionResult Eliminar(int idProveedor)
+        private readonly ABM_Entidades AdEntidades;
+
+        public BS_Entidades(ABM_Entidades adEntidades)
+        {
+            AdEntidades = adEntidades;
+        }
+        public Tipos TiposEntidades()
+        {
+            return new Tipos(AdEntidades);
+        }
+
+        public Categorias CategoriasEntidades()
+        {
+            return new Categorias(AdEntidades);
+        }
+
+        internal IActionResult Eliminar(int idProveedor)
         {
             try
             {
-                return new ABM_Entidades().Eliminar(idProveedor);
+                return AdEntidades.Eliminar(idProveedor);
             }
             catch (Exception ex)
             {
@@ -31,14 +42,13 @@ namespace Aponus_Web_API.Business
                     Content = !string.IsNullOrEmpty(ex.InnerException?.Message) ? "Error:\n" + ex.InnerException.Message : "Error:\n" + ex.Message
                 };
             }
-
         }
 
-        internal static IActionResult Listar(int IdTipo, int IdCategoria, int IdEntidad )
+        internal IActionResult Listar(int IdTipo, int IdCategoria, int IdEntidad )
         {
             try
             {
-                IQueryable<Entidades> QueryEntidades = new ABM_Entidades().Listar();
+                IQueryable<Entidades> QueryEntidades = AdEntidades.Listar();
 
                 if (IdEntidad != 0)
                     QueryEntidades = QueryEntidades.Where(x => x.IdEntidad == IdEntidad);
@@ -91,7 +101,7 @@ namespace Aponus_Web_API.Business
             }
         }
 
-        internal static IActionResult Guardar(DTOEntidades Entidad)
+        internal IActionResult Guardar(DTOEntidades Entidad)
         {
             try
             {
@@ -129,7 +139,7 @@ namespace Aponus_Web_API.Business
                         }
                     }
 
-                    return new ABM_Entidades().GuardarEntidad(Entidad);
+                    return AdEntidades.GuardarEntidad(Entidad);
                 }
 
 
@@ -142,17 +152,23 @@ namespace Aponus_Web_API.Business
                     StatusCode = 400,
                     Content = !string.IsNullOrEmpty(ex.InnerException?.Message) ? "Error:\n" + ex.InnerException.Message : "Error:\n" + ex.Message
                 };
-
             }
         }
 
-        internal static class Tipos
+        public class Tipos
         {
-            internal static IActionResult Eliminar(int id)
+            private readonly ABM_Entidades AdEntidades;
+
+            public Tipos(ABM_Entidades adEntidades)
+            {
+                AdEntidades = adEntidades;
+            }
+
+            internal IActionResult Eliminar(int id)
             {
                 try
                 {
-                    return new ABM_Entidades().EliminarTipo(id);
+                    return AdEntidades.EliminarTipo(id);
                 }
                 catch (Exception ex)
                 {
@@ -167,11 +183,11 @@ namespace Aponus_Web_API.Business
                 }
             }
 
-            internal static async Task<IActionResult> Guardar(DTOEntidadesTipos tipoEntidad)
+            internal async Task<IActionResult> Guardar(DTOEntidadesTipos tipoEntidad)
             {
                 try
                 {
-                    await new ABM_Entidades().GuardarTipo(tipoEntidad);
+                    await AdEntidades.GuardarTipo(tipoEntidad);
                     return new StatusCodeResult(200);
                 }
                 catch (Exception ex)
@@ -183,17 +199,15 @@ namespace Aponus_Web_API.Business
                         ContentType = "application/json",
                         StatusCode = 400
                     };
-
                 }
-
             }
 
-            internal static async Task<IActionResult> Listar()
+            internal async Task<IActionResult> Listar()
             {
                 List<EntidadesTipos>? EntidadesList = new List<EntidadesTipos>();
                 List<DTOEntidadesTipos> DTOEntidades = new List<DTOEntidadesTipos>();
 
-                IActionResult Tipos = await new ABM_Entidades().ListarTipos();
+                IActionResult Tipos = await AdEntidades.ListarTipos();
 
                 if (Tipos is JsonResult JsonTiposEntidades)
                 {
@@ -201,7 +215,7 @@ namespace Aponus_Web_API.Business
 
                 }
 
-                foreach (EntidadesTipos entidad in EntidadesList)
+                foreach (EntidadesTipos entidad in EntidadesList ?? Enumerable.Empty<EntidadesTipos>())
                 {
                     DTOEntidades.Add(new DTOEntidadesTipos()
                     {
@@ -209,21 +223,23 @@ namespace Aponus_Web_API.Business
                         Nombre = entidad.NombreTipo
                     });
                 }
-
                 return new JsonResult(DTOEntidades);
-
             }
-
 
         }
 
-        internal static class Categorias
+        public class Categorias
         {
-            internal static IActionResult Eliminar(int idCategoria)
+            private readonly ABM_Entidades AdEntidades;
+            public Categorias(ABM_Entidades adEntidades)
+            {
+                AdEntidades = adEntidades;
+            }
+            internal IActionResult Eliminar(int idCategoria)
             {
                 try
                 {
-                    return new ABM_Entidades().EliminarCategoria(idCategoria);
+                    return AdEntidades.EliminarCategoria(idCategoria);
                 }
                 catch (Exception ex)
                 {
@@ -237,13 +253,12 @@ namespace Aponus_Web_API.Business
                     };
                 }
             }
-
-            internal static async Task<IActionResult> ValidarDatosCategoria(DTOEntidadesCategorias nuevaCategoria)
+            internal async Task<IActionResult> ValidarDatosCategoria(DTOEntidadesCategorias nuevaCategoria)
             {
                 nuevaCategoria.NombreCategoria = !string.IsNullOrEmpty(nuevaCategoria.NombreCategoria) ?  Regex.Replace(nuevaCategoria.NombreCategoria, @"\s+", " ").Trim().ToUpper() : "";
                 try
                 {
-                    _= await new ABM_Entidades().GuardarCategoria(nuevaCategoria);
+                    _= await AdEntidades.GuardarCategoria(nuevaCategoria);
                     return new StatusCodeResult(200);
                 }
                 catch (Exception ex)
@@ -257,20 +272,19 @@ namespace Aponus_Web_API.Business
                     };
                 }
             }
-
-            internal static async Task<IActionResult> Listar(int? idTipo)
+            internal async Task<IActionResult> Listar(int? idTipo)
             {
                 List<EntidadesCategorias>? ListaCategorias = new List<EntidadesCategorias>();
                 List<DTOEntidadesCategorias> DTOCategorias = new List<DTOEntidadesCategorias>();
 
-                IActionResult Categorias = await new ABM_Entidades().ListarCategorias(idTipo);
+                IActionResult Categorias = await AdEntidades.ListarCategorias(idTipo);
 
                 if (Categorias is JsonResult JsonCategorias)
                 {
                     ListaCategorias = JsonCategorias.Value as List<EntidadesCategorias>;
                 }
 
-                foreach (EntidadesCategorias categoria in ListaCategorias)
+                foreach (EntidadesCategorias categoria in ListaCategorias ?? Enumerable.Empty<EntidadesCategorias>())
                 {
                     DTOCategorias.Add(new DTOEntidadesCategorias()
                     {

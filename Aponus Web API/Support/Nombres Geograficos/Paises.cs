@@ -5,10 +5,10 @@ namespace Aponus_Web_API.Support.Nombres_Geograficos
     public class Paises
     {
         [JsonProperty(PropertyName = "countryName", NullValueHandling = NullValueHandling.Ignore)]
-        public string CountryName { get; set; }
+        public string CountryName { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "countryCode", NullValueHandling = NullValueHandling.Ignore)]
-        public string CountryCode { get; set; }
+        public string CountryCode { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "geonameId", NullValueHandling = NullValueHandling.Ignore)]
         public int GeonameId { get; set; }

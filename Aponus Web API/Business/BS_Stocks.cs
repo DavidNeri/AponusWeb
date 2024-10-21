@@ -1,24 +1,45 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Componentes;
-using Aponus_Web_API.Acceso_a_Datos.Entidades;
 using Aponus_Web_API.Acceso_a_Datos.Stocks;
 using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
-using Microsoft.AspNetCore.Mvc;
-using Z.EntityFramework.Plus;
 using Aponus_Web_API.Support;
+using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using Z.EntityFramework.Plus;
 
 namespace Aponus_Web_API.Business
 {
-    public class BS_Stocks : Stocks
+    public class BS_Stocks
     {
-        internal JsonResult ListarProductos(string? typeId, int? idDescription)
+        private readonly AponusContext AponusDbContext;
+        private readonly ComponentesProductos _ComponentesProductos;
+        private readonly Stocks AdStocks;
+        private readonly BS_Entidades BsEntidades;
+
+        public  BS_Stocks(AponusContext _aponusContext, Stocks adStocks, ComponentesProductos componentesProductos, BS_Entidades bsEntidades)
         {
-            List<DTOTiposProductos> ListadoProductos = new Stocks().ListarProductos();
+            AponusDbContext = _aponusContext;
+            AdStocks = adStocks;
+            _ComponentesProductos = componentesProductos;
+            BsEntidades = bsEntidades;
+        }
+
+        public StockInsumos OperacionesStockInsumos()
+        {
+            return new StockInsumos(AdStocks);
+        }
+
+        public StockProductos OperacionesStockProductos()
+        {
+            return new StockProductos(_ComponentesProductos, AponusDbContext, AdStocks);
+        }
+        internal JsonResult ListarProductos(string typeId, int idDescription)
+        {
+            List<DTOTiposProductos> ListadoProductos = AdStocks.ListarProductos();
 
 
-            if (typeId != null && idDescription != null)
+            if (typeId.Equals("0") && idDescription != 0)
             {
                 List<DTOTiposProductos> Lista = ListadoProductos
                     .Where(x => x.IdTipo == typeId && x.DescripcionProductos
@@ -27,13 +48,13 @@ namespace Aponus_Web_API.Business
 
                 Lista.ForEach(tpd => tpd.DescripcionProductos.ForEach(dpp =>
                 {
-                    dpp.Columnas = new ColumnasJson().ObtenerColumnas(dpp.Productos);
+                    dpp.Columnas = new ColumnasJson().ObtenerColumnas(dpp.Productos,null);
                 }));
 
 
                 return new JsonResult(Lista);
             }
-            else if (typeId != null)
+            else if (!typeId.Equals("0"))
             {
                 List<DTOTiposProductos> Lista = ListadoProductos
                     .Where(x => x.IdTipo == typeId)
@@ -41,12 +62,12 @@ namespace Aponus_Web_API.Business
 
                 Lista.ForEach(tpd => tpd.DescripcionProductos.ForEach(dpp =>
                 {
-                    dpp.Columnas = new ColumnasJson().ObtenerColumnas(dpp.Productos);
+                    dpp.Columnas = new ColumnasJson().ObtenerColumnas(dpp.Productos, null);
                 }));
 
                 return new JsonResult(Lista);
             }
-            else if (idDescription != null)
+            else if (idDescription != 0)
             {
 
                 List<DTOTiposProductos> Lista = ListadoProductos
@@ -56,7 +77,7 @@ namespace Aponus_Web_API.Business
 
                 Lista.ForEach(tpd => tpd.DescripcionProductos.ForEach(dpp =>
                 {
-                    dpp.Columnas = new ColumnasJson().ObtenerColumnas(dpp.Productos);
+                    dpp.Columnas = new ColumnasJson().ObtenerColumnas(dpp.Productos, null);
                 }));
                 return new JsonResult(Lista);
             }
@@ -64,123 +85,118 @@ namespace Aponus_Web_API.Business
             {
                 ListadoProductos.ForEach(tpd => tpd.DescripcionProductos.ForEach(dpp =>
                 {
-                    dpp.Columnas = new ColumnasJson().ObtenerColumnas(dpp.Productos);
+                    dpp.Columnas = new ColumnasJson().ObtenerColumnas(dpp.Productos, null);
                 }));
 
                 return new JsonResult(ListadoProductos);
             }
 
         }
-
         internal IActionResult ObtenerDatosInsumos(int? IdDescripcion)
         {
-            return new Stocks().ListarInsumosProducto(IdDescripcion);
-
+            return AdStocks.ListarInsumosProducto(IdDescripcion);
         }
-
         internal IActionResult ProcesarDatosMovimiento(DTOMovimientosStock Movimiento)
         {
-            Stocks stocks = new Stocks();
-            bool Rollback = false;
-            
-            using (AponusContext AponusDbContext = new AponusContext())
+            bool Rollback = false;            
+         
+            using (var transaccion = AponusDbContext.Database.BeginTransaction())
             {
-                using (var transaccion = AponusDbContext.Database.BeginTransaction())
+                foreach (DTOSuministrosMovimientosStock suministro in Movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
                 {
-                    foreach (DTOSuministrosMovimientosStock suministro in Movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
+                    if (!AdStocks.ActualizarStockInsumo(AponusDbContext,new DTOStockUpdate()
                     {
-                        if (!stocks.ActualizarStockInsumo(AponusDbContext,new DTOStockUpdate()
-                        {
-                            Id = suministro.IdSuministro,
-                            Origen = Movimiento.Origen,
-                            Destino = Movimiento.Destino,
-                            Cantidad = Convert.ToDecimal(suministro.Cantidad)
-                        }))
-                            Rollback = true;
-                    }
-
-                    int? IdMovimiento = stocks.GuardarDatosMovimiento(AponusDbContext, new Stock_Movimientos
-                    {
-                        CreadoUsuario = Movimiento.UsuarioCreacion ?? "ERROR",
-                        ModificadoUsuario = Movimiento.UsuarioModificacion,
-                        FechaHoraCreado = Fechas.ObtenerFechaHora(),
-                        IdProveedorOrigen = Movimiento.IdProveedorOrigen ?? 0,
-                        IdProveedorDestino = Movimiento.IdProveedorDestino ?? 0,
-                        Tipo = Movimiento.Tipo,
-                        Destino = !string.IsNullOrEmpty(Movimiento.Destino) ? Movimiento.Destino.ToUpper() : "",
-                        Origen = !string.IsNullOrEmpty(Movimiento.Origen) ? Movimiento.Origen.ToUpper() : "",
-                    });
-
-                    if (IdMovimiento == null) Rollback = true;
-
-                    List<SuministrosMovimientosStock> Suministros = (Movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
-                        .Select(x => new SuministrosMovimientosStock()
-                        {
-                            IdMovimiento = IdMovimiento ?? 0,
-                            Cantidad = Convert.ToDecimal(x.Cantidad),
-                            IdSuministro = x.IdSuministro,                           
-
-                        })
-                        .ToList();
-
-                    if (!stocks.GuardarSuministrosMovimiento(AponusDbContext, Suministros)) Rollback = true;
-
-                    //Obtener el Nombre del IdProveedor de Destino
-                    IActionResult Proveedores =  BS_Entidades.Listar(Movimiento.IdProveedorDestino ?? 0, 0, 0);
-                    DTOEntidades? proveedor = new DTOEntidades();
-
-                    if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value!=null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)
-                    {
-                        proveedor = ProveedoresList.FirstOrDefault(x => x.IdEntidad == Movimiento.IdProveedorDestino);
-                        
-                    }
-                    string? NombreCompletoProveedor = proveedor?.Apellido + "_" + proveedor?.Nombre;
-                    string? NombreClave = proveedor?.NombreClave; 
-                    //Obtener el Nombre del IdProveedor de Destino
-
-                    if (Movimiento.Archivos != null && Movimiento.Archivos.Count > 0)
-                    {
-                        List<ArchivosMovimientosStock> DatosArchivosMovimiento = new CloudinaryService().SubirArchivosMovimiento(Movimiento.Archivos,
-                        string.IsNullOrEmpty(NombreClave) ? NombreCompletoProveedor : NombreClave);
-
-                        if (DatosArchivosMovimiento.Count == 0) Rollback = true;
-
-                        Movimiento.IdMovimiento = IdMovimiento;
-                        DatosArchivosMovimiento.ForEach(x => x.IdMovimiento = IdMovimiento ?? 0);
-                        if (!stocks.GuardarDatosArchivosMovimiento(AponusDbContext, DatosArchivosMovimiento)) Rollback = true;
-
-                    }                    
-
-                    if (Rollback)
-                    {
-                        transaccion.Rollback();
-                        return new ContentResult()
-                        {
-                            Content = $"Error interno, no se aplicaron los cambios",
-                            ContentType = "Aplication/Json",
-                            StatusCode = 500,
-                        };
-                    }else
-                    {
-                        AponusDbContext.Database.CommitTransaction();
-                        AponusDbContext.SaveChanges();
-                        AponusDbContext.Dispose();
-                        return new StatusCodeResult(200);
-                    }              
-                    
+                        Id = suministro.IdSuministro,
+                        Origen = Movimiento.Origen,
+                        Destino = Movimiento.Destino,
+                        Cantidad = Convert.ToDecimal(suministro.Cantidad)
+                    }))
+                        Rollback = true;
                 }
 
+                int? IdMovimiento = AdStocks.GuardarDatosMovimiento(AponusDbContext, new Stock_Movimientos
+                {
+                    CreadoUsuario = Movimiento.UsuarioCreacion ?? "ERROR",
+                    ModificadoUsuario = Movimiento.UsuarioModificacion,
+                    FechaHoraCreado = Fechas.ObtenerFechaHora(),
+                    IdProveedorOrigen = Movimiento.IdProveedorOrigen ?? 0,
+                    IdProveedorDestino = Movimiento.IdProveedorDestino ?? 0,
+                    Tipo = Movimiento.Tipo,
+                    Destino = !string.IsNullOrEmpty(Movimiento.Destino) ? Movimiento.Destino.ToUpper() : "",
+                    Origen = !string.IsNullOrEmpty(Movimiento.Origen) ? Movimiento.Origen.ToUpper() : "",
+                });
+
+                if (IdMovimiento == null) Rollback = true;
+
+                List<SuministrosMovimientosStock> Suministros = (Movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
+                    .Select(x => new SuministrosMovimientosStock()
+                    {
+                        IdMovimiento = IdMovimiento ?? 0,
+                        Cantidad = Convert.ToDecimal(x.Cantidad),
+                        IdSuministro = x.IdSuministro,                           
+
+                    })
+                    .ToList();
+
+                if (!AdStocks.GuardarSuministrosMovimiento(AponusDbContext, Suministros)) Rollback = true;
+
+                //Obtener el Nombre del IdProveedor de Destino
+                IActionResult Proveedores =  BsEntidades.Listar(Movimiento.IdProveedorDestino ?? 0, 0, 0);
+                DTOEntidades? proveedor = new DTOEntidades();
+
+                if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value!=null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)
+                {
+                    proveedor = ProveedoresList.FirstOrDefault(x => x.IdEntidad == Movimiento.IdProveedorDestino);
+                        
+                }
+                string? NombreCompletoProveedor = proveedor?.Apellido + "_" + proveedor?.Nombre;
+                string? NombreClave = proveedor?.NombreClave; 
+                //Obtener el Nombre del IdProveedor de Destino
+
+                if (Movimiento.Archivos != null && Movimiento.Archivos.Count > 0)
+                {
+                    List<ArchivosMovimientosStock> DatosArchivosMovimiento = new CloudinaryService().SubirArchivosMovimiento(Movimiento.Archivos,
+                    string.IsNullOrEmpty(NombreClave) ? NombreCompletoProveedor : NombreClave);
+
+                    if (DatosArchivosMovimiento.Count == 0) Rollback = true;
+
+                    Movimiento.IdMovimiento = IdMovimiento;
+                    DatosArchivosMovimiento.ForEach(x => x.IdMovimiento = IdMovimiento ?? 0);
+                    if (!AdStocks.GuardarDatosArchivosMovimiento(AponusDbContext, DatosArchivosMovimiento)) Rollback = true;
+
+                }                    
+
+                if (Rollback)
+                {
+                    transaccion.Rollback();
+                    return new ContentResult()
+                    {
+                        Content = $"Error interno, no se aplicaron los cambios",
+                        ContentType = "Aplication/Json",
+                        StatusCode = 500,
+                    };
+                }else
+                {
+                    AponusDbContext.Database.CommitTransaction();
+                    AponusDbContext.SaveChanges();
+                    AponusDbContext.Dispose();
+                    return new StatusCodeResult(200);
+                }              
+                    
             }
-            
-        
         }
-
-        
-
-
-        public  static class Productos
+        public  class StockProductos
         {
-            internal static async Task<IActionResult> Actualizar(DTOStockProductos DTOStockProducto)
+            private readonly ComponentesProductos _componentesProductos;
+            private readonly AponusContext AponusDbContext;
+            private readonly Stocks AdStocks;
+            public StockProductos(ComponentesProductos componentesProductos, AponusContext _aponusDbContext, Stocks _adStocks)
+            {
+                _componentesProductos = componentesProductos;
+                AponusDbContext = _aponusDbContext;
+                AdStocks = _adStocks;   
+            }
+            internal async Task<IActionResult> Actualizar(DTOStockProductos DTOStockProducto)
             {
                 try
                 {
@@ -193,7 +209,7 @@ namespace Aponus_Web_API.Business
                             if (PropObjDB.Name.ToLower().Contains(PropDTO.Name.ToLower()) && PropDTO.GetValue(DTOStockProducto) != null)
                                 PropObjDB.SetValue(StockProductoDB, PropDTO.GetValue(DTOStockProducto));
 
-                    bool Resultado = await new Stocks.Productos().Actualizar(StockProductoDB);
+                    bool Resultado = await AdStocks.StockProductos().Actualizar(StockProductoDB);
 
                     if (Resultado)
                         return new StatusCodeResult(200);
@@ -216,274 +232,227 @@ namespace Aponus_Web_API.Business
 
                 }
             }
+            internal async Task<IActionResult> Incrementar(DTOProducto Producto)
+            {      
 
-            internal static async Task<IActionResult> Incrementar(DTOStockUpdate Actualizacion)
-            {
-                List<(string IdComponente, bool? resultado, decimal? ValorAnterior, decimal? NuevoValor)> Resultados = new List<(string, bool?, decimal?, decimal?)>();
+                //Obtener Componentes Producto
 
-                JsonResult Componentes = new ComponentesProductos().ObtenerComponentesFormateados(new DTODetallesProducto()
+                List<Productos_Componentes>? Componentes = !string.IsNullOrEmpty(Producto.IdProducto) ? 
+                    await _componentesProductos.ObtenerComponentes(Producto.IdProducto) : null;
+                
+
+                //IdDescripcion y Tipos de Almacenamiento/Fraccionamiento
+                JsonResult JsonNombresComponentes = await _componentesProductos.ListarNombresComponentes();
+                var stringJsonNombresComponentes = Newtonsoft.Json.JsonConvert.SerializeObject(JsonNombresComponentes.Value);
+                List<DTODescripcionComponentes> ListaDescripcionComponentes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<DTODescripcionComponentes>>(stringJsonNombresComponentes) ?? new List<DTODescripcionComponentes>();
+                //IdDescripcion y Tipos de Almacenamiento/Fraccionamiento
+
+                //IdDescripcion por cada Componente
+                List<(string id, int IdDesc, decimal? Longitud, decimal? Peso)> ListaDetallesComponentes = _componentesProductos.ListarIdDescripcionComponentesProducto(Componentes?.Select(x => x.IdComponente).ToArray() ?? Array.Empty<string>());
+                //IdDescripcion por cada Componente
+
+
+                List<Models.StockInsumos> StockComponentes = new List<Models.StockInsumos>();
+
+                if (Componentes != null)
                 {
-                    IdProducto = Actualizacion.Id,
-                    Cantidad = Convert.ToInt32(Actualizacion.Cantidad)
-                });
-
-                List<DTOProductoComponente> ListaComponentes = Componentes.Value as List<DTOProductoComponente>;
-                List<string> IdComponenteList = new();
-
-                foreach (DTOProductoComponente DetallesComponentesProducto in ListaComponentes)
-                {
-                    List<DTOStock> ComponentesList = DetallesComponentesProducto.StockComponente;
-
-                    foreach (DTOStock Componente in ComponentesList)
+                    foreach (var Componente in Componentes)
                     {
+                        Componente.Cantidad = Componente.Cantidad == null ? null : (Producto.Cantidad ?? 00) * Componente.Cantidad;
+                        Componente.Longitud = Componente.Longitud == null ? null : (Producto.Cantidad ?? 00) * Componente.Longitud;
+                        Componente.Peso = Componente.Peso == null ? null : (Producto.Cantidad ?? 00) * Componente.Peso;
 
-                        if (Componente.Longitud != null)
+                        Models.StockInsumos StockDisponibleComponente = AdStocks.BuscarInsumo(Componente.IdComponente) ?? new Models.StockInsumos();
+
+                        int IdDescripcionComponente = ListaDetallesComponentes.Where(x => x.Item1.Equals(Componente.IdComponente)).Select(x => x.Item2).First();
+                        string TipoAlmacenamiento = ListaDescripcionComponentes?.Where(x => x.IdDescripcion == IdDescripcionComponente).Select(x => x.IdAlmacenamiento).First() ?? "";
+                        string? TipoFraccionamiento = ListaDescripcionComponentes?.Where(x => x.IdDescripcion == IdDescripcionComponente).Select(x => x.IdFraccionamiento).First();
+
+                        //Verifico si hay diferencia entre entre el tipo de Almacenamiento y el tipo de fraccionamienrto
+                        if (TipoFraccionamiento != null && TipoAlmacenamiento != TipoFraccionamiento)
                         {
-                            DTOStockUpdate ComponenteActualizar = new DTOStockUpdate()
+                            if (TipoFraccionamiento.Equals("UD") && TipoAlmacenamiento.Equals("KG"))
                             {
-                                Id = Componente.IdInsumo,
-                                Cantidad = Componente.Longitud,
-                                Origen = "PINTURA",
-                                Destino = "PROCESO",
+                                decimal PesoUnidadComponente = ListaDetallesComponentes.Where(x => x.Equals(Componente.IdComponente)).Select(x => x.Peso).First() ?? 0;
+                                decimal PesoTotalUnProducto = PesoUnidadComponente * Componente.Cantidad ?? 1;
+                                decimal PesoRequerido = PesoTotalUnProducto * Componente.Cantidad ?? 1;
+                                decimal PesoDisponible = StockDisponibleComponente.Proceso ?? 0;
+                                decimal PesoRestante = PesoDisponible - PesoRequerido;
 
-                            };
-
-                            StockInsumos? StockComponente = new Stocks().BuscarInsumo(Componente.IdInsumo);
-                            Resultados.Add((StockComponente.IdInsumo, null, StockComponente.Proceso, ComponenteActualizar.Cantidad));
-
-                            if (StockComponente.Proceso != null & ComponenteActualizar.Cantidad != null)
-                            {
-                                if ((int?)StockComponente.Proceso < (int?)ComponenteActualizar.Cantidad)
+                                StockComponentes.Add(new Models.StockInsumos()
                                 {
-                                    IdComponenteList.Add(DetallesComponentesProducto.Descripcion);
-                                }
+                                    IdInsumo = Componente.IdComponente,
+                                    Proceso = PesoRestante,
+                                });
+
+                            }
+                            else if (TipoFraccionamiento.Equals("CM") && TipoAlmacenamiento.Equals("UD"))
+                            {
+                                decimal? LargoTotalInsumo = ListaDetallesComponentes.Where(x => x.id.Equals(Componente.IdComponente)).Select(x => x.Longitud).First();
+                                decimal CantidadStock = StockDisponibleComponente.Proceso ?? 0;
+                                decimal? LongitudTotalCmDisponible = (LargoTotalInsumo ?? 0) * CantidadStock;
+                                decimal LongitudNecesaria = Componente.Longitud ?? 0 * Producto.Cantidad ?? 1;
+                                decimal LongitudRestanteCm = LongitudTotalCmDisponible ?? 0 - LongitudNecesaria;
+
+                                int CantidadRestante = (int)Math.Floor(LongitudRestanteCm / LargoTotalInsumo ?? 1);
+
+                                StockComponentes.Add(new Models.StockInsumos()
+                                {
+                                    IdInsumo = Componente.IdComponente,
+                                    Proceso = CantidadRestante,
+                                });
+
                             }
                         }
-                        else if (Componente.Peso != null)
+                        else if (TipoFraccionamiento == null || TipoFraccionamiento.Equals(TipoAlmacenamiento))
                         {
-                            DTOStockUpdate ComponenteActualizar = new DTOStockUpdate()
-                            {
-                                Id = Componente.IdInsumo,
-                                Cantidad = Componente.Peso
-                            };
+                            TipoFraccionamiento = TipoAlmacenamiento;
 
-                            StockInsumos? StockComponente = new Stocks().BuscarInsumo(Componente.IdInsumo);
-                            Resultados.Add((StockComponente.IdInsumo, null, StockComponente.Proceso, ComponenteActualizar.Cantidad));
-
-                            if (StockComponente.Proceso != null & ComponenteActualizar.Cantidad != null)
+                            if (TipoFraccionamiento.Equals("UD"))
                             {
-                                if (StockComponente.Proceso < ComponenteActualizar.Cantidad)
+                                decimal UnidadesUnProducto = Componente.Cantidad ?? 1;
+                                decimal unidadesNecesarias = UnidadesUnProducto * Producto.Cantidad ?? 1;
+                                decimal UnidadesStock = StockDisponibleComponente.Proceso ?? 0;
+                                decimal UnidadesRestantess = UnidadesStock - unidadesNecesarias;
+
+                                StockComponentes.Add(new Models.StockInsumos()
                                 {
-                                    IdComponenteList.Add(DetallesComponentesProducto.Descripcion);
-                                }
+                                    IdInsumo = Componente.IdComponente,
+                                    Proceso = UnidadesRestantess,
+                                });
+
+
+                            }
+                            else if (TipoFraccionamiento.Equals("KG"))
+                            {
+                                decimal PesoUnProducto = Componente.Peso ?? 1;
+                                decimal PesoNecesario = PesoUnProducto * Producto.Cantidad ?? 1;
+                                decimal PesoStock = StockDisponibleComponente.Proceso ?? 0;
+                                decimal PesoRestante = PesoStock - PesoNecesario;
+
+                                StockComponentes.Add(new Models.StockInsumos()
+                                {
+                                    IdInsumo = Componente.IdComponente,
+                                    Proceso = PesoRestante,
+                                });
+                            }
+                            else if (TipoFraccionamiento.Equals("CM"))
+                            {
+                                decimal? LargoTotalInsumo = ListaDetallesComponentes.Where(x => x.id.Equals(Componente.IdComponente)).Select(x => x.Longitud).First();
+                                decimal CantidadStock = StockDisponibleComponente.Proceso ?? 0;
+                                decimal? LongitudTotalCmDisponible = (LargoTotalInsumo ?? 0) * CantidadStock;
+                                decimal LongitudNecesaria = Componente.Longitud ?? 0 * Producto.Cantidad ?? 1;
+                                decimal LongitudRestanteCm = LongitudTotalCmDisponible ?? 0 - LongitudNecesaria;
+
+                                int CantidadRestante = (int)Math.Floor(LongitudRestanteCm / LargoTotalInsumo ?? 1);
+
+                                StockComponentes.Add(new Models.StockInsumos()
+                                {
+                                    IdInsumo = Componente.IdComponente,
+                                    Proceso = CantidadRestante,
+                                });
                             }
                         }
-                        else if (Componente.Cantidad != null)
+
+                     
+                        bool NoRoolBack = false;
+
+                        using (var transaccion = AponusDbContext.Database.BeginTransaction())
                         {
-                            DTOStockUpdate ComponenteActualizar = new DTOStockUpdate()
+                            try
                             {
-                                Id = Componente.IdInsumo,
-                                Cantidad = Componente.Cantidad
-                            };
-
-                            StockInsumos? StockComponente = new Stocks().BuscarInsumo(Componente.IdInsumo);
-                            Resultados.Add((StockComponente.IdInsumo, null, StockComponente.Proceso, ComponenteActualizar.Cantidad));
-
-                            if (StockComponente.Proceso != null & ComponenteActualizar.Cantidad != null)
-                            {
-                                if (StockComponente.Proceso < ComponenteActualizar.Cantidad)
+                                foreach (var item in StockComponentes)
                                 {
-                                    IdComponenteList.Add(DetallesComponentesProducto.Descripcion);
+                                    NoRoolBack = AdStocks.ActualizarStockInsumo(AponusDbContext, new DTOStockUpdate() { Id = item.IdInsumo, Cantidad = item.Proceso });
+
+                                    if (!NoRoolBack)
+                                    {
+                                        transaccion.Rollback();
+                                        return new ContentResult()
+                                        {
+                                            Content = "No se aplicaron los  cambios",
+                                            ContentType = "application/json",
+                                            StatusCode = 400,
+                                        };
+                                    }
                                 }
 
+                                transaccion.Commit();
+                            }
+                            catch (Exception ex)
+                            {
+                                transaccion.Rollback();
+                                return new ContentResult()
+                                {
+                                    Content = $"Error: {ex.InnerException?.Message ?? ex.Message}",
+                                    ContentType = "application/json",
+                                    StatusCode = 400,
+                                };
                             }
                         }
                     }
 
-
-                }
-
-                if (IdComponenteList.Count > 0)
-                {
-                    string ValoresLista = String.Join("\n- ", IdComponenteList);
-
-                    var Resultado = new ObjectResult("La cantidad de Stock en estado 'En Proceso' de los siguientes insumos es inferior " +
-                                                        "a la cantidad requerida para agregar el producto:\n- " + ValoresLista)
-                    {
-                        StatusCode = 500,
-                    };
-
-                    return Resultado;
-
+                    return new StatusCodeResult(200);
                 }
                 else
                 {
-                    foreach (DTOProductoComponente DetallesComponentesProducto in ListaComponentes)
+                    return new ContentResult()
                     {
-                        List<DTOStock> ComponentesList = DetallesComponentesProducto.StockComponente;
+                        Content = "Error interno, no se encontraron los componentes. No se aplicaron los cambios",
+                        ContentType = "application/json",
+                        StatusCode = 400
+                    };
+                } 
+            }            
+        }
 
-                        foreach (DTOStock Componente in ComponentesList)
-                        {
-                            if (Componente.Longitud != null)
-                            {
-                                DTOStockUpdate ComponenteActualizar = new DTOStockUpdate()
-                                {
-                                    Id = Componente.IdInsumo,
-                                    Cantidad = Componente.Longitud
-                                };
-                                //Guardart los ccomponentes, valores y bool del resutado de descontar enu una lista para 
-                                //verificar si alguno dio falso y si dio falso, tengo q llamar al de incrementar con los que dio verdadero e
-                                //infomar que no se realizaron modificaciones por error en la db . con try catch
+        public class StockInsumos
+        {
+            private readonly Stocks AdStocks;
 
-                                var elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                elemento.resultado = new Stocks().ActualizarStockInsumo(null, ComponenteActualizar);
-
-                            }
-                            else if (Componente.Peso != null)
-                            {
-                                DTOStockUpdate ComponenteActualizar = new DTOStockUpdate()
-                                {
-                                    Id = Componente.IdInsumo,
-                                    Cantidad = Componente.Cantidad
-                                };
-
-                                var elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                elemento.resultado = new Stocks().ActualizarStockInsumo(null, ComponenteActualizar);
-
-
-                            }
-                            else if (Componente.Cantidad != null)
-                            {
-                                DTOStockUpdate ComponenteActualizar = new DTOStockUpdate()
-                                {
-                                    Id = Componente.IdInsumo,
-                                    Cantidad = Componente.Cantidad
-                                };
-
-                                var elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-                                elemento.resultado = new Stocks().ActualizarStockInsumo(null, ComponenteActualizar);
-                            }
-                        }
-                    }
-
-                    bool ResultadosOK = Resultados.Exists(x => x.resultado == false);
-
-                    if (ResultadosOK)
-                    {
-
-                        Resultados.ForEach(elemento => elemento.resultado = null);
-
-                        while (Resultados.Exists(x => x.resultado == false) == true)
-                        {
-                            foreach (var elemento in Resultados)
-                            {
-                                DTOStockUpdate ComponenteActualizar = new DTOStockUpdate()
-                                {
-                                    Id = elemento.IdComponente,
-                                    Cantidad = elemento.ValorAnterior,
-                                };
-
-                                var _elemento = Resultados.Find(x => x.IdComponente == ComponenteActualizar.Id);
-
-                                //
-
-
-                                //Continuar aca
-                                _elemento.resultado = new Stocks().ActualizarStockInsumo(null, ComponenteActualizar);
-                            }
-                        }
-
-                        var Resultado = new ObjectResult("Error interno, no se aplicaron los cambios")
-                        {
-                            StatusCode = 500,
-                        };
-                        return Resultado;
-
-                    }
-                    else
-                    {
-                        if (new Stocks().IncrementarStockProducto(Actualizacion))
-                        {
-                            return new StatusCodeResult(200);
-                        }
-                        else
-                        {
-                            bool resultado = false;
-                            int i = 0;
-                            while (resultado == false && i > 250)
-                            {
-                                resultado = new Stocks().IncrementarStockProducto(Actualizacion);
-                                i++;
-                            }
-
-                            if (resultado == false && i <= 250)
-                            {
-                                var Resultado = new ObjectResult("Error interno, no se aplicaron los cambios")
-                                {
-                                    StatusCode = 500,
-                                };
-                                return Resultado;
-
-                            }
-                            else
-                            {
-                                return new StatusCodeResult(200);
-                            }
-                        }
-
-
-                    }
-                }
-            }
-
-
-            public static class Insumos
+            public StockInsumos(Stocks adStocks)
             {
-                internal static async Task<IActionResult> Actualizar(DTOStock DtoStockInsumo)
+                AdStocks = adStocks;
+            }
+            internal async Task<IActionResult> Actualizar(DTOStock DtoStockInsumo)
+            {
+                try
                 {
+                    Models.StockInsumos ObjStockInsumosDB = new Models.StockInsumos();
+                    PropertyInfo[] PropsDTOStockInsumo = DtoStockInsumo.GetType().GetProperties(); //Valores que recibo                    
+                    PropertyInfo[] PropsObjStockInsumosDB = ObjStockInsumosDB.GetType().GetProperties(); //Objeto para la Base de Datos
 
-                    try
-                    {
-                        StockInsumos ObjStockInsumosDB = new StockInsumos();
-                        PropertyInfo[] PropsDTOStockInsumo = DtoStockInsumo.GetType().GetProperties(); //Valores que recibo                    
-                        PropertyInfo[] PropsObjStockInsumosDB = ObjStockInsumosDB.GetType().GetProperties(); //Objeto para la Base de Datos
+                    foreach (var PropDTO in PropsDTOStockInsumo)
+                        foreach (var PropObjDB in PropsObjStockInsumosDB)
+                            if (PropObjDB.Name.ToLower().Contains(PropDTO.Name.ToLower()) && PropDTO.GetValue(DtoStockInsumo) != null)
+                                PropObjDB.SetValue(ObjStockInsumosDB, PropDTO.GetValue(DtoStockInsumo));
 
-                        foreach (var PropDTO in PropsDTOStockInsumo)
-                            foreach (var PropObjDB in PropsObjStockInsumosDB)
-                                if (PropObjDB.Name.ToLower().Contains(PropDTO.Name.ToLower()) && PropDTO.GetValue(DtoStockInsumo) != null)
-                                    PropObjDB.SetValue(ObjStockInsumosDB, PropDTO.GetValue(DtoStockInsumo));
+                    bool Resultado = await AdStocks.StockInsumos().Actualizar(ObjStockInsumosDB);
 
-                        bool Resultado = await new Stocks.Insumos().Actualizar(ObjStockInsumosDB);
-
-                        if (Resultado)
-                            return new StatusCodeResult(200);   
-                        else
-                            return new ContentResult()
-                            {
-                                Content="No se aplicaron los cambios",
-                                ContentType="application/json",
-                                StatusCode=400
-                            };
-                    }
-                    catch (Exception ex)
-                    {
+                    if (Resultado)
+                        return new StatusCodeResult(200);
+                    else
                         return new ContentResult()
                         {
-                            Content = ex.InnerException?.Message ?? ex.Message,
+                            Content = "No se aplicaron los cambios",
                             ContentType = "application/json",
                             StatusCode = 400
                         };
-
-                    }
+                }
+                catch (Exception ex)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException?.Message ?? ex.Message,
+                        ContentType = "application/json",
+                        StatusCode = 400
+                    };
 
                 }
 
             }
+
         }
-
     }
-
-
-
 
 }

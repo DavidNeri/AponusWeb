@@ -1,8 +1,6 @@
 ﻿using Aponus_Web_API.Business;
-using Aponus_Web_API.Data_Transfer_objects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -10,6 +8,12 @@ namespace Aponus_Web_API.Controllers
     [ApiController]
     public class ComponentsController : Controller
     {
+        private readonly BS_Components _BsComponents;
+        public ComponentsController(BS_Components BsComponents)
+        {
+            _BsComponents = BsComponents;
+        }
+
         [HttpGet]
         [Route("FetchUnities")]
 
@@ -17,11 +21,11 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return await new BS_Components().ObtenerTipoAlmacenamiento();
+                return await _BsComponents.ObtenerTipoAlmacenamiento();
             }
             catch (DbUpdateException e)
             {
-                string Mensaje = e.InnerException.Message;
+                string Mensaje = e.InnerException?.Message ?? e.Message;
                 return new JsonResult(Mensaje);
             }
         }
@@ -33,11 +37,11 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return  new BS_Components().ObtenerPropsComponentes();
+                return  _BsComponents.ObtenerPropsComponentes();
             }
             catch (DbUpdateException e)
             {
-                string Mensaje = e.InnerException.Message;
+                string Mensaje = e.InnerException?.Message ?? e.Message;
                 return new JsonResult(Mensaje);
             }
         }
@@ -51,11 +55,11 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_Components().ListarComponentes(IdDescripcion);
+                return _BsComponents.ListarComponentes(IdDescripcion);
             }
             catch (DbUpdateException e)
             {
-                string Mensaje = e.InnerException.Message;
+                string Mensaje = e.InnerException?.Message ?? e.Message;
                 return new JsonResult(Mensaje);
             }
         }

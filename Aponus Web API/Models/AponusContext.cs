@@ -3,10 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Models;
 
-public partial class AponusContext : DbContext
-{
-    public AponusContext(){}
+public partial class AponusContext : DbContext{
     public AponusContext(DbContextOptions<AponusContext> options) : base(options) { }
+    public AponusContext() { }
     public virtual DbSet<ComponentesDetalle> ComponentesDetalles { get; set; }
     public virtual DbSet<Productos_Componentes> Componentes_Productos{ get; set; }
     public virtual DbSet<Stock_Movimientos> Stock_Movimientos { get; set; }
@@ -41,18 +40,13 @@ public partial class AponusContext : DbContext
     public virtual DbSet<EstadosVentas> estadosVentas { get; set; }
     public virtual DbSet<CuotasVentas> cuotasVentas{ get; set; }
     public virtual DbSet<EstadosCuotasVentas> estadosCuotasVentas { get; set; }
-    public virtual DbSet<PerfilesUsuarios> perfilesUsuarios { get; set; }
-    
+    public virtual DbSet<PerfilesUsuarios> perfilesUsuarios { get; set; }    
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        optionsBuilder
-            .UseNpgsql("Host=autorack.proxy.rlwy.net;Database=railway;Username=postgres;Password=IZeICnXcFWmXjVngimVzxaoXrwHoiaKC;Port=26059;SSL Mode=Prefer;Trust Server Certificate=True;")
-            .UseLazyLoadingProxies()
-            .EnableSensitiveDataLogging();
-    }    
-
+     
+       
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
@@ -323,7 +317,7 @@ public partial class AponusContext : DbContext
 
         modelBuilder.Entity<ComprasDetalles>(entity =>
         {
-            entity.ToTable("COMPRAS_DETALLES");
+            entity.ToTable("COMPRAS_DETALLE");
 
             entity.HasKey(PK => new
             {
@@ -898,8 +892,16 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .HasColumnName("DESCRIPCION");  
+                .HasColumnName("DESCRIPCION");
 
+            entity.Property(p => p.IdAlmacenamiento)
+            .HasColumnType("varchar(50)")
+            .HasColumnName("ID_ALMACENAMIENTO")
+            .IsRequired();
+
+            entity.Property(p => p.IdFraccionamiento)
+            .HasColumnName("ID_FRACCIONAMIENTO")
+            .HasColumnType("varchar(50)");
         });
 
        
@@ -1042,7 +1044,7 @@ public partial class AponusContext : DbContext
             .HasColumnType("int");
             
 
-            entity.Property(e => e.correo)
+            entity.Property(e => e.Correo)
             .HasColumnName("CORREO")
             .HasColumnType("varchar(50)");
 

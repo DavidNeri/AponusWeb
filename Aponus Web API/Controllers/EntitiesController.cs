@@ -1,6 +1,5 @@
 ﻿using Aponus_Web_API.Business;
 using Aponus_Web_API.Data_Transfer_Objects;
-using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
@@ -9,11 +8,17 @@ namespace Aponus_Web_API.Controllers
     [ApiController]
     public class EntitiesController : ControllerBase
     {
+        private readonly BS_Entidades BSEntidades;
+        public EntitiesController(BS_Entidades bSEntidades)
+        {
+            BSEntidades = bSEntidades;
+        }
+
         [HttpGet]
         [Route("Types/List")]
         public async Task<IActionResult> ListarTiposEntidades()
         {
-            return await BS_Entidades.Tipos.Listar();
+            return await BSEntidades.TiposEntidades().Listar();
         }
 
         [HttpPost]
@@ -32,7 +37,7 @@ namespace Aponus_Web_API.Controllers
             }
             else
             {
-                return await BS_Entidades.Tipos.Guardar(TipoEntidad);
+                return await BSEntidades.TiposEntidades().Guardar(TipoEntidad);
             }
         }
 
@@ -42,7 +47,7 @@ namespace Aponus_Web_API.Controllers
 
         public async Task<IActionResult> ListarCategoriasEntidades(int? IdTipo)
         {
-            return await BS_Entidades.Categorias.Listar(IdTipo);
+            return await BSEntidades.CategoriasEntidades().Listar(IdTipo);
         }
        
 
@@ -72,21 +77,21 @@ namespace Aponus_Web_API.Controllers
             }
             else
             {
-                return await BS_Entidades.Categorias.ValidarDatosCategoria(NuevaCategoria);
+                return await BSEntidades.CategoriasEntidades().ValidarDatosCategoria(NuevaCategoria);
             }
         }
         [HttpPost]
         [Route("Categories/Delete/{Id}")]
         public IActionResult EliminarCategoria(int Id)
         {
-            return BS_Entidades.Categorias.Eliminar(Id);
+            return BSEntidades.CategoriasEntidades().Eliminar(Id);
         }
 
         [HttpPost]
         [Route("Types/Delete/{Id}")]
         public IActionResult EliminarTipo(int Id)
         {
-            return BS_Entidades.Tipos.Eliminar(Id);
+            return BSEntidades.TiposEntidades().Eliminar(Id);
         }
         
 
@@ -94,23 +99,22 @@ namespace Aponus_Web_API.Controllers
         [Route("Save")]
         public IActionResult Nuevo(DTOEntidades Entidad)
         {
-            return BS_Entidades.Guardar(Entidad);
+            return BSEntidades.Guardar(Entidad);
         }
 
 
         [HttpGet]
         [Route("List/{typeId=0}/{CategoryId=0}/{EntityId=0}")]
-        public async Task<IActionResult> Listar(int TypeId, int CategoryId, int EntityId)
-        {
-            
-            return BS_Entidades.Listar(TypeId, CategoryId, EntityId);
+        public IActionResult Listar(int TypeId, int CategoryId, int EntityId)
+        {            
+            return BSEntidades.Listar(TypeId, CategoryId, EntityId);
         }       
 
         [HttpPost]
         [Route("Delete/{Id}")]
         public IActionResult Eliminar(int Id)
         {
-            return BS_Entidades.Eliminar(Id);
+            return BSEntidades.Eliminar(Id);
         }
     }
 }

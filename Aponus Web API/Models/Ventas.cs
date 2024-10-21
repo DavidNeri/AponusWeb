@@ -18,7 +18,7 @@ namespace Aponus_Web_API.Models
         public DateTime FechaHora { get; set; }
 
         [ForeignKey("ID_USUARIO")]
-        public string IdUsuario { get; set; }
+        public string IdUsuario { get; set; } = "" ;
 
         [Column("TOTAL")]
         public decimal Total { get; set; }

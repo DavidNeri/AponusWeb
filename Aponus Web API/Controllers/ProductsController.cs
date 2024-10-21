@@ -6,16 +6,23 @@ using Microsoft.EntityFrameworkCore;
 namespace Aponus_Web_API.Controllers
 {
     [Route("Aponus/[Controller]")]
-   [ApiController]
+    [ApiController]
     public class ProductsController : Controller
     {
+        private readonly BS_Productos BsProductos;
+
+        public ProductsController(BS_Productos _BSProductos)
+        {
+            BsProductos = _BSProductos;
+        }
+
         [HttpGet]
-        [Route("List/{TypeId?}/{IdDescription?}")]
-        public JsonResult ListProducts(string? TypeId, int? IdDescription)
+        [Route("List/{TypeId}/{IdDescription?}")]
+        public JsonResult ListProducts(string TypeId, int? IdDescription)
         {
             try
             {
-                return new BS_Stocks().ListarProductos(TypeId, IdDescription);
+                return BsProductos.ListarProductos(TypeId, IdDescription);
             }
             catch (Exception)
             {
@@ -25,10 +32,10 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListProducts")]
-        public async Task<JsonResult> ListProducts() {
+        public JsonResult ListProducts() {
             try
             {
-                return  new BS_Productos().ListarProductos();
+                return BsProductos.ListarProductos();
             }
             catch (Exception e )
             { 
@@ -38,11 +45,11 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("NewListComponents")]
-        public JsonResult NewListComponents(DTODetallesProducto Producto)
+        public JsonResult NewListComponents(DTOProducto Producto)
         {
             try
             {
-                return new BS_Productos().NewListarComponentesProducto(Producto);
+                return BsProductos.NewListarComponentesProducto(Producto);
 
             }
             catch (Exception e)
@@ -58,7 +65,7 @@ namespace Aponus_Web_API.Controllers
             try
             {
 
-                return await new BS_Productos().ListarDN(TypeId);
+                return await BsProductos.ListarDN(TypeId);
             }
             catch (Exception)
             {
@@ -73,7 +80,7 @@ namespace Aponus_Web_API.Controllers
             try
             {
 
-                return await new BS_Productos().ListarDN(TypeId, IdDescription);
+                return await BsProductos.ListarDN(TypeId, IdDescription);
             }
             catch (Exception)
             {
@@ -84,15 +91,15 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Save")]
-        public IActionResult Guardar(DTODetallesProducto Producto)
+        public IActionResult Guardar(DTOProducto Producto)
         {
             try
             {
-                return new BS_Productos().ProcesarDatos(Producto);
+                return BsProductos.ProcesarDatos(Producto);
             }
             catch (DbUpdateException e)
             {
-                string Mensaje = e.InnerException.Message;
+                string Mensaje = e.InnerException?.Message ?? e.Message;
                 return new JsonResult(Mensaje);
             }
         }
@@ -104,28 +111,17 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_Productos().ActualizarComponentes(Producto);
+                return BsProductos.ActualizarComponentes(Producto);
             }
             catch (DbUpdateException ex)
             {
-                if (ex.InnerException.Message != null)
+                return new ContentResult()
                 {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException.Message,
-                        ContentType = "application/json",
-                    };
-                }
-                else
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.Message,
-                        ContentType = "application/json",
-                    };
-                }
+                    Content = ex.InnerException?.Message ?? ex.Message,
+                    ContentType = "application/json",
+                    StatusCode = 400
+                };
             }
         }
-
     }
 }

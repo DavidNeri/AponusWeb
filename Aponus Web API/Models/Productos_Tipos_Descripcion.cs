@@ -8,10 +8,9 @@ namespace Aponus_Web_API.Models
         public int? IdDescripcion { get; set; }
 
         [Column("ID_TIPO")]
-        public string IdTipo { get; set; }        
-
-        public  virtual ProductosTipo IdTipoNavigation { get; set; }
-        public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }
+        public string IdTipo { get; set; } = string.Empty; 
+        public  virtual ProductosTipo IdTipoNavigation { get; set; } = new ProductosTipo();
+        public virtual ProductosDescripcion IdDescripcionNavigation { get; set; } = new ProductosDescripcion();
 
 
     }

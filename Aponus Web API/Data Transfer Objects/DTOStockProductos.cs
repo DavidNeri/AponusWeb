@@ -11,7 +11,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public string? IdProducto { get; set; }
 
         [JsonProperty(Order = 2, PropertyName = "idTipo", NullValueHandling = NullValueHandling.Ignore)]
-        public string IdTipo { get; set; }
+        public string IdTipo { get; set; } = string.Empty;
 
         [JsonProperty(Order = 3, PropertyName = "idDescripcion", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdDescripcion { get; set; }

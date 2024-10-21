@@ -8,7 +8,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Usuarios
     public class Usuarios
     {
         private readonly AponusContext AponusDBContext;
-        public Usuarios() { AponusDBContext = new AponusContext(); }
+        public Usuarios(AponusContext _aponusContext)
+        {
+            AponusDBContext = _aponusContext;   
+        }
 
         internal DTOUsuarios? ValidarCredenciales(DTOUsuarios usuario)
         {
@@ -16,10 +19,10 @@ namespace Aponus_Web_API.Acceso_a_Datos.Usuarios
             DTOUsuarios? Usuario = new DTOUsuarios();
 
 
-            if (usuario.Usuario.Contains("@")==true)
+            if (usuario.Usuario != null && usuario.Usuario.Contains("@")==true)
             {
                 ListUsuario = AponusDBContext.Usuarios
-                   .Where(x => x.correo == usuario.Usuario && x.Contraseña == usuario.Contraseña)
+                   .Where(x => x.Correo == usuario.Usuario && x.Contraseña == usuario.Contraseña)
                    .Select(x => new DTOUsuarios
                    {
                        Usuario = x.Usuario,                      
@@ -35,7 +38,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Usuarios
                 return Usuario;
 
             }
-            else if(usuario.Usuario.Contains("@") == false) 
+            else if(usuario.Usuario != null && usuario.Usuario.Contains("@") == false) 
             {
 
                 ListUsuario = AponusDBContext.Usuarios

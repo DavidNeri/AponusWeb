@@ -10,13 +10,29 @@ namespace Aponus_Web_API.Business
 {
     public class BS_Ventas
     {
-        public static class Estados
+        private readonly ABM_Ventas AdVentas;
+        public BS_Ventas(ABM_Ventas adVentas)
         {
-            internal static IActionResult Eliminar(int id)
+            AdVentas = adVentas;
+        }
+
+        public Estados EstadosVentas()
+        {
+            return new Estados(AdVentas);
+        }
+        public class Estados
+        {
+            private readonly ABM_Ventas AdVentas;
+
+            public Estados(ABM_Ventas adVentas)
+            {
+                AdVentas = adVentas;
+            }
+            internal IActionResult Eliminar(int id)
             {
                 try
                 {
-                    new ABM_Ventas().EliminarEstado(new EstadosVentas()
+                    AdVentas.EliminarEstado(new EstadosVentas()
                     {
                         IdEstadoVenta = id
                     });
@@ -33,8 +49,7 @@ namespace Aponus_Web_API.Business
                     };
                 }
             }
-
-            internal static async Task<IActionResult> ValidarDatos(DTOEstadosVentas Estado)
+            internal async Task<IActionResult> ValidarDatos(DTOEstadosVentas Estado)
             {
                 try
                 {
@@ -49,7 +64,7 @@ namespace Aponus_Web_API.Business
                             StatusCode = 400
                         };
 
-                    await new ABM_Ventas().GuardarEstado(Estado);
+                    await AdVentas.GuardarEstado(Estado);
                     return new StatusCodeResult(200);
 
                 }
@@ -66,8 +81,7 @@ namespace Aponus_Web_API.Business
                 }
             }
         }
-
-        internal static async Task<IActionResult> ProcesarDatosVenta(DTOVentas Venta)
+        internal async Task<IActionResult> ProcesarDatosVenta(DTOVentas Venta)
         {
             decimal saldoPendiente = Venta.Total; 
 
@@ -139,7 +153,7 @@ namespace Aponus_Web_API.Business
                 }
                 
 
-                bool Resultado = await new Acceso_a_Datos.Ventas.ABM_Ventas().Guardar(NuevaVenta);
+                bool Resultado = await AdVentas.Guardar(NuevaVenta);
 
 
                 return new ContentResult()
@@ -152,10 +166,9 @@ namespace Aponus_Web_API.Business
 
             
         }
-        public static async Task<ICollection<DTOCuotasVentas>> CalcularCuotas( ParametrosCalcularCuotas Parametros
-            )
+        public static ICollection<DTOCuotasVentas> CalcularCuotas(ParametrosCalcularCuotas Parametros)
         {
-            ICollection<CuotasVentas> NvaVtaCuotas = new List<CuotasVentas>();
+            ICollection<DTOCuotasVentas> NvaVtaCuotas = new List<DTOCuotasVentas>();
             DateTime Vencimiento = Fechas.ObtenerFechaHora();
 
             decimal MontoCuota = (Parametros.MontoVenta + (Parametros.MontoVenta * Parametros.Interes)) / Parametros.CantidadCuotas;
@@ -169,7 +182,7 @@ namespace Aponus_Web_API.Business
                     _ => Vencimiento.AddDays(30)
                 };
 
-                NvaVtaCuotas.Add(new CuotasVentas()
+                NvaVtaCuotas.Add(new DTOCuotasVentas()
                 {
                     NumeroCuota = i,
                    
@@ -185,15 +198,14 @@ namespace Aponus_Web_API.Business
             }
 
 
-            return null;
+            return NvaVtaCuotas;
         }
-
-        internal async static Task<IActionResult> Filtrar(FiltrosVentas? filtros)
+        internal IActionResult Filtrar(FiltrosVentas? filtros)
         {
             try
             {
 
-                IQueryable<Ventas> QueryVentas = new ABM_Ventas().ListarVentas();
+                IQueryable<Ventas> QueryVentas = AdVentas.ListarVentas();
 
                 if (filtros?.IdCliente != null)
                     QueryVentas = QueryVentas.Where(x => x.IdCliente == filtros.IdCliente);

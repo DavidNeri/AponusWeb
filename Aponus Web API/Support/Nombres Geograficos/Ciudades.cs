@@ -5,13 +5,13 @@ namespace Aponus_Web_API.Support.Nombres_Geograficos
     public class Ciudades
     {
         [JsonProperty(PropertyName = "toponymName", NullValueHandling = NullValueHandling.Ignore)]
-        public string ToponymName { get; set; }
+        public string ToponymName { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "countryCode", NullValueHandling = NullValueHandling.Ignore)]
-        public string CountryCode { get; set; }
+        public string CountryCode { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "adminCode1", NullValueHandling = NullValueHandling.Ignore)]
-        public string AdminCode1 { get; set; }
+        public string AdminCode1 { get; set; } = string.Empty;
      
     }
 }

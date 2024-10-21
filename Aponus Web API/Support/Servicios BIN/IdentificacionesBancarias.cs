@@ -25,7 +25,6 @@ namespace Aponus_Web_API.Support.Servicios_BIN
             return new JsonResult(binInfo);
 
 
-
         }
     }
 }

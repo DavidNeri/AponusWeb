@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public string? CodigoMPago { get; set; }
 
         [JsonProperty(PropertyName = "descripcion", NullValueHandling = NullValueHandling.Ignore)]
-        public string Descripcion { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "idEstado", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdEstado { get; set; }

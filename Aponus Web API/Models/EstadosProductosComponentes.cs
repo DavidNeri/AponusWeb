@@ -10,9 +10,9 @@ namespace Aponus_Web_API.Models
         public int IdEstado { get; set; }
 
         [Column("DESCRIPCION")]
-        public string Descripcion{ get; set;}
+        public string Descripcion{ get; set;} = string.Empty;
 
-        public virtual ICollection<Productos_Componentes> ProductosComponentes { get; set; }
+        public virtual ICollection<Productos_Componentes> ProductosComponentes { get; set; } = new List<Productos_Componentes>();
 
     }
 }

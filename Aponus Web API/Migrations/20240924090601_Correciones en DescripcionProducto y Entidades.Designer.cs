@@ -208,7 +208,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasIndex("IdInsumo");
 
-                    b.ToTable("COMPRAS_DETALLES", (string)null);
+                    b.ToTable("COMPRAS_DETALLE", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.CuotasVentas", b =>
@@ -1131,7 +1131,7 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID_PERFIL");
 
-                    b.Property<string>("correo")
+                    b.Property<string>("Correo")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("CORREO");
@@ -1400,19 +1400,19 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Models.Producto", b =>
                 {
                     b.HasOne("Aponus_Web_API.Models.ProductosDescripcion", "IdDescripcionNavigation")
-                        .WithMany("Productos")
+                        .WithMany("StockProductos")
                         .HasForeignKey("IdDescripcion")
                         .IsRequired()
                         .HasConstraintName("FK_PRODUCTOS_PRODUCTOS_DESCRIPCION");
 
                     b.HasOne("Aponus_Web_API.Models.EstadosProductos", "IdEstadoNavigation")
-                        .WithMany("Productos")
+                        .WithMany("StockProductos")
                         .HasForeignKey("IdEstadoMovimiento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Aponus_Web_API.Models.ProductosTipo", "IdTipoNavigation")
-                        .WithMany("Productos")
+                        .WithMany("StockProductos")
                         .HasForeignKey("IdTipo")
                         .IsRequired()
                         .HasConstraintName("FK_PRODUCTOS_PRODUCTOS_TIPOS");
@@ -1645,7 +1645,7 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductos", b =>
                 {
-                    b.Navigation("Productos");
+                    b.Navigation("StockProductos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.EstadosProductosComponentes", b =>
@@ -1694,14 +1694,14 @@ namespace AponusWebAPI.Migrations
                 {
                     b.Navigation("Producto_Tipo_Descripcione");
 
-                    b.Navigation("Productos");
+                    b.Navigation("StockProductos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.ProductosTipo", b =>
                 {
                     b.Navigation("Producto_Tipo_Descripcione");
 
-                    b.Navigation("Productos");
+                    b.Navigation("StockProductos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Models.Stock_Movimientos", b =>

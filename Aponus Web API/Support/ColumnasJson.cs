@@ -78,18 +78,18 @@ namespace Aponus_Web_API.Support
         [JsonProperty(PropertyName = "porcentajeGanancia", NullValueHandling = NullValueHandling.Ignore)]
         public string? PorcentajeGanancia { get; private set; } = "Porcentaje de Ganancia";
 
-        public string[] ObtenerColumnas(List<DTOStockProductos> StockProductos = null, List<DTOComponenteFormateado> Especificacionesformato = null)
+        public string[] ObtenerColumnas(List<DTOStockProductos>? StockProductos, List<DTOComponenteFormateado>? Especificacionesformato)
         {
-            List<string> columnasList = new List<string>();
+            List<string> columnasList = new();
 
             if (StockProductos != null)
             {
-                if (StockProductos.Any(x => x.DiametroNominal != null && (x.DiametroNominal != null || x.DiametroNominal != "-" ))) columnasList.Add(DiametroNominal);
-                if (StockProductos.Any(x => x.Tolerancia != null && (x.Tolerancia != null || x.Tolerancia != "-"))) columnasList.Add(Tolerancia);
-                if (StockProductos.Any(x => x.Cantidad != null && (x.Cantidad != null || x.Cantidad != "-") )) columnasList.Add(Cantidad);
-                if (StockProductos.Any(x => x.PrecioLista != null && (x.PrecioLista != null || x.PrecioLista != "-"))) columnasList.Add(PrecioLista);
-                if (StockProductos.Any(x => x.PrecioFinal != null && (x.PrecioFinal != null || x.PrecioFinal != "-"))) columnasList.Add(PrecioFinal);
-                if (StockProductos.Any(x => x.PorcentajeGanancia != null && (x.PorcentajeGanancia != null || x.PorcentajeGanancia != "-"))) columnasList.Add(PorcentajeGanancia);
+                if (StockProductos.Any(x => x.DiametroNominal    != null && x.DiametroNominal     != "-"))            columnasList.Add(DiametroNominal      ?? "");
+                if (StockProductos.Any(x => x.Tolerancia         != null && x.Tolerancia          != "-"))            columnasList.Add(Tolerancia           ?? "");
+                if (StockProductos.Any(x => x.Cantidad           != null && x.Cantidad            != "-"))            columnasList.Add(Cantidad             ?? "");
+                if (StockProductos.Any(x => x.PrecioLista        != null && x.PrecioLista         != "-"))            columnasList.Add(PrecioLista          ?? "");
+                if (StockProductos.Any(x => x.PrecioFinal        != null && x.PrecioFinal         != "-"))            columnasList.Add(PrecioFinal          ?? "");
+                if (StockProductos.Any(x => x.PorcentajeGanancia != null && x.PorcentajeGanancia  != "-"))            columnasList.Add(PorcentajeGanancia   ?? "");
 
                 string[] columnas = columnasList.ToArray();
 
@@ -97,25 +97,25 @@ namespace Aponus_Web_API.Support
             }
             else if (Especificacionesformato!=null)
             {  
-                if (Especificacionesformato.Any(x => x.Largo != null &&(x.Largo != null || !x.Largo.Contains("-")))) columnasList.Add(Largo);
-                if (Especificacionesformato.Any(x => x.Ancho != null && (x.Ancho != null || !x.Ancho.Contains("-")))) columnasList.Add(Ancho);
-                if (Especificacionesformato.Any(x => x.Longitud != null && (x.Longitud != null || x.Longitud.Contains("-")))) columnasList.Add(Longitud);
-                if (Especificacionesformato.Any(x => x.Espesor != null && (x.Espesor != null || x.Espesor.Contains("-")))) columnasList.Add(Espesor);
-                if (Especificacionesformato.Any(x => x.Altura != null && (x.Altura != null || x.Altura.Contains("-")))) columnasList.Add(Altura);
-                if (Especificacionesformato.Any(x => x.Diametro != null && (x.Diametro != null || !x.Diametro.Contains("-")))) columnasList.Add(Diametro);
-                if (Especificacionesformato.Any(x => x.DiametroNominal != null && (x.DiametroNominal != null || !x.DiametroNominal.Contains("-")))) columnasList.Add(DiametroNominal);
-                if (Especificacionesformato.Any(x => x.Tolerancia != null && (x.Tolerancia != null || !x.Tolerancia.Contains("-")))) columnasList.Add(Tolerancia);
-                if (Especificacionesformato.Any(x => x.Peso != null && (x.Peso != null || !x.Peso.Contains("-")))) columnasList.Add(Peso);
-                if (Especificacionesformato.Any(x => x.Perfil != null && (x.Perfil != null || !x.Perfil.Contains("-")))) columnasList.Add(Perfil);              
-                if (Especificacionesformato.Any(x => x.Recibido != null && (x.Recibido != null || !x.Recibido.Contains("-")))) columnasList.Add(Recibido);
-                if (Especificacionesformato.Any(x => x.Granallado != null && (x.Granallado != null || !x.Granallado.Contains("-")))) columnasList.Add(Granallado);
-                if (Especificacionesformato.Any(x => x.Pintura != null && (x.Pintura != null || !x.Pintura.Contains("-")))) columnasList.Add(Pintura);
-                if (Especificacionesformato.Any(x => x.Proceso != null && (x.Proceso != null || !x.Proceso.Contains("-")))) columnasList.Add(Proceso);
-                if (Especificacionesformato.Any(x => x.Moldeado != null && (x.Moldeado != null || !x.Moldeado.Contains("-")))) columnasList.Add(Moldeado);
-                if (Especificacionesformato.Any(x => x.Requerido != null && (x.Requerido != null || !x.Requerido.Contains("-")))) columnasList.Add(Requerido);
-                if (Especificacionesformato.Any(x => x.Disponibles != null && (x.Disponibles != null || !x.Disponibles.Contains("-")))) columnasList.Add(Disponibles);
-                if (Especificacionesformato.Any(x => x.Faltantes != null && (x.Faltantes != null || !x.Faltantes.Contains("-")))) columnasList.Add(Faltantes);
-                if (Especificacionesformato.Any(x => x.Total != null && (x.Total != null || !x.Total.Contains("-")))) columnasList.Add(Total);
+                if (Especificacionesformato.Any(x => x.Largo           !=            null && !x.Largo          .Contains('-')))            columnasList.Add(Largo           ?? "");
+                if (Especificacionesformato.Any(x => x.Ancho           !=            null && !x.Ancho          .Contains('-')))            columnasList.Add(Ancho           ?? "");
+                if (Especificacionesformato.Any(x => x.Longitud        !=            null && !x.Longitud       .Contains('-')))            columnasList.Add(Longitud        ?? "");
+                if (Especificacionesformato.Any(x => x.Espesor         !=            null && !x.Espesor        .Contains('-')))            columnasList.Add(Espesor         ?? "");
+                if (Especificacionesformato.Any(x => x.Altura          !=            null && !x.Altura         .Contains('-')))            columnasList.Add(Altura          ?? "");
+                if (Especificacionesformato.Any(x => x.Diametro        !=            null && !x.Diametro       .Contains('-')))            columnasList.Add(Diametro        ?? "");
+                if (Especificacionesformato.Any(x => x.DiametroNominal !=            null && !x.DiametroNominal.Contains('-')))            columnasList.Add(DiametroNominal ?? "");
+                if (Especificacionesformato.Any(x => x.Tolerancia      !=            null && !x.Tolerancia     .Contains('-')))            columnasList.Add(Tolerancia      ?? "");
+                if (Especificacionesformato.Any(x => x.Peso            !=            null && !x.Peso           .Contains('-')))            columnasList.Add(Peso            ?? "");
+                if (Especificacionesformato.Any(x => x.Perfil          !=            null && !x.Perfil         .Contains('-')))            columnasList.Add(Perfil          ?? "");              
+                if (Especificacionesformato.Any(x => x.Recibido        !=            null && !x.Recibido       .Contains('-')))            columnasList.Add(Recibido        ?? "");
+                if (Especificacionesformato.Any(x => x.Granallado      !=            null && !x.Granallado     .Contains('-')))            columnasList.Add(Granallado      ?? "");
+                if (Especificacionesformato.Any(x => x.Pintura         !=            null && !x.Pintura        .Contains('-')))            columnasList.Add(Pintura         ?? "");
+                if (Especificacionesformato.Any(x => x.Proceso         !=            null && !x.Proceso        .Contains('-')))            columnasList.Add(Proceso         ?? "");
+                if (Especificacionesformato.Any(x => x.Moldeado        !=            null && !x.Moldeado       .Contains('-')))            columnasList.Add(Moldeado        ?? "");
+                if (Especificacionesformato.Any(x => x.Requerido       !=            null && !x.Requerido      .Contains('-')))            columnasList.Add(Requerido       ?? "");
+                if (Especificacionesformato.Any(x => x.Disponibles     !=            null && !x.Disponibles    .Contains('-')))            columnasList.Add(Disponibles     ?? "");
+                if (Especificacionesformato.Any(x => x.Faltantes       !=            null && !x.Faltantes      .Contains('-')))            columnasList.Add(Faltantes       ?? "");
+                if (Especificacionesformato.Any(x => x.Total           !=            null && !x.Total          .Contains('-')))            columnasList.Add(Total           ?? "");
 
                 string[] columnas = columnasList.ToArray();
 

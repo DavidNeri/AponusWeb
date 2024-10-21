@@ -2,13 +2,13 @@
   {
     "ContainingType": "Aponus_Web_API.Controllers.BINServicesController",
     "Method": "ObtenerInformacionTarjeta",
-    "RelativePath": "Aponus/BINServices/GetCardInfo/{NumeroTarjeta}",
+    "RelativePath": "Aponus/BINServices/GetCardInfo/{BIN}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "NumeroTarjeta",
+        "Name": "BIN",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -1174,7 +1174,7 @@
       {
         "Name": "TypeId",
         "Type": "System.String",
-        "IsRequired": false
+        "IsRequired": true
       },
       {
         "Name": "IdDescription",
@@ -1241,7 +1241,7 @@
     "Parameters": [
       {
         "Name": "Producto",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesProducto",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOProducto",
         "IsRequired": true
       }
     ],
@@ -1257,7 +1257,23 @@
     "Parameters": [
       {
         "Name": "Producto",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesProducto",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOProducto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.PurchaseController",
+    "Method": "NuevaCompra",
+    "RelativePath": "Aponus/Purchase/New",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Compras",
+        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOCompras",
         "IsRequired": true
       }
     ],
@@ -1353,7 +1369,7 @@
     "Parameters": [
       {
         "Name": "Producto",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOStockUpdate",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOProducto",
         "IsRequired": true
       }
     ],
@@ -1370,12 +1386,12 @@
       {
         "Name": "TypeId",
         "Type": "System.String",
-        "IsRequired": false
+        "IsRequired": true
       },
       {
         "Name": "IdDescription",
-        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
+        "Type": "System.Int32",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -1438,7 +1454,7 @@
     "Parameters": [
       {
         "Name": "InsumoProducto",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOComponente",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesComponenteProducto",
         "IsRequired": true
       }
     ],
@@ -1454,7 +1470,7 @@
     "Parameters": [
       {
         "Name": "Especificaciones",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOComponente",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesComponenteProducto",
         "IsRequired": true
       }
     ],
@@ -1480,7 +1496,7 @@
     "Parameters": [
       {
         "Name": "Especificaciones",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOComponente",
+        "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesComponenteProducto",
         "IsRequired": true
       }
     ],

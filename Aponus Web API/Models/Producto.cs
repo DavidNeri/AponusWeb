@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Aponus_Web_API.Models;
 
 public partial class Producto
 {
     public string IdProducto { get; set; } = null!;
-    
+
     public int IdDescripcion { get; set; }
 
     public string IdTipo { get; set; } = null!;
@@ -21,7 +22,7 @@ public partial class Producto
     public decimal? PrecioLista { get; set; }
 
     [Column(TypeName = "decimal(18,2)")]
-    public decimal? PrecioFinal{ get; set; }
+    public decimal? PrecioFinal { get; set; }
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal? PorcentajeGanancia { get; set; }
@@ -31,7 +32,7 @@ public partial class Producto
 
     public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }  = null!;
     public virtual ProductosTipo IdTipoNavigation { get; set; } = null!;
-    public virtual EstadosProductos IdEstadoNavigation { get; set; }
-    public virtual ICollection<VentasDetalles> Ventas { get; set; }
+    public virtual EstadosProductos IdEstadoNavigation { get; set; } = new EstadosProductos();
+    public virtual ICollection<VentasDetalles> Ventas { get; set; } = default!;
 
 }

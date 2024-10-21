@@ -11,7 +11,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Ventas
     public class ABM_Ventas
     {
         private readonly AponusContext AponusDBContext;
-        public ABM_Ventas() { AponusDBContext = new AponusContext(); }
+        private readonly Stocks.Stocks stocks;
+
+        public ABM_Ventas(AponusContext _aponusContext, Stocks.Stocks _stocks)
+        {
+            AponusDBContext = _aponusContext;
+            stocks = _stocks;   
+        }
 
         public async Task<bool> Guardar(Models.Ventas Venta)
         {
@@ -33,7 +39,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Ventas
 
                 foreach (VentasDetalles item in Venta.DetallesVenta ?? Enumerable.Empty<VentasDetalles>())
                 {
-                    roolbackResult = new Stocks.Stocks().DisminuirStockProducto( new DTOStockUpdate()
+                    roolbackResult = stocks.DisminuirStockProducto( new DTOStockUpdate()
                     {
                         IdExistencia = item.IdProducto,
                         Cantidad = item.Cantidad,
@@ -89,14 +95,13 @@ namespace Aponus_Web_API.Acceso_a_Datos.Ventas
                 {
                     Estado.Descripcion = NuevoEstado.Descripcion ?? Estado.Descripcion;
                     Estado.IdEstado = NuevoEstado.IdEstado ?? Estado.IdEstado;
-                    await AponusDBContext.SaveChangesAsync();
-                    
+                    await AponusDBContext.SaveChangesAsync();                    
                 }
                 else
                 {
                     await AponusDBContext.estadosVentas.AddAsync(new EstadosVentas()
                     {
-                        Descripcion = NuevoEstado.Descripcion
+                        Descripcion = NuevoEstado?.Descripcion ?? ""
                     });
                 }
                 return new StatusCodeResult(200);
@@ -115,7 +120,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Ventas
                 {
                     await AponusDBContext.estadosVentas.AddAsync(new EstadosVentas()
                     {
-                        Descripcion = NuevoEstado.Descripcion
+                        Descripcion = NuevoEstado?.Descripcion ?? ""
                     });
                     return new StatusCodeResult(200);
                 }

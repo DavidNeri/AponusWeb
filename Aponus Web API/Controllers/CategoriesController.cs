@@ -1,15 +1,8 @@
-﻿using Aponus_Web_API.Acceso_a_Datos.Sistema;
-using Aponus_Web_API.Models;
-using Aponus_Web_API.Support;
+﻿using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Business;
-using Microsoft.AspNetCore.Http.Metadata;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Newtonsoft.Json;
-using System.Linq;
-using Aponus_Web_API.Data_Transfer_objects;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -17,8 +10,13 @@ namespace Aponus_Web_API.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
+        private readonly BS_Categorias BsCategorias;
         private readonly AponusContext AponusDBContext;
-        public CategoriesController(AponusContext aponusDBContext){AponusDBContext = aponusDBContext;}
+        public CategoriesController(AponusContext aponusDBContext, BS_Categorias _BsCategorias)
+        {
+            AponusDBContext = aponusDBContext;
+            BsCategorias = _BsCategorias;
+        }
 
 
         [HttpGet]
@@ -44,7 +42,7 @@ namespace Aponus_Web_API.Controllers
         [Route("Products/Descriptions/List/{idTipo}")]
         public List<DTODescripciones> ListarDescripciones(string IdTipo)
         {            
-                return new BS_Categorias().ListarDescripciones(IdTipo);            
+                return BsCategorias.ListarDescripciones(IdTipo);            
         }
 
 
@@ -54,7 +52,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_Categorias().AgregarTipo(NuevaCategoria);
+                return BsCategorias.AgregarTipo(NuevaCategoria);
                 
             }
             catch (Exception ex)
@@ -69,7 +67,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_Categorias().EliminarTipoProducto(IdTipo);
+                return BsCategorias.EliminarTipoProducto(IdTipo);
 
             }
             catch (Exception ex)
@@ -85,7 +83,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return await new BS_Categorias().AgregarDescripcion(NuevaCategoria);
+                return await BsCategorias.AgregarDescripcion(NuevaCategoria);
             }
             catch (Exception ex)
             {
@@ -104,7 +102,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_Categorias().EliminarDescripcionProducto(IdDescription);
+                return BsCategorias.EliminarDescripcionProducto(IdDescription);
 
             }
             catch (Exception ex)
@@ -118,12 +116,12 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_Categorias().Actualizar(ActualizarCategorias);
+                return BsCategorias.Actualizar(ActualizarCategorias);
             }
             catch (DbUpdateException e)
             {
 
-                string Mensaje = e.InnerException.Message;
+                string Mensaje = e.InnerException?.Message ?? e.Message;
                 return new JsonResult(Mensaje);
             }
 
@@ -136,12 +134,12 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return await new BS_Categorias().ListarNombresComponentes();
+                return await BsCategorias.ListarNombresComponentes();
             }
             catch (DbUpdateException e)
             {
 
-                string Mensaje = e.InnerException.Message;
+                string Mensaje = e.InnerException?.Message ?? e.Message;
                 return new JsonResult(Mensaje);
             }
         }
@@ -155,11 +153,10 @@ namespace Aponus_Web_API.Controllers
         {
              try
              {
-                 return  new BS_Categorias().AgregarDescripcionCompoente(nombreComponente);
+                 return  BsCategorias.AgregarDescripcionCompoente(nombreComponente);
              }
              catch (DbUpdateException ex)
              {
-
                  if (ex.InnerException != null)
                  {
                      return new ContentResult()
@@ -167,7 +164,6 @@ namespace Aponus_Web_API.Controllers
                          Content = ex.InnerException.Message,
                          ContentType = "text/plain",
                          StatusCode = 400,
-
                      };
                  }
                  else
@@ -181,9 +177,6 @@ namespace Aponus_Web_API.Controllers
                      };
                  };
              }
-
-            
-
         }
 
         
@@ -193,7 +186,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return new BS_Categorias().ModificarDescripcionCompoente(Descripcion);
+                return BsCategorias.ModificarDescripcionCompoente(Descripcion);
             }
             catch (DbUpdateException ex)
             {

@@ -8,11 +8,17 @@ namespace Aponus_Web_API.Controllers
     [ApiController]
     public class UsersController :ControllerBase
     {
+        private readonly SS_Usuarios _Usuarios;
+        public UsersController(SS_Usuarios usuarios)
+        {
+            _Usuarios = usuarios;
+        }
+
         [HttpPost]
         [Route("Validation")]
         public DTOUsuarios? ValiadarUsuario(DTOUsuarios Usuario) 
         {
-            return new SS_Usuarios().ValidarUsuario(Usuario);
+            return _Usuarios.ValidarUsuario(Usuario);
         }
 
         [HttpPost]
@@ -29,7 +35,7 @@ namespace Aponus_Web_API.Controllers
                 };
             }else
             {
-                return await SS_Usuarios.NuevoUsuario(Usuario);
+                return await _Usuarios.NuevoUsuario(Usuario);
             }
         }
 

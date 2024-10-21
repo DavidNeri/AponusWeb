@@ -12,12 +12,12 @@ namespace Aponus_Web_API.Models
         public int? IdEstadoMovimiento { get; set; }
 
         [Column("DESCRIPCION")]
-        public string Descripcion { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
 
         [Column("ID_ESTADO_PROPIO")]
         public int IdEstado { get; set; }
 
-        public virtual ICollection<Stock_Movimientos> movimientosStock{ get; set; }
+        public virtual ICollection<Stock_Movimientos> movimientosStock { get; set; } = new List<Stock_Movimientos>();
 
     }
 }

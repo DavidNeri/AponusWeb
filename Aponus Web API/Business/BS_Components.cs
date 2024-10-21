@@ -2,36 +2,34 @@
 using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System.Linq.Expressions;
 using System.Data.Entity.Validation;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing.Text;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using Newtonsoft.Json.Serialization;
 using Aponus_Web_API.Data_Transfer_Objects;
 
 namespace Aponus_Web_API.Business
 {
     public class BS_Components
     {
-        
-        internal JsonResult? DeterminarProp(DTOComponente? Especificaciones)
+        private readonly ComponentesProductos _componentesProductos;
+        private readonly OperacionesComponentes _operacionesComponentes;
+        private readonly ObtenerComponentes _obtenerComponentes;
+
+        public BS_Components(ComponentesProductos componentesProductos, OperacionesComponentes operacionesComponentes, ObtenerComponentes obtenerComponentes)
         {
-            return new ObtenerComponentes().ListarProp(
+            _componentesProductos = componentesProductos;
+            _operacionesComponentes = operacionesComponentes;
+            _obtenerComponentes = obtenerComponentes;
+        }
+        internal JsonResult? DeterminarProp(DTODetallesComponenteProducto? Especificaciones)
+        {
+            return _obtenerComponentes.ListarProp(
                 CategorizarPropiedades(Especificaciones).Item1,
                 CategorizarPropiedades(Especificaciones).Item2);
 
-        }
-
-        
+        }        
         internal IActionResult GuardarComponentesProducto(List<DTOComponentesProducto> ComponentesProd)
         {
             bool ChkIdProd = ComponentesProd.All(x => x.IdProducto != null);
-            ComponentesProductos CP = new ComponentesProductos();
             
             if (ChkIdProd)
             {
@@ -39,13 +37,13 @@ namespace Aponus_Web_API.Business
                 {
                     try
                     {
-                        CP.GuardarComponenteProd(new Productos_Componentes
+                        _componentesProductos.GuardarComponenteProd(new Productos_Componentes
                         {
-                            IdProducto = Componente.IdProducto,
-                            IdComponente = Componente.IdComponente,
-                            Cantidad = Componente.Cantidad,
-                            Longitud = Componente.Largo,
-                            Peso = Componente.Peso,
+                            IdProducto = Componente?.IdProducto ?? "",
+                            IdComponente = Componente?.IdComponente ?? "",
+                            Cantidad = Componente?.Cantidad,
+                            Longitud = Componente?.Largo,
+                            Peso = Componente?.Peso,
                         });
 
                     }
@@ -88,19 +86,16 @@ namespace Aponus_Web_API.Business
             return new StatusCodeResult(200);
 
         }
-
         internal IActionResult ListarComponentes(int? IdDescripcion)
         {
-            return new ObtenerComponentes().Listar(IdDescripcion);
+            return _obtenerComponentes.Listar(IdDescripcion);
         }
-
-        internal JsonResult? ObtenerIdComponente(DTOComponente? Especificaciones)
+        internal JsonResult? ObtenerIdComponente(DTODetallesComponenteProducto? Especificaciones)
         {
 
-            return new ObtenerComponentes().ObtenerId(CategorizarPropiedades(Especificaciones).Item2);
+            return _obtenerComponentes.ObtenerId(CategorizarPropiedades(Especificaciones).Item2);
 
         }
-
         internal IActionResult ObtenerPropsComponentes()
         {
             string? TipoMapeado;
@@ -139,18 +134,16 @@ namespace Aponus_Web_API.Business
             return new JsonResult(ListaInfoProps);
             
         }
-        //operacionescompoenentes.listarprops
         internal async Task<IActionResult> ObtenerTipoAlmacenamiento( )
         {
             
-            return await new OperacionesComponentes().ListarTiposAlacenamiento();
+            return await _operacionesComponentes.ListarTiposAlacenamiento();
         }
-
-        private (string[], List<(string Nombre, string Valor)>) CategorizarPropiedades(DTOComponente? Especificaciones)
+        private (string[], List<(string Nombre, string Valor)>) CategorizarPropiedades(DTODetallesComponenteProducto? Especificaciones)
         {
             var propiedadesNulas = new string[0];
             List<(string Nombre, string Valor)> propiedadesNoNulas = new List<(string, string)>();
-            var propiedades = typeof(DTOComponente).GetProperties();
+            var propiedades = typeof(DTODetallesComponenteProducto).GetProperties();
 
             foreach (var propiedad in propiedades)
             {
@@ -163,7 +156,7 @@ namespace Aponus_Web_API.Business
                 }
                 else if (valor != null)
                 {
-                    string _valor = valor.ToString();
+                    string _valor = valor.ToString() ?? "";
                     propiedadesNoNulas.Add((propiedad.Name, _valor));
 
                 }

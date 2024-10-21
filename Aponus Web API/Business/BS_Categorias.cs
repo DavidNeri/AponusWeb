@@ -1,22 +1,26 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos.Componentes;
-using Aponus_Web_API.Acceso_a_Datos.Sistema;
-using Aponus_Web_API.Acceso_a_Datos.Stocks;
-using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Data_Transfer_Objects;
 using Aponus_Web_API.Models;
 using Aponus_Web_API.Support;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
+using Categorias = Aponus_Web_API.Acceso_a_Datos.Sistema.Categorias;
 
 namespace Aponus_Web_API.Business
 {
     public class BS_Categorias
     {
-       
+        private readonly Categorias AdCategorias;
+        private readonly ComponentesProductos _ComponentesProductos;
+
+        public BS_Categorias(Categorias _AdCategorias, ComponentesProductos componentesProductos)
+        {
+            AdCategorias = _AdCategorias;
+            _ComponentesProductos = componentesProductos;
+        }
         internal async Task<IActionResult> AgregarDescripcion(DTOCategorias NuevaCategoria)
         {
-
             try
             {
                 ProductosDescripcion DescripcionProductoDB = new ProductosDescripcion()
@@ -24,8 +28,8 @@ namespace Aponus_Web_API.Business
                     DescripcionProducto = Regex.Replace(NuevaCategoria.Descripcion ?? "", @"\s+", " ").Trim().ToUpper(),  //Inserta la Descripcion y obtiene el id
                 };
 
-                return await new Categorias().NuevaDescripcion(DescripcionProductoDB, NuevaCategoria.IdTipo ?? "");
-                
+                return await AdCategorias.NuevaDescripcion(DescripcionProductoDB, NuevaCategoria.IdTipo ?? "");    
+
             }
             catch (Exception ex)
             {
@@ -35,17 +39,16 @@ namespace Aponus_Web_API.Business
                     ContentType = "application/json",
                     StatusCode = 400
                 };
-            }
+            }           
 
         }
-
         internal JsonResult AgregarTipo(DTOCategorias NuevaCategoria)
         {
             try
             {
                 NuevaCategoria.IdTipo = new CategoriesServices().GenerarIdTipo(NuevaCategoria.DescripcionTipo??"");
                 NuevaCategoria.DescripcionTipo = NuevaCategoria.DescripcionTipo?.ToUpper();
-                new Categorias().NuevoTipo(NuevaCategoria);
+                AdCategorias.NuevoTipo(NuevaCategoria);
 
                 return new JsonResult(NuevaCategoria.IdTipo);
 
@@ -58,23 +61,22 @@ namespace Aponus_Web_API.Business
         }
         internal List<DTODescripciones> ListarDescripciones(string IdTipo)
         {
-            return new Categorias().ListarDescripciones(IdTipo);
+            return AdCategorias.ListarDescripciones(IdTipo);
         }
         internal IActionResult Actualizar(DTOActualizarCategorias ActualizarCategorias)
         {
-            Categorias ObjCategorias = new Categorias();
             //cambiar los return y agregar "se actuializo bla bla bla , valor anteriores blabla bla , avalor nuevo bla bla bli
 
             try
             {    //si tengo ID_TIPO anterior + el texto del NUEVO_TIPO actualizo el TIPO, para lo cual
                  //Verifico que exista el TIPO anterior, genero el nuevo ID_TIPO y actualizo 
-                if (ActualizarCategorias.Anterior.IdTipo != null && ActualizarCategorias.Nueva.DescripcionTipo != null && ActualizarCategorias.Nueva.IdTipo==null)
+                if (ActualizarCategorias?.Anterior?.IdTipo != null && ActualizarCategorias?.Nueva?.DescripcionTipo != null && ActualizarCategorias.Nueva.IdTipo==null)
                 {
                     ActualizarCategorias.Nueva.IdTipo = new CategoriesServices().GenerarIdTipo(ActualizarCategorias.Nueva.DescripcionTipo);
                     ActualizarCategorias.Nueva.DescripcionTipo = ActualizarCategorias.Nueva.DescripcionTipo.TrimEnd().ToUpper();
 
                     ProductosTipo? TipoAnteriorExiste =
-                    ObjCategorias.ObtenerTipo(new ProductosTipo
+                    AdCategorias.ObtenerTipo(new ProductosTipo
                     {
                         IdTipo = ActualizarCategorias.Anterior.IdTipo,
                     });
@@ -83,7 +85,7 @@ namespace Aponus_Web_API.Business
                     {
                         try
                         {
-                            ObjCategorias.ActualizarTipoProd(ActualizarCategorias);
+                            AdCategorias.ActualizarTipoProd(ActualizarCategorias);
                         }
                         catch (DbUpdateException ex)
                         {
@@ -95,11 +97,8 @@ namespace Aponus_Web_API.Business
                                 StatusCode= 400,
                                 Content = "Ocurrio un error " + Mensaje,
                                 ContentType = "text/plain"
-
                             };
                         }
-
-
                     }
                     else
                     {
@@ -114,15 +113,15 @@ namespace Aponus_Web_API.Business
 
                 }
                 //Si no hay ID_TIPOS verifico si existe diferencia entre las DECRIPTIONS para actualizarlas
-                else if (ActualizarCategorias.Anterior.IdTipo==null&&ActualizarCategorias.Nueva?.IdTipo==null) 
+                else if (ActualizarCategorias?.Anterior?.IdTipo == null && ActualizarCategorias?.Nueva?.IdTipo==null) 
                 {
-                    if (ActualizarCategorias.Nueva?.Descripcion!=null && ActualizarCategorias.Anterior?.IdDescripcion!=null)
+                    if (ActualizarCategorias?.Nueva?.Descripcion != null && ActualizarCategorias.Anterior?.IdDescripcion != null)
                     {
                         ActualizarCategorias.Nueva.Descripcion = ActualizarCategorias.Nueva.Descripcion.TrimEnd().ToUpper();
 
                         try
                         {
-                            ObjCategorias.ActualizarDescripcionProd(ActualizarCategorias);
+                            AdCategorias.ActualizarDescripcionProd(ActualizarCategorias);
                             return new StatusCodeResult(200);
                         }
                         catch (DbUpdateException ex)
@@ -140,7 +139,7 @@ namespace Aponus_Web_API.Business
                             };
                         }
                     }
-                    else if (ActualizarCategorias.Nueva?.Descripcion== null)
+                    else if (ActualizarCategorias?.Nueva?.Descripcion == null)
                     {
 
                         return new ContentResult()
@@ -164,12 +163,9 @@ namespace Aponus_Web_API.Business
 
                 } 
                 // Axtualizar Descripcion (cambiar el TIPO al que pertenece)
-                else if (ActualizarCategorias.Anterior.IdTipo!=null 
-                    && ActualizarCategorias.Nueva?.IdTipo != null
-                    && (ActualizarCategorias.Anterior.IdTipo != ActualizarCategorias.Nueva.IdTipo)
-                    && ActualizarCategorias.Anterior.IdDescripcion == ActualizarCategorias.Nueva.IdDescripcion)
+                else if (ActualizarCategorias?.Anterior?.IdTipo != null && ActualizarCategorias.Nueva?.IdTipo != null && (ActualizarCategorias.Anterior.IdTipo != ActualizarCategorias.Nueva.IdTipo) && ActualizarCategorias.Anterior.IdDescripcion == ActualizarCategorias.Nueva.IdDescripcion)
                 {                   
-                        ObjCategorias.ActualizarTipos_Descripciones(ActualizarCategorias);
+                        AdCategorias.ActualizarTipos_Descripciones(ActualizarCategorias);
                         return new StatusCodeResult(200);
                 }
                 else
@@ -182,8 +178,6 @@ namespace Aponus_Web_API.Business
 
                     };
                 }
-
-
              }
              catch (DbUpdateException)
              {
@@ -198,19 +192,15 @@ namespace Aponus_Web_API.Business
 
             };
         }
-
         internal async Task<JsonResult> ListarNombresComponentes()
         {
-            return await new OperacionesComponentes().ListarNombres() ;
-        }
-
-        
-
+            return await _ComponentesProductos.ListarNombresComponentes() ;
+        }        
         internal IActionResult AgregarDescripcionCompoente(string DescripcionComponente)
         {
             try
             {
-                return new Categorias().AgregarDescripcionCompoente(DescripcionComponente);
+                return AdCategorias.AgregarDescripcionCompoente(DescripcionComponente);
             }
             catch (DbUpdateException ex)
             {
@@ -221,8 +211,7 @@ namespace Aponus_Web_API.Business
                     {
                         Content = ex.InnerException?.Message,
                         ContentType = "text/plain",
-                        StatusCode = 400,
-                    
+                        StatusCode = 400,                    
                     };
                 }
                 else
@@ -232,17 +221,15 @@ namespace Aponus_Web_API.Business
                         Content = ex.Message,
                         ContentType = "text/plain",
                         StatusCode = 400,
-
                     };
                 };
             }
         }
-
         internal IActionResult ModificarDescripcionCompoente(DTODescripcionComponentes descripcion)
         {
             try
             {
-                return new Categorias().ModificarDescripcionComponente(descripcion);
+                return AdCategorias.ModificarDescripcionComponente(descripcion);
             }
             catch (DbUpdateException ex)
             {
@@ -269,15 +256,14 @@ namespace Aponus_Web_API.Business
                 };
             }
         }
-
         internal IActionResult EliminarTipoProducto(string idTipo)
         {
-            return new Categorias.Productos().EliminarTipo(idTipo);
+            return AdCategorias.Productos_Metodos().EliminarTipo(idTipo);
         }
-
         internal IActionResult EliminarDescripcionProducto(int idDescription)
         {
-            return new Categorias.Productos().EliminarDescripcion(idDescription);
+
+            return AdCategorias.Productos_Metodos().EliminarDescripcion(idDescription);
         }
 
        

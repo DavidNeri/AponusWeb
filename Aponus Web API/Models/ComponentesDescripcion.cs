@@ -12,15 +12,11 @@ public partial class ComponentesDescripcion
     [MessagePack.Key("ID_DESCRIPCION")]
     public int IdDescripcion { get; set; }
            
-    public string? Descripcion{ get; set; }
+    public string? Descripcion{ get; set; } 
 
-   // public virtual ICollection<CuantitativosDetalle> CuantitativosDetalles { get; set; } = new List<CuantitativosDetalle>();
+    public string IdAlmacenamiento { get; set; } = string.Empty;
 
-    //public virtual ICollection<MensurablesDetalle> MensurablesDetalles { get; set; } = new List<MensurablesDetalle>();
-
-    //public virtual ICollection<PesablesDetalle> PesablesDetalles { get; set; } = new List<PesablesDetalle>();
-    //public virtual ICollection<ComponentesDescripcion> ComponentesDescripcions { get; set; } = new List<ComponentesDescripcion>();
-
+    public string?  IdFraccionamiento { get; set; }
 
 
 }

@@ -1,25 +1,18 @@
 ﻿using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Models;
-using Aponus_Web_API.Support;
-using Microsoft.AspNetCore.JsonPatch.Adapters;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Collections;
 using System.Data;
-using System.Data.Entity.Infrastructure;
-using System.Drawing;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 {
     public class ObtenerComponentes
     {
         private readonly AponusContext AponusDBContext;
-        public ObtenerComponentes() { AponusDBContext = new AponusContext(); }
+        public ObtenerComponentes(AponusContext _aponusDBContext)
+        {
+            AponusDBContext = _aponusDBContext;
+        }
         internal JsonResult? ListarProp(string[] propiedadesNulas, List<(string Nombre, string Valor)> propiedadesNoNulas)
         {
            
@@ -32,75 +25,75 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
             do
             {
-                var propertyType = typeof(ComponentesDetalle).GetProperty(propiedadesNulas[i]).PropertyType;
+                var propertyType = typeof(ComponentesDetalle).GetProperty(propiedadesNulas[i])?.PropertyType;
 
                 // Crear la expresión lambda para la propiedad a seleccionar
                 var parameter = Expression.Parameter(typeof(ComponentesDetalle), "x");
                 var property = Expression.Property(parameter, propiedadesNulas[i]);
-                Expression<Func<ComponentesDetalle, object>> lambda = null;
+                Expression<Func<ComponentesDetalle, object>>? lambda = null;
 
                 // Agregar comprobación para manejar valores nulos
-                var defaultValue = propertyType.IsValueType ? Activator.CreateInstance(propertyType) : null;
-                var propertyOrDefault = Expression.Coalesce(property, Expression.Constant(defaultValue, propertyType));
+                var defaultValue = propertyType != null && propertyType.IsValueType ? Activator.CreateInstance(propertyType) : null;
 
-                lambda = Expression.Lambda<Func<ComponentesDetalle, object>>(
-                          Expression.Convert(propertyOrDefault, typeof(object)),
-                          parameter);
+                if (propertyType != null)
+                {
+                    var propertyOrDefault = Expression.Coalesce(property, Expression.Constant(defaultValue, propertyType));
+                    lambda = Expression.Lambda<Func<ComponentesDetalle, object>>(Expression.Convert(propertyOrDefault, typeof(object)),parameter);
+                }
+                else
+                {
+                    throw new ArgumentNullException(nameof(propertyType), "El tipo de la propiedad no puede ser nulo.");
+                }
 
                 var resultados = query.Select(lambda).Distinct().ToArray();
-
                 var Valores = resultados.Where(x => x != null && !string.IsNullOrEmpty(x.ToString()));
 
-                if (Valores.Count()>0)                    
+                if (Valores.Any())                    
                 {
                     var Columna = AponusDBContext.Set<ComponentesDetalle>()
-                        .Select(e => typeof(ComponentesDetalle).GetProperty(propiedadesNulas[i]))
-                        .First()
+                        .Select(e => typeof(ComponentesDetalle).GetProperty(propiedadesNulas[i]))?
+                        .First()?
                         .Name;
 
                     var ResultadosTotales = new { Valores , Columna };
                     jsonResult = new JsonResult(ResultadosTotales);
-                }      
-
+                }
                 i++;
+
             } while (jsonResult == null && i < propiedadesNulas.Length);
 
 
-            if (jsonResult==null)
-            {
-                jsonResult = new JsonResult(null);
-            }
+            jsonResult ??= new JsonResult(null);
 
             return jsonResult;
 
         }
-
         internal IActionResult Listar(int? IdDescripcion)
         {
-            IQueryable<ComponentesDetalle> query = AponusDBContext.ComponentesDetalles;
+            IQueryable<ComponentesDetalle> query = AponusDBContext.ComponentesDetalles.Where(x=>x.IdEstado != 0).AsQueryable();
+                
 
             if (IdDescripcion.HasValue)
             {
-                query = query.Where(X => X.IdDescripcion == IdDescripcion.Value);
+                query = query.Where(X => X.IdDescripcion == IdDescripcion);
             }
 
             var Componentes = query.ToList();
 
             return new JsonResult(Componentes);
         }
-
         internal JsonResult? ObtenerId(List<(string Nombre, string Valor)> propiedadesNoNulas)
         {
             var query = GenerarWhereAND(propiedadesNoNulas);
             var Insumo = query.Select(x => x.IdInsumo).ToList();
-            JsonResult jsonResult= null;
+            JsonResult jsonResult= new JsonResult(null);
 
             if(Insumo.Count()>1)
             {
                 jsonResult= new JsonResult("Los valores no corresponden a un elemento unico");
-            }else
+            }
+            else
             {
-            
                 jsonResult= new JsonResult(new DTOComponentesProducto()
                 {
                     IdComponente = Insumo[0],
@@ -109,7 +102,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
 
             return jsonResult;
         }
-
         private IQueryable<ComponentesDetalle> GenerarWhereAND(List<(string Nombre, string Valor)> propiedadesNoNulas)
         {
             var dbContext = AponusDBContext;

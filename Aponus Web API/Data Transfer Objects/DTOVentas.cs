@@ -18,7 +18,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public DateTime? FechaHora { get; set; }
 
         [Required(ErrorMessage = "El campo 'Usuario' es obligatorio"), JsonProperty(PropertyName = "idUsuario", NullValueHandling = NullValueHandling.Ignore)]
-        public string IdUsuario { get; set; }
+        public string IdUsuario { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "total", NullValueHandling = NullValueHandling.Ignore)]
         public decimal Total { get; set; } = 0;

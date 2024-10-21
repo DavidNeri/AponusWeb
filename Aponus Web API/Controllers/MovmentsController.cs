@@ -11,13 +11,19 @@ namespace Aponus_Web_API.Controllers
     [ApiController]
     public class MovmentsController : Controller
     {
+        private readonly BS_Movimientos BsMovimientos;
+        public MovmentsController(BS_Movimientos bsMovimientos)
+        {
+            BsMovimientos = bsMovimientos;
+        }
+
         [HttpPost]
         [Route("New")]
         public IActionResult NuevoMovimiento ([FromForm]DTOMovimientosStock Actualizacion)
         {
             try
             {
-                return new BS_Movimientos().ProcesarDatosMovimiento(Actualizacion);
+                return BsMovimientos.ProcesarDatosMovimiento(Actualizacion);
                 
             }
             catch (Exception)
@@ -36,21 +42,14 @@ namespace Aponus_Web_API.Controllers
         [Route("List")]
         public async Task<IActionResult> Listar(FiltrosMovimientos? Filtros)
         {
-            return await new BS_Movimientos().Listar(Filtros);
+            return await BsMovimientos.Listar(Filtros);
         }
 
         [HttpPost]
         [Route("{IdMovimiento}/Delete")]
         public IActionResult EliminarMovimiento(int IdMovimiento)
         {
-            if (IdMovimiento == null)
-                return new ContentResult()
-                {
-                    Content = "No se encontró el valor 'ID_MOVIMIENTO'\n No se aplicaron los cambios",
-                    ContentType = "Aplication/Json",
-                    StatusCode = 400,
-                };
-            return new BS_Movimientos().Eliminar(IdMovimiento);
+            return BsMovimientos.Eliminar(IdMovimiento);
         }
         //Update State Movment
 
@@ -58,7 +57,7 @@ namespace Aponus_Web_API.Controllers
         [Route("Files/Delete")]
         public IActionResult EliminarArchivo(DTOMovimientosStock Archivos)
         {
-            return new BS_Movimientos.Archivos().Eliminar(Archivos);
+            return  BsMovimientos.ArchivosMovimientos().Eliminar(Archivos);
         }
 
         [HttpPost]
@@ -66,7 +65,7 @@ namespace Aponus_Web_API.Controllers
 
         public async Task<IActionResult> AgregarArchivo([FromForm] DTOMovimientosStock Archivos)
         {
-            return await new BS_Movimientos.Archivos().Agregar(Archivos);
+            return await BsMovimientos.ArchivosMovimientos().Agregar(Archivos);
         }
 
         
@@ -75,7 +74,7 @@ namespace Aponus_Web_API.Controllers
         [Route("Update")]
         public IActionResult ActualizarProveedor(DTOMovimientosStock Movimiento)
         {
-            return new BS_Movimientos().Actualizar(Movimiento);
+            return BsMovimientos.Actualizar(Movimiento);
         }
 
         [HttpPost]
@@ -90,14 +89,14 @@ namespace Aponus_Web_API.Controllers
                     ContentType = "Aplication/Json",
                     StatusCode = 400,
                 };
-            return new BS_Movimientos().ActualizarSuministros(Movimiento);
+            return BsMovimientos.ActualizarSuministros(Movimiento);
         }
 
         [HttpGet]
         [Route("States/List")]
         public IActionResult ListarEstados()
         {
-            return BS_Movimientos.Estados.Listar();
+            return BsMovimientos.EstadosMovimientos().Listar();
         }
 
         [HttpPost]
@@ -112,7 +111,7 @@ namespace Aponus_Web_API.Controllers
                     ContentType = "Aplication/Json",
                     StatusCode = 400,
                 };
-            return await BS_Movimientos.Estados.Guardar(Estado);
+            return await BsMovimientos.EstadosMovimientos().Guardar(Estado);
         }
     }
 }

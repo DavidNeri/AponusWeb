@@ -11,7 +11,7 @@ namespace Aponus_Web_API.Models
         public int IdEstado { get; set; } = 1;
 
         [Column("DESCRIPCION")]
-        public string Descripcion { get; set; }
+        public string Descripcion { get; set; } = string.Empty;
 
         public virtual ICollection<SuministrosMovimientosStock>? SuministrosMovimientoStock{ get; set; }
 

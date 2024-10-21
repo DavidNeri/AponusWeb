@@ -9,7 +9,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public string? IdProducto { get; set; }
 
         [JsonProperty(PropertyName = "idComponente", NullValueHandling = NullValueHandling.Ignore)]
-        public string? IdComponente { get; set; }
+        public string IdComponente { get; set; } = "";
 
         [JsonProperty(PropertyName = "descripcion", NullValueHandling = NullValueHandling.Ignore)]
         public string? Descripcion { get; set; }
@@ -36,7 +36,7 @@ namespace Aponus_Web_API.Data_Transfer_Objects
         public decimal? Espesor { get; set; }
 
         [JsonProperty(PropertyName = "tolerancia", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Tolerancia { get; set; }
+        public string Tolerancia { get; set; } = "";
 
         [JsonProperty(PropertyName = "stockComponente", NullValueHandling = NullValueHandling.Ignore)]
         public List<DTOStock>? StockComponente { get; set; }

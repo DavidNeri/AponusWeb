@@ -5,15 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 using Z.EntityFramework.Plus;
-using static Aponus_Web_API.Business.BS_Entidades;
 
 namespace Aponus_Web_API.Acceso_a_Datos.Entidades
 {
     public class ABM_Entidades
     {
         private readonly AponusContext AponusDBContext;
-        public ABM_Entidades() { AponusDBContext = new AponusContext(); }
-
+        public ABM_Entidades(AponusContext _aponusDBContext)
+        {
+            AponusDBContext = _aponusDBContext;
+        }
         public IActionResult GuardarEntidad(DTOEntidades Entidad)
         {     
             
@@ -104,7 +105,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
             }
 
         }        
-
         internal IActionResult Eliminar(int IdEntidad)
         {
             try
@@ -146,7 +146,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
 
 
         }
-
         internal IQueryable<Aponus_Web_API.Models.Entidades> Listar()
         {
             IQueryable<Aponus_Web_API.Models.Entidades> QueryListado = AponusDBContext.Entidades.Where(x => x.IdEstado != 0);
@@ -154,8 +153,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
             return QueryListado;
            
         }
-
-
         internal async Task<IActionResult> ListarTipos()
         {
             try
@@ -169,7 +166,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
                 return new StatusCodeResult(500);
             }
         }
-
         internal async Task<IActionResult?> GuardarTipo(DTOEntidadesTipos NuevotipoEntidad)
         {
             NuevotipoEntidad.Nombre = !string.IsNullOrEmpty(NuevotipoEntidad.Nombre) ? Regex.Replace(NuevotipoEntidad.Nombre, @"\s+", " ").Trim().ToUpper() : null;
@@ -239,7 +235,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
                 }
             }
         }
-
         internal async Task<IActionResult> ListarCategorias(int? idTipo)
         {
             try
@@ -279,10 +274,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
             }
             
 
-        }
-            
-            
-        
+        }                  
         internal async Task<IActionResult> GuardarCategoria(DTOEntidadesCategorias nuevaCategoria)
         {
             bool rollback;
@@ -351,8 +343,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
                 }
             }
         }
-
-
         internal async Task<bool> VincularTiposCategorias(EntidadesTipos? Tipo,EntidadesCategorias? Cat )
         {
             try
@@ -381,7 +371,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
                 return false;
             }
         }
-
         internal IActionResult EliminarCategoria(int idCategoria)
         {
             EntidadesCategorias? Categoria = AponusDBContext.CategoriasEntidades.FirstOrDefault(x => x.IdCategoria == idCategoria);
@@ -417,7 +406,6 @@ namespace Aponus_Web_API.Acceso_a_Datos.Entidades
             }
 
         }
-
         internal IActionResult EliminarTipo(int id)
         {
             EntidadesTipos? Tipo = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == id);

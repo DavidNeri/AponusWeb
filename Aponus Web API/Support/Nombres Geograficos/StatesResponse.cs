@@ -2,7 +2,7 @@
 {
     public class StatesResponse
     {
-        public List<Estados_Provincias> Geonames { get; set; }
+        public List<Estados_Provincias> Geonames { get; set; } = new List<Estados_Provincias>();
 
     }
 }
