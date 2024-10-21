@@ -1,4 +1,4 @@
-﻿using Aponus_Web_API.Business;
+﻿using Aponus_Web_API.Negocio;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,8 +8,8 @@ namespace Aponus_Web_API.Controllers
     [ApiController]
     public class ComponentsController : Controller
     {
-        private readonly BS_Components _BsComponents;
-        public ComponentsController(BS_Components BsComponents)
+        private readonly BS_Componentes _BsComponents;
+        public ComponentsController(BS_Componentes BsComponents)
         {
             _BsComponents = BsComponents;
         }

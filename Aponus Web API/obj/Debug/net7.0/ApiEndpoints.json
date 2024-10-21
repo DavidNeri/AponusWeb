@@ -47,7 +47,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_Objects.DTODescripciones, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTODescripciones, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -67,7 +67,7 @@
     "Parameters": [
       {
         "Name": "NuevaCategoria",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOCategorias",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOCategorias",
         "IsRequired": true
       }
     ],
@@ -83,7 +83,7 @@
     "Parameters": [
       {
         "Name": "ActualizarCategorias",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOActualizarCategorias",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOActualizarCategorias",
         "IsRequired": true
       }
     ],
@@ -130,7 +130,7 @@
     "Parameters": [
       {
         "Name": "NuevaCategoria",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOCategorias",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOCategorias",
         "IsRequired": true
       }
     ],
@@ -172,7 +172,7 @@
     "Parameters": [
       {
         "Name": "Descripcion",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTODescripcionComponentes",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTODescripcionComponentes",
         "IsRequired": true
       }
     ],
@@ -276,7 +276,7 @@
     "Parameters": [
       {
         "Name": "NuevaCategoria",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEntidadesCategorias",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOEntidadesCategorias",
         "IsRequired": true
       }
     ],
@@ -334,7 +334,7 @@
     "Parameters": [
       {
         "Name": "Entidad",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEntidades",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOEntidades",
         "IsRequired": true
       }
     ],
@@ -376,7 +376,7 @@
     "Parameters": [
       {
         "Name": "TipoEntidad",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEntidadesTipos",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOEntidadesTipos",
         "IsRequired": true
       }
     ],
@@ -455,7 +455,7 @@
     "Parameters": [
       {
         "Name": "Archivos",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOMovimientosStock",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOMovimientosStock",
         "IsRequired": true
       }
     ],
@@ -741,12 +741,12 @@
       },
       {
         "Name": "Suministros",
-        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_Objects.DTOSuministrosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOSuministrosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": false
       },
       {
         "Name": "DatosArchivos",
-        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_Objects.DTODatosArchivosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTODatosArchivosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": false
       },
       {
@@ -777,7 +777,7 @@
     "Parameters": [
       {
         "Name": "Filtros",
-        "Type": "Aponus_Web_API.Support.FiltrosMovimientos",
+        "Type": "Aponus_Web_API.Utilidades.UTL_Movimientos",
         "IsRequired": false
       }
     ],
@@ -1063,12 +1063,12 @@
       },
       {
         "Name": "Suministros",
-        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_Objects.DTOSuministrosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOSuministrosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": false
       },
       {
         "Name": "DatosArchivos",
-        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_Objects.DTODatosArchivosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTODatosArchivosMovimientosStock, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": false
       },
       {
@@ -1109,7 +1109,7 @@
     "Parameters": [
       {
         "Name": "Estado",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEstadosMovimientosStock",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOEstadosMovimientosStock",
         "IsRequired": true
       }
     ],
@@ -1125,7 +1125,7 @@
     "Parameters": [
       {
         "Name": "Movimiento",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOMovimientosStock",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOMovimientosStock",
         "IsRequired": true
       }
     ],
@@ -1141,7 +1141,7 @@
     "Parameters": [
       {
         "Name": "Movimiento",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOMovimientosStock",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOMovimientosStock",
         "IsRequired": true
       }
     ],
@@ -1273,7 +1273,7 @@
     "Parameters": [
       {
         "Name": "Compras",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOCompras",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOCompras",
         "IsRequired": true
       }
     ],
@@ -1289,7 +1289,7 @@
     "Parameters": [
       {
         "Name": "Filtros",
-        "Type": "Aponus_Web_API.Support.Ventas.FiltrosVentas",
+        "Type": "Aponus_Web_API.Utilidades.UTL_FiltrosVentas",
         "IsRequired": false
       }
     ],
@@ -1305,7 +1305,7 @@
     "Parameters": [
       {
         "Name": "Parametros",
-        "Type": "Aponus_Web_API.Support.ParametrosCalcularCuotas",
+        "Type": "Aponus_Web_API.Utilidades.UTL_ParametrosCuotas",
         "IsRequired": true
       }
     ],
@@ -1321,7 +1321,7 @@
     "Parameters": [
       {
         "Name": "Venta",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOVentas",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOVentas",
         "IsRequired": true
       }
     ],
@@ -1353,7 +1353,7 @@
     "Parameters": [
       {
         "Name": "Estados",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOEstadosVentas",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOEstadosVentas",
         "IsRequired": true
       }
     ],
@@ -1406,7 +1406,7 @@
     "Parameters": [
       {
         "Name": "StockProducto",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOStockProductos",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOStockProductos",
         "IsRequired": true
       }
     ],
@@ -1438,7 +1438,7 @@
     "Parameters": [
       {
         "Name": "StockInsumo",
-        "Type": "Aponus_Web_API.Data_Transfer_Objects.DTOStock",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOStock",
         "IsRequired": true
       }
     ],

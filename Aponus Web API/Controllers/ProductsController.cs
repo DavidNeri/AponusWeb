@@ -1,4 +1,4 @@
-﻿using Aponus_Web_API.Business;
+﻿using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Data_Transfer_objects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

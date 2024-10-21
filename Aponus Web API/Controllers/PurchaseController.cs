@@ -1,4 +1,4 @@
-﻿using Aponus_Web_API.Data_Transfer_Objects;
+﻿using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers

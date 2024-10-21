@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Aponus_Web_API.Business;
+using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Data_Transfer_objects;
 using System.IO;
 using System.Drawing.Drawing2D;
-using Aponus_Web_API.Data_Transfer_Objects;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.Build.Framework;
 
 namespace Aponus_Web_API.Controllers

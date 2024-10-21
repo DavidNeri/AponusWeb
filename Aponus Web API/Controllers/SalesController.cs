@@ -1,8 +1,8 @@
-﻿using Aponus_Web_API.Business;
-using Aponus_Web_API.Data_Transfer_Objects;
-using Aponus_Web_API.Models;
-using Aponus_Web_API.Support;
-using Aponus_Web_API.Support.Ventas;
+﻿using Aponus_Web_API.Negocio;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Utilidades;
+using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
@@ -20,7 +20,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List")]
-        public IActionResult List(FiltrosVentas? Filtros)
+        public IActionResult List(UTL_FiltrosVentas? Filtros)
         {
             return BsVentas.Filtrar(Filtros);
 
@@ -28,7 +28,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Quotation")]
-        public IActionResult GenerarCuotas(ParametrosCalcularCuotas Parametros)
+        public IActionResult GenerarCuotas(UTL_ParametrosCuotas Parametros)
         {
             try
             {

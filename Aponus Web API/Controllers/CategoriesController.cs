@@ -1,8 +1,8 @@
-﻿using Aponus_Web_API.Models;
+﻿using Aponus_Web_API.Modelos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Aponus_Web_API.Data_Transfer_Objects;
-using Aponus_Web_API.Business;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Aponus_Web_API.Negocio;
 
 namespace Aponus_Web_API.Controllers
 {

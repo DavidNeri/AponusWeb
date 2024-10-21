@@ -1,6 +1,6 @@
-﻿using Aponus_Web_API.Business;
+﻿using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Data_Transfer_objects;
-using Aponus_Web_API.Models;
+using Aponus_Web_API.Modelos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +11,10 @@ namespace Aponus_Web_API.Controllers
     [ApiController]
     public class SuppliesController : Controller
     {
-        private readonly BS_Supplies BsSupplies;
-        private readonly BS_Components BsComponents;  
+        private readonly BS_Suministros BsSupplies;
+        private readonly BS_Componentes BsComponents;  
 
-        public SuppliesController(BS_Supplies bsSupplies, BS_Components bsComponents)
+        public SuppliesController(BS_Suministros bsSupplies, BS_Componentes bsComponents)
         {
             BsSupplies = bsSupplies;
             BsComponents = bsComponents;

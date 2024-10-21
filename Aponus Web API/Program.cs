@@ -1,41 +1,32 @@
-using Aponus_Web_API.Models;
+using Aponus_Web_API.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.Features;
-using Aponus_Web_API.Acceso_a_Datos.Productos;
-using Aponus_Web_API.Business;
+using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Controllers;
-using Aponus_Web_API.Acceso_a_Datos.Sistema;
-using Aponus_Web_API.Acceso_a_Datos.Componentes;
-using Aponus_Web_API.Acceso_a_Datos.Entidades;
-using Aponus_Web_API.Acceso_a_Datos.Insumos;
-using Aponus_Web_API.Acceso_a_Datos.Stocks;
-using Aponus_Web_API.Acceso_a_Datos.Ventas;
-using Aponus_Web_API.Support.Movimientos;
-using Aponus_Web_API.Support;
-using Aponus_Web_API.System;
+using Aponus_Web_API.Utilidades;
+using Aponus_Web_API.Systema;
+using Aponus_Web_API.Utilidades;
+using Aponus_Web_API.Acceso_a_Datos;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<ComponentesProductos>();
-builder.Services.AddScoped<ObtenerComponentes>();
-builder.Services.AddScoped<OperacionesComponentes>();
-builder.Services.AddScoped<ABM_Entidades>();
-builder.Services.AddScoped<ObtenerInsumos>();
+builder.Services.AddScoped<AD_Componentes>();
+builder.Services.AddScoped<AD_Entidades>();
+builder.Services.AddScoped<AD_Suministros>();
 builder.Services.AddScoped<AD_Productos>();
-builder.Services.AddScoped<ObtenerProductos>();
-builder.Services.AddScoped<Categorias>();
-builder.Services.AddScoped<MovimientosStock>();
-builder.Services.AddScoped<Stocks>();
-builder.Services.AddScoped<Aponus_Web_API.Acceso_a_Datos.Usuarios.Usuarios>();
-builder.Services.AddScoped<ABM_Ventas>();
+builder.Services.AddScoped<AD_Categorias>();
+builder.Services.AddScoped<AD_Movimientos>();
+builder.Services.AddScoped<AD_Stocks>();
+builder.Services.AddScoped<AD_Usuarios>();
+builder.Services.AddScoped<AD_Ventas>();
 
 builder.Services.AddScoped<BS_Categorias>();
-builder.Services.AddScoped<BS_Components>();
+builder.Services.AddScoped<BS_Componentes>();
 builder.Services.AddScoped<BS_Entidades>();
 builder.Services.AddScoped<BS_Movimientos>();
 builder.Services.AddScoped<BS_Productos>();
 builder.Services.AddScoped<BS_Stocks>();
-builder.Services.AddScoped<BS_Supplies>();
+builder.Services.AddScoped<BS_Suministros>();
 builder.Services.AddScoped<BS_Ventas>();
 
 builder.Services.AddScoped<CategoriesController>();
@@ -49,8 +40,8 @@ builder.Services.AddScoped<StocksController>();
 builder.Services.AddScoped<SuppliesController>();
 builder.Services.AddScoped<UsersController>();
 
-builder.Services.AddScoped<Suministros>();
-builder.Services.AddScoped<CategoriesServices>();
+builder.Services.AddScoped<UTL_Suministros>();
+builder.Services.AddScoped<UTL_Categorias>();
 builder.Services.AddScoped<SS_Usuarios>();
 
 builder.Services.AddControllers();

@@ -1,4 +1,4 @@
-﻿using Aponus_Web_API.Support.Servicios_BIN;
+﻿using Aponus_Web_API.Utilidades.Servicios_BIN;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
@@ -17,7 +17,7 @@ namespace Aponus_Web_API.Controllers
             }
             else
             {
-                return await new IdentificacionesBancarias().ObtenerDatosTarjeta(BIN);
+                return await new UTL_IdentificacionesBancarias().ObtenerDatosTarjeta(BIN);
             }
             
         }

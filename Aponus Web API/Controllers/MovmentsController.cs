@@ -1,8 +1,6 @@
-﻿using Aponus_Web_API.Business;
-using Aponus_Web_API.Data_Transfer_objects;
-using Aponus_Web_API.Data_Transfer_Objects;
-using Aponus_Web_API.Support;
-using Aponus_Web_API.Support.Movimientos;
+﻿using Aponus_Web_API.Negocio;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
@@ -40,7 +38,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List")]
-        public async Task<IActionResult> Listar(FiltrosMovimientos? Filtros)
+        public async Task<IActionResult> Listar(UTL_Movimientos? Filtros)
         {
             return await BsMovimientos.Listar(Filtros);
         }
