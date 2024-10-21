@@ -242,7 +242,7 @@ namespace Aponus_Web_API.Business
                 
 
                 //IdDescripcion y Tipos de Almacenamiento/Fraccionamiento
-                JsonResult JsonNombresComponentes = await _componentesProductos.ListarNombresComponentes();
+                JsonResult JsonNombresComponentes = _componentesProductos.ListarNombresComponentes();
                 var stringJsonNombresComponentes = Newtonsoft.Json.JsonConvert.SerializeObject(JsonNombresComponentes.Value);
                 List<DTODescripcionComponentes> ListaDescripcionComponentes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<DTODescripcionComponentes>>(stringJsonNombresComponentes) ?? new List<DTODescripcionComponentes>();
                 //IdDescripcion y Tipos de Almacenamiento/Fraccionamiento

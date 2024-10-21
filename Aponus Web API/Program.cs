@@ -11,6 +11,8 @@ using Aponus_Web_API.Acceso_a_Datos.Insumos;
 using Aponus_Web_API.Acceso_a_Datos.Stocks;
 using Aponus_Web_API.Acceso_a_Datos.Ventas;
 using Aponus_Web_API.Support.Movimientos;
+using Aponus_Web_API.Support;
+using Aponus_Web_API.System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,14 +28,30 @@ builder.Services.AddScoped<MovimientosStock>();
 builder.Services.AddScoped<Stocks>();
 builder.Services.AddScoped<Aponus_Web_API.Acceso_a_Datos.Usuarios.Usuarios>();
 builder.Services.AddScoped<ABM_Ventas>();
-builder.Services.AddScoped<Suministros>();
 
-builder.Services.AddScoped<BS_Movimientos>();
-builder.Services.AddScoped<BS_Stocks>();
-builder.Services.AddScoped<BS_Entidades>();
 builder.Services.AddScoped<BS_Categorias>();
+builder.Services.AddScoped<BS_Components>();
+builder.Services.AddScoped<BS_Entidades>();
+builder.Services.AddScoped<BS_Movimientos>();
+builder.Services.AddScoped<BS_Productos>();
+builder.Services.AddScoped<BS_Stocks>();
+builder.Services.AddScoped<BS_Supplies>();
+builder.Services.AddScoped<BS_Ventas>();
 
 builder.Services.AddScoped<CategoriesController>();
+builder.Services.AddScoped<ComponentsController>();
+builder.Services.AddScoped<EntitiesController>();
+builder.Services.AddScoped<MovmentsController>();
+builder.Services.AddScoped<ProductsController>();
+builder.Services.AddScoped<PurchaseController>();
+builder.Services.AddScoped<SalesController>();
+builder.Services.AddScoped<StocksController>();
+builder.Services.AddScoped<SuppliesController>();
+builder.Services.AddScoped<UsersController>();
+
+builder.Services.AddScoped<Suministros>();
+builder.Services.AddScoped<CategoriesServices>();
+builder.Services.AddScoped<SS_Usuarios>();
 
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>

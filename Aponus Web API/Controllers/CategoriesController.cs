@@ -130,11 +130,11 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Supplies/Descriptions/List")]
-        public async Task<JsonResult> ListarNombreComponentes()
+        public JsonResult ListarNombreComponentes()
         {
             try
             {
-                return await BsCategorias.ListarNombresComponentes();
+                return BsCategorias.ListarNombresComponentes();
             }
             catch (DbUpdateException e)
             {

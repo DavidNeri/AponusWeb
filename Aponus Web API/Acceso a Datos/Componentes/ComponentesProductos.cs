@@ -36,9 +36,9 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                                      .Where(x => x.IdProducto == IdProducto)
                                      .ToListAsync();
         }
-        internal async Task<JsonResult> ListarNombresComponentes()
+        internal JsonResult ListarNombresComponentes()
         {
-            List<DTODescripcionComponentes> DescripcionesComponentes = await AponusDbContext.ComponentesDescripcions
+            List<DTODescripcionComponentes> DescripcionesComponentes =  AponusDbContext.ComponentesDescripcions
                 .Select(x => new DTODescripcionComponentes()
                 {
                     IdDescripcion     = x.IdDescripcion    ,
@@ -47,7 +47,7 @@ namespace Aponus_Web_API.Acceso_a_Datos.Componentes
                     IdFraccionamiento = x.IdFraccionamiento
 
                 })
-                .ToListAsync();
+                .ToList();
 
             return new JsonResult(DescripcionesComponentes);
         }

@@ -45,7 +45,6 @@ namespace Aponus_Web_API.Controllers
                 return new JsonResult(Mensaje);
             }
         }
-
         
 
         [HttpGet]

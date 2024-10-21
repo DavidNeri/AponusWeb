@@ -876,9 +876,6 @@ public partial class AponusContext : DbContext{
 
         });
 
-
-      
-
         modelBuilder.Entity<ComponentesDescripcion>(entity =>
         {
             entity.HasKey(e => e.IdDescripcion);            

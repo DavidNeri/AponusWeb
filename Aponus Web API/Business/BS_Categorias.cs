@@ -192,9 +192,9 @@ namespace Aponus_Web_API.Business
 
             };
         }
-        internal async Task<JsonResult> ListarNombresComponentes()
+        internal JsonResult ListarNombresComponentes()
         {
-            return await _ComponentesProductos.ListarNombresComponentes() ;
+            return _ComponentesProductos.ListarNombresComponentes() ;
         }        
         internal IActionResult AgregarDescripcionCompoente(string DescripcionComponente)
         {
