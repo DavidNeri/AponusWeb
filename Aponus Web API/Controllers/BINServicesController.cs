@@ -19,7 +19,7 @@ namespace Aponus_Web_API.Controllers
             {
                 return await new UTL_IdentificacionesBancarias().ObtenerDatosTarjeta(BIN);
             }
-            
+
         }
     }
 }

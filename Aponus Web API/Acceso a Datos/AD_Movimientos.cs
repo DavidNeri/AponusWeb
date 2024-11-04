@@ -1,5 +1,5 @@
-﻿using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using Aponus_Web_API.Modelos;
+﻿using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -33,9 +33,9 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
             internal static List<EstadosMovimientosStock> Listar(AponusContext AponusDbContext)
             {
-               return AponusDbContext.EstadoMovimientosStock.Where(x=>x.IdEstado!=0 && !x.Descripcion.ToUpper().Contains("ELIMINADO")).ToList();  
-                
-            }          
+                return AponusDbContext.EstadoMovimientosStock.Where(x => x.IdEstado != 0 && !x.Descripcion.ToUpper().Contains("ELIMINADO")).ToList();
+
+            }
         }
 
         public class ArchivosMovimientos
@@ -82,13 +82,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     UsuarioCreacion = x.CreadoUsuario,
                     FechaHoraCreado = x.FechaHoraCreado,
                     FechaHoraUltimaModificacion = x.FechaHoraUltimaModificacion,
-                    IdProveedorOrigen = x.IdProveedorOrigen,
-                    IdProveedorDestino = x.IdProveedorDestino,
+                    IdProveedorDestino = x.IdProveedor,
                     UsuarioModificacion = x.ModificadoUsuario,
 
 
                     DatosArchivos = AponusDBContext.ArchivosStock
-                    .Where(x => x.IdMovimiento == x.IdMovimiento && x.IdEstado==1)
+                    .Where(x => x.IdMovimiento == x.IdMovimiento && x.IdEstado == 1)
                     .Select(x => new DTODatosArchivosMovimientosStock()
                     {
                         IdMovimiento = x.IdMovimiento,
@@ -109,10 +108,10 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     Archivo.DatosArchivo = archivo;
                     Archivo.MensajeError = error;
                 }
-            }  
+            }
             return Movimiento;
         }
-        public async Task<List<DTOMovimientosStock>> Listar(UTL_Movimientos? Filtros = null)
+        public async Task<List<DTOMovimientosStock>> Listar(UTL_FiltrosMovimientos? Filtros = null)
         {
 
             if (Filtros != null)
@@ -122,10 +121,10 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     (!Filtros.Desde.HasValue || movimiento.FechaHoraCreado >= Filtros.Desde.Value) &&
                     (!Filtros.Hasta.HasValue || movimiento.FechaHoraCreado <= Filtros.Hasta.Value) &&
                     (string.IsNullOrEmpty(Filtros.Etapa) || (movimiento.Destino != null && movimiento.Destino.Contains(Filtros.Etapa))) &&
-                    (!Filtros.IdProveedor.HasValue || movimiento.IdProveedorDestino == Filtros.IdProveedor))
+                    (!Filtros.IdProveedor.HasValue || movimiento.IdProveedor == Filtros.IdProveedor))
                 .Join(
                     AponusDBContext.Entidades,
-                    movimientos => movimientos.IdProveedorDestino,
+                    movimientos => movimientos.IdProveedor,
                     proveedorDestino => proveedorDestino.IdEntidad,
                     (movimiento, proveedor) => new { Movimiento = movimiento, Proveedor = proveedor }
                 )
@@ -182,10 +181,10 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
             else
             {
-                IQueryable<DTOMovimientosStock> IQMovimientos = AponusDBContext.Stock_Movimientos                
+                IQueryable<DTOMovimientosStock> IQMovimientos = AponusDBContext.Stock_Movimientos
                 .Join(
                     AponusDBContext.Entidades,
-                    movimientos => movimientos.IdProveedorDestino,
+                    movimientos => movimientos.IdProveedor,
                     proveedorDestino => proveedorDestino.IdEntidad,
                     (movimiento, proveedor) => new { Movimiento = movimiento, Proveedor = proveedor }
                 )
@@ -264,12 +263,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 return new List<DTODatosArchivosMovimientosStock>();
             }
-            
+
         }
         private async static Task<byte[]> DescargarArchivoMovimiento_Local(string url)
         {
             HttpClient webClient = new HttpClient();
-            byte[] archivoBites = await webClient.GetByteArrayAsync(url);            
+            byte[] archivoBites = await webClient.GetByteArrayAsync(url);
 
             return archivoBites;
         }
@@ -304,19 +303,19 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
             return mimeTypes.ContainsKey(Extension) ? mimeTypes[Extension] : "application/octet-stream";
         }
-        internal bool RegistrarModificacion(AponusContext AponusDbContext,DTOMovimientosStock Mov)
+        internal bool RegistrarModificacion(AponusContext AponusDbContext, DTOMovimientosStock Mov)
         {
             try
             {
-                AponusDbContext ??= AponusDBContext;               
+                AponusDbContext ??= AponusDBContext;
                 DateTime FechaHora = UTL_Fechas.ObtenerFechaHora();
 
-                var Movimiento = AponusDbContext.Stock_Movimientos.Where(x=>x.IdMovimiento==Mov.IdMovimiento).FirstOrDefault();
+                var Movimiento = AponusDbContext.Stock_Movimientos.Where(x => x.IdMovimiento == Mov.IdMovimiento).FirstOrDefault();
 
                 if (Movimiento != null)
                 {
                     Movimiento.FechaHoraUltimaModificacion = FechaHora;
-                    Movimiento.ModificadoUsuario           = Mov.UsuarioModificacion;
+                    Movimiento.ModificadoUsuario = Mov.UsuarioModificacion;
                     AponusDbContext.Stock_Movimientos.Update(Movimiento);
 
                     return true;
@@ -331,7 +330,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 var error = ex.Message;
                 return false;
             }
-            
+
         }
         internal bool Eliminar(AponusContext AponusDBContext, int idMovimiento)
         {
@@ -339,7 +338,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             {
                 var Movimiento = AponusDBContext.Stock_Movimientos.FirstOrDefault(x => x.IdMovimiento == idMovimiento);
 
-                if (Movimiento!=null)
+                if (Movimiento != null)
                 {
                     Movimiento.IdEstadoMovimiento = 0;
                     AponusDBContext.Entry(Movimiento).CurrentValues.SetValues(Movimiento);
@@ -365,8 +364,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 {
                     Movimiento.FechaHoraUltimaModificacion = UTL_Fechas.ObtenerFechaHora();
                     Movimiento.ModificadoUsuario = actualizacionMovimiento.UsuarioModificacion ?? Movimiento.ModificadoUsuario;
-                    Movimiento.IdProveedorOrigen = actualizacionMovimiento.IdProveedorOrigen ?? Movimiento.IdProveedorOrigen;
-                    Movimiento.IdProveedorDestino = actualizacionMovimiento.IdProveedorDestino ?? Movimiento.IdProveedorDestino;
+                    Movimiento.IdProveedor = actualizacionMovimiento.IdProveedorDestino ?? Movimiento.IdProveedor;
                     Movimiento.Origen = actualizacionMovimiento.Origen ?? Movimiento.Origen;
                     Movimiento.Destino = actualizacionMovimiento.Destino ?? Movimiento.Destino;
                     Movimiento.Tipo = actualizacionMovimiento.Tipo ?? Movimiento.Tipo;

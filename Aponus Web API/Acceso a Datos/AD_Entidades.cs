@@ -1,9 +1,8 @@
-﻿using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using Aponus_Web_API.Modelos;
+﻿using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
 using Z.EntityFramework.Plus;
 
 namespace Aponus_Web_API.Acceso_a_Datos
@@ -16,13 +15,13 @@ namespace Aponus_Web_API.Acceso_a_Datos
             AponusDBContext = _aponusDBContext;
         }
         public IActionResult GuardarEntidad(DTOEntidades Entidad)
-        {     
-            
+        {
+
             try
             {
                 if (Entidad.IdEntidad != null)
                 {
-                    var Existente = AponusDBContext.Entidades.FirstOrDefault(x => x.IdEntidad == Entidad.IdEntidad && x.IdEstado != 0 );                   
+                    var Existente = AponusDBContext.Entidades.FirstOrDefault(x => x.IdEntidad == Entidad.IdEntidad && x.IdEstado != 0);
 
                     if (Existente != null)
                     {
@@ -49,14 +48,14 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                         AponusDBContext.Entidades.Update(Existente);
                         AponusDBContext.SaveChanges();
-                    }                   
+                    }
 
                     return new StatusCodeResult(200);
 
                 }
                 else
                 {
-                    Modelos.Entidades NuevaEntidad = new Modelos.Entidades()
+                    Entidades NuevaEntidad = new()
                     {
                         NombreClave = Entidad.Nombre ?? "",
                         Nombre = !string.IsNullOrEmpty(Entidad.Nombre) ? Entidad.Nombre.Trim().ToUpper().Replace(" ", "") : null,
@@ -77,7 +76,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         IdUsuarioRegistro = Entidad.IdUsuarioRegistro ?? "",
                         IdTipo = Entidad.IdTipo,
                         IdCategoria = Entidad.IdCategoria,
-                        CategoriaEntidad = AponusDBContext.CategoriasEntidades.FirstOrDefault(x=>x.IdCategoria==Entidad.IdCategoria) ?? new EntidadesCategorias(),
+                        CategoriaEntidad = AponusDBContext.CategoriasEntidades.FirstOrDefault(x => x.IdCategoria == Entidad.IdCategoria) ?? new EntidadesCategorias(),
                         TipoEntidad = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == Entidad.IdTipo) ?? new EntidadesTipos(),
                         UsuarioRegistro = AponusDBContext.Usuarios.FirstOrDefault(x => x.Usuario == Entidad.IdUsuarioRegistro) ?? new Modelos.Usuarios(),
 
@@ -95,45 +94,6 @@ namespace Aponus_Web_API.Acceso_a_Datos
             {
                 ContentResult excepcion = new ContentResult()
                 {
-                    ContentType= "application/json",
-                    StatusCode= 400,
-                };
-
-                excepcion.Content = !string.IsNullOrEmpty(ex.InnerException?.Message) ? "Error:\n"+ex.InnerException.Message : "Error:\n"+ex.Message;
-
-                return excepcion;   
-            }
-
-        }        
-        internal IActionResult Eliminar(int IdEntidad)
-        {
-            try
-            {
-                Modelos.Entidades? Entidad = AponusDBContext.Entidades.Find(IdEntidad);
-
-                if (Entidad != null)
-                {
-                    Entidad.IdEstado= 0;
-                    AponusDBContext.Entidades.Update(Entidad);
-                    AponusDBContext.SaveChanges();
-
-                    return new StatusCodeResult(200);
-
-                }else
-                {
-                    return new ContentResult()
-                    {
-                        ContentType = "application/json",
-                        StatusCode = 400,
-                        Content ="No se encontró la entida"
-                    };
-
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                ContentResult excepcion = new ContentResult()
-                {
                     ContentType = "application/json",
                     StatusCode = 400,
                 };
@@ -142,212 +102,172 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 return excepcion;
             }
-            
-
 
         }
-        internal IQueryable<Aponus_Web_API.Modelos.Entidades> Listar()
+        internal async Task<(int? Resultado, Exception? Error)> DeshabilitarEntidad(Entidades Entidad)
         {
-            IQueryable<Aponus_Web_API.Modelos.Entidades> QueryListado = AponusDBContext.Entidades.Where(x => x.IdEstado != 0);
-            
-            return QueryListado;
-           
-        }
-        internal async Task<IActionResult> ListarTipos()
-        {
+            using var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
             try
             {
-                var Entidades = await AponusDBContext.TiposEntidades.Where(x=>x.IdEstado!=0).ToListAsync();
+                AponusDBContext.Entidades.Update(Entidad);
+                await AponusDBContext.SaveChangesAsync();
+                await transaccion.CommitAsync();
 
-                return new JsonResult(Entidades);   
-            }
-            catch (Exception)
-            {
-                return new StatusCodeResult(500);
-            }
-        }
-        internal async Task<IActionResult?> GuardarTipo(DTOEntidadesTipos NuevotipoEntidad)
-        {
-            NuevotipoEntidad.Nombre = !string.IsNullOrEmpty(NuevotipoEntidad.Nombre) ? Regex.Replace(NuevotipoEntidad.Nombre, @"\s+", " ").Trim().ToUpper() : null;
-      
+                return (StatusCodes.Status200OK, null);
 
-            using (var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
-            {
-                try
-                {
-
-                    if (NuevotipoEntidad.IdTipo != null)
-                    {
-                        EntidadesTipos? ExisteId = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == NuevotipoEntidad.IdTipo & x.IdEstado!=0);
-
-                        if ( ExisteId?.IdTipo != null && !string.IsNullOrEmpty(NuevotipoEntidad.Nombre))
-                        {
-                            ExisteId.NombreTipo = NuevotipoEntidad.Nombre;
-                            AponusDBContext.TiposEntidades.Update(ExisteId);
-                            
-                            AponusDBContext.SaveChanges();
-                            transaccion.Commit();
-                            return new StatusCodeResult(200);
-
-                        }
-                    }
-                    else
-                    {
-                        EntidadesTipos? ExisteNombre = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.NombreTipo == NuevotipoEntidad.Nombre && x.IdEstado!=0);
-
-                        if (string.IsNullOrEmpty(ExisteNombre?.NombreTipo) && !string.IsNullOrEmpty(NuevotipoEntidad.Nombre))
-                        {
-                            _ = AponusDBContext.TiposEntidades.AddAsync(new EntidadesTipos()
-                            {
-                                NombreTipo = NuevotipoEntidad.Nombre
-                            }); ;
-
-                           
-                            await AponusDBContext.SaveChangesAsync();
-                            await transaccion.CommitAsync();
-                            return new StatusCodeResult(200);
-                        }
-                        else
-                        {
-                            return new ContentResult()
-                            {
-                                Content = "El Tipo ya existe",
-                                ContentType = "application/json",
-                                StatusCode = 400
-
-                            };
-                        }
-                       
-                    }
-
-                    return null;
-                }
-                catch (Exception ex)
-                {
-                    string Mensaje = ex.InnerException?.Message ?? ex.Message; 
-
-                    return new ContentResult()
-                    {
-                        ContentType = "application/json",
-                        StatusCode = 400,
-                        Content = Mensaje
-                    };
-                }
-            }
-        }
-        internal async Task<IActionResult> ListarCategorias(int? idTipo)
-        {
-            try
-            {
-                IEnumerable<EntidadesCategorias> QueryCategorias = await AponusDBContext.CategoriasEntidades.Where(x => x.IdEstado == 1).ToListAsync();
-
-                if (idTipo.HasValue)
-                {
-                    ICollection<EntidadesTiposCategorias>? Tipo = await AponusDBContext.EntidadeTiposCategorias
-                        .Where(x => x.idTipoEntidad == idTipo)
-                        .ToListAsync();
-
-                    var TipoCategorias = Tipo.Select(x => x.IdCategoriaEntidad).ToList();
-
-                    QueryCategorias = QueryCategorias.Where(x => TipoCategorias.Contains(x.IdCategoria));
-                }
-
-                var ListaCategorias = QueryCategorias.Select(x => new EntidadesCategorias()
-                {
-                    IdCategoria = x.IdCategoria,
-                    NombreCategoria = x.NombreCategoria,
-                })
-                .ToList();
-
-                return new JsonResult(ListaCategorias);
             }
             catch (Exception ex)
             {
-
-                return new ContentResult()
-                {
-                    Content = ex.InnerException?.Message ?? ex.Message,
-                    ContentType = "application/json",
-                    StatusCode = 400
-
-                };
-            }
-            
-
-        }                  
-        internal async Task<IActionResult> GuardarCategoria(DTOEntidadesCategorias nuevaCategoria)
-        {
-            bool rollback;
-            using (var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
-            {
-                try
-                {
-                    var CategoriaExistente = await AponusDBContext.CategoriasEntidades.FirstOrDefaultAsync(x => x.NombreCategoria.Equals(nuevaCategoria.NombreCategoria) && x.IdEstado!=0);
-
-                    if (CategoriaExistente == null)
-                    {
-                        await AponusDBContext.CategoriasEntidades.AddAsync(new EntidadesCategorias()
-                        {
-                            NombreCategoria = nuevaCategoria.NombreCategoria ?? "",
-                        });
-
-                        await AponusDBContext.SaveChangesAsync();
-
-                        EntidadesCategorias? Cat = await AponusDBContext.CategoriasEntidades.FirstOrDefaultAsync(x => x.NombreCategoria == nuevaCategoria.NombreCategoria && x.IdEstado != 0);
-                        EntidadesTipos? Tipo = await AponusDBContext.TiposEntidades.FirstOrDefaultAsync(x => x.IdTipo == nuevaCategoria.IdTipo && x.IdEstado != 0);
-                        nuevaCategoria.IdCategoria = Cat?.IdCategoria;
-
-                        rollback = await VincularTiposCategorias(Tipo, Cat);
-
-
-                        if (!rollback)
-                        {
-                            await transaccion.CommitAsync();
-                            return new StatusCodeResult(200);
-                        }
-                        else
-                        {
-                            await transaccion.RollbackAsync();
-                            return new ContentResult()
-                            {
-                                Content = "Error interno, no se aplicaron lo cambios",
-                                ContentType = "application/json",
-                                StatusCode = 400,
-                            };
-                        }
-                    }
-                    else if (nuevaCategoria.IdCategoria != null)
-                    {
-
-                        CategoriaExistente = await AponusDBContext.CategoriasEntidades.FirstOrDefaultAsync(x => x.IdCategoria.Equals(nuevaCategoria.IdCategoria ) && x.IdEstado != 0);
-
-                        if ( CategoriaExistente != null )
-                            CategoriaExistente.NombreCategoria = nuevaCategoria.NombreCategoria ?? "";
-                        
-                        await AponusDBContext.SaveChangesAsync();
-                        await transaccion.CommitAsync();
-                    }
-
-                    return new StatusCodeResult(200);
-
-
-                }
-                catch (Exception ex)
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException?.Message ?? ex.Message,
-                        ContentType = "application/json",
-                        StatusCode = 400,
-                    };
-                }
+                await transaccion.RollbackAsync();
+                return (null, ex);
             }
         }
-        internal async Task<bool> VincularTiposCategorias(EntidadesTipos? Tipo,EntidadesCategorias? Cat )
+        internal IQueryable<Entidades> ListarEntidades()
+        {
+            IQueryable<Entidades> QueryListado = AponusDBContext.Entidades.Where(x => x.IdEstado != 0);
+
+            return QueryListado;
+
+        }
+        internal async Task<(List<EntidadesTipos>? LstTiposEntidades, Exception? ex)> ListarTiposEntidades()
         {
             try
             {
-                if (Tipo != null && Cat!= null)
+                return
+                (
+                    await AponusDBContext.TiposEntidades
+                        .Where(x => x.IdEstado != 0)
+                        .ToListAsync(),
+                        null
+                );
+            }
+            catch (Exception ex)
+            {
+                return (null, ex);
+            }
+        }
+        internal async Task<(int?, Exception? ex)> GuardarTipoEntidad(EntidadesTipos NuevoTipo)
+        {
+            using var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
+            try
+            {
+                if (NuevoTipo.IdTipo != 0)
+                {
+                    EntidadesTipos? ExisteId = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == NuevoTipo.IdTipo);
+
+                    if (ExisteId?.IdTipo != null && ExisteId?.IdTipo != 0 && !string.IsNullOrEmpty(NuevoTipo.NombreTipo))
+                    {
+                        ExisteId!.NombreTipo = NuevoTipo.NombreTipo;
+                        ExisteId.IdEstado = 1;
+
+                        AponusDBContext.TiposEntidades.Update(ExisteId);
+                        await AponusDBContext.SaveChangesAsync();
+                        await transaccion.CommitAsync();
+
+                        return (StatusCodes.Status200OK, null);
+                    }
+
+                    return (null, new Exception("error al actualizar, no se encontro el Tipo"));
+                }
+                else
+                {
+                    await AponusDBContext.TiposEntidades.AddAsync(NuevoTipo);
+                    await AponusDBContext.SaveChangesAsync();
+                    await transaccion.CommitAsync();
+
+                    return (StatusCodes.Status200OK, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                return (null, ex);
+            }
+        }
+        internal async Task<(List<EntidadesCategorias>? LstCategoriasEntidades, Exception? Ex)> ListarCategorias(int? idTipo)
+        {
+            try
+            {
+                IQueryable<EntidadesCategorias> QueryCategorias = AponusDBContext.CategoriasEntidades
+                    .Where(x => x.IdEstado == 1);
+
+
+                if (idTipo != null)
+                {
+                    var IdCategorias = await AponusDBContext.EntidadeTiposCategorias
+                        .Where(x => x.idTipoEntidad == idTipo)
+                        .Select(x => x.IdCategoriaEntidad)
+                        .ToListAsync();
+
+                    QueryCategorias = QueryCategorias.Where(x => IdCategorias.ToList().Equals(x.IdCategoria));
+                }
+
+                List<EntidadesCategorias> LstCategoriasEntidades = await QueryCategorias.ToListAsync();
+
+                return (LstCategoriasEntidades, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex);
+            }
+
+
+        }
+        internal async Task<(int? Resultado, Exception? Ex)> GuardarCategoria(EntidadesCategorias nuevaCategoria, int? IdTipo)
+        {
+            bool rollback;
+            using var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                var CategoriaExistente = await AponusDBContext.CategoriasEntidades.FirstOrDefaultAsync(x => x.NombreCategoria.Equals(nuevaCategoria.NombreCategoria) && x.IdEstado != 0);
+
+                if (CategoriaExistente == null)
+                {
+                    await AponusDBContext.CategoriasEntidades.AddAsync(nuevaCategoria);
+                    await AponusDBContext.SaveChangesAsync();
+
+                    EntidadesCategorias? Cat = await AponusDBContext.CategoriasEntidades.FirstOrDefaultAsync(x => x.NombreCategoria == nuevaCategoria.NombreCategoria && x.IdEstado != 0);
+                    EntidadesTipos? Tipo = await AponusDBContext.TiposEntidades.FirstOrDefaultAsync(x => x.IdTipo == IdTipo && x.IdEstado != 0);
+                    nuevaCategoria.IdCategoria = Cat?.IdCategoria ?? 0;
+
+                    rollback = await VincularTiposCategorias(Tipo, Cat);
+
+                    if (!rollback)
+                    {
+                        await transaccion.CommitAsync();
+                        return (StatusCodes.Status200OK, null);
+                    }
+                    else
+                    {
+                        await transaccion.RollbackAsync();
+                        return (null, new Exception("No se aplicaron los cambios"));
+
+                    }
+                }
+                else if (nuevaCategoria.IdCategoria != 0)
+                {
+
+                    CategoriaExistente = await AponusDBContext.CategoriasEntidades.FirstOrDefaultAsync(x => x.IdCategoria.Equals(nuevaCategoria.IdCategoria) && x.IdEstado != 0);
+
+                    if (CategoriaExistente != null)
+                        CategoriaExistente.NombreCategoria = nuevaCategoria.NombreCategoria ?? "";
+
+                    await AponusDBContext.SaveChangesAsync();
+                    await transaccion.CommitAsync();
+                }
+
+                return (StatusCodes.Status200OK, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex);
+            }
+        }
+        internal async Task<bool> VincularTiposCategorias(EntidadesTipos? Tipo, EntidadesCategorias? Cat)
+        {
+            try
+            {
+                if (Tipo != null && Cat != null)
                 {
                     EntidadesTiposCategorias vinculo = new EntidadesTiposCategorias()
                     {
@@ -371,90 +291,46 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 return false;
             }
         }
-        internal IActionResult EliminarCategoria(int idCategoria)
+        internal async Task<(int? Status, Exception? ex)> CambiarEstadoCategoria(EntidadesCategorias Categoria)
         {
-            EntidadesCategorias? Categoria = AponusDBContext.CategoriasEntidades.FirstOrDefault(x => x.IdCategoria == idCategoria);
-
-            if (Categoria != null)
+            try
             {
-                Categoria.IdEstado = 0;
+                AponusDBContext.CategoriasEntidades.Update(Categoria);
+                await AponusDBContext.SaveChangesAsync();
 
-                try
-                {
-                    AponusDBContext.CategoriasEntidades.Update(Categoria);
-                    AponusDBContext.SaveChanges();
-                    return new StatusCodeResult(200);
-                }
-                catch (Exception ex)
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException?.Message ?? ex.Message,
-                        StatusCode = 400,
-                        ContentType = "application/json"                    
-                    };
-                }               
-
-            }else
+                return (StatusCodes.Status200OK, null);
+            }
+            catch (Exception ex)
             {
-                return new ContentResult()
-                {
-                    Content = "Error: No se encontro la Categoría", 
-                    ContentType = "application/json",
-                    StatusCode = 400
-                };
+                return (null, ex);
             }
 
         }
-        internal IActionResult EliminarTipo(int id)
+        internal async Task<(int? Resultado, Exception? ex)> DesactivarTipoyRelaciones(EntidadesTipos TipoEntidad)
         {
-            EntidadesTipos? Tipo = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == id);
-            var EntidadesTipoCategorias = AponusDBContext.EntidadeTiposCategorias.Where(x=>x.idTipoEntidad==id).ToList();
-
-            using (var transaccion = AponusDBContext.Database.BeginTransaction())
+            using var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
+            try
             {
+                var Entidades = await AponusDBContext.Entidades
+                    .Where(x => x.IdTipo == TipoEntidad.IdTipo)
+                    .ToListAsync() ?? new List<Entidades>();
 
+                Entidades.ForEach(x => x.IdEstado = 0);
 
+                AponusDBContext.Entidades.UpdateRange(Entidades);
+                AponusDBContext.TiposEntidades.Update(TipoEntidad);
 
+                await AponusDBContext.SaveChangesAsync();
+                await transaccion.CommitAsync();
+
+                return (StatusCodes.Status200OK, null);
             }
-
-            if (EntidadesTipoCategorias != null)
+            catch (Exception ex)
             {
-
-            }
-
-            if (Tipo != null)
-            {
-                Tipo.IdEstado = 0;
-
-                try
-                {
-                    AponusDBContext.TiposEntidades.Update(Tipo);
-                    AponusDBContext.SaveChanges();
-                    return new StatusCodeResult(200);
-
-                }
-                catch (Exception ex)
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException?.Message ?? ex.Message,
-                        StatusCode = 400,
-                        ContentType = "application/json"
-                    };
-                }
-            }
-            else
-            {
-                return new ContentResult()
-                {
-                    Content = "Error: No se encontro la Categoría",
-                    ContentType = "application/json",
-                    StatusCode = 400
-                };
+                await transaccion.RollbackAsync();
+                return (null, ex);
             }
         }
     }
-    
+
 }
-    

@@ -23,7 +23,7 @@ namespace Aponus_Web_API.Utilidades
                 if (cp.UnidadFraccionamiento == null) Unidad = cp.UnidadAlmacenamiento;
                 else Unidad = cp.UnidadAlmacenamiento;
 
-                    StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
                 sb.Append($"{descripcion}");
                 if (diametro != null)
                     sb.Append($", Diametro:{diametro}mm");
@@ -44,7 +44,7 @@ namespace Aponus_Web_API.Utilidades
                 {
                     IdSuminitro = IdSuministro,
                     NombreFormateado = sb.ToString(),
-                    Unidad=Unidad
+                    Unidad = Unidad
                 });
 
 
@@ -54,7 +54,7 @@ namespace Aponus_Web_API.Utilidades
             return SuministrosFormateados;
         }
 
-       
+
 
 
     }

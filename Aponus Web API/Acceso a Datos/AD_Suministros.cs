@@ -1,6 +1,6 @@
 ﻿using Aponus_Web_API.Modelos;
-using Microsoft.EntityFrameworkCore;
 using Aponus_Web_API.Utilidades;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aponus_Web_API.Acceso_a_Datos
 {
@@ -17,37 +17,37 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
             var IdSuministrosTodos = SuministrosId.ToList();
 
-            List<UTL_FormatoSuministros> formatoSuminitrosComponentes=AponusDBContext.ComponentesDetalles
+            List<UTL_FormatoSuministros> formatoSuminitrosComponentes = AponusDBContext.ComponentesDetalles
                 .Join(
                     AponusDBContext.ComponentesDescripcions,
-                    Detalles=>Detalles.IdDescripcion,
-                    Descripciones=>Descripciones.IdDescripcion,
-                    (_Detalles, _Descripciones)=>new
+                    Detalles => Detalles.IdDescripcion,
+                    Descripciones => Descripciones.IdDescripcion,
+                    (_Detalles, _Descripciones) => new
                     {
-                        detales=_Detalles,
-                        descripciones=_Descripciones,
+                        detales = _Detalles,
+                        descripciones = _Descripciones,
                     })
                 .Where(ComponentesId => IdSuministrosTodos.Contains(ComponentesId.detales.IdInsumo))
-                .Select(reg=> new UTL_FormatoSuministros()
+                .Select(reg => new UTL_FormatoSuministros()
                 {
-                    IdSuministro=reg.detales.IdInsumo,
-                    Descripcion=reg.descripciones.Descripcion,
-                    DiametroNominal=reg.detales.DiametroNominal,
-                    Diametro=reg.detales.Diametro,
-                    Tolerancia=reg.detales.Tolerancia,
+                    IdSuministro = reg.detales.IdInsumo,
+                    Descripcion = reg.descripciones.Descripcion,
+                    DiametroNominal = reg.detales.DiametroNominal,
+                    Diametro = reg.detales.Diametro,
+                    Tolerancia = reg.detales.Tolerancia,
                     Espesor = reg.detales.Espesor,
-                    Longitud=reg.detales.Longitud,
-                    Altura=reg.detales.Altura,
+                    Longitud = reg.detales.Longitud,
+                    Altura = reg.detales.Altura,
                     Perfil = reg.detales.Perfil,
-                    UnidadAlmacenamiento=reg.detales.IdAlmacenamiento,
-                    UnidadFraccionamiento=reg.detales.IdFraccionamiento
+                    UnidadAlmacenamiento = reg.detales.IdAlmacenamiento,
+                    UnidadFraccionamiento = reg.detales.IdFraccionamiento
 
                 })
                 .ToList();
 
 
             ///Buscar Detalle Suministros (StockInsumos)            
-            List<UTL_FormatoSuministros> formatoSuminitrosProductos= AponusDBContext.Productos
+            List<UTL_FormatoSuministros> formatoSuminitrosProductos = AponusDBContext.Productos
                .Join(
                    AponusDBContext.ProductosDescripcions,
                    Detalles => Detalles.IdDescripcion,
@@ -64,7 +64,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                    Descripcion = reg.descripciones.DescripcionProducto,
                    DiametroNominal = reg.detales.DiametroNominal,
                    Tolerancia = reg.detales.Tolerancia,
-                   UnidadAlmacenamiento="Ud",
+                   UnidadAlmacenamiento = "Ud",
                })
                .ToList();
 
@@ -72,7 +72,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             ///Concatenar Listas
             ///
 
-            List<UTL_FormatoSuministros>formatoSuministros = formatoSuminitrosComponentes.Concat(formatoSuminitrosProductos).ToList();
+            List<UTL_FormatoSuministros> formatoSuministros = formatoSuminitrosComponentes.Concat(formatoSuminitrosProductos).ToList();
 
 
             ///Formatear Nombres
@@ -80,7 +80,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
             List<(string IdSuminitro,
                 string NombreFormateado,
-                string? Unidad)> SuministrosFormateados=new UTL_NombresSuministros().formatearNombres(formatoSuministros);              
+                string? Unidad)> SuministrosFormateados = new UTL_NombresSuministros().formatearNombres(formatoSuministros);
 
             return SuministrosFormateados;
 

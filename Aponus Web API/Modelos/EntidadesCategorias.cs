@@ -11,10 +11,10 @@ namespace Aponus_Web_API.Modelos
         public int IdCategoria { get; set; }
 
         [Column("NOMBRE_CATEGORIA")]
-        public string NombreCategoria { get; set;} = string.Empty;
+        public string NombreCategoria { get; set; } = string.Empty;
 
         [Column("ID_ESTADO")]
-        public int IdEstado {  get; set; }
+        public int IdEstado { get; set; }
         public virtual ICollection<Entidades> Entidades { get; set; } = new List<Entidades>();
         public virtual ICollection<EntidadesTiposCategorias> TiposCategoriasNavigation { get; set; } = new List<EntidadesTiposCategorias>();
 

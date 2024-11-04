@@ -17,7 +17,7 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
-    "Method": "EliminarTipoProducto",
+    "Method": "EliminarDescripcionProducto",
     "RelativePath": "Aponus/Categories/Products/Descriptions/{IdDescription}/Delete",
     "HttpMethod": "POST",
     "IsController": true,
@@ -33,7 +33,7 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
-    "Method": "ListarDescripciones",
+    "Method": "ListarDescripcionesProductos",
     "RelativePath": "Aponus/Categories/Products/Descriptions/List/{idTipo}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -45,21 +45,11 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTODescripciones, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
-    "Method": "AgregarDescripcion",
+    "Method": "NuevaDescripcionProducto",
     "RelativePath": "Aponus/Categories/Products/Descriptions/New",
     "HttpMethod": "POST",
     "IsController": true,
@@ -75,7 +65,7 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
-    "Method": "ActualizarCategorias",
+    "Method": "Actualizar_Tipo_Descripcion_Producto",
     "RelativePath": "Aponus/Categories/Products/Type-or-Description/Update",
     "HttpMethod": "POST",
     "IsController": true,
@@ -112,7 +102,7 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
-    "Method": "ListCategories",
+    "Method": "ListarTiposProductos",
     "RelativePath": "Aponus/Categories/Products/Types/List",
     "HttpMethod": "GET",
     "IsController": true,
@@ -122,7 +112,7 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
-    "Method": "AgregarTipo_Descripcion",
+    "Method": "AgregarTipoProducto",
     "RelativePath": "Aponus/Categories/Products/Types/New",
     "HttpMethod": "POST",
     "IsController": true,
@@ -148,30 +138,14 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
-    "Method": "AgregarDescripcionCompoente",
-    "RelativePath": "Aponus/Categories/Supplies/Descriptions/New",
+    "Method": "GuardarDescripcionComponente",
+    "RelativePath": "Aponus/Categories/Supplies/Descriptions/Save",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "nombreComponente",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
-    "Method": "ModificarDescripcionCompoente",
-    "RelativePath": "Aponus/Categories/Supplies/Descriptions/Update",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Descripcion",
+        "Name": "Componente",
         "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTODescripcionComponentes",
         "IsRequired": true
       }
@@ -180,12 +154,18 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.ComponentsController",
-    "Method": "ObtenerAlmacenamiento",
-    "RelativePath": "Aponus/Components/FetchUnities",
+    "Method": "ObtenerAlmacenamientoComponentes",
+    "RelativePath": "Aponus/Components/FetchUnities/{IdNombreComponente}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "IdNombreComponente",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -200,7 +180,7 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.ComponentsController",
-    "Method": "ListarComponentes",
+    "Method": "ObtenerListarComponentes",
     "RelativePath": "Aponus/Components/List/{IdDescripcion}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -368,7 +348,7 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
-    "Method": "GuardarTipoEntidad",
+    "Method": "Guardar",
     "RelativePath": "Aponus/Entities/Types/Save",
     "HttpMethod": "POST",
     "IsController": true,
@@ -777,7 +757,7 @@
     "Parameters": [
       {
         "Name": "Filtros",
-        "Type": "Aponus_Web_API.Utilidades.UTL_Movimientos",
+        "Type": "Aponus_Web_API.Utilidades.UTL_FiltrosMovimientos",
         "IsRequired": false
       }
     ],
@@ -1157,7 +1137,7 @@
     "Parameters": [
       {
         "Name": "Producto",
-        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_objects.DTOComponentesProducto, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOComponentesProducto, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],
@@ -1241,7 +1221,7 @@
     "Parameters": [
       {
         "Name": "Producto",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOProducto",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOProducto",
         "IsRequired": true
       }
     ],
@@ -1257,7 +1237,7 @@
     "Parameters": [
       {
         "Name": "Producto",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOProducto",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOProducto",
         "IsRequired": true
       }
     ],
@@ -1265,9 +1245,41 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.PurchaseController",
-    "Method": "NuevaCompra",
-    "RelativePath": "Aponus/Purchase/New",
+    "Method": "RegistrarPago",
+    "RelativePath": "Aponus/Purchase/Billings/New",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Pago",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOPagosCompras",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.PurchaseController",
+    "Method": "Listar",
+    "RelativePath": "Aponus/Purchase/List",
     "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Filtros",
+        "Type": "Aponus_Web_API.Utilidades.UTL_FiltrosComprasVentas",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.PurchaseController",
+    "Method": "NuevaCompra",
+    "RelativePath": "Aponus/Purchase/Save",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -1289,7 +1301,7 @@
     "Parameters": [
       {
         "Name": "Filtros",
-        "Type": "Aponus_Web_API.Utilidades.UTL_FiltrosVentas",
+        "Type": "Aponus_Web_API.Utilidades.UTL_FiltrosComprasVentas",
         "IsRequired": false
       }
     ],
@@ -1369,7 +1381,7 @@
     "Parameters": [
       {
         "Name": "Producto",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTOProducto",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOProducto",
         "IsRequired": true
       }
     ],
@@ -1454,7 +1466,7 @@
     "Parameters": [
       {
         "Name": "InsumoProducto",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesComponenteProducto",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTODetallesComponenteProducto",
         "IsRequired": true
       }
     ],
@@ -1470,7 +1482,7 @@
     "Parameters": [
       {
         "Name": "Especificaciones",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesComponenteProducto",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTODetallesComponenteProducto",
         "IsRequired": true
       }
     ],
@@ -1496,7 +1508,7 @@
     "Parameters": [
       {
         "Name": "Especificaciones",
-        "Type": "Aponus_Web_API.Data_Transfer_objects.DTODetallesComponenteProducto",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTODetallesComponenteProducto",
         "IsRequired": true
       }
     ],
@@ -1528,7 +1540,7 @@
     "Parameters": [
       {
         "Name": "ComponentesProd",
-        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Data_Transfer_objects.DTOComponentesProducto, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOComponentesProducto, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],

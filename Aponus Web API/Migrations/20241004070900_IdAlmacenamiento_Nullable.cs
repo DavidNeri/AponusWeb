@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace AponusWebAPI.Migrations
+namespace Aponus_Web_API.Migrations
 {
     /// <inheritdoc />
     public partial class IdAlmacenamientoNullable : Migration

@@ -1,15 +1,10 @@
-﻿using MessagePack;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Modelos;
 
 public partial class ProductosTipo
 {
-    
+
     [Column("ID_TIPO")]
     public string IdTipo { get; set; } = null!;
 
@@ -18,8 +13,8 @@ public partial class ProductosTipo
 
     [ForeignKey("ID_ESTADO")]
     public int IdEstado { get; set; }
-    
-    public virtual ICollection<Producto> Productos{ get; set;} = new List<Producto>();
+
+    public virtual ICollection<Producto> Productos { get; set; } = new List<Producto>();
 
     public virtual EstadosTiposProductos IdEstadoNavigation { get; set; } = new EstadosTiposProductos();
 

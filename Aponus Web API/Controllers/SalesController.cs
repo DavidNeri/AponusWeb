@@ -1,7 +1,5 @@
 ﻿using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using Aponus_Web_API.Modelos;
-using Aponus_Web_API.Utilidades;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +18,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List")]
-        public IActionResult List(UTL_FiltrosVentas? Filtros)
+        public IActionResult List(UTL_FiltrosComprasVentas? Filtros)
         {
             return BsVentas.Filtrar(Filtros);
 
@@ -68,15 +66,15 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Save")]
-        public async Task<IActionResult> Guardar (DTOVentas Venta)
+        public async Task<IActionResult> Guardar(DTOVentas Venta)
         {
-             // If Venta.Cuotas es nulo errror 
+            // If Venta.Cuotas es nulo errror 
 
-            if(Venta.Total.Equals(0))
+            if (Venta.MontoTotal.Equals(0))
                 return new ContentResult()
                 {
-                    Content="El valor de la venta no puede ser 0.00",
-                    ContentType="Application/Json",
+                    Content = "El valor de la venta no puede ser 0.00",
+                    ContentType = "Application/Json",
                     StatusCode = 400
                 };
             else
@@ -85,16 +83,16 @@ namespace Aponus_Web_API.Controllers
                 {
                     return await BsVentas.ProcesarDatosVenta(Venta);
                 }
-                catch (Exception ex )
+                catch (Exception ex)
                 {
                     return new ContentResult()
                     {
                         Content = ex.InnerException?.Message ?? ex.Message,
-                        ContentType="applcation/json",
-                        StatusCode=400
+                        ContentType = "applcation/json",
+                        StatusCode = 400
                     };
-                }  
-                
+                }
+
             }
 
 

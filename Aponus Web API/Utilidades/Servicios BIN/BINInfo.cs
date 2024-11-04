@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Aponus_Web_API.Utilidades.Servicios_BIN
+﻿namespace Aponus_Web_API.Utilidades.Servicios_BIN
 {
     public class BINInfo
     {
@@ -13,8 +11,8 @@ namespace Aponus_Web_API.Utilidades.Servicios_BIN
     public class BankInfo
     {
         public string Name { get; set; } = string.Empty;
-        
+
     }
-   
+
 
 }

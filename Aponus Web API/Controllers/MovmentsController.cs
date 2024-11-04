@@ -17,12 +17,12 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("New")]
-        public IActionResult NuevoMovimiento ([FromForm]DTOMovimientosStock Actualizacion)
+        public IActionResult NuevoMovimiento([FromForm] DTOMovimientosStock Actualizacion)
         {
             try
             {
                 return BsMovimientos.ProcesarDatosMovimiento(Actualizacion);
-                
+
             }
             catch (Exception)
             {
@@ -38,7 +38,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List")]
-        public async Task<IActionResult> Listar(UTL_Movimientos? Filtros)
+        public async Task<IActionResult> Listar(UTL_FiltrosMovimientos? Filtros)
         {
             return await BsMovimientos.Listar(Filtros);
         }
@@ -55,18 +55,18 @@ namespace Aponus_Web_API.Controllers
         [Route("Files/Delete")]
         public IActionResult EliminarArchivo(DTOMovimientosStock Archivos)
         {
-            return  BsMovimientos.ArchivosMovimientos().Eliminar(Archivos);
+            return BsMovimientos.ArchivosMovimientos().Eliminar(Archivos);
         }
 
         [HttpPost]
-        [Route("Files/New")]      
+        [Route("Files/New")]
 
         public async Task<IActionResult> AgregarArchivo([FromForm] DTOMovimientosStock Archivos)
         {
             return await BsMovimientos.ArchivosMovimientos().Agregar(Archivos);
         }
 
-        
+
 
         [HttpPut]
         [Route("Update")]
@@ -80,7 +80,7 @@ namespace Aponus_Web_API.Controllers
 
         public IActionResult ActualizarInsumos(DTOMovimientosStock Movimiento)
         {
-            if(Movimiento.IdMovimiento==null)
+            if (Movimiento.IdMovimiento == null)
                 return new ContentResult()
                 {
                     Content = "No se encontró el valor 'ID_MOVIMIENTO'\n No se aplicaron los cambios",

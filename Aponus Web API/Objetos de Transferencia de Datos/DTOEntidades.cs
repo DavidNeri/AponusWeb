@@ -1,15 +1,14 @@
 ﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
     public class DTOEntidades
     {
-        [JsonProperty(Order=100, PropertyName = "idEntidad", NullValueHandling = NullValueHandling.Ignore)] 
+        [JsonProperty(Order = 100, PropertyName = "idEntidad", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdEntidad { get; set; }
 
         [JsonProperty(Order = 3, PropertyName = "nombreClave", NullValueHandling = NullValueHandling.Ignore)]
-        public string? NombreClave{ get; set; }
+        public string? NombreClave { get; set; }
 
         [JsonProperty(Order = 2, PropertyName = "nombre", NullValueHandling = NullValueHandling.Ignore)]
         public string? Nombre { get; set; }
@@ -24,7 +23,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public string? Ciudad { get; set; }
 
         [JsonProperty(Order = 5, PropertyName = "provincia", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Provincia{ get; set; }
+        public string? Provincia { get; set; }
 
         [JsonProperty(Order = 7, PropertyName = "localidad", NullValueHandling = NullValueHandling.Ignore)]
         public string? Localidad { get; set; }
@@ -34,7 +33,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 
         [JsonProperty(Order = 9, PropertyName = "altura", NullValueHandling = NullValueHandling.Ignore)]
         public string? Altura { get; set; }
-        
+
         [JsonProperty(Order = 10, PropertyName = "codigoPostal", NullValueHandling = NullValueHandling.Ignore)]
         public string? CodigoPostal { get; set; }
 
@@ -54,7 +53,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public string? Email { get; set; }
 
         [JsonProperty(Order = 16, PropertyName = "idFiscal", NullValueHandling = NullValueHandling.Ignore)]
-        public string IdFiscal { get; set; } = string.Empty;    
+        public string IdFiscal { get; set; } = string.Empty;
 
         [JsonProperty(Order = 17, PropertyName = "fechaRegistro", NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? FechaRegistro { get; set; }
@@ -66,7 +65,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public int IdTipo { get; set; }
 
         [JsonProperty(Order = 19, PropertyName = "idCategoria", NullValueHandling = NullValueHandling.Ignore)]
-        public int IdCategoria{ get; set; }
+        public int IdCategoria { get; set; }
 
         [JsonProperty(Order = 19, PropertyName = "idEstado", NullValueHandling = NullValueHandling.Ignore)]
         public bool? IdEstado { get; set; }

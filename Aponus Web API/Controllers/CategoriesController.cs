@@ -1,8 +1,8 @@
 ﻿using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Negocio;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using Aponus_Web_API.Negocio;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -18,42 +18,29 @@ namespace Aponus_Web_API.Controllers
             BsCategorias = _BsCategorias;
         }
 
-
         [HttpGet]
         [Route("Products/Types/List")]
-        public async Task<JsonResult> ListCategories() {
-            
-
-            List<ProductosTipo> TipoProductos = await AponusDBContext.ProductosTipos
-                .OrderBy(x=> x.DescripcionTipo)
-                .Where(x=>x.IdEstado!=0)
-                .Select(x=> new ProductosTipo()
-                {
-                    IdTipo= x.IdTipo,
-                    DescripcionTipo= x.DescripcionTipo,
-                    IdEstado= x.IdEstado,
-                })
-                .ToListAsync();
-
-            return new JsonResult(TipoProductos);
-        }       
+        public async Task<JsonResult> ListarTiposProductos()
+        {
+            return await BsCategorias.MapearTiposProductosDTO();
+        }
 
         [HttpGet]
         [Route("Products/Descriptions/List/{idTipo}")]
-        public List<DTODescripciones> ListarDescripciones(string IdTipo)
-        {            
-                return BsCategorias.ListarDescripciones(IdTipo);            
+        public async Task<IActionResult> ListarDescripcionesProductos(string IdTipo)
+        {
+            return await BsCategorias.MapearDescripcionesProductosDTO(IdTipo);
         }
 
 
         [HttpPost]
         [Route("Products/Types/New")]
-        public JsonResult AgregarTipo_Descripcion(DTOCategorias NuevaCategoria)
+        public JsonResult AgregarTipoProducto(DTOCategorias NuevaCategoria)
         {
             try
             {
-                return BsCategorias.AgregarTipo(NuevaCategoria);
-                
+                return BsCategorias.NormalizarNombreTipoProducto(NuevaCategoria);
+
             }
             catch (Exception ex)
             {
@@ -62,13 +49,12 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpPost]
-        [Route("Products/Types/{TypeId}/Delete/")] //Continuar!!
-        public IActionResult EliminarTipoProducto(string IdTipo)
+        [Route("Products/Types/{TypeId}/Delete/")]
+        public async Task<IActionResult> EliminarTipoProducto(string IdTipo)
         {
             try
             {
-                return BsCategorias.EliminarTipoProducto(IdTipo);
-
+                return await BsCategorias.RegistrarCambioEstadoTipoProducto(IdTipo);
             }
             catch (Exception ex)
             {
@@ -79,11 +65,11 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Descriptions/New")]
-        public async Task<IActionResult> AgregarDescripcion(DTOCategorias NuevaCategoria)
+        public async Task<IActionResult> NuevaDescripcionProducto(DTOCategorias NuevaCategoria)
         {
             try
             {
-                return await BsCategorias.AgregarDescripcion(NuevaCategoria);
+                return await BsCategorias.NormalizarDescripcionProducto(NuevaCategoria);
             }
             catch (Exception ex)
             {
@@ -98,123 +84,38 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Descriptions/{IdDescription}/Delete/")]
-        public IActionResult EliminarTipoProducto(int IdDescription)
+        public async Task<IActionResult> EliminarDescripcionProducto(int IdDescription)
         {
-            try
-            {
-                return BsCategorias.EliminarDescripcionProducto(IdDescription);
-
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(ex.Message);
-            }
+            return await BsCategorias.RegistrarCambioEstadoDescripcionProducto(IdDescription);
         }
+
         [HttpPost]
         [Route("Products/Type-or-Description/Update")]
-        public IActionResult ActualizarCategorias(DTOActualizarCategorias ActualizarCategorias)
+        public IActionResult Actualizar_Tipo_Descripcion_Producto(DTOActualizarCategorias ActualizarCategorias)
         {
             try
             {
-                return BsCategorias.Actualizar(ActualizarCategorias);
+                return BsCategorias.ValidarOperacionActualizacion(ActualizarCategorias);
             }
             catch (DbUpdateException e)
             {
-
                 string Mensaje = e.InnerException?.Message ?? e.Message;
                 return new JsonResult(Mensaje);
             }
-
-
         }
 
         [HttpGet]
         [Route("Supplies/Descriptions/List")]
-        public JsonResult ListarNombreComponentes()
+        public IActionResult ListarNombreComponentes()
         {
-            try
-            {
-                return BsCategorias.ListarNombresComponentes();
-            }
-            catch (DbUpdateException e)
-            {
-
-                string Mensaje = e.InnerException?.Message ?? e.Message;
-                return new JsonResult(Mensaje);
-            }
+            return BsCategorias.MapearNombresComponentesDTO();
         }
 
-
-        
-
         [HttpPost]
-        [Route("Supplies/Descriptions/New")]
-        public IActionResult AgregarDescripcionCompoente ([FromBody] string nombreComponente)
+        [Route("Supplies/Descriptions/Save")]
+        public async Task<IActionResult> GuardarDescripcionComponente(DTODescripcionComponentes Componente)
         {
-             try
-             {
-                 return  BsCategorias.AgregarDescripcionCompoente(nombreComponente);
-             }
-             catch (DbUpdateException ex)
-             {
-                 if (ex.InnerException != null)
-                 {
-                     return new ContentResult()
-                     {
-                         Content = ex.InnerException.Message,
-                         ContentType = "text/plain",
-                         StatusCode = 400,
-                     };
-                 }
-                 else
-                 {
-                     return new ContentResult()
-                     {
-                         Content = ex.Message,
-                         ContentType = "text/plain",
-                         StatusCode = 400,
-
-                     };
-                 };
-             }
-        }
-
-        
-        [HttpPost]
-        [Route("Supplies/Descriptions/Update")] //ModifyComponentDescription
-        public IActionResult ModificarDescripcionCompoente( DTODescripcionComponentes Descripcion)
-        {
-            try
-            {
-                return BsCategorias.ModificarDescripcionCompoente(Descripcion);
-            }
-            catch (DbUpdateException ex)
-            {
-
-                if (ex.InnerException != null)
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-
-                    };
-                }
-                else
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-
-                    };
-                };
-            }
-
-
-
+            return await BsCategorias.MapeoComponenteBD(Componente);
         }
 
     }

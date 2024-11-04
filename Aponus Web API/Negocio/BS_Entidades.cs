@@ -1,6 +1,6 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
-using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -26,29 +26,39 @@ namespace Aponus_Web_API.Negocio
             return new Categorias(AdEntidades);
         }
 
-        internal IActionResult Eliminar(int idProveedor)
+        internal async Task<IActionResult> ValidarEntidad(int idEntidad)
         {
-            try
-            {
-                return AdEntidades.Eliminar(idProveedor);
-            }
-            catch (Exception ex)
-            {
+            IQueryable<Entidades> LstEntidades = AdEntidades.ListarEntidades();
+            Entidades? Entidad = LstEntidades.FirstOrDefault(x => x.IdEntidad == idEntidad);
 
+            if (Entidad == null)
+            {
                 return new ContentResult()
                 {
                     ContentType = "application/json",
                     StatusCode = 400,
-                    Content = !string.IsNullOrEmpty(ex.InnerException?.Message) ? "Error:\n" + ex.InnerException.Message : "Error:\n" + ex.Message
+                    Content = "No se encontró la Entidad"
                 };
+            }
+            else
+            {
+                var (Status, error) = await AdEntidades.DeshabilitarEntidad(Entidad);
+                if (error != null) return new ContentResult()
+                {
+                    ContentType = "application/json",
+                    StatusCode = 400,
+                    Content = error.InnerException?.Message ?? error.Message
+                };
+
+                return new StatusCodeResult((int)Status!);
             }
         }
 
-        internal IActionResult Listar(int IdTipo, int IdCategoria, int IdEntidad )
+        internal IActionResult MapeoEntidadesDTO(int IdTipo, int IdCategoria, int IdEntidad)
         {
             try
             {
-                IQueryable<Modelos.Entidades> QueryEntidades = AdEntidades.Listar();
+                IQueryable<Modelos.Entidades> QueryEntidades = AdEntidades.ListarEntidades();
 
                 if (IdEntidad != 0)
                     QueryEntidades = QueryEntidades.Where(x => x.IdEntidad == IdEntidad);
@@ -57,8 +67,8 @@ namespace Aponus_Web_API.Negocio
                 if (IdCategoria != 0)
                     QueryEntidades = QueryEntidades.Where(x => x.IdCategoria == IdCategoria);
 
-                List<DTOEntidades> Listado =  QueryEntidades
-                    .Select(x=>new DTOEntidades()
+                List<DTOEntidades> Listado = QueryEntidades
+                    .Select(x => new DTOEntidades()
                     {
                         IdEntidad = x.IdEntidad,
                         NombreClave = x.NombreClave,
@@ -101,7 +111,7 @@ namespace Aponus_Web_API.Negocio
             }
         }
 
-        internal IActionResult Guardar(DTOEntidades Entidad)
+        internal IActionResult ValidaryNormalizarDatos(DTOEntidades Entidad)
         {
             try
             {
@@ -123,7 +133,7 @@ namespace Aponus_Web_API.Negocio
                                     Regex.Replace(Entidad.Apellido ?? "", @"\s+", " ").Trim().ToUpper() + " " +
                                     Regex.Replace(Entidad.Nombre ?? "", @"\s+", " ").Trim().ToUpper();
 
-                    foreach ( PropertyInfo prop in Entidad.GetType().GetProperties())
+                    foreach (PropertyInfo prop in Entidad.GetType().GetProperties())
                     {
                         if (prop.PropertyType == typeof(string) && !prop.Name.ToLower().Equals("idfiscal") && !prop.Name.ToLower().Equals("idusuarioregistro"))
                         {
@@ -164,68 +174,96 @@ namespace Aponus_Web_API.Negocio
                 AdEntidades = adEntidades;
             }
 
-            internal IActionResult Eliminar(int id)
+            internal async Task<IActionResult> ValidarTipoEntidad(int id)
             {
                 try
                 {
-                    return AdEntidades.EliminarTipo(id);
+                    var (LstTipos, ex) = await AdEntidades.ListarTiposEntidades();
+                    if (ex != null) return new ContentResult()
+                    {
+                        Content = ex.InnerException?.Message ?? ex.Message,
+                        ContentType = "application/json",
+                        StatusCode = 400
+                    };
+                    EntidadesTipos? TipoEntidad = LstTipos!.FirstOrDefault(x => x.IdTipo == id);
+                    if (TipoEntidad != null)
+                    {
+                        TipoEntidad.IdEstado = 0;
+
+                        var (Resultado, _ex) = await AdEntidades.DesactivarTipoyRelaciones(TipoEntidad);
+                        if (_ex != null) return new ContentResult()
+                        {
+                            Content = _ex.InnerException?.Message ?? _ex.Message,
+                            ContentType = "application/json",
+                            StatusCode = 400
+                        };
+
+                        return new StatusCodeResult((int)Resultado!);
+                    }
+                    else
+                    {
+                        return new ContentResult()
+                        {
+                            Content = "No se encontró el Tipo",
+                            ContentType = "application/json",
+                            StatusCode = 400
+                        };
+                    }
                 }
                 catch (Exception ex)
                 {
-
                     return new ContentResult()
                     {
                         Content = ex.InnerException?.Message ?? ex.Message,
                         ContentType = "application/json",
                         StatusCode = 400
-
                     };
                 }
             }
 
-            internal async Task<IActionResult> Guardar(DTOEntidadesTipos tipoEntidad)
+            internal async Task<IActionResult> MapeoDTOTipoEntidadDB(DTOEntidadesTipos tipoEntidad)
             {
-                try
+                EntidadesTipos NuevoTipo = new()
                 {
-                    await AdEntidades.GuardarTipo(tipoEntidad);
-                    return new StatusCodeResult(200);
-                }
-                catch (Exception ex)
+                    NombreTipo = !string.IsNullOrEmpty(tipoEntidad.Nombre) ? Regex.Replace(tipoEntidad.Nombre, @"\s+", " ").Trim().ToUpper() : string.Empty,
+                    IdTipo = tipoEntidad.IdTipo ?? 0
+                };
+
+                var (Resultado, ex) = await AdEntidades.GuardarTipoEntidad(NuevoTipo);
+
+                if (ex != null) return new ContentResult()
                 {
-                    string Mensaje = ex.InnerException?.Message ?? ex.Message;
+                    Content = ex.InnerException?.Message ?? ex.Message,
+                    ContentType = "application/json",
+                    StatusCode = 400
+                };
+
+                return new StatusCodeResult((int)Resultado!);
+
+            }
+
+            internal async Task<IActionResult> MapeoTiposEntidadesDTO()
+            {
+                List<DTOEntidadesTipos> DTOEntidades = new();
+
+                var (LstTipos, ex) = await AdEntidades.ListarTiposEntidades();
+
+                if (ex != null)
                     return new ContentResult()
                     {
-                        Content = Mensaje,
+                        Content = ex.InnerException?.Message ?? ex?.Message,
                         ContentType = "application/json",
-                        StatusCode = 400
+                        StatusCode = 400,
                     };
-                }
-            }
 
-            internal async Task<IActionResult> Listar()
-            {
-                List<EntidadesTipos>? EntidadesList = new List<EntidadesTipos>();
-                List<DTOEntidadesTipos> DTOEntidades = new List<DTOEntidadesTipos>();
-
-                IActionResult Tipos = await AdEntidades.ListarTipos();
-
-                if (Tipos is JsonResult JsonTiposEntidades)
+                LstTipos!.ForEach(X => DTOEntidades.Add(new DTOEntidadesTipos()
                 {
-                    EntidadesList = JsonTiposEntidades.Value as List<EntidadesTipos>;
+                    IdTipo = X.IdTipo,
+                    Nombre = X.NombreTipo
+                }));
 
-                }
-
-                foreach (EntidadesTipos entidad in EntidadesList ?? Enumerable.Empty<EntidadesTipos>())
-                {
-                    DTOEntidades.Add(new DTOEntidadesTipos()
-                    {
-                        IdTipo = entidad.IdTipo,
-                        Nombre = entidad.NombreTipo
-                    });
-                }
                 return new JsonResult(DTOEntidades);
             }
-
         }
 
         public class Categorias
@@ -235,63 +273,85 @@ namespace Aponus_Web_API.Negocio
             {
                 AdEntidades = adEntidades;
             }
-            internal IActionResult Eliminar(int idCategoria)
+            internal async Task<IActionResult> ValidarCategoria(int idCategoria)
             {
-                try
-                {
-                    return AdEntidades.EliminarCategoria(idCategoria);
-                }
-                catch (Exception ex)
-                {
 
-                    return new ContentResult()
+                var (LstEntidades, ex) = await AdEntidades.ListarCategorias(null);
+                if (ex != null) return new ContentResult()
+                {
+                    Content = ex.InnerException?.Message ?? ex?.Message,
+                    ContentType = "application/json",
+                    StatusCode = 400,
+                };
+
+                EntidadesCategorias? CategoriaEntidad = LstEntidades!.FirstOrDefault(x => x.IdCategoria == idCategoria);
+
+                if (CategoriaEntidad != null)
+                {
+                    CategoriaEntidad.IdEstado = 0;
+                    var (resultado, _ex) = await AdEntidades.CambiarEstadoCategoria(CategoriaEntidad);
+
+                    if (_ex != null) return new ContentResult()
                     {
-                        Content= ex.InnerException?.Message ??  ex.Message,
+                        Content = _ex.InnerException?.Message ?? _ex?.Message,
                         ContentType = "application/json",
-                        StatusCode = 400
-                         
+                        StatusCode = 400,
                     };
-                }
-            }
-            internal async Task<IActionResult> ValidarDatosCategoria(DTOEntidadesCategorias nuevaCategoria)
-            {
-                nuevaCategoria.NombreCategoria = !string.IsNullOrEmpty(nuevaCategoria.NombreCategoria) ?  Regex.Replace(nuevaCategoria.NombreCategoria, @"\s+", " ").Trim().ToUpper() : "";
-                try
-                {
-                    _= await AdEntidades.GuardarCategoria(nuevaCategoria);
-                    return new StatusCodeResult(200);
-                }
-                catch (Exception ex)
-                {
 
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException?.Message ?? ex.Message,
-                        ContentType="application/json",
-                        StatusCode=400
-                    };
+                    return new StatusCodeResult((int)resultado!);
                 }
+
+                return new ContentResult()
+                {
+                    Content = "No se encontróla Categoría",
+                    ContentType = "application/json",
+                    StatusCode = 400,
+                };
+
+
             }
-            internal async Task<IActionResult> Listar(int? idTipo)
+            internal async Task<IActionResult> MapeoNuevaCategoriaDB(DTOEntidadesCategorias nuevaCategoria)
+            {
+
+                EntidadesCategorias entidadesCategorias = new EntidadesCategorias()
+                {
+                    IdCategoria = nuevaCategoria.IdCategoria ?? 0,
+                    NombreCategoria = !string.IsNullOrEmpty(nuevaCategoria.NombreCategoria) ? Regex.Replace(nuevaCategoria.NombreCategoria, @"\s+", " ").Trim().ToUpper() : "",
+
+                };
+
+                var (Resultado, ex) = await AdEntidades.GuardarCategoria(entidadesCategorias, nuevaCategoria.IdTipo);
+                if (ex != null) return new ContentResult()
+                {
+                    Content = ex.InnerException?.Message ?? ex.Message,
+                    ContentType = "application/json",
+                    StatusCode = 400
+                };
+
+                return new StatusCodeResult((int)Resultado!);
+
+            }
+            internal async Task<IActionResult> MapeoEntidadesCategoriasDTO(int? idTipo)
             {
                 List<EntidadesCategorias>? ListaCategorias = new List<EntidadesCategorias>();
                 List<DTOEntidadesCategorias> DTOCategorias = new List<DTOEntidadesCategorias>();
 
-                IActionResult Categorias = await AdEntidades.ListarCategorias(idTipo);
+                var (LstCategorias, ex) = await AdEntidades.ListarCategorias(idTipo);
 
-                if (Categorias is JsonResult JsonCategorias)
+                if (ex != null) return new ContentResult()
                 {
-                    ListaCategorias = JsonCategorias.Value as List<EntidadesCategorias>;
-                }
+                    Content = ex.InnerException?.Message ?? ex.Message,
+                    ContentType = "application/json",
+                    StatusCode = 400
+                };
 
-                foreach (EntidadesCategorias categoria in ListaCategorias ?? Enumerable.Empty<EntidadesCategorias>())
+                LstCategorias!.ForEach(c => DTOCategorias.Add(new DTOEntidadesCategorias()
                 {
-                    DTOCategorias.Add(new DTOEntidadesCategorias()
-                    {
-                        IdCategoria = categoria.IdCategoria,
-                        NombreCategoria = categoria.NombreCategoria,
-                    });
-                }
+                    IdTipo = idTipo,
+                    IdCategoria = c.IdCategoria,
+                    NombreCategoria = c.NombreCategoria,
+                }));
+
                 return new JsonResult(DTOCategorias);
 
 
@@ -300,9 +360,9 @@ namespace Aponus_Web_API.Negocio
 
 
     }
-           
-        
 
-       
-    
+
+
+
+
 }

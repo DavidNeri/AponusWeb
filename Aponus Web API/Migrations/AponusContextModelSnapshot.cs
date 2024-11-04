@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AponusWebAPI.Migrations
+namespace Aponus_Web_API.Migrations
 {
     [DbContext(typeof(AponusContext))]
     partial class AponusContextModelSnapshot : ModelSnapshot
@@ -19,9 +19,6 @@ namespace AponusWebAPI.Migrations
             modelBuilder
                 .UseCollation("Modern_Spanish_CI_AI")
                 .HasAnnotation("ProductVersion", "7.0.11")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -160,9 +157,6 @@ namespace AponusWebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdCompra"));
 
-                    b.Property<int>("EstadoIdEstadoCompra")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FechaHora")
                         .HasColumnType("timestamp")
                         .HasColumnName("FECHA_HORA");
@@ -180,17 +174,17 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("ID_USUARIO");
 
-                    b.Property<decimal?>("SaldoCancelado")
+                    b.Property<decimal>("MontoTotal")
                         .HasColumnType("decimal(18,2)")
-                        .HasColumnName("SALDO_CANCELADO");
+                        .HasColumnName("MONTO_TOTAL");
 
-                    b.Property<decimal>("SaldoTotal")
+                    b.Property<decimal?>("SaldoPendiente")
                         .HasColumnType("decimal(18,2)")
-                        .HasColumnName("SALDO_TOTAL");
+                        .HasColumnName("SALDO_PENDIENTE");
 
                     b.HasKey("IdCompra");
 
-                    b.HasIndex("EstadoIdEstadoCompra");
+                    b.HasIndex("IdEstadoCompra");
 
                     b.HasIndex("IdProveedor");
 
@@ -218,6 +212,47 @@ namespace AponusWebAPI.Migrations
                     b.HasIndex("IdInsumo");
 
                     b.ToTable("COMPRAS_DETALLE", (string)null);
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Modelos.CuotasCompras", b =>
+                {
+                    b.Property<int>("IdCuota")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("ID_CUOTA");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdCuota"));
+
+                    b.Property<DateTime?>("FechaPago")
+                        .HasColumnType("timestamp")
+                        .HasColumnName("FECHA_PAGO");
+
+                    b.Property<DateTime>("FechaVencimiento")
+                        .HasColumnType("timestamp")
+                        .HasColumnName("FECHA_VENCIMIENTO");
+
+                    b.Property<int>("IdCompra")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_COMPRA");
+
+                    b.Property<int>("IdEstadoCuota")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("MONTO");
+
+                    b.Property<int>("NumeroCuota")
+                        .HasColumnType("integer")
+                        .HasColumnName("NUMERO_CUOTA");
+
+                    b.HasKey("IdCuota");
+
+                    b.HasIndex("IdCompra");
+
+                    b.HasIndex("IdEstadoCuota");
+
+                    b.ToTable("CUOTAS_COMPRAS", (string)null);
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.CuotasVentas", b =>
@@ -503,6 +538,31 @@ namespace AponusWebAPI.Migrations
                     b.ToTable("ESTADOS_COMPRAS", (string)null);
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Modelos.EstadosCuotasCompras", b =>
+                {
+                    b.Property<int>("IdEstadoCuota")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("ID_ESTADO_CUOTA");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoCuota"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("DESCRIPCION");
+
+                    b.Property<int>("IdEstado")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("ID_ESTADO")
+                        .HasDefaultValueSql("1");
+
+                    b.HasKey("IdEstadoCuota");
+
+                    b.ToTable("ESTADOS_CUOTAS_COMPRAS", (string)null);
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Modelos.EstadosCuotasVentas", b =>
                 {
                     b.Property<int>("IdEstadoCuota")
@@ -711,13 +771,9 @@ namespace AponusWebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdPago"));
 
-                    b.Property<int?>("CantidadCuotas")
-                        .HasColumnType("int")
-                        .HasColumnName("CANTIDAD_CUOTAS");
-
-                    b.Property<int?>("CantidadCuotasCanceladas")
-                        .HasColumnType("int")
-                        .HasColumnName("CANTIDAD_CUOTAS_CANCELADAS");
+                    b.Property<DateTime?>("Fecha")
+                        .HasColumnType("timestamp")
+                        .HasColumnName("FECHA");
 
                     b.Property<int>("IdCompra")
                         .HasColumnType("int")
@@ -727,17 +783,9 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID_MEDIO_PAGO");
 
-                    b.Property<decimal>("Subtotal")
+                    b.Property<decimal>("Monto")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("SUBTOTAL");
-
-                    b.Property<decimal?>("SubtotalCancelado")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("SUBTOTAL_CANCELADO");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("TOTAL");
 
                     b.HasKey("IdPago");
 
@@ -794,7 +842,7 @@ namespace AponusWebAPI.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("varcahr(100)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("DESCRIPCION");
 
                     b.Property<int>("IdEstado")
@@ -1049,13 +1097,9 @@ namespace AponusWebAPI.Migrations
                         .HasColumnName("ID_ESTADO_MOVIMIENTO")
                         .HasDefaultValueSql("1");
 
-                    b.Property<int>("IdProveedorDestino")
+                    b.Property<int>("IdProveedor")
                         .HasColumnType("int")
-                        .HasColumnName("ID_PROVEEDOR_DESTINO");
-
-                    b.Property<int>("IdProveedorOrigen")
-                        .HasColumnType("int")
-                        .HasColumnName("ID_PROVEEDOR_ORIGEN");
+                        .HasColumnName("ID_PROVEEDOR");
 
                     b.Property<string>("ModificadoUsuario")
                         .HasColumnType("varchar(50)")
@@ -1073,9 +1117,7 @@ namespace AponusWebAPI.Migrations
 
                     b.HasIndex("IdEstadoMovimiento");
 
-                    b.HasIndex("IdProveedorDestino");
-
-                    b.HasIndex("IdProveedorOrigen");
+                    b.HasIndex("IdProveedor");
 
                     b.ToTable("STOCK_MOVIMIENTOS", (string)null);
                 });
@@ -1118,14 +1160,14 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("CONTRASEÑA");
 
-                    b.Property<int>("IdPerfil")
-                        .HasColumnType("int")
-                        .HasColumnName("ID_PERFIL");
-
                     b.Property<string>("Correo")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("CORREO");
+
+                    b.Property<int>("IdPerfil")
+                        .HasColumnType("int")
+                        .HasColumnName("ID_PERFIL");
 
                     b.HasKey("Usuario");
 
@@ -1160,13 +1202,13 @@ namespace AponusWebAPI.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("ID_USUARIO");
 
-                    b.Property<decimal>("SaldoPendiente")
+                    b.Property<decimal>("MontoTotal")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("MONTO_TOTAL");
+
+                    b.Property<decimal?>("SaldoPendiente")
                         .HasColumnType("numeric")
                         .HasColumnName("SALDO_PENDIENTE");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("TOTAL");
 
                     b.HasKey("IdVenta");
 
@@ -1243,11 +1285,12 @@ namespace AponusWebAPI.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Modelos.EstadosCompras", "Estado")
                         .WithMany("compras")
-                        .HasForeignKey("EstadoIdEstadoCompra")
+                        .HasForeignKey("IdEstadoCompra")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_COMPRAS_ESTADOS_COMPRAS_ID_ESTADO_COMPRA");
 
-                    b.HasOne("Aponus_Web_API.Modelos.Entidades", "Proveedor")
+                    b.HasOne("Aponus_Web_API.Modelos.Entidades", "IdProveedorNavigation")
                         .WithMany("compras")
                         .HasForeignKey("IdProveedor")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1257,11 +1300,12 @@ namespace AponusWebAPI.Migrations
                         .WithMany("Compras")
                         .HasForeignKey("IdUsuario")
                         .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_COMPRAS_USUARIOS_IDUSUARIO");
 
                     b.Navigation("Estado");
 
-                    b.Navigation("Proveedor");
+                    b.Navigation("IdProveedorNavigation");
 
                     b.Navigation("Usuario");
                 });
@@ -1283,6 +1327,27 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("Compra");
 
                     b.Navigation("DetallesInsumo");
+                });
+
+            modelBuilder.Entity("Aponus_Web_API.Modelos.CuotasCompras", b =>
+                {
+                    b.HasOne("Aponus_Web_API.Modelos.Compras", "CompraNavigation")
+                        .WithMany("CuotasCompra")
+                        .HasForeignKey("IdCompra")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_CUOTAS_COMPRAS_COMPRAS_ID_COMPRA");
+
+                    b.HasOne("Aponus_Web_API.Modelos.EstadosCuotasCompras", "EstadoCuotaCompra")
+                        .WithMany("IdEstadoCuotaNavigation")
+                        .HasForeignKey("IdEstadoCuota")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_CUOTAS_COMPRAS_ESTADOS_CUOTAS_COMPRAS_ID_ESTADO_CUOTA");
+
+                    b.Navigation("CompraNavigation");
+
+                    b.Navigation("EstadoCuotaCompra");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.CuotasVentas", b =>
@@ -1391,19 +1456,19 @@ namespace AponusWebAPI.Migrations
             modelBuilder.Entity("Aponus_Web_API.Modelos.Producto", b =>
                 {
                     b.HasOne("Aponus_Web_API.Modelos.ProductosDescripcion", "IdDescripcionNavigation")
-                        .WithMany("StockProductos")
+                        .WithMany("Productos")
                         .HasForeignKey("IdDescripcion")
                         .IsRequired()
                         .HasConstraintName("FK_PRODUCTOS_PRODUCTOS_DESCRIPCION");
 
                     b.HasOne("Aponus_Web_API.Modelos.EstadosProductos", "IdEstadoNavigation")
-                        .WithMany("StockProductos")
+                        .WithMany("Productos")
                         .HasForeignKey("IdEstado")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Aponus_Web_API.Modelos.ProductosTipo", "IdTipoNavigation")
-                        .WithMany("StockProductos")
+                        .WithMany("Productos")
                         .HasForeignKey("IdTipo")
                         .IsRequired()
                         .HasConstraintName("FK_PRODUCTOS_PRODUCTOS_TIPOS");
@@ -1477,23 +1542,14 @@ namespace AponusWebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aponus_Web_API.Modelos.Entidades", "ProveedorDestino")
-                        .WithMany("MovimientosDestino")
-                        .HasForeignKey("IdProveedorDestino")
+                    b.HasOne("Aponus_Web_API.Modelos.Entidades", "Proveeedor")
+                        .WithMany("Movimientos")
+                        .HasForeignKey("IdProveedor")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_STOCK_MOVIMIENTOS_ENTIDADES_ID_PROVEEDOR_DESTINO");
 
-                    b.HasOne("Aponus_Web_API.Modelos.Entidades", "ProveedorOrigen")
-                        .WithMany("MovimientosOrigen")
-                        .HasForeignKey("IdProveedorOrigen")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_STOCK_MOVIMIENTOS_ENTIDADES_ID_PROVEEDOR_ORIGEN");
-
-                    b.Navigation("ProveedorDestino");
-
-                    b.Navigation("ProveedorOrigen");
+                    b.Navigation("Proveeedor");
 
                     b.Navigation("estadoMovimiento");
                 });
@@ -1582,6 +1638,8 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.Compras", b =>
                 {
+                    b.Navigation("CuotasCompra");
+
                     b.Navigation("DetallesCompra");
 
                     b.Navigation("Pagos");
@@ -1589,9 +1647,7 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.Entidades", b =>
                 {
-                    b.Navigation("MovimientosDestino");
-
-                    b.Navigation("MovimientosOrigen");
+                    b.Navigation("Movimientos");
 
                     b.Navigation("compras");
 
@@ -1627,6 +1683,11 @@ namespace AponusWebAPI.Migrations
                     b.Navigation("compras");
                 });
 
+            modelBuilder.Entity("Aponus_Web_API.Modelos.EstadosCuotasCompras", b =>
+                {
+                    b.Navigation("IdEstadoCuotaNavigation");
+                });
+
             modelBuilder.Entity("Aponus_Web_API.Modelos.EstadosCuotasVentas", b =>
                 {
                     b.Navigation("IdEstadoCuotaNavigation");
@@ -1639,7 +1700,7 @@ namespace AponusWebAPI.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.EstadosProductos", b =>
                 {
-                    b.Navigation("StockProductos");
+                    b.Navigation("Productos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.EstadosProductosComponentes", b =>
@@ -1688,14 +1749,14 @@ namespace AponusWebAPI.Migrations
                 {
                     b.Navigation("Producto_Tipo_Descripcione");
 
-                    b.Navigation("StockProductos");
+                    b.Navigation("Productos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.ProductosTipo", b =>
                 {
                     b.Navigation("Producto_Tipo_Descripcione");
 
-                    b.Navigation("StockProductos");
+                    b.Navigation("Productos");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.Stock_Movimientos", b =>

@@ -1,25 +1,23 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace AponusWebAPI.Migrations
+namespace Aponus_Web_API.Migrations
 {
     /// <inheritdoc />
     public partial class CorrecionesenDescripcionProductoyEntidades : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
-        {          
+        {
 
-    
+
             migrationBuilder.AlterColumn<string>(
                 table: "ENTIDADES",
                 name: "NOMBRE_CLAVE",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldNullable: false                
+                oldNullable: false
                 );
 
         }
@@ -27,7 +25,7 @@ namespace AponusWebAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            
+
         }
     }
 }

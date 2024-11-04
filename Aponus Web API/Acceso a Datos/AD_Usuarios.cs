@@ -1,7 +1,5 @@
 ﻿using Aponus_Web_API.Mapping;
 using Aponus_Web_API.Modelos;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace Aponus_Web_API.Acceso_a_Datos
 {
@@ -10,7 +8,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         private readonly AponusContext AponusDBContext;
         public AD_Usuarios(AponusContext _aponusContext)
         {
-            AponusDBContext = _aponusContext;   
+            AponusDBContext = _aponusContext;
         }
 
         internal DTOUsuarios? ValidarCredenciales(DTOUsuarios usuario)
@@ -19,13 +17,13 @@ namespace Aponus_Web_API.Acceso_a_Datos
             DTOUsuarios? Usuario = new DTOUsuarios();
 
 
-            if (usuario.Usuario != null && usuario.Usuario.Contains("@")==true)
+            if (usuario.Usuario != null && usuario.Usuario.Contains("@") == true)
             {
                 ListUsuario = AponusDBContext.Usuarios
                    .Where(x => x.Correo == usuario.Usuario && x.Contraseña == usuario.Contraseña)
                    .Select(x => new DTOUsuarios
                    {
-                       Usuario = x.Usuario,                      
+                       Usuario = x.Usuario,
                        IdPerfil = x.IdPerfil
                    }).ToList();
 
@@ -38,7 +36,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 return Usuario;
 
             }
-            else if(usuario.Usuario != null && usuario.Usuario.Contains("@") == false) 
+            else if (usuario.Usuario != null && usuario.Usuario.Contains("@") == false)
             {
 
                 ListUsuario = AponusDBContext.Usuarios
@@ -49,29 +47,30 @@ namespace Aponus_Web_API.Acceso_a_Datos
                        Contraseña = x.Contraseña,
                        IdPerfil = x.IdPerfil
                    }).ToList();
-              
-                if (ListUsuario.Count()!=0)
+
+                if (ListUsuario.Count() != 0)
                 {
                     Usuario.Usuario = ListUsuario[0].Usuario;
                     Usuario.IdPerfil = ListUsuario[0].IdPerfil;
                 }
-                               
-                return Usuario;
-                
 
-            }else
+                return Usuario;
+
+
+            }
+            else
             {
                 return null;
             }
 
         }
 
-        
+
         public async Task Nuevo(Modelos.Usuarios Usuario)
         {
             Usuario.Perfil = AponusDBContext.perfilesUsuarios.FirstOrDefault(x => x.IdPerfil == Usuario.IdPerfil) ?? new PerfilesUsuarios();
 
-            using( var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
+            using (var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
             {
                 try
                 {

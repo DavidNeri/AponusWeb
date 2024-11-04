@@ -2,7 +2,7 @@
 {
     public class CitiesResponse
     {
-        public List<Ciudades> geonames {  get; set; } = new List<Ciudades>();
+        public List<Ciudades> geonames { get; set; } = new List<Ciudades>();
 
     }
 }

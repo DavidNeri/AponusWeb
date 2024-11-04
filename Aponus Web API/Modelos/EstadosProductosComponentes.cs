@@ -6,11 +6,11 @@ namespace Aponus_Web_API.Modelos
     public class EstadosProductosComponentes
     {
         [Key]
-        [Column("ID_ESTADO")]        
+        [Column("ID_ESTADO")]
         public int IdEstado { get; set; }
 
         [Column("DESCRIPCION")]
-        public string Descripcion{ get; set;} = string.Empty;
+        public string Descripcion { get; set; } = string.Empty;
 
         public virtual ICollection<Productos_Componentes> ProductosComponentes { get; set; } = new List<Productos_Componentes>();
 

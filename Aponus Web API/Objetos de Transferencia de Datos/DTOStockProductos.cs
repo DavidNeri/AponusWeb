@@ -1,13 +1,11 @@
-﻿using Aponus_Web_API.Data_Transfer_objects;
-using Aponus_Web_API.Modelos;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
     public class DTOStockProductos : DTOStockFormateado
     {
-       
-        [JsonProperty(Order= 1, PropertyName = "idProducto", NullValueHandling = NullValueHandling.Ignore)]
+
+        [JsonProperty(Order = 1, PropertyName = "idProducto", NullValueHandling = NullValueHandling.Ignore)]
         public string? IdProducto { get; set; }
 
         [JsonProperty(Order = 2, PropertyName = "idTipo", NullValueHandling = NullValueHandling.Ignore)]

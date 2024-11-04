@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace Aponus_Web_API.Modelos
 {
@@ -8,7 +7,7 @@ namespace Aponus_Web_API.Modelos
     {
         [Key]
         [ForeignKey("ID_VENTA")]
-        public int IdVenta{ get; set; }
+        public int IdVenta { get; set; }
 
         [Key]
         [ForeignKey("ID_PRODUCTO")]
@@ -21,7 +20,7 @@ namespace Aponus_Web_API.Modelos
         public int Cantidad { get; set; }
 
         [Column("ENTREGADOS")]
-        public int? Entregados{ get; set; }
+        public int? Entregados { get; set; }
 
         public virtual Producto IdProductoNavigation { get; set; } = new();
 
@@ -30,4 +29,3 @@ namespace Aponus_Web_API.Modelos
 
     }
 }
-        

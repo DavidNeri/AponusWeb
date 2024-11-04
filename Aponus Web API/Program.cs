@@ -1,16 +1,16 @@
-using Aponus_Web_API.Modelos;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http.Features;
-using Aponus_Web_API.Negocio;
+using Aponus_Web_API.Acceso_a_Datos;
 using Aponus_Web_API.Controllers;
-using Aponus_Web_API.Utilidades;
+using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Systema;
 using Aponus_Web_API.Utilidades;
-using Aponus_Web_API.Acceso_a_Datos;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<AD_Componentes>();
+builder.Services.AddScoped<AD_Compras>();
 builder.Services.AddScoped<AD_Entidades>();
 builder.Services.AddScoped<AD_Suministros>();
 builder.Services.AddScoped<AD_Productos>();
@@ -21,6 +21,7 @@ builder.Services.AddScoped<AD_Usuarios>();
 builder.Services.AddScoped<AD_Ventas>();
 
 builder.Services.AddScoped<BS_Categorias>();
+builder.Services.AddScoped<BS_Compras>();
 builder.Services.AddScoped<BS_Componentes>();
 builder.Services.AddScoped<BS_Entidades>();
 builder.Services.AddScoped<BS_Movimientos>();
@@ -39,6 +40,7 @@ builder.Services.AddScoped<SalesController>();
 builder.Services.AddScoped<StocksController>();
 builder.Services.AddScoped<SuppliesController>();
 builder.Services.AddScoped<UsersController>();
+
 
 builder.Services.AddScoped<UTL_Suministros>();
 builder.Services.AddScoped<UTL_Categorias>();

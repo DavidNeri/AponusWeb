@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace Aponus_Web_API.Modelos 
+namespace Aponus_Web_API.Modelos
 {
     public class ComponentesDetalle
     {
@@ -26,7 +26,7 @@ namespace Aponus_Web_API.Modelos
         [JsonIgnore]
         public virtual EstadosComponentesDetalles IdEstadoNavigation { get; set; } = new EstadosComponentesDetalles();
 
-        public  virtual ICollection<ComprasDetalles> ComprasNavigation { get; set; } = new HashSet<ComprasDetalles>();
+        public virtual ICollection<ComprasDetalles> ComprasNavigation { get; set; } = new HashSet<ComprasDetalles>();
 
     }
 }

@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Modelos;
 
-public partial class AponusContext : DbContext{
+public partial class AponusContext : DbContext
+{
     public AponusContext(DbContextOptions<AponusContext> options) : base(options) { }
     public AponusContext() { }
     public virtual DbSet<ComponentesDetalle> ComponentesDetalles { get; set; }
-    public virtual DbSet<Productos_Componentes> Componentes_Productos{ get; set; }
+    public virtual DbSet<Productos_Componentes> Componentes_Productos { get; set; }
     public virtual DbSet<Stock_Movimientos> Stock_Movimientos { get; set; }
     public virtual DbSet<ArchivosMovimientosStock> ArchivosStock { get; set; }
     public virtual DbSet<StockInsumos> stockInsumos { get; set; }
@@ -16,7 +16,7 @@ public partial class AponusContext : DbContext{
     public virtual DbSet<ProductosDescripcion> ProductosDescripcions { get; set; }
     public virtual DbSet<ProductosTipo> ProductosTipos { get; set; }
     public virtual DbSet<Productos_Tipos_Descripcion> Producto_Tipo_Descripcion { get; set; }
-    public virtual DbSet<Usuarios> Usuarios { get; set; } 
+    public virtual DbSet<Usuarios> Usuarios { get; set; }
     public virtual DbSet<Entidades> Entidades { get; set; }
     public virtual DbSet<SuministrosMovimientosStock> SuministrosMovimientoStock { get; set; }
     public virtual DbSet<EstadosProductos> EstadosProducto { get; set; }
@@ -30,26 +30,82 @@ public partial class AponusContext : DbContext{
     public virtual DbSet<EntidadesCategorias> CategoriasEntidades { get; set; }
     public virtual DbSet<EntidadesTipos> TiposEntidades { get; set; }
     public virtual DbSet<EntidadesTiposCategorias> EntidadeTiposCategorias { get; set; }
-    public virtual DbSet<Compras> compras{ get; set; }
+
+    public virtual DbSet<Compras> Compra { get; set; }
     public virtual DbSet<PagosCompras> PagosCompra { get; set; }
     public virtual DbSet<ComprasDetalles> ComprasDetalle { get; set; }
+    public virtual DbSet<EstadosCompras> EstadosCompra { get; set; }
+
+    public virtual DbSet<CuotasCompras> CuotasCompra { get; set; }
+    public virtual DbSet<EstadosCuotasCompras> EstadosCuotasCompra { get; set; }
+
+
     public virtual DbSet<MediosPago> MediosPagos { get; set; }
     public virtual DbSet<Ventas> ventas { get; set; }
     public virtual DbSet<PagosVentas> pagosVentas { get; set; }
     public virtual DbSet<VentasDetalles> ventasDetalle { get; set; }
     public virtual DbSet<EstadosVentas> estadosVentas { get; set; }
-    public virtual DbSet<CuotasVentas> cuotasVentas{ get; set; }
+    public virtual DbSet<CuotasVentas> cuotasVentas { get; set; }
     public virtual DbSet<EstadosCuotasVentas> estadosCuotasVentas { get; set; }
-    public virtual DbSet<PerfilesUsuarios> perfilesUsuarios { get; set; }    
+    public virtual DbSet<PerfilesUsuarios> perfilesUsuarios { get; set; }
+
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-     
-       
+
+
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
+
+
+        modelBuilder.Entity<CuotasCompras>(entity =>
+        {
+            entity.ToTable("CUOTAS_COMPRAS");
+
+            entity.HasKey(p => p.IdCuota);
+
+            entity.Property(p => p.IdCompra)
+            .HasColumnName("ID_COMPRA");
+
+            entity.Property(p => p.Monto)
+            .HasColumnType("decimal(18,2)");
+
+            entity.Property(p => p.FechaVencimiento)
+            .HasColumnType("timestamp");
+
+            entity.Property(p => p.FechaPago)
+            .HasColumnType("timestamp");
+
+            entity.HasOne(p => p.CompraNavigation)
+            .WithMany(p => p.CuotasCompra)
+            .HasPrincipalKey(PK => PK.IdCompra)
+            .HasForeignKey(FK => FK.IdCompra)
+            .HasConstraintName("FK_CUOTAS_COMPRAS_COMPRAS_ID_COMPRA");
+
+            entity.HasOne(p => p.EstadoCuotaCompra)
+            .WithMany(p => p.IdEstadoCuotaNavigation)
+            .HasPrincipalKey(p => p.IdEstadoCuota)
+            .HasForeignKey(p => p.IdEstadoCuota)
+            .HasConstraintName("FK_CUOTAS_COMPRAS_ESTADOS_CUOTAS_COMPRAS_ID_ESTADO_CUOTA");
+
+        });
+
+        modelBuilder.Entity<EstadosCuotasCompras>(entity =>
+        {
+            entity.ToTable("ESTADOS_CUOTAS_COMPRAS");
+
+            entity.HasKey(p => p.IdEstadoCuota);
+
+            entity.Property(p => p.Descripcion)
+            .HasColumnType("text");
+
+            entity.Property(p => p.IdEstado)
+            .HasDefaultValueSql("1");
+
+        });
 
         modelBuilder.Entity<PerfilesUsuarios>(entity =>
         {
@@ -63,7 +119,7 @@ public partial class AponusContext : DbContext{
             .UseIdentityColumn();
 
             entity.Property(p => p.Descripcion)
-            .HasColumnType("varcahr(100)")
+            .HasColumnType("varchar(100)")
             .HasColumnName("DESCRIPCION");
 
             entity.Property(p => p.IdEstado)
@@ -113,7 +169,7 @@ public partial class AponusContext : DbContext{
             entity.HasMany(p => p.IdEstadoCuotaNavigation)
             .WithOne(p => p.EstadoCuota)
             .HasPrincipalKey(p => p.IdEstadoCuota)
-            .HasForeignKey(FK=>FK.IdEstadoCuota);
+            .HasForeignKey(FK => FK.IdEstadoCuota);
 
         });
 
@@ -147,12 +203,12 @@ public partial class AponusContext : DbContext{
             .HasColumnType("timestamp");
 
             entity.Property(p => p.IdEstadoCuota)
-            .HasColumnName("ID_ESTADO_CUOTA")            
+            .HasColumnName("ID_ESTADO_CUOTA")
             .HasDefaultValueSql("1");
 
             entity.Property(p => p.FechaPago)
             .HasColumnName("FECHA_PAGO")
-            .HasColumnType("timestamp");        
+            .HasColumnType("timestamp");
         });
 
         modelBuilder.Entity<Ventas>(entity =>
@@ -178,13 +234,16 @@ public partial class AponusContext : DbContext{
             .HasColumnName("ID_USUARIO")
             .HasColumnType("varchar(50)");
 
-            entity.Property(p => p.Total)
-            .HasColumnName("TOTAL")
+            entity.Property(p => p.MontoTotal)
+            .HasColumnName("MONTO_TOTAL")
             .HasColumnType("decimal(18,2)");
 
             entity.Property(p => p.IdEstadoVenta)
             .HasColumnName("ID_ESTADO_VENTA")
             .HasColumnType("int");
+
+            entity.Property(p => p.SaldoPendiente)
+            .HasColumnName("SALDO_PENDIENTE");
 
             entity.HasOne(p => p.Usuario)
             .WithMany(p => p.Ventas)
@@ -339,8 +398,8 @@ public partial class AponusContext : DbContext{
 
             entity.HasOne(p => p.Compra)
             .WithMany(p => p.DetallesCompra)
-            .HasPrincipalKey(PK=>PK.IdCompra)
-            .HasForeignKey(FK=>FK.IdCompra);
+            .HasPrincipalKey(PK => PK.IdCompra)
+            .HasForeignKey(FK => FK.IdCompra);
 
             entity.HasOne(p => p.DetallesInsumo)
             .WithMany(p => p.ComprasNavigation)
@@ -392,39 +451,24 @@ public partial class AponusContext : DbContext{
             .HasColumnName("ID_MEDIO_PAGO")
             .HasColumnType("int");
 
-           entity.Property(p => p.CantidadCuotas)
-          .HasColumnName("CANTIDAD_CUOTAS")
-          .HasColumnType("int");
-
-            entity.Property(p => p.CantidadCuotasCanceladas)
-            .HasColumnName("CANTIDAD_CUOTAS_CANCELADAS")
-            .HasColumnType("int");
-
-            entity.Property(p => p.Subtotal)
+            entity.Property(p => p.Monto)
             .HasColumnName("SUBTOTAL")
             .HasColumnType("decimal(18,2)");
 
-            entity.Property(p => p.Total)
-            .HasColumnName("TOTAL")
-            .HasColumnType("decimal(18,2)");
+            entity.Property(p => p.Fecha)
+            .HasColumnType("timestamp");
 
-            entity.Property(p => p.SubtotalCancelado)
-            .HasColumnName("SUBTOTAL_CANCELADO")
-            .HasColumnType("decimal(18,2)");
+            entity.HasOne(p => p.MedioPago)
+            .WithMany(p => p.PagosComprasNavigation)
+            .HasForeignKey(FK => FK.IdMedioPago)
+            .HasPrincipalKey(PK => PK.IdMedioPago);
 
-
-            entity.HasOne(p=>p.MedioPago)
-            .WithMany(p=>p.PagosComprasNavigation)
-            .HasForeignKey(FK=>FK.IdMedioPago)
-            .HasPrincipalKey(PK=>PK.IdMedioPago);
-
-            entity.HasOne(p=>p.Compra)
-            .WithMany(p=>p.Pagos)
-            .HasPrincipalKey(PK=>PK.IdCompra)
-            .HasForeignKey(FK=>FK.IdCompra);   
+            entity.HasOne(p => p.Compra)
+            .WithMany(p => p.Pagos)
+            .HasPrincipalKey(PK => PK.IdCompra)
+            .HasForeignKey(FK => FK.IdCompra);
 
 
-                
         });
 
         modelBuilder.Entity<EstadosCompras>(entity =>
@@ -453,7 +497,7 @@ public partial class AponusContext : DbContext{
         {
             entity.ToTable("COMPRAS");
 
-            entity.HasKey(p=>p.IdCompra);
+            entity.HasKey(p => p.IdCompra);
 
             entity.Property(p => p.IdCompra)
             .HasColumnName("ID_COMPRA")
@@ -482,19 +526,27 @@ public partial class AponusContext : DbContext{
             .HasColumnName("ID_ESTADO_COMPRA")
             .HasColumnType("int");
 
-            entity.Property(p => p.SaldoTotal)
+            entity.Property(p => p.MontoTotal)
             .HasColumnType("decimal(18,2)")
-            .HasColumnName("SALDO_TOTAL");
+            .HasColumnName("MONTO_TOTAL");
 
-            entity.Property(p => p.SaldoCancelado)
+            entity.Property(p => p.SaldoPendiente)
             .HasColumnType("decimal(18,2)")
-            .HasColumnName("SALDO_CANCELADO");
+            .HasColumnName("SALDO_PENDIENTE");
 
             entity.HasOne(p => p.Estado)
             .WithMany(p => p.compras)
-            .HasPrincipalKey(PK => PK.IdEstadoCompra);            
+            .HasPrincipalKey(PK => PK.IdEstadoCompra)
+            .HasForeignKey(FK => FK.IdEstadoCompra)
+            .HasConstraintName("FK_COMPRAS_ESTADOS_COMPRAS_ID_ESTADO_COMPRA");
 
-            entity.HasOne(p => p.Proveedor)
+            entity.HasOne(p => p.Usuario)
+            .WithMany(p => p.Compras)
+            .HasPrincipalKey(PK => PK.Usuario)
+            .HasForeignKey(FK => FK.IdUsuario)
+            .HasConstraintName("FK_COMPRAS_USUARIOS_IDUSUARIO");
+
+            entity.HasOne(p => p.IdProveedorNavigation)
             .WithMany(p => p.compras)
             .HasForeignKey(p => p.IdProveedor)
             .HasPrincipalKey(p => p.IdEntidad)
@@ -504,7 +556,7 @@ public partial class AponusContext : DbContext{
             .WithOne(p => p.Compra)
             .HasForeignKey(p => p.IdCompra);
         });
-           
+
         modelBuilder.Entity<EntidadesTipos>(entity =>
         {
             entity.ToTable("ENTIDADES_TIPOS");
@@ -558,10 +610,10 @@ public partial class AponusContext : DbContext{
             .WithOne(p => p.CategoriaEntidad)
             .HasForeignKey(FK => FK.IdCategoria);
 
-            entity.HasMany(p=>p.TiposCategoriasNavigation)
-            .WithOne(p=>p.CategoriaEntidad)
-            .HasPrincipalKey(PK=>PK.IdCategoria)
-            .HasForeignKey(FK=>FK.IdCategoriaEntidad);
+            entity.HasMany(p => p.TiposCategoriasNavigation)
+            .WithOne(p => p.CategoriaEntidad)
+            .HasPrincipalKey(PK => PK.IdCategoria)
+            .HasForeignKey(FK => FK.IdCategoriaEntidad);
 
         });
 
@@ -602,7 +654,7 @@ public partial class AponusContext : DbContext{
 
             entity.Property(p => p.Descripcion)
             .HasColumnName("DESCRIPCION")
-            .HasColumnType("text");           
+            .HasColumnType("text");
 
             entity.HasMany(p => p.ArchivosMovimientoStock)
             .WithOne(p => p.ArchivosMovimientosStockNavigation)
@@ -696,7 +748,7 @@ public partial class AponusContext : DbContext{
 
             entity.HasMany(e => e.ProductosComponentes)
             .WithOne(e => e.IdEstadoNavigation)
-            .HasForeignKey(e => e.IdEstado);            
+            .HasForeignKey(e => e.IdEstado);
         });
 
         modelBuilder.Entity<EstadosProductos>(entity =>
@@ -729,7 +781,7 @@ public partial class AponusContext : DbContext{
             .HasColumnName("ID_MOVIMIENTO")
             .HasColumnType("int");
 
-            entity.Property(e=>e.IdSuministro)
+            entity.Property(e => e.IdSuministro)
             .HasColumnName("ID_SUMINISTRO")
             .HasColumnType("varchar(50)");
 
@@ -779,11 +831,11 @@ public partial class AponusContext : DbContext{
           .HasColumnType("decimal(18,2)");
         });
 
-        modelBuilder.Entity<Productos_Componentes>(entity => 
+        modelBuilder.Entity<Productos_Componentes>(entity =>
         {
             entity.ToTable("PRODUCTOS_COMPONENTES");
 
-            entity.Property(e=>e.IdProducto)
+            entity.Property(e => e.IdProducto)
             .HasColumnName("ID_PRODUCTO")
             .HasColumnType("varchar(50)");
 
@@ -819,7 +871,7 @@ public partial class AponusContext : DbContext{
             .HasColumnName("ID_INSUMO")
             .HasColumnType("varchar(50)");
 
-            entity.HasKey(e=>e.IdInsumo)
+            entity.HasKey(e => e.IdInsumo)
             .HasName("PK_ID_INSUMO");
 
             entity.ToTable("COMPONENTES_DETALLE");
@@ -868,7 +920,7 @@ public partial class AponusContext : DbContext{
             entity.Property(e => e.IdFraccionamiento)
             .HasColumnName("ID_FRACCIONAMIENTO")
             .HasColumnType("varchar(50)");
-            
+
             entity.Property(e => e.IdAlmacenamiento)
             .HasColumnName("ID_ALMACENAMIENTO")
             .HasColumnType("varchar(50)");
@@ -878,7 +930,7 @@ public partial class AponusContext : DbContext{
 
         modelBuilder.Entity<ComponentesDescripcion>(entity =>
         {
-            entity.HasKey(e => e.IdDescripcion);            
+            entity.HasKey(e => e.IdDescripcion);
 
             entity.ToTable("COMPONENTES_DESCRIPCION");
 
@@ -901,7 +953,7 @@ public partial class AponusContext : DbContext{
             .HasColumnType("varchar(50)");
         });
 
-       
+
 
         modelBuilder.Entity<Producto>(entity =>
         {
@@ -932,7 +984,7 @@ public partial class AponusContext : DbContext{
 
             entity.Property(e => e.PorcentajeGanancia)
             .HasColumnName("PORCENTAJE_GANANCIA");
-            
+
             entity.Property(e => e.Tolerancia).HasColumnName("TOLERANCIA");
 
             entity.Property(e => e.IdEstado)
@@ -940,8 +992,8 @@ public partial class AponusContext : DbContext{
             .HasDefaultValueSql("1");
 
             entity.HasOne(d => d.IdDescripcionNavigation).WithMany(p => p.Productos)
-                 
-                .HasForeignKey(d=>d.IdDescripcion)
+
+                .HasForeignKey(d => d.IdDescripcion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PRODUCTOS_PRODUCTOS_DESCRIPCION");
 
@@ -960,7 +1012,7 @@ public partial class AponusContext : DbContext{
 
         modelBuilder.Entity<ProductosDescripcion>(entity =>
         {
-            entity.HasKey(e => e.IdDescripcion) ;
+            entity.HasKey(e => e.IdDescripcion);
 
             entity.ToTable("PRODUCTOS_DESCRIPCION");
 
@@ -1004,23 +1056,23 @@ public partial class AponusContext : DbContext{
             entity.ToTable("PRODUCTOS_TIPOS_DESCRIPCION");
             entity.HasKey(Key => new { Key.IdTipo, Key.IdDescripcion });
 
-            entity.Property(e=>e.IdTipo)
+            entity.Property(e => e.IdTipo)
             .HasColumnName("ID_TIPO")
             .HasColumnType("varchar(50)");
 
-            entity.Property(e=>e.IdDescripcion)
+            entity.Property(e => e.IdDescripcion)
             .HasColumnName("ID_DESCRIPCION");
-            
+
 
             entity.HasOne(p => p.IdTipoNavigation)
             .WithMany(p => p.Producto_Tipo_Descripcione)
-            .HasForeignKey(FK=>FK.IdTipo)
+            .HasForeignKey(FK => FK.IdTipo)
             .HasConstraintName("FK_PRODUCTOS_TIPOS_DESCRIPCION_ID_TIPO")
             .OnDelete(DeleteBehavior.NoAction);
 
             entity.HasOne(p => p.IdDescripcionNavigation)
             .WithMany(p => p.Producto_Tipo_Descripcione)
-            .HasForeignKey(FK=>FK.IdDescripcion)
+            .HasForeignKey(FK => FK.IdDescripcion)
             .HasConstraintName("FK_PRODUCTOS_TIPOS_DESCRIPCION_ID_DESCRIPCION")
             .OnDelete(DeleteBehavior.NoAction);
 
@@ -1039,7 +1091,7 @@ public partial class AponusContext : DbContext{
             entity.Property(e => e.IdPerfil)
             .HasColumnName("ID_PERFIL")
             .HasColumnType("int");
-            
+
 
             entity.Property(e => e.Correo)
             .HasColumnName("CORREO")
@@ -1053,11 +1105,11 @@ public partial class AponusContext : DbContext{
             .WithOne(u => u.UsuarioRegistro)
             .HasForeignKey(e => e.IdUsuarioRegistro);
 
-            entity.HasOne(p=>p.Perfil)
-            .WithMany(p=>p.UsuariosNavigation)
+            entity.HasOne(p => p.Perfil)
+            .WithMany(p => p.UsuariosNavigation)
             .HasConstraintName("FK_USUARIOS_PERFILES_USUARIOS_ID_PERFIL")
-            .HasPrincipalKey(PK=>PK.IdPerfil)
-            .HasForeignKey(FK=>FK.IdPerfil);
+            .HasPrincipalKey(PK => PK.IdPerfil)
+            .HasForeignKey(FK => FK.IdPerfil);
 
 
 
@@ -1088,14 +1140,10 @@ public partial class AponusContext : DbContext{
 
             entity.Property(e => e.FechaHoraUltimaModificacion)
             .HasColumnName("FECHA_HORA_ULTIMA_MODIFICACION")
-            .HasColumnType("timestamp");
+            .HasColumnType("timestamp");      
 
-            entity.Property(e => e.IdProveedorOrigen)
-            .HasColumnName("ID_PROVEEDOR_ORIGEN")
-            .HasColumnType("int");
-
-            entity.Property(e => e.IdProveedorDestino)
-            .HasColumnName("ID_PROVEEDOR_DESTINO")
+            entity.Property(e => e.IdProveedor)
+            .HasColumnName("ID_PROVEEDOR")
             .HasColumnType("int");
 
             entity.Property(e => e.IdEstadoMovimiento)
@@ -1115,25 +1163,18 @@ public partial class AponusContext : DbContext{
            .HasColumnName("TIPO")
            .HasColumnType("varchar(15)");
 
-            entity.HasOne(e => e.ProveedorOrigen)
-            .WithMany(e => e.MovimientosOrigen)
-            .HasForeignKey(e => e.IdProveedorOrigen)
+            entity.HasOne(e => e.Proveeedor)
+            .WithMany(e => e.Movimientos)
+            .HasForeignKey(e => e.IdProveedor)
             .HasPrincipalKey(PK => PK.IdEntidad)
-            .HasForeignKey(FK => FK.IdProveedorOrigen)
-            .HasConstraintName("FK_STOCK_MOVIMIENTOS_ENTIDADES_ID_PROVEEDOR_ORIGEN");
-
-            entity.HasOne(e => e.ProveedorDestino)
-            .WithMany(e => e.MovimientosDestino)
-            .HasForeignKey(e => e.IdProveedorDestino)
-            .HasPrincipalKey(PK => PK.IdEntidad)
-            .HasForeignKey(FK => FK.IdProveedorDestino)
+            .HasForeignKey(FK => FK.IdProveedor)
             .HasConstraintName("FK_STOCK_MOVIMIENTOS_ENTIDADES_ID_PROVEEDOR_DESTINO");
 
         });
 
         modelBuilder.Entity<ArchivosMovimientosStock>(entity =>
         {
-            entity.HasKey( e => new
+            entity.HasKey(e => new
             {
                 e.IdMovimiento,
                 e.HashArchivo

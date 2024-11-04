@@ -4,8 +4,9 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
     public class DTODescripcionesProductos
     {
-        [JsonProperty(Order=1, PropertyName = "idDescripcion", NullValueHandling = NullValueHandling.Ignore)]
-        public int IdDescripcion{ get; set; }
+
+        [JsonProperty(Order = 1, PropertyName = "idDescripcion", NullValueHandling = NullValueHandling.Ignore)]
+        public int IdDescripcion { get; set; }
 
         [JsonProperty(Order = 2, PropertyName = "nombreDescripcion", NullValueHandling = NullValueHandling.Ignore)]
         public string NombreDescripcion { get; set; } = string.Empty;

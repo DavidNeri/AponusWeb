@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Modelos;
 
@@ -17,7 +14,6 @@ public partial class ProductosDescripcion
     public int IdEstado { get; set; }
 
     public virtual EstadosProductosDescripciones IdEstadoNavigation { get; set; } = new EstadosProductosDescripciones();
-    public virtual ICollection<Producto> Productos { get; set; } = new List <Producto>();
+    public virtual ICollection<Producto> Productos { get; set; } = new List<Producto>();
     public virtual ICollection<Productos_Tipos_Descripcion> Producto_Tipo_Descripcione { get; set; } = new HashSet<Productos_Tipos_Descripcion>();
 }
-    

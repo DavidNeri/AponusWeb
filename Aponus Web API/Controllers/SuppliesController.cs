@@ -1,6 +1,5 @@
 ﻿using Aponus_Web_API.Negocio;
-using Aponus_Web_API.Data_Transfer_objects;
-using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +11,7 @@ namespace Aponus_Web_API.Controllers
     public class SuppliesController : Controller
     {
         private readonly BS_Suministros BsSupplies;
-        private readonly BS_Componentes BsComponents;  
+        private readonly BS_Componentes BsComponents;
 
         public SuppliesController(BS_Suministros bsSupplies, BS_Componentes bsComponents)
         {
@@ -22,11 +21,11 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("new-id/{sypplyName}/")]
-        public async Task<JsonResult> GenerarIdInsumo(string? sypplyName)
+        public JsonResult GenerarIdInsumo(string? sypplyName)
         {
             try
             {
-                return await BsSupplies.ObtenerNuevoIdComponente(sypplyName);
+                return BsSupplies.ObtenerNuevoIdComponente(sypplyName);
             }
             catch (Exception e)
             {
@@ -35,7 +34,7 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
-       [HttpGet]
+        [HttpGet]
         [Route("ListFormatted")]
         public IActionResult ListarInsumosFormateados()
         {
@@ -43,7 +42,7 @@ namespace Aponus_Web_API.Controllers
             return BsSupplies.ListarNombresFormateados();
 
         }
-      
+
         [HttpPost]
         [Route("Create-or-Update")]
 

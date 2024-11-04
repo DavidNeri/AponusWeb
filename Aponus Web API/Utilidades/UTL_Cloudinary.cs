@@ -16,7 +16,7 @@ namespace Aponus_Web_API.Utilidades
             _cloudinary = new Cloudinary(DatosCuenta);
             _httpClient = new HttpClient();
         }
-   
+
 
         public List<ArchivosMovimientosStock> SubirArchivosMovimiento(List<IFormFile> Archivos, string Proveedor)
         {
@@ -27,8 +27,8 @@ namespace Aponus_Web_API.Utilidades
 
             foreach (var Archivo in Archivos)
             {
-                
-                using(var stream = Archivo.OpenReadStream())
+
+                using (var stream = Archivo.OpenReadStream())
                 {
                     var DatosSubida = new RawUploadParams()
                     {
@@ -42,7 +42,7 @@ namespace Aponus_Web_API.Utilidades
                     {
                         HashArchivo = Archivo.FileName,
                         PathArchivo = Resultado.SecureUrl.ToString(),
-                        
+
 
                     });
 
@@ -61,14 +61,14 @@ namespace Aponus_Web_API.Utilidades
                 return (ArchivoBytes, null);
 
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
 
                 Console.WriteLine($"Error al descargar archivo de Cloudinary: {ex.InnerException?.Message ?? ex.Message}");
                 return (null, $"Error al objener datos del archivo: {ex.InnerException?.Message ?? ex.Message}");
-                
+
             }
-        
+
         }
 
     }

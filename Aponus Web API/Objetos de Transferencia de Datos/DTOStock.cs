@@ -8,10 +8,10 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public string? IdInsumo { get; set; }
 
         [JsonProperty(PropertyName = "peso", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? Peso{ get; set; }
+        public decimal? Peso { get; set; }
 
         [JsonProperty(PropertyName = "cantidad", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? Cantidad{ get; set; }
+        public decimal? Cantidad { get; set; }
 
         [JsonProperty(PropertyName = "longitud", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Longitud { get; set; }

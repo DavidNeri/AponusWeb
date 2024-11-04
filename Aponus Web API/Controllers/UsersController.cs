@@ -6,7 +6,7 @@ namespace Aponus_Web_API.Controllers
 {
     [Route("Aponus/[Controller]")]
     [ApiController]
-    public class UsersController :ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly SS_Usuarios _Usuarios;
         public UsersController(SS_Usuarios usuarios)
@@ -16,7 +16,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Validation")]
-        public DTOUsuarios? ValiadarUsuario(DTOUsuarios Usuario) 
+        public DTOUsuarios? ValiadarUsuario(DTOUsuarios Usuario)
         {
             return _Usuarios.ValidarUsuario(Usuario);
         }
@@ -29,16 +29,17 @@ namespace Aponus_Web_API.Controllers
             {
                 return new ContentResult()
                 {
-                    Content="Faltan Datos",
-                    ContentType="application/json",
-                    StatusCode=400
+                    Content = "Faltan Datos",
+                    ContentType = "application/json",
+                    StatusCode = 400
                 };
-            }else
+            }
+            else
             {
                 return await _Usuarios.NuevoUsuario(Usuario);
             }
         }
 
-        
+
     }
 }

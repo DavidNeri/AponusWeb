@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Modelos
         public string IdSuministro { get; set; } = "";
 
         [Column("CANTIDAD")]
-        public decimal Cantidad{ get; set; }
+        public decimal Cantidad { get; set; }
 
         [Column("ID_ESTADO")]
         public int IdEstado { get; set; }

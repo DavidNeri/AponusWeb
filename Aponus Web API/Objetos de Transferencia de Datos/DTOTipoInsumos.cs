@@ -1,8 +1,7 @@
-﻿using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using Aponus_Web_API.Utilidades;
+﻿using Aponus_Web_API.Utilidades;
 using Newtonsoft.Json;
 
-namespace Aponus_Web_API.Data_Transfer_objects
+namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
     public class DTOTipoInsumos : DTODetallesComponenteProducto
     {

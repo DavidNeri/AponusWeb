@@ -12,7 +12,7 @@ namespace Aponus_Web_API.Utilidades.Nombres_Geograficos
 
         [JsonProperty(PropertyName = "geonameId", NullValueHandling = NullValueHandling.Ignore)]
         public int GeonameId { get; set; }
-        
+
 
     }
 }

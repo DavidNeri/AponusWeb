@@ -1,5 +1,5 @@
 ﻿using Aponus_Web_API.Negocio;
-using Aponus_Web_API.Data_Transfer_objects;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,13 +32,14 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListProducts")]
-        public JsonResult ListProducts() {
+        public JsonResult ListProducts()
+        {
             try
             {
                 return BsProductos.ListarProductos();
             }
-            catch (Exception e )
-            { 
+            catch (Exception e)
+            {
                 return Json(e);
             }
         }
@@ -75,7 +76,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListDN/{TypeId}/{IdDescription}")]
-        public async Task<JsonResult> ListarDN(string? TypeId, int?IdDescription)
+        public async Task<JsonResult> ListarDN(string? TypeId, int? IdDescription)
         {
             try
             {

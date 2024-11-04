@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Modelos
 
         [Column("DESCRIPCION")]
         public string Descripcion { get; set; } = string.Empty;
-        
+
         [Column("ID_ESTADO")]
         public int IdEstado { get; set; }
 

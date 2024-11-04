@@ -1,10 +1,9 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
-using Aponus_Web_API.Data_Transfer_objects;
 using Aponus_Web_API.Modelos;
-using Microsoft.AspNetCore.Mvc;
-using System.Data.Entity.Validation;
-using Microsoft.EntityFrameworkCore;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Data.Entity.Validation;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -22,11 +21,11 @@ namespace Aponus_Web_API.Negocio
                 CategorizarPropiedades(Especificaciones).Item1,
                 CategorizarPropiedades(Especificaciones).Item2);
 
-        }        
+        }
         internal IActionResult GuardarComponentesProducto(List<DTOComponentesProducto> ComponentesProd)
         {
             bool ChkIdProd = ComponentesProd.All(x => x.IdProducto != null);
-            
+
             if (ChkIdProd)
             {
                 foreach (DTOComponentesProducto Componente in ComponentesProd)
@@ -66,7 +65,7 @@ namespace Aponus_Web_API.Negocio
                     {
                         return new ContentResult { Content = "Operacion Invalida", ContentType = "text/plan", StatusCode = 400 };
                     }
-                    catch (Exception )
+                    catch (Exception)
                     {
                         return new ContentResult { Content = "Objeto Inexistente", ContentType = "text/plan", StatusCode = 400 };
                     }
@@ -82,9 +81,36 @@ namespace Aponus_Web_API.Negocio
             return new StatusCodeResult(200);
 
         }
-        internal IActionResult ListarComponentes(int? IdDescripcion)
+        internal async Task<IActionResult> MapeoComponentesDetalleDTO(int? IdDescripcion)
         {
-            return _componentesProductos.Listar(IdDescripcion);
+            var (Listado, Ex) = await _componentesProductos.ListarDetalleComponentes(IdDescripcion);
+
+            if (Ex != null) return new ContentResult()
+            {
+                Content = Ex.InnerException?.Message ?? Ex.Message,
+                ContentType = "application/json",
+                StatusCode = 500
+            };
+            List<DTODetallesComponenteProducto> ComponentesDetalle = new();
+
+            Listado!.ForEach(x => ComponentesDetalle.Add(new DTODetallesComponenteProducto()
+            {
+                IdInsumo = x.IdInsumo,
+                IdDescripcion = x.IdDescripcion,
+                Altura = x.Altura,
+                Espesor = x.Espesor,
+                Diametro = x.Diametro,
+                DiametroNominal = x.DiametroNominal,
+                Longitud = x.Longitud,
+                Perfil = x.Perfil,
+                Tolerancia = x.Tolerancia,
+                Peso = x.Peso,
+                idFraccionamiento = x.IdFraccionamiento,
+                idAlmacenamiento = x.IdAlmacenamiento,
+
+            }));
+
+            return new JsonResult(Listado);
         }
         internal JsonResult? ObtenerIdComponente(DTODetallesComponenteProducto? Especificaciones)
         {
@@ -113,27 +139,44 @@ namespace Aponus_Web_API.Negocio
             };
             foreach (var item in propiedades)
             {
-               
+
 
                 if (MapeoTipos.TryGetValue(item.PropertyType, out TipoMapeado) && !item.Name.Contains("IdInsumo"))
                 {
                     ListaInfoProps.Add(new DTOInfoPropsComponentes()
                     {
-                       Nombre= item.Name,
+                        Nombre = item.Name,
                         Tipo = TipoMapeado,
 
                     });
                 }
             }
 
-           
+
             return new JsonResult(ListaInfoProps);
-            
+
         }
-        internal async Task<IActionResult> ObtenerTipoAlmacenamiento( )
+        internal async Task<IActionResult> MapeoDetalleNombreComponenteDTO(int? IdDescripcionComponente)
         {
-            
-            return await _componentesProductos.ListarTiposAlacenamiento();
+            var (Listado, error) = await _componentesProductos.ListarTiposAlacenamiento(IdDescripcionComponente);
+            if (error != null) return new ContentResult()
+            {
+                Content = error.InnerException?.Message ?? error.Message,
+                ContentType = "application/json",
+                StatusCode = 400
+            };
+
+            List<DTODescripcionComponentes> ListadoDetallesNombresComponentes = new List<DTODescripcionComponentes>();
+            Listado!.ForEach(x => ListadoDetallesNombresComponentes.Add(new DTODescripcionComponentes()
+            {
+                IdDescripcion = x.IdDescripcion,
+                Descripcion = x.Descripcion ?? "",
+                IdAlmacenamiento = x.IdAlmacenamiento,
+                IdFraccionamiento = x.IdFraccionamiento
+            }));
+
+            return new JsonResult(ListadoDetallesNombresComponentes);
+
         }
         private (string[], List<(string Nombre, string Valor)>) CategorizarPropiedades(DTODetallesComponenteProducto? Especificaciones)
         {
@@ -158,9 +201,9 @@ namespace Aponus_Web_API.Negocio
                 }
             }
 
-            return (propiedadesNulas,propiedadesNoNulas);
+            return (propiedadesNulas, propiedadesNoNulas);
 
         }
-            
+
     }
 }

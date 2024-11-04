@@ -8,7 +8,7 @@ namespace Aponus_Web_API.Modelos
         public int idTipoEntidad { get; set; }
 
         [ForeignKey("ID_CATEGORIA")]
-        public int IdCategoriaEntidad{ get; set; }
+        public int IdCategoriaEntidad { get; set; }
 
         public virtual EntidadesTipos TipoEntidad { get; set; } = new EntidadesTipos();
         public virtual EntidadesCategorias CategoriaEntidad { get; set; } = new EntidadesCategorias();

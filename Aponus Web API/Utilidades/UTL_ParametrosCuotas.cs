@@ -12,7 +12,7 @@ namespace Aponus_Web_API.Utilidades
         public decimal MontoVenta { get; set; }
 
         [JsonProperty(PropertyName = "interes", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal Interes { get; set; } = 0;   
+        public decimal Interes { get; set; } = 0;
 
     }
 }

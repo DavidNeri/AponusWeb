@@ -1,20 +1,26 @@
-D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.csproj.AssemblyReference.cache
-D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.GeneratedMSBuildEditorConfig.editorconfig
-D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.AssemblyInfoInputs.cache
-D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.AssemblyInfo.cs
-D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.csproj.CoreCompileInputs.cache
-D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.MvcApplicationPartsAssemblyInfo.cs
-D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.MvcApplicationPartsAssemblyInfo.cache
-D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.sourcelink.json
+D:\Carpetas personales\Desktop\appsettings.Development.json
+D:\Carpetas personales\Desktop\appsettings.json
+D:\Carpetas personales\Desktop\Aponus Web API.exe
+D:\Carpetas personales\Desktop\Aponus Web API.deps.json
+D:\Carpetas personales\Desktop\Aponus Web API.runtimeconfig.json
+D:\Carpetas personales\Desktop\Aponus Web API.dll
+D:\Carpetas personales\Desktop\Aponus Web API.pdb
+D:\Carpetas personales\Desktop\Ensamblado Aponus\appsettings.Development.json
+D:\Carpetas personales\Desktop\Ensamblado Aponus\appsettings.json
+D:\Carpetas personales\Desktop\Ensamblado Aponus\Aponus Web API.exe
+D:\Carpetas personales\Desktop\Ensamblado Aponus\Aponus Web API.deps.json
+D:\Carpetas personales\Desktop\Ensamblado Aponus\Aponus Web API.runtimeconfig.json
+D:\Carpetas personales\Desktop\Ensamblado Aponus\Aponus Web API.dll
+D:\Carpetas personales\Desktop\Ensamblado Aponus\Aponus Web API.pdb
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\appsettings.Development.json
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\appsettings.json
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\libman.json
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Aponus Web API.exe
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Aponus Web API.deps.json
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Aponus Web API.runtimeconfig.json
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Aponus Web API.pdb
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Annytab.Stemmer.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Castle.Core.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\CloudinaryDotNet.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\DataScope.Stemmer.NETStandart.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\EntityFramework.SqlServer.dll
@@ -47,10 +53,7 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.DiaSymReader.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.DotNet.Scaffolding.Shared.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Proxies.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.NET.StringTools.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.OpenApi.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.VisualStudio.Debugger.Contracts.dll
@@ -62,7 +65,6 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.VisualStudio.Web.CodeGene
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.Win32.SystemEvents.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Mono.TextTemplating.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Newtonsoft.Json.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Npgsql.dll
@@ -97,7 +99,6 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.Windows.Extensions.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Z.EntityFramework.Extensions.EFCore.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Z.EntityFramework.Plus.EFCore.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Z.Expressions.Eval.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\es\Humanizer.resources.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\cs\Microsoft.CodeAnalysis.resources.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\de\Microsoft.CodeAnalysis.resources.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\es\Microsoft.CodeAnalysis.resources.dll
@@ -264,6 +265,14 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Draw
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win\lib\netcoreapp2.0\System.Management.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.csproj.AssemblyReference.cache
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.GeneratedMSBuildEditorConfig.editorconfig
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.AssemblyInfoInputs.cache
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.AssemblyInfo.cs
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.csproj.CoreCompileInputs.cache
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.MvcApplicationPartsAssemblyInfo.cs
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.MvcApplicationPartsAssemblyInfo.cache
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.sourcelink.json
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets.build.json
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets.development.json
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets\msbuild.Aponus Web API.Microsoft.AspNetCore.StaticWebAssets.props
@@ -278,3 +287,6 @@ D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\refint\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.pdb
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.genruntimeconfig.cache
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\ref\Aponus Web API.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Mono.TextTemplating.dll

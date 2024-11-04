@@ -1,7 +1,6 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
-using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Modelos;
-using Aponus_Web_API.Utilidades;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
@@ -76,20 +75,20 @@ namespace Aponus_Web_API.Negocio
                         Content = ex.InnerException?.Message ?? ex.Message,
                         ContentType = "application/json",
                         StatusCode = 400
-                        
+
                     };
                 }
             }
         }
         internal async Task<IActionResult> ProcesarDatosVenta(DTOVentas Venta)
         {
-            decimal saldoPendiente = Venta.Total; 
+            decimal saldoPendiente = Venta.MontoTotal;
 
             if (Venta.DetallesVenta == null || (Venta.Pagos == null && Venta.Cuotas != null) || Venta.Cuotas == null && Venta.Pagos == null)
             {
                 return new ContentResult()
                 {
-                    Content="Faltan Datos",
+                    Content = "Faltan Datos",
                     ContentType = "application/json",
                     StatusCode = 400,
                 };
@@ -102,8 +101,8 @@ namespace Aponus_Web_API.Negocio
                     FechaHora = UTL_Fechas.ObtenerFechaHora(),
                     IdUsuario = Venta.IdUsuario,
                     IdEstadoVenta = Venta.IdEstadoVenta,
-                    Total = Venta.Total,
-                    
+                    MontoTotal = Venta.MontoTotal,
+
                 };
 
                 if (Venta.DetallesVenta != null)
@@ -115,7 +114,7 @@ namespace Aponus_Web_API.Negocio
                             IdProducto = vta.IdProducto,
                             Cantidad = vta.Cantidad,
                             Precio = vta.Precio,
-                            IdProductoNavigation = new Producto { IdProducto = vta.IdProducto}
+                            IdProductoNavigation = new Producto { IdProducto = vta.IdProducto }
 
                         });
                     }
@@ -128,10 +127,10 @@ namespace Aponus_Web_API.Negocio
 
                         NuevaVenta.Pagos.Add(new PagosVentas()
                         {
-                            Fecha = vtaPagos.FechaPago ?? UTL_Fechas.ObtenerFechaHora(),
+                            Fecha = vtaPagos.Fecha ?? UTL_Fechas.ObtenerFechaHora(),
                             Monto = vtaPagos.Monto,
-                            IdMedioPago = vtaPagos.IdMedioPago,                           
-                            
+                            IdMedioPago = vtaPagos.IdMedioPago,
+
                         });
                     }
 
@@ -151,7 +150,7 @@ namespace Aponus_Web_API.Negocio
                         });
                     }
                 }
-                
+
 
                 bool Resultado = await AdVentas.Guardar(NuevaVenta);
 
@@ -164,7 +163,7 @@ namespace Aponus_Web_API.Negocio
                 };
             }
 
-            
+
         }
         public static ICollection<DTOCuotasVentas> CalcularCuotas(UTL_ParametrosCuotas Parametros)
         {
@@ -185,7 +184,7 @@ namespace Aponus_Web_API.Negocio
                 NvaVtaCuotas.Add(new DTOCuotasVentas()
                 {
                     NumeroCuota = i,
-                   
+
                     Monto = i switch
                     {
                         int n when n == Parametros.CantidadCuotas => MontoCuota + Resto,
@@ -200,15 +199,15 @@ namespace Aponus_Web_API.Negocio
 
             return NvaVtaCuotas;
         }
-        internal IActionResult Filtrar(UTL_FiltrosVentas? filtros)
+        internal IActionResult Filtrar(UTL_FiltrosComprasVentas? filtros)
         {
             try
             {
 
                 IQueryable<Ventas> QueryVentas = AdVentas.ListarVentas();
 
-                if (filtros?.IdCliente != null)
-                    QueryVentas = QueryVentas.Where(x => x.IdCliente == filtros.IdCliente);
+                if (filtros?.IdEntidad != null)
+                    QueryVentas = QueryVentas.Where(x => x.IdCliente == filtros.IdEntidad);
                 if (filtros?.Desde != null)
                     QueryVentas = QueryVentas.Where(X => X.FechaHora >= filtros.Desde);
                 if (filtros?.Hasta != null)
@@ -221,7 +220,7 @@ namespace Aponus_Web_API.Negocio
                     FechaHora = x.FechaHora,
                     IdUsuario = x.IdUsuario,
                     IdEstadoVenta = x.IdEstadoVenta,
-                    Total = x.Total,
+                    MontoTotal = x.MontoTotal,
                     SaldoPendiente = x.SaldoPendiente,
                     DetallesVenta = x.DetallesVenta.Select(y => new DTOVentasDetalles()
                     {
@@ -249,11 +248,11 @@ namespace Aponus_Web_API.Negocio
                         Nombre = x.Cliente.Nombre,
                         Apellido = x.Cliente.Apellido,
                         NombreClave = x.Cliente.NombreClave,
-                        IdTipo = x.Cliente.IdTipo,  
-                        IdCategoria = x.Cliente.IdCategoria,    
+                        IdTipo = x.Cliente.IdTipo,
+                        IdCategoria = x.Cliente.IdCategoria,
                     },
 
-                    Pagos = x.Pagos.Select(Pagos=> new DTOPagosVentas()
+                    Pagos = x.Pagos.Select(Pagos => new DTOPagosVentas()
                     {
                         IdMedioPago = Pagos.IdMedioPago,
                         IdPago = Pagos.IdPago,
@@ -267,8 +266,8 @@ namespace Aponus_Web_API.Negocio
                         }
 
                     }).ToList(),
-                    
-                }).ToList();  
+
+                }).ToList();
 
 
                 return new JsonResult(ListadoVentas);
@@ -285,7 +284,7 @@ namespace Aponus_Web_API.Negocio
             }
 
 
-            
+
         }
     }
 }

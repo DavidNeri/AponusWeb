@@ -1,6 +1,6 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
-using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,36 +18,35 @@ namespace Aponus_Web_API.Negocio
             AdCategorias = _AdCategorias;
             _ComponentesProductos = componentesProductos;
         }
-        internal async Task<IActionResult> AgregarDescripcion(DTOCategorias NuevaCategoria)
+        internal async Task<IActionResult> NormalizarDescripcionProducto(DTOCategorias NuevaCategoria)
         {
-            try
-            {
-                ProductosDescripcion DescripcionProductoDB = new ProductosDescripcion()
-                {
-                    DescripcionProducto = Regex.Replace(NuevaCategoria.Descripcion ?? "", @"\s+", " ").Trim().ToUpper(),  //Inserta la Descripcion y obtiene el id
-                };
 
-                return await AdCategorias.NuevaDescripcion(DescripcionProductoDB, NuevaCategoria.IdTipo ?? "");    
-
-            }
-            catch (Exception ex)
+            ProductosDescripcion DescripcionProductoDB = new ProductosDescripcion()
             {
+                DescripcionProducto = Regex.Replace(NuevaCategoria.Descripcion ?? "", @"\s+", " ").Trim().ToUpper(),  //Inserta la Descripcion y obtiene el id
+            };
+
+            var (StatusCode, Error) = await AdCategorias.AgregarDescripcionProducto(DescripcionProductoDB, NuevaCategoria.IdTipo ?? "");
+
+            if (Error != null)
                 return new ContentResult()
                 {
-                    Content = ex.InnerException?.Message ?? ex.Message,
+                    Content = Error.InnerException?.Message ?? Error.Message,
                     ContentType = "application/json",
-                    StatusCode = 400
+                    StatusCode = 500
                 };
-            }           
+
+            return new StatusCodeResult((int)StatusCode!);
+
 
         }
-        internal JsonResult AgregarTipo(DTOCategorias NuevaCategoria)
+        internal JsonResult NormalizarNombreTipoProducto(DTOCategorias NuevaCategoria)
         {
             try
             {
-                NuevaCategoria.IdTipo = new UTL_Categorias().GenerarIdTipo(NuevaCategoria.DescripcionTipo??"");
+                NuevaCategoria.IdTipo = new UTL_Categorias().GenerarIdTipoProducto(NuevaCategoria.DescripcionTipo ?? "");
                 NuevaCategoria.DescripcionTipo = NuevaCategoria.DescripcionTipo?.ToUpper();
-                AdCategorias.NuevoTipo(NuevaCategoria);
+                AdCategorias.AgregarTipoProducto(NuevaCategoria);
 
                 return new JsonResult(NuevaCategoria.IdTipo);
 
@@ -58,29 +57,45 @@ namespace Aponus_Web_API.Negocio
             }
 
         }
-        internal List<DTODescripciones> ListarDescripciones(string IdTipo)
+        internal async Task<IActionResult> MapearDescripcionesProductosDTO(string IdTipo)
         {
-            return AdCategorias.ListarDescripciones(IdTipo);
+            var (resultado, error) = await AdCategorias.ListarDescripcionesProductos(IdTipo);
+
+            if (error != null)
+                return new ContentResult()
+                {
+                    Content = error.InnerException?.Message ?? error.Message,
+                    ContentType = "ApplicationBuilder/json",
+                    StatusCode = 500,
+                };
+
+            List<DTODescripcionesProductos> ListadoDescripciones = new();
+
+            resultado!
+                .ForEach(descripcion => ListadoDescripciones.Add(new DTODescripcionesProductos()
+                {
+                    IdDescripcion = descripcion.IdDescripcion,
+                    NombreDescripcion = descripcion.DescripcionProducto ?? ""
+                }));
+
+            return new JsonResult(ListadoDescripciones);
+
         }
-        internal IActionResult Actualizar(DTOActualizarCategorias ActualizarCategorias)
+        internal IActionResult ValidarOperacionActualizacion(DTOActualizarCategorias ActualizarCategorias)
         {
             //cambiar los return y agregar "se actuializo bla bla bla , valor anteriores blabla bla , avalor nuevo bla bla bli
 
             try
             {    //si tengo ID_TIPO anterior + el texto del NUEVO_TIPO actualizo el TIPO, para lo cual
                  //Verifico que exista el TIPO anterior, genero el nuevo ID_TIPO y actualizo 
-                if (ActualizarCategorias?.Anterior?.IdTipo != null && ActualizarCategorias?.Nueva?.DescripcionTipo != null && ActualizarCategorias.Nueva.IdTipo==null)
+                if (ActualizarCategorias?.Anterior?.IdTipo != null && ActualizarCategorias?.Nueva?.DescripcionTipo != null && ActualizarCategorias.Nueva.IdTipo == null)
                 {
-                    ActualizarCategorias.Nueva.IdTipo = new UTL_Categorias().GenerarIdTipo(ActualizarCategorias.Nueva.DescripcionTipo);
+                    ActualizarCategorias.Nueva.IdTipo = new UTL_Categorias().GenerarIdTipoProducto(ActualizarCategorias.Nueva.DescripcionTipo);
                     ActualizarCategorias.Nueva.DescripcionTipo = ActualizarCategorias.Nueva.DescripcionTipo.TrimEnd().ToUpper();
 
-                    ProductosTipo? TipoAnteriorExiste =
-                    AdCategorias.ObtenerTipo(new ProductosTipo
-                    {
-                        IdTipo = ActualizarCategorias.Anterior.IdTipo,
-                    });
+                    ProductosTipo? TipoAnteriorExiste = AdCategorias.ObtenerTipo(ActualizarCategorias.Anterior.IdTipo);
 
-                    if (TipoAnteriorExiste!=null)
+                    if (TipoAnteriorExiste != null)
                     {
                         try
                         {
@@ -89,11 +104,11 @@ namespace Aponus_Web_API.Negocio
                         catch (DbUpdateException ex)
                         {
                             string Mensaje;
-                            if (ex.InnerException != null) Mensaje = ex.InnerException.Message; else Mensaje=ex.Message;
+                            if (ex.InnerException != null) Mensaje = ex.InnerException.Message; else Mensaje = ex.Message;
 
                             return new ContentResult()
                             {
-                                StatusCode= 400,
+                                StatusCode = 400,
                                 Content = "Ocurrio un error " + Mensaje,
                                 ContentType = "text/plain"
                             };
@@ -104,7 +119,7 @@ namespace Aponus_Web_API.Negocio
                         return new ContentResult()
                         {
                             StatusCode = 400,
-                            Content = "Error: El campo 'Descripcion' no puede estar vacio" ,
+                            Content = "Error: El campo 'Descripcion' no puede estar vacio",
                             ContentType = "text/plain"
 
                         };
@@ -112,7 +127,7 @@ namespace Aponus_Web_API.Negocio
 
                 }
                 //Si no hay ID_TIPOS verifico si existe diferencia entre las DECRIPTIONS para actualizarlas
-                else if (ActualizarCategorias?.Anterior?.IdTipo == null && ActualizarCategorias?.Nueva?.IdTipo==null) 
+                else if (ActualizarCategorias?.Anterior?.IdTipo == null && ActualizarCategorias?.Nueva?.IdTipo == null)
                 {
                     if (ActualizarCategorias?.Nueva?.Descripcion != null && ActualizarCategorias.Anterior?.IdDescripcion != null)
                     {
@@ -127,7 +142,7 @@ namespace Aponus_Web_API.Negocio
                         {
                             string Mensaje;
 
-                            if (ex.InnerException != null) Mensaje = ex.InnerException.Message; else Mensaje=ex.Message ;
+                            if (ex.InnerException != null) Mensaje = ex.InnerException.Message; else Mensaje = ex.Message;
 
                             return new ContentResult()
                             {
@@ -149,7 +164,8 @@ namespace Aponus_Web_API.Negocio
 
                         };
 
-                    }else
+                    }
+                    else
                     {
                         return new ContentResult()
                         {
@@ -160,12 +176,12 @@ namespace Aponus_Web_API.Negocio
                         };
                     }
 
-                } 
+                }
                 // Axtualizar Descripcion (cambiar el TIPO al que pertenece)
                 else if (ActualizarCategorias?.Anterior?.IdTipo != null && ActualizarCategorias.Nueva?.IdTipo != null && (ActualizarCategorias.Anterior.IdTipo != ActualizarCategorias.Nueva.IdTipo) && ActualizarCategorias.Anterior.IdDescripcion == ActualizarCategorias.Nueva.IdDescripcion)
-                {                   
-                        AdCategorias.ActualizarTipos_Descripciones(ActualizarCategorias);
-                        return new StatusCodeResult(200);
+                {
+                    AdCategorias.ActualizarTipos_Descripciones(ActualizarCategorias);
+                    return new StatusCodeResult(200);
                 }
                 else
                 {
@@ -177,11 +193,11 @@ namespace Aponus_Web_API.Negocio
 
                     };
                 }
-             }
-             catch (DbUpdateException)
-             {
-                 return new StatusCodeResult(500);
-             }
+            }
+            catch (DbUpdateException)
+            {
+                return new StatusCodeResult(500);
+            }
 
             return new ContentResult()
             {
@@ -191,80 +207,145 @@ namespace Aponus_Web_API.Negocio
 
             };
         }
-        internal JsonResult ListarNombresComponentes()
+        internal IActionResult MapearNombresComponentesDTO()
         {
-            return _ComponentesProductos.ListarNombresComponentes() ;
-        }        
-        internal IActionResult AgregarDescripcionCompoente(string DescripcionComponente)
-        {
+            List<ComponentesDescripcion>? NombresComponentes = _ComponentesProductos.ListarNombresComponentes();
+
             try
             {
-                return AdCategorias.AgregarDescripcionCompoente(DescripcionComponente);
-            }
-            catch (DbUpdateException ex)
-            {
+                if (NombresComponentes != null)
+                {
+                    List<DTODescripcionComponentes> DTODescripcionesComponentes = new List<DTODescripcionComponentes>();
 
-                if (ex.InnerException!=null)
-                {
-                    return new ContentResult()
+                    DTODescripcionesComponentes.ForEach(componentes => new DTODescripcionComponentes()
                     {
-                        Content = ex.InnerException?.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,                    
-                    };
+                        Descripcion = componentes.Descripcion,
+                        IdAlmacenamiento = componentes.IdAlmacenamiento,
+                        IdDescripcion = componentes.IdDescripcion,
+                        IdFraccionamiento = componentes.IdFraccionamiento,
+                    });
+
+                    return new JsonResult(DTODescripcionesComponentes);
                 }
-                else
+            }
+            catch (Exception ex)
+            {
+                return new ContentResult()
                 {
-                    return new ContentResult()
-                    {
-                        Content = ex.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-                    };
+                    StatusCode = 500,
+                    Content = ex.InnerException?.Message ?? ex.Message,
+                    ContentType = "text/plain"
+
                 };
             }
+
+
+            return new JsonResult(null);
+
         }
-        internal IActionResult ModificarDescripcionCompoente(DTODescripcionComponentes descripcion)
+        internal async Task<IActionResult> MapeoComponenteBD(DTODescripcionComponentes Componente)
         {
-            try
+            ComponentesDescripcion componente = new ComponentesDescripcion()
             {
-                return AdCategorias.ModificarDescripcionComponente(descripcion);
-            }
-            catch (DbUpdateException ex)
+                Descripcion = Regex.Replace(Componente.Descripcion, @"\s+", " ").Trim().ToUpper(),
+                IdAlmacenamiento = Componente.IdAlmacenamiento ?? "",
+                IdFraccionamiento = Componente?.IdFraccionamiento ?? "",
+            };
+
+            if (Componente?.IdDescripcion != 0)
             {
-
-                if (ex.InnerException != null)
+                componente.IdDescripcion = Componente!.IdDescripcion;
+                var (statusCode, _error) = await AdCategorias.ModificarDescripcionComponente(componente);
+                if (_error != null) return new ContentResult()
                 {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException?.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-
-                    };
-                }
-                else
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-
-                    };
+                    StatusCode = 500,
+                    Content = _error.InnerException?.Message ?? _error.Message,
+                    ContentType = "text/plain"
                 };
+
+                return new StatusCodeResult((int)statusCode!);
             }
-        }
-        internal IActionResult EliminarTipoProducto(string idTipo)
-        {
-            return AdCategorias.Productos_Metodos().EliminarTipo(idTipo);
-        }
-        internal IActionResult EliminarDescripcionProducto(int idDescription)
-        {
+            else
+            {
+                var (StatusCode, error) = await AdCategorias.AgregarDescripcionCompoente(componente);
+                if (error != null) return new ContentResult()
+                {
+                    StatusCode = 500,
+                    Content = error.InnerException?.Message ?? error.Message,
+                    ContentType = "text/plain"
+                };
 
-            return AdCategorias.Productos_Metodos().EliminarDescripcion(idDescription);
+                return new StatusCodeResult((int)StatusCode!);
+            }
+
         }
 
-       
+        internal async Task<IActionResult> RegistrarCambioEstadoTipoProducto(string idTipo)
+        {
+            ProductosTipo? TipoProducto = AdCategorias.ObtenerTipo(idTipo);
+
+            if (TipoProducto != null)
+            {
+                TipoProducto.IdEstado = 0;
+                var (statusCode, error) = await AdCategorias.MetodosProductos().DesactivarTipoProductoyRelaciones(TipoProducto);
+                if (error != null)
+                    return new ContentResult()
+                    {
+                        Content = error.InnerException?.Message ?? error.Message,
+                        ContentType = "application/json",
+                        StatusCode = 500
+                    };
+                if (statusCode == 200) return new StatusCodeResult((int)statusCode);
+            }
+            return new JsonResult(null);
+
+        }
+        internal async Task<IActionResult> RegistrarCambioEstadoDescripcionProducto(int idDescription)
+        {
+            var (Descripciones, error) = await AdCategorias.ListarDescripcionesProductos(string.Empty);
+            if (error != null) return new ContentResult()
+            {
+                Content = error.InnerException?.Message ?? error.Message,
+                ContentType = "application/json",
+                StatusCode = 500
+            };
+
+            ProductosDescripcion? productosDescripcion = Descripciones!.FirstOrDefault(x => x.IdDescripcion == idDescription);
+
+            if (productosDescripcion != null)
+            {
+                productosDescripcion.IdEstado = 0;
+                var (Resultado, Error) = await AdCategorias.MetodosProductos().DesactivarDescripcionProductoyRelaciones(productosDescripcion);
+
+                if (error != null) return new ContentResult()
+                {
+                    Content = error.InnerException?.Message ?? error.Message,
+                    ContentType = "application/json",
+                    StatusCode = 500
+                };
+
+                if (Resultado == 200) return new StatusCodeResult((int)Resultado);
+            }
+
+            return new JsonResult(null);
+        }
+
+        internal async Task<JsonResult> MapearTiposProductosDTO()
+        {
+            List<ProductosTipo>? TiposProductos = await AdCategorias.MetodosProductos().ListarTiposProductos();
+
+            List<DTOTiposProductos> DTOTiposProducto = new List<DTOTiposProductos>();
+
+            foreach (var TipoProducto in TiposProductos ?? Enumerable.Empty<ProductosTipo>())
+            {
+                DTOTiposProducto.Add(new DTOTiposProductos()
+                {
+                    IdTipo = TipoProducto.IdTipo,
+                    DescripcionTipo = TipoProducto.DescripcionTipo ?? "",
+                });
+            }
+
+            return new JsonResult(DTOTiposProducto);
+        }
     }
 }

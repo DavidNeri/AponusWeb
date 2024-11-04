@@ -1,7 +1,6 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
-using Aponus_Web_API.Data_Transfer_objects;
-using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +17,9 @@ namespace Aponus_Web_API.Negocio
             Componentes = componentes;
             stocks = _stocks;
         }
-        internal async Task<JsonResult> ObtenerNuevoIdComponente(string ComponentDescription)
+        internal JsonResult ObtenerNuevoIdComponente(string ComponentDescription)
         {
-            return await Componentes.ObtenerNuevoId(ComponentDescription);
+            return Componentes.ObtenerNuevoId(ComponentDescription);
         }
         internal IActionResult GuardarInsumoProducto(DTODetallesComponenteProducto componente)
         {
@@ -76,7 +75,7 @@ namespace Aponus_Web_API.Negocio
 
             }
 
-        }      
+        }
         internal IActionResult ListarNombresFormateados()
         {
             List<DTOTipoInsumos>? InsumosAgrupados = new List<DTOTipoInsumos>();
@@ -99,31 +98,31 @@ namespace Aponus_Web_API.Negocio
                     {
                         IdSuministro = item.idComponente ?? string.Empty,
                         Descripcion = insumo.Descripcion,
-                        Altura = !string.IsNullOrEmpty(item.Altura) && !item.Altura.Contains('-') ? Convert.ToDecimal(item.Altura.Replace("mm","")) : null,
+                        Altura = !string.IsNullOrEmpty(item.Altura) && !item.Altura.Contains('-') ? Convert.ToDecimal(item.Altura.Replace("mm", "")) : null,
                         Diametro = !string.IsNullOrEmpty(item.Altura) && !item.Altura.Contains('-') ? Convert.ToDecimal(item.Altura.Replace("mm", "")) : null,
                         DiametroNominal = !string.IsNullOrEmpty(item.DiametroNominal) && !item.DiametroNominal.Contains('-') ? Convert.ToInt32(item.DiametroNominal.Replace("mm", "")) : null,
                         Espesor = !string.IsNullOrEmpty(item.Espesor) && !item.Espesor.Contains('-') ? Convert.ToDecimal(item.Espesor.Replace("mm", "")) : null,
                         Longitud = !string.IsNullOrEmpty(item.Longitud) && !item.Longitud.Contains('-') ? Convert.ToDecimal(item.Longitud.Replace("mm", "")) : null,
                         Perfil = !string.IsNullOrEmpty(item.Perfil) && !item.Perfil.Contains('-') ? Convert.ToInt32(item.Perfil) : null,
-                        Tolerancia = (item.Tolerancia?.Equals('-') ?? false )? "" : item.Tolerancia,
-                        UnidadAlmacenamiento= !string.IsNullOrEmpty(item.idAlmacenamiento) ? item.idAlmacenamiento : null,
+                        Tolerancia = (item.Tolerancia?.Equals('-') ?? false) ? "" : item.Tolerancia,
+                        UnidadAlmacenamiento = !string.IsNullOrEmpty(item.idAlmacenamiento) ? item.idAlmacenamiento : null,
                         UnidadFraccionamiento = !string.IsNullOrEmpty(item.idFraccionamiento) ? item.idFraccionamiento : null,
                     });
                 }
             };
 
             List<(string IdSuministro, string Nombre, string? Unidad)> ListaInusumos = new UTL_NombresSuministros().formatearNombres(InsumosDesagrupados);
-            ListaInusumos = ListaInusumos.OrderBy(x=>x.Nombre).ToList();    
+            ListaInusumos = ListaInusumos.OrderBy(x => x.Nombre).ToList();
 
             List<Dictionary<string, string>> InsumosFormateados = ListaInusumos
-                .Select(item=> new Dictionary<string, string>()
+                .Select(item => new Dictionary<string, string>()
                 {
                     { "idInsumo", item.IdSuministro},
                     { "nombre", item.Nombre}
                 })
                 .ToList();
 
-            return new JsonResult(InsumosFormateados); 
+            return new JsonResult(InsumosFormateados);
 
         }
     }

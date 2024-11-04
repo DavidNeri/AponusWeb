@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Systema
             AdUsuarios = _usuarios;
         }
 
-        internal DTOUsuarios? ValidarUsuario(DTOUsuarios Usuario )
+        internal DTOUsuarios? ValidarUsuario(DTOUsuarios Usuario)
         {
             return AdUsuarios.ValidarCredenciales(Usuario);
         }
@@ -37,12 +37,12 @@ namespace Aponus_Web_API.Systema
             {
                 return new ContentResult()
                 {
-                    Content = ex.InnerException?.Message ?? ex.Message,   
-                    ContentType="application/json",
-                    StatusCode=500
+                    Content = ex.InnerException?.Message ?? ex.Message,
+                    ContentType = "application/json",
+                    StatusCode = 500
                 };
             }
-             
+
         }
     }
 }

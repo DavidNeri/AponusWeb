@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AponusWebAPI.Migrations
+namespace Aponus_Web_API.Migrations
 {
     /// <inheritdoc />
     public partial class PERFILESUSUARIOS : Migration
@@ -31,7 +30,7 @@ namespace AponusWebAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-           
+
         }
     }
 }

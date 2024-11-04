@@ -1,6 +1,5 @@
-﻿using Aponus_Web_API.Data_Transfer_objects;
+﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using Aponus_Web_API.Modelos;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Entity;
 using Z.EntityFramework.Plus;
@@ -15,7 +14,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         public AD_Ventas(AponusContext _aponusContext, AD_Stocks _stocks)
         {
             AponusDBContext = _aponusContext;
-            stocks = _stocks;   
+            stocks = _stocks;
         }
 
         public async Task<bool> Guardar(Modelos.Ventas Venta)
@@ -38,7 +37,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 foreach (VentasDetalles item in Venta.DetallesVenta ?? Enumerable.Empty<VentasDetalles>())
                 {
-                    roolbackResult = stocks.DisminuirStockProducto( new DTOStockUpdate()
+                    roolbackResult = stocks.DisminuirStockProducto(new DTOStockUpdate()
                     {
                         IdExistencia = item.IdProducto,
                         Cantidad = item.Cantidad,
@@ -65,18 +64,18 @@ namespace Aponus_Web_API.Acceso_a_Datos
         public IQueryable<Modelos.Ventas> ListarVentas()
         {
             return AponusDBContext.ventas
-                .Where(Estado=>Estado.IdEstadoVenta != 0)
-                .Include(x=>x.DetallesVenta)
-                .Include(x=>x.Cuotas)
-                .Include(x=>x.Pagos)
-                .Include(Cli=>Cli.Cliente)
+                .Where(Estado => Estado.IdEstadoVenta != 0)
+                .Include(x => x.DetallesVenta)
+                .Include(x => x.Cuotas)
+                .Include(x => x.Pagos)
+                .Include(Cli => Cli.Cliente)
                 .AsQueryable();
         }
 
         internal void EliminarEstado(EstadosVentas EstadoVenta)
         {
             var Estado = AponusDBContext.estadosVentas.Find(typeof(EstadosVentas), EstadoVenta.IdEstadoVenta);
-            
+
             if (Estado != null)
             {
                 Estado.IdEstado = 0;
@@ -89,12 +88,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             if (NuevoEstado.IdEstadoVenta != null)
             {
-                EstadosVentas? Estado = await AponusDBContext.estadosVentas.FirstOrDefaultAsync(x => x.IdEstadoVenta == NuevoEstado.IdEstado && x.IdEstado!=0);
+                EstadosVentas? Estado = await AponusDBContext.estadosVentas.FirstOrDefaultAsync(x => x.IdEstadoVenta == NuevoEstado.IdEstado && x.IdEstado != 0);
                 if (Estado != null)
                 {
                     Estado.Descripcion = NuevoEstado.Descripcion ?? Estado.Descripcion;
                     Estado.IdEstado = NuevoEstado.IdEstado ?? Estado.IdEstado;
-                    await AponusDBContext.SaveChangesAsync();                    
+                    await AponusDBContext.SaveChangesAsync();
                 }
                 else
                 {
@@ -107,7 +106,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
             else
             {
-                var Existe = AponusDBContext.estadosVentas.FirstOrDefault(x => x.Descripcion.Equals(NuevoEstado.Descripcion) && x.IdEstado!=0);
+                var Existe = AponusDBContext.estadosVentas.FirstOrDefault(x => x.Descripcion.Equals(NuevoEstado.Descripcion) && x.IdEstado != 0);
                 if (Existe != null)
                     return new ContentResult()
                     {

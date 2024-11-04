@@ -11,17 +11,17 @@ namespace Aponus_Web_API.Modelos
         public int IdPago { get; set; }
 
         [ForeignKey("ID_VENTA")]
-        public int IdVenta{ get; set; }
+        public int IdVenta { get; set; }
 
         [ForeignKey("ID_MEDIO_PAGO")]
-        public int IdMedioPago { get; set; }      
+        public int IdMedioPago { get; set; }
 
         [Column("MONTO")]
-        public decimal Monto{ get; set; } 
+        public decimal Monto { get; set; }
 
         [Column("FECHA")]
         public DateTime? Fecha { get; set; }
         public virtual MediosPago MedioPago { get; set; } = new();
-        public virtual Ventas Venta { get; set; } = new ();
+        public virtual Ventas Venta { get; set; } = new();
     }
 }

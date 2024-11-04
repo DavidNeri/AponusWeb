@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Aponus_Web_API.Data_Transfer_objects
+namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
     public class DTOProducto
 
@@ -17,9 +16,9 @@ namespace Aponus_Web_API.Data_Transfer_objects
 
         [JsonProperty(PropertyName = "diametroNominal", NullValueHandling = NullValueHandling.Ignore)]
         public int? DiametroNominal { get; set; }
-       
+
         [JsonProperty(PropertyName = "tolerancia", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Tolerancia{ get; set; }
+        public string? Tolerancia { get; set; }
 
         [JsonProperty(PropertyName = "cantidad", NullValueHandling = NullValueHandling.Ignore)]
         public int? Cantidad { get; set; }

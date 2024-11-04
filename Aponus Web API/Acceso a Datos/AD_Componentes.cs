@@ -1,6 +1,5 @@
-﻿using Aponus_Web_API.Data_Transfer_objects;
+﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using Aponus_Web_API.Modelos;
 using Fractions;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Entity;
@@ -20,7 +19,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             AponusDbContext = _AponusDbContext;
         }
-        internal List<(string Id, int IdDescripcion, decimal? Longitud, decimal? Peso)> ListarIdDescripcionComponentesProducto (string[] Componentes)
+        internal List<(string Id, int IdDescripcion, decimal? Longitud, decimal? Peso)> ListarIdDescripcionComponentesProducto(string[] Componentes)
         {
             List<(string, int, decimal?, decimal?)> ComponentesDetalle = AponusDbContext.ComponentesDetalles
                                                                                            .Where(x => Componentes.ToList().Contains(x.IdInsumo))
@@ -37,24 +36,25 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                      .Where(x => x.IdProducto == IdProducto)
                                      .ToListAsync();
         }
-        internal JsonResult ListarNombresComponentes()
+        internal List<ComponentesDescripcion>? ListarNombresComponentes()
         {
-            List<DTODescripcionComponentes> DescripcionesComponentes =  AponusDbContext.ComponentesDescripcions
-                .Select(x => new DTODescripcionComponentes()
+            List<ComponentesDescripcion>? DescripcionesComponentes = AponusDbContext.ComponentesDescripcions
+                .Select(x => new ComponentesDescripcion()
                 {
-                    IdDescripcion     = x.IdDescripcion    ,
-                    Descripcion       = x.Descripcion ?? "",
-                    IdAlmacenamiento  = x.IdAlmacenamiento ,
-                    IdFraccionamiento = x.IdFraccionamiento
+                    IdDescripcion = x.IdDescripcion,
+                    Descripcion = x.Descripcion ?? "",
+                    IdAlmacenamiento = x.IdAlmacenamiento,
+                    IdFraccionamiento = x.IdFraccionamiento,
+                    
 
                 })
                 .ToList();
 
-            return new JsonResult(DescripcionesComponentes);
+            return DescripcionesComponentes;
         }
         internal void GuardarComponenteProd(Productos_Componentes componente)
         {
-                     
+
             var ValidarExistencia = AponusDbContext.Componentes_Productos
             .FirstOrDefault(c => c.IdProducto == componente.IdProducto &&
                                     c.IdComponente == componente.IdComponente);
@@ -71,16 +71,16 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 AponusDbContext.Componentes_Productos.Add(componente);
                 AponusDbContext.SaveChanges();
             }
-            
+
 
         }
         internal JsonResult ObtenerComponentesFormateados(DTOProducto Producto)
-        {            
+        {
             var ComponentesProducto = AponusDbContext.Componentes_Productos
                     .Where(x => x.IdProducto == Producto.IdProducto)
                     .Join(AponusDbContext.ComponentesDetalles,
-                        _Componentes                        => _Componentes.IdComponente,
-                        _DetalleComponentes                 => _DetalleComponentes.IdInsumo,
+                        _Componentes => _Componentes.IdComponente,
+                        _DetalleComponentes => _DetalleComponentes.IdInsumo,
                         (_Componentes, _DetalleComponentes) => new
                         {
                             _Componentes,
@@ -88,8 +88,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         })
 
                     .Join(AponusDbContext.ComponentesDescripcions,
-                        _DetComponentes                       => _DetComponentes._DetalleComponentes.IdDescripcion,
-                        _NombreComponentes                    => _NombreComponentes.IdDescripcion,
+                        _DetComponentes => _DetComponentes._DetalleComponentes.IdDescripcion,
+                        _NombreComponentes => _NombreComponentes.IdDescripcion,
                         (_DetComponentes, _NombreComponentes) => new
                         {
                             _DetComponentes,
@@ -100,28 +100,28 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         _StockComponentes => _StockComponentes.IdInsumo,
                         (_JoinResult, _StockComponentes) => new
                         {
-                            _IdProducto      = _JoinResult._DetComponentes._Componentes.IdProducto,
-                            _IdComponente    = _JoinResult._DetComponentes._Componentes.IdComponente           ?? "",
-                            _Descripcion     = _JoinResult._NombreComponentes.Descripcion                      ?? "",
-                            _Diametro        = _JoinResult._DetComponentes._DetalleComponentes.Diametro        ?? null,
-                            _Longitud        = _JoinResult._DetComponentes._DetalleComponentes.Longitud        ?? null,
-                            _Altura          = _JoinResult._DetComponentes._DetalleComponentes.Altura          ?? null,
-                            _Espesor         = _JoinResult._DetComponentes._DetalleComponentes.Espesor         ?? null,
-                            _Perfil          = _JoinResult._DetComponentes._DetalleComponentes.Perfil          ?? null,
-                            _Tolerancia      = _JoinResult._DetComponentes._DetalleComponentes.Tolerancia      ?? "",
+                            _IdProducto = _JoinResult._DetComponentes._Componentes.IdProducto,
+                            _IdComponente = _JoinResult._DetComponentes._Componentes.IdComponente ?? "",
+                            _Descripcion = _JoinResult._NombreComponentes.Descripcion ?? "",
+                            _Diametro = _JoinResult._DetComponentes._DetalleComponentes.Diametro ?? null,
+                            _Longitud = _JoinResult._DetComponentes._DetalleComponentes.Longitud ?? null,
+                            _Altura = _JoinResult._DetComponentes._DetalleComponentes.Altura ?? null,
+                            _Espesor = _JoinResult._DetComponentes._DetalleComponentes.Espesor ?? null,
+                            _Perfil = _JoinResult._DetComponentes._DetalleComponentes.Perfil ?? null,
+                            _Tolerancia = _JoinResult._DetComponentes._DetalleComponentes.Tolerancia ?? "",
                             _DiametroNominal = _JoinResult._DetComponentes._DetalleComponentes.DiametroNominal ?? null,
-                            _Largo           = _JoinResult._DetComponentes._Componentes.Longitud               ?? null,
+                            _Largo = _JoinResult._DetComponentes._Componentes.Longitud ?? null,
 
                             StockComponente = new DTOStockFormateado
                             {
-                                IdInsumo   = _StockComponentes.IdInsumo,
-                                Recibido   = _StockComponentes.Recibido   !=    null    ? _StockComponentes.Recibido  .ToString()    : "Sin Stock",
-                                Granallado = _StockComponentes.Granallado !=    null    ? _StockComponentes.Granallado.ToString()    : "Sin Stock",
-                                Pintura    = _StockComponentes.Pintura    !=    null    ? _StockComponentes.Pintura   .ToString()    : "Sin Stock",
-                                Proceso    = _StockComponentes.Proceso    !=    null    ? _StockComponentes.Proceso   .ToString()    : "Sin Stock",
-                                Moldeado   = _StockComponentes.Moldeado   !=    null    ? _StockComponentes.Moldeado  .ToString()    : "Sin Stock",
+                                IdInsumo = _StockComponentes.IdInsumo,
+                                Recibido = _StockComponentes.Recibido != null ? _StockComponentes.Recibido.ToString() : "Sin Stock",
+                                Granallado = _StockComponentes.Granallado != null ? _StockComponentes.Granallado.ToString() : "Sin Stock",
+                                Pintura = _StockComponentes.Pintura != null ? _StockComponentes.Pintura.ToString() : "Sin Stock",
+                                Proceso = _StockComponentes.Proceso != null ? _StockComponentes.Proceso.ToString() : "Sin Stock",
+                                Moldeado = _StockComponentes.Moldeado != null ? _StockComponentes.Moldeado.ToString() : "Sin Stock",
 
-                                Total     = ((_StockComponentes.Pintura ?? 0) + (_StockComponentes.Moldeado ?? 0) + (_StockComponentes.Recibido ?? 0) + (_StockComponentes.Proceso ?? 0) + (_StockComponentes.Granallado ?? 0)).ToString(),
+                                Total = ((_StockComponentes.Pintura ?? 0) + (_StockComponentes.Moldeado ?? 0) + (_StockComponentes.Recibido ?? 0) + (_StockComponentes.Proceso ?? 0) + (_StockComponentes.Granallado ?? 0)).ToString(),
                                 Requerido = ((_JoinResult._DetComponentes._Componentes.Cantidad ?? 0) * Producto.Cantidad).ToString(),
                             }
                         })
@@ -142,17 +142,17 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                     .Select(group => new
                     {
-                        idProducto      = group.Key._IdProducto,
-                        IdComponente    = group.Key._IdComponente,
-                        Descripcion     = group.Key._Descripcion,
-                        Perfil          = group.Key._Perfil,
-                        Longitud        = group.Key._Longitud,
+                        idProducto = group.Key._IdProducto,
+                        IdComponente = group.Key._IdComponente,
+                        Descripcion = group.Key._Descripcion,
+                        Perfil = group.Key._Perfil,
+                        Longitud = group.Key._Longitud,
                         DiametroNominal = group.Key._DiametroNominal,
-                        Altura          = group.Key._Altura,
-                        Largo           = group.Key._Largo,
-                        Diametro        = group.Key._Diametro,
-                        Espesor         = group.Key._Espesor,
-                        Tolerancia      = group.Key._Tolerancia,
+                        Altura = group.Key._Altura,
+                        Largo = group.Key._Largo,
+                        Diametro = group.Key._Diametro,
+                        Espesor = group.Key._Espesor,
+                        Tolerancia = group.Key._Tolerancia,
                         StockComponente = group.Select(cp => cp.StockComponente).ToList(),
 
                     })
@@ -163,41 +163,41 @@ namespace Aponus_Web_API.Acceso_a_Datos
             List<string> AllComponentesIds = ComponentesProducto.Select(cp => cp.IdComponente).ToList();
 
             List<DTODetallesComponenteProducto> PropiedadesComponentes = AponusDbContext.ComponentesDetalles
-                .Where(x=>AllComponentesIds.Contains(x.IdInsumo))
+                .Where(x => AllComponentesIds.Contains(x.IdInsumo))
                 .Select(x => new DTODetallesComponenteProducto()
-                {                    
-                    idComponente      = x.IdInsumo,
-                    idAlmacenamiento  = x.IdAlmacenamiento,
+                {
+                    idComponente = x.IdInsumo,
+                    idAlmacenamiento = x.IdAlmacenamiento,
                     idFraccionamiento = x.IdFraccionamiento,
-                    Altura            = x.Altura,
-                    Diametro          = x.Diametro,
-                    Espesor           = x.Espesor,
-                    Longitud          = x.Longitud,
-                    Perfil            = x.Perfil,
-                    Tolerancia        = x.Tolerancia,
-                    DiametroNominal   = x.DiametroNominal,                    
-                    Peso              = x.Peso,
-                    
+                    Altura = x.Altura,
+                    Diametro = x.Diametro,
+                    Espesor = x.Espesor,
+                    Longitud = x.Longitud,
+                    Perfil = x.Perfil,
+                    Tolerancia = x.Tolerancia,
+                    DiametroNominal = x.DiametroNominal,
+                    Peso = x.Peso,
+
                 })
-                .ToList();  
+                .ToList();
 
             List<DTOProductoComponente> productos = new List<DTOProductoComponente>();
 
             foreach (var cp in ComponentesProducto)
             {
-                    string? IdComponente = cp.IdComponente ?? "";
-                    string? descripcion = cp.Descripcion ?? "";
-                    string? diametro = cp.Diametro != null ? string.Format("{0:####}", cp.Diametro) : null;
-                    string? longitud = cp.Longitud != null ? string.Format("{0:#,0}", cp.Longitud) : null;
-                    string? altura = cp.Altura != null ? string.Format("{0:####}", cp.Altura) : null;
-                    string? espesor = cp.Espesor != null ? string.Format("{0:####}", cp.Espesor) : null;
-                    string? perfil = cp.Perfil != null ? string.Format("{0:####}", cp.Perfil) : null;
-                    string? tolerancia = cp.Tolerancia ?? "";
-                    string? DiametroNominal = cp.DiametroNominal.ToString() ?? "";
-                    string? largo = cp.Largo != null ? string.Format("{0:####}", cp.Largo) : null;
+                string? IdComponente = cp.IdComponente ?? "";
+                string? descripcion = cp.Descripcion ?? "";
+                string? diametro = cp.Diametro != null ? string.Format("{0:####}", cp.Diametro) : null;
+                string? longitud = cp.Longitud != null ? string.Format("{0:#,0}", cp.Longitud) : null;
+                string? altura = cp.Altura != null ? string.Format("{0:####}", cp.Altura) : null;
+                string? espesor = cp.Espesor != null ? string.Format("{0:####}", cp.Espesor) : null;
+                string? perfil = cp.Perfil != null ? string.Format("{0:####}", cp.Perfil) : null;
+                string? tolerancia = cp.Tolerancia ?? "";
+                string? DiametroNominal = cp.DiametroNominal.ToString() ?? "";
+                string? largo = cp.Largo != null ? string.Format("{0:####}", cp.Largo) : null;
 
 
-                
+
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append($"{descripcion}");
@@ -211,7 +211,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     sb.Append($", Espesor:{espesor}mm");
                 if (perfil != null)
                     sb.Append($", Perfil:{perfil}");
-                if (tolerancia != null && tolerancia!="")
+                if (tolerancia != null && tolerancia != "")
                     sb.Append($", Tolerancia:{tolerancia}");
                 if (DiametroNominal != null && DiametroNominal != "")
                     sb.Append($", DN:{DiametroNominal}mm");
@@ -224,96 +224,96 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 DTOProductoComponente productoComponente = new DTOProductoComponente
                 {
-                    IdComponente    = cp.IdComponente ?? "",                    
-                    Descripcion     = sb.ToString(),
-                    Perfil          = cp.Perfil,
-                    Longitud        = cp.Longitud,
+                    IdComponente = cp.IdComponente ?? "",
+                    Descripcion = sb.ToString(),
+                    Perfil = cp.Perfil,
+                    Longitud = cp.Longitud,
                     DiametroNominal = cp.DiametroNominal,
-                    Altura          = cp.Altura,
-                    Largo           = cp.Largo,
-                    Diametro        = cp.Diametro,
-                    Espesor         = cp.Espesor,
-                    Tolerancia      = cp.Tolerancia ?? "",
+                    Altura = cp.Altura,
+                    Largo = cp.Largo,
+                    Diametro = cp.Diametro,
+                    Espesor = cp.Espesor,
+                    Tolerancia = cp.Tolerancia ?? "",
                     StockFormateado = cp.StockComponente
                 };
 
                 productos.Add(productoComponente);
             }
-                      
+
 
             foreach (var producto in productos)
             {
-                
-                producto.Perfil          = null;
-                producto.Longitud        = null;
-                producto.DiametroNominal = null;
-                producto.Altura          = null;
-                producto.Largo           = null;
-                producto.Diametro        = null;
-                producto.Espesor         = null;
-                producto.Tolerancia      = "";                
 
-                string? SiglaAlmacenamiento  = PropiedadesComponentes
-                    .Where(x                 => x.idComponente!= null && x.idComponente.Contains(producto.IdComponente))
-                    .Select(x                => x.idAlmacenamiento)
+                producto.Perfil = null;
+                producto.Longitud = null;
+                producto.DiametroNominal = null;
+                producto.Altura = null;
+                producto.Largo = null;
+                producto.Diametro = null;
+                producto.Espesor = null;
+                producto.Tolerancia = "";
+
+                string? SiglaAlmacenamiento = PropiedadesComponentes
+                    .Where(x => x.idComponente != null && x.idComponente.Contains(producto.IdComponente))
+                    .Select(x => x.idAlmacenamiento)
                     .FirstOrDefault();
 
                 string? SiglaFraccionamiento = PropiedadesComponentes
-                    .Where(x                 => x.idComponente != null && x.idComponente.Contains(producto.IdComponente))
-                    .Select(x                => x.idFraccionamiento)
+                    .Where(x => x.idComponente != null && x.idComponente.Contains(producto.IdComponente))
+                    .Select(x => x.idFraccionamiento)
                     .FirstOrDefault();
 
                 foreach (var item in producto.StockFormateado ?? Enumerable.Empty<DTOStockFormateado>())
                 {
-                    var TipoPropiedadStock          = item.GetType();
+                    var TipoPropiedadStock = item.GetType();
                     PropertyInfo[] PropiedadesStock = TipoPropiedadStock.GetProperties();
 
                     foreach (var propiedad in PropiedadesStock)
                     {
-                        
 
-                        if (propiedad.GetValue(item) !=null && !propiedad.Name.Contains("IdInsumo") && !propiedad.Name.Contains("NombreInsumo") && propiedad?.GetValue(item)?.ToString() != "Sin Stock")
+
+                        if (propiedad.GetValue(item) != null && !propiedad.Name.Contains("IdInsumo") && !propiedad.Name.Contains("NombreInsumo") && propiedad?.GetValue(item)?.ToString() != "Sin Stock")
                         {
-                            if (SiglaFraccionamiento != null )
+                            if (SiglaFraccionamiento != null)
                             {
                                 if (propiedad != null && propiedad.Name.Contains("Requerido"))
                                 {
                                     DTODetallesComponenteProducto? Componente = PropiedadesComponentes.FirstOrDefault(x => x.idComponente == item.IdInsumo);
-                                    
-                                    string? CantidadRequerida                 = (string?)item.GetType().GetProperty(propiedad.Name)?.GetValue(item);
+
+                                    string? CantidadRequerida = (string?)item.GetType().GetProperty(propiedad.Name)?.GetValue(item);
 
                                     if (CantidadRequerida == "") CantidadRequerida = "0";
 
                                     //Si el componente no tiene diametro, ni espesor, ni altura, ni DN, es decir si es una junta
                                     if (Componente?.Diametro == null && Componente?.Perfil != null && Componente.Espesor == null && Componente.Altura == null && Componente.DiametroNominal == null && !Regex.IsMatch(CantidadRequerida ?? "", "[a-zA-Z]"))
                                     {
-                                        var TotalInsumosStock  = Decimal.Parse(item.Total ?? "", CultureInfo.InvariantCulture);
-                                        var LongitudInsumo     = Componente.Longitud;
+                                        var TotalInsumosStock = Decimal.Parse(item.Total ?? "", CultureInfo.InvariantCulture);
+                                        var LongitudInsumo = Componente.Longitud;
                                         var _CantidadRequerida = Decimal.Parse(CantidadRequerida ?? "", CultureInfo.InvariantCulture);
-                                        var LongitudNecesaria  = _CantidadRequerida * Producto.Cantidad;
-                                        var InsumosNecesarios  = LongitudNecesaria / LongitudInsumo ?? 1;
-                                        var UnidadAlternativa  = (Fraction)InsumosNecesarios;
+                                        var LongitudNecesaria = _CantidadRequerida * Producto.Cantidad;
+                                        var InsumosNecesarios = LongitudNecesaria / LongitudInsumo ?? 1;
+                                        var UnidadAlternativa = (Fraction)InsumosNecesarios;
 
                                         item.GetType()
                                             .GetProperty(propiedad.Name)?
                                             .SetValue(item, item
                                             .GetType()
                                             .GetProperty(propiedad.Name)?
-                                            .GetValue(item)      +
-                                            SiglaFraccionamiento + " - " + 
-                                            UnidadAlternativa    +" "+ 
+                                            .GetValue(item) +
+                                            SiglaFraccionamiento + " - " +
+                                            UnidadAlternativa + " " +
                                             SiglaAlmacenamiento);
 
                                     }
                                     else if (!Regex.IsMatch(CantidadRequerida ?? "", "[a-zA-Z]"))
                                     {
                                         decimal? PesoComponente = Componente?.Peso;
-                                     
+
                                         if (PesoComponente == null) PesoComponente = 0;
 
                                         var UnidadAlternativa = ((Decimal.Parse(CantidadRequerida ?? "", CultureInfo.InvariantCulture) * PesoComponente) * Producto.Cantidad);
-                                        
-                                        UnidadAlternativa = UnidadAlternativa != null ? Math.Round((decimal)UnidadAlternativa,1) : 0;
+
+                                        UnidadAlternativa = UnidadAlternativa != null ? Math.Round((decimal)UnidadAlternativa, 1) : 0;
 
                                         if (UnidadAlternativa > 0)
                                         {
@@ -338,7 +338,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                             .SetValue(item, item.GetType().GetProperty(propiedad.Name)?.GetValue(item)
                                             + " " + SiglaAlmacenamiento);
                                     }
-                                    
+
                                 }
                             }
                             else
@@ -349,15 +349,15 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                         .SetValue(item, item.GetType().GetProperty(propiedad.Name)?.GetValue(item)
                                         + " " + SiglaAlmacenamiento);
                                 }
-                                    
-                            } 
+
+                            }
                         }
                     }
                 }
             }
 
-            string ? IdProd = ComponentesProducto.Select(x => x.idProducto).FirstOrDefault();
-            
+            string? IdProd = ComponentesProducto.Select(x => x.idProducto).FirstOrDefault();
+
             var result = new
             {
                 idProducto = IdProd,
@@ -421,19 +421,43 @@ namespace Aponus_Web_API.Acceso_a_Datos
             return jsonResult;
 
         }
-        internal IActionResult Listar(int? IdDescripcion)
+        internal async Task<(List<ComponentesDetalle>? LstComponentes, Exception? Error)> ListarDetalleComponentes(int? IdDescripcion)
         {
-            IQueryable<ComponentesDetalle> query = AponusDbContext.ComponentesDetalles.Where(x => x.IdEstado != 0).AsQueryable();
-
-
-            if (IdDescripcion.HasValue)
+            try
             {
-                query = query.Where(X => X.IdDescripcion == IdDescripcion);
+                List<ComponentesDetalle> LstComponentes = await AponusDbContext.ComponentesDetalles
+               .Where(x => x.IdEstado != 0 && (IdDescripcion == null || x.IdDescripcion == IdDescripcion))
+               .Select(x => new ComponentesDetalle()
+               {
+                   IdInsumo = x.IdInsumo,
+                   Altura = x.Altura,
+                   Diametro = x.Diametro,
+                   DiametroNominal = x.DiametroNominal,
+                   Espesor = x.Espesor,
+                   IdDescripcion = x.IdDescripcion,
+                   IdEstado = x.IdEstado,
+                   Longitud = x.Longitud,
+                   Perfil = x.Perfil,
+                   Peso = x.Peso,
+                   Tolerancia = x.Tolerancia,
+                   IdAlmacenamiento = AponusDbContext.ComponentesDescripcions
+                                                        .Where(y => y.IdDescripcion == x.IdDescripcion)
+                                                        .Select(X => X.IdAlmacenamiento)
+                                                        .FirstOrDefault(),
+                   IdFraccionamiento = AponusDbContext.ComponentesDescripcions
+                                                        .Where(y => y.IdDescripcion == x.IdDescripcion)
+                                                        .Select(X => X.IdFraccionamiento)
+                                                        .FirstOrDefault(),
+               })
+               .ToListAsync();
+
+                return (LstComponentes, null);
+            }
+            catch (Exception Error)
+            {
+                return (null, Error);
             }
 
-            var Componentes = query.ToList();
-
-            return new JsonResult(Componentes);
         }
         internal JsonResult? ObtenerId(List<(string Nombre, string Valor)> propiedadesNoNulas)
         {
@@ -543,36 +567,45 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
             AponusDbContext.SaveChanges();
         }
-        internal async Task<IActionResult> ListarTiposAlacenamiento()
+        internal async Task<(List<ComponentesDescripcion>? Listado, Exception? Error)> ListarTiposAlacenamiento(int? IdDescripcionComponente)
         {
-            List<DTODetallesComponenteProducto> Unidades = await AponusDbContext.ComponentesDetalles
-                .Select(x => new DTODetallesComponenteProducto()
-                {
-                    IdInsumo = x.IdInsumo,
+            try
+            {
+                List<ComponentesDescripcion>? Listado = await AponusDbContext.ComponentesDescripcions
+                    .Where(x => x.IdDescripcion == IdDescripcionComponente || IdDescripcionComponente == null)
+                    .Select(x => new ComponentesDescripcion()
+                    {
+                        IdDescripcion = x.IdDescripcion,
+                        Descripcion = x.Descripcion,
+                        IdFraccionamiento = x.IdFraccionamiento,
+                        IdAlmacenamiento = x.IdAlmacenamiento,
 
-                    idFraccionamiento = x.IdFraccionamiento != null && (x.IdFraccionamiento.ToLower() == "ud" || x.IdFraccionamiento.ToLower().Contains("unidad")) ? "Unidades"
-                                       : x.IdFraccionamiento != null && (x.IdFraccionamiento.ToLower() == "kg" || x.IdFraccionamiento.ToLower().Contains("kilo")) ? "Kgs"
-                                       : x.IdFraccionamiento,
+                    }).ToListAsync();
 
-                    idAlmacenamiento = x.IdAlmacenamiento != null && (x.IdAlmacenamiento.ToLower() == "kg" || x.IdAlmacenamiento.ToLower().Contains("kilo")) ? "Kgs"
-                                        : x.IdAlmacenamiento != null && (x.IdAlmacenamiento.ToLower() == "ud" || x.IdAlmacenamiento.ToLower().Contains("unidad")) ? "Unidades"
-                                        : x.IdAlmacenamiento,
+                return (Listado, null);
+            }
+            catch (Exception Error)
+            {
+                return (null, Error);
+            }
 
-                }).ToListAsync();
-
-            return new JsonResult(Unidades);
         }
-        internal async Task<JsonResult> ObtenerNuevoId(string componentDescription)
+        internal  JsonResult ObtenerNuevoId(string componentDescription)
         {
             string IdComponente = "";
-            List<string> IdComponenteList = await AponusDbContext.ComponentesDetalles
+            List<string> IdComponenteList =  AponusDbContext.ComponentesDetalles
                 .Where(x => x.IdInsumo.Contains(componentDescription.Substring(0, 3).ToUpper()))
                 .Select(x => x.IdInsumo.Substring(3))
-                .ToListAsync();
+                .ToList();            
 
             if (IdComponenteList.Count > 0)
             {
-                List<int> numeros = IdComponenteList.Select(int.Parse).ToList();
+                List<int> numeros = IdComponenteList
+                    .Select(x => Regex.Match(x, @"\d+")) // Extrae la parte numérica
+                    .Where(match => match.Success) // Filtra los casos donde hay un número
+                    .Select(match => int.Parse(match.Value)) // Convierte la parte numérica a int
+                    .ToList();
+                
                 int valorMaximo = numeros.Max() + 1;
                 IdComponente = componentDescription.Substring(0, 3).ToUpper() + "_" + valorMaximo;
             }

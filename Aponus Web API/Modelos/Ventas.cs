@@ -9,32 +9,37 @@ namespace Aponus_Web_API.Modelos
         [Key]
         [Column("ID_VENTA")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdVenta{ get; set; }
+        public int IdVenta { get; set; }
 
         [Column("ID_CLIENTE")]
-        public int IdCliente{ get; set; }
+        public int IdCliente { get; set; }
 
         [Column("FECHA_HORA")]
         public DateTime FechaHora { get; set; }
 
         [ForeignKey("ID_USUARIO")]
-        public string IdUsuario { get; set; } = "" ;
+        public string IdUsuario { get; set; } = "";
 
-        [Column("TOTAL")]
-        public decimal Total { get; set; }
+        [Column("MONTO_TOTAL")]
+        public decimal MontoTotal { get; set; }
 
         [Column("SALDO_PENDIENTE")]
-        public decimal SaldoPendiente{ get; set; }
+        public decimal? SaldoPendiente { get; set; }
 
         [Column("ID_ESTADO_VENTA")]
         public int IdEstadoVenta { get; set; }
 
-        public virtual Entidades Cliente { get; set; } = new();        
+        [NotMapped]
+        public decimal SaldoCancelado => MontoTotal - (SaldoPendiente ?? 0);
+
+        public virtual Entidades Cliente { get; set; } = new();
         public virtual Usuarios Usuario { get; set; } = new();
+        public virtual EstadosVentas Estado { get; set; } = new();
+
         public virtual ICollection<VentasDetalles> DetallesVenta { get; set; } = new HashSet<VentasDetalles>();
         public virtual ICollection<PagosVentas> Pagos { get; set; } = new HashSet<PagosVentas>();
         public virtual ICollection<CuotasVentas> Cuotas { get; set; } = new HashSet<CuotasVentas>();
-        public virtual EstadosVentas Estado { get; set; } = new();
 
-    }   
+
+    }
 }

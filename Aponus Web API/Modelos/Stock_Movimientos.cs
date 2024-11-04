@@ -23,11 +23,8 @@ namespace Aponus_Web_API.Modelos
         [Column("FECHA_HORA_ULTIMA_MODIFICACION")]
         public DateTime? FechaHoraUltimaModificacion { get; set; }
 
-        [ForeignKey("ID_PROVEEDOR_ORIGEN")]        
-        public int IdProveedorOrigen { get; set; }        
-
-        [ForeignKey("ID_PROVEEDOR_DESTINO")]
-        public int IdProveedorDestino { get; set; }
+        [ForeignKey("ID_PROVEEDOR")]
+        public int IdProveedor { get; set; }
 
         [Column("ORIGEN")]
         public string? Origen { get; set; }
@@ -37,12 +34,11 @@ namespace Aponus_Web_API.Modelos
 
         [Column("TIPO")]
         public string? Tipo { get; set; }
-        
+
         [Column("ID_ESTADO_MOVIMIENTO")]
         public int IdEstadoMovimiento { get; set; } = 1;
 
-        public virtual Entidades? ProveedorOrigen { get; set; }
-        public virtual Entidades? ProveedorDestino { get; set; }
+        public virtual Entidades? Proveeedor { get; set; }
         public virtual EstadosMovimientosStock? estadoMovimiento { get; set; }
         public virtual ICollection<SuministrosMovimientosStock>? Suministros { get; set; }
 

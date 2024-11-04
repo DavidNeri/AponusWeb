@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Aponus_Web_API.Utilidades.Nombres_Geograficos;
+﻿using Aponus_Web_API.Utilidades.Nombres_Geograficos;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 
@@ -31,11 +31,11 @@ namespace Aponus_Web_API.Utilidades
 
                 return new ContentResult()
                 {
-                    Content= EX.InnerException?.Message ?? EX.Message,
-                    ContentType="application/json",
-                    StatusCode=400
+                    Content = EX.InnerException?.Message ?? EX.Message,
+                    ContentType = "application/json",
+                    StatusCode = 400
                 };
-            }         
+            }
 
         }
 
@@ -51,7 +51,7 @@ namespace Aponus_Web_API.Utilidades
             var Respuesta = JsonConvert.DeserializeObject<StatesResponse>(Resultado);
 
             List<Estados_Provincias>? Estados_Provincias = Respuesta?.Geonames;
-            
+
             Estados_Provincias?
                 .ForEach(x => x.ToponymName = x.ToponymName
                 .Replace(" Province", "")
@@ -61,11 +61,11 @@ namespace Aponus_Web_API.Utilidades
                 .Replace(" Prefecture", "")
                 .Replace(" Territory", "")
                 .Trim());
-            
+
             return new JsonResult(Estados_Provincias);
         }
 
-        internal async Task<IActionResult> ListarCiudades(string CountryId, string Estado_Provincia_Id )
+        internal async Task<IActionResult> ListarCiudades(string CountryId, string Estado_Provincia_Id)
         {
             var URL = $"http://api.geonames.org/searchJSON?&adminCode1={Estado_Provincia_Id}&country={CountryId}&username={usuario}";
             HttpResponseMessage RespuestaHttp = await _httpClient.GetAsync(URL);

@@ -17,7 +17,7 @@ namespace Aponus_Web_API.Modelos
         [Column("ID_ESTADO")]
         public int IdEstado { get; set; }
 
-        public  virtual ICollection<CuotasVentas> IdEstadoCuotaNavigation { get; set; } = new HashSet<CuotasVentas>();
+        public virtual ICollection<CuotasVentas> IdEstadoCuotaNavigation { get; set; } = new HashSet<CuotasVentas>();
 
 
     }

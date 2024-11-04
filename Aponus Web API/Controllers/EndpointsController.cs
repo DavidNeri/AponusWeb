@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing.Patterns;
-using System.ComponentModel;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -12,12 +10,12 @@ namespace Aponus_Web_API.Controllers
 
         public EndpointsController(EndpointDataSource endpointDataSource)
         {
-            _endpointDataSource = endpointDataSource;   
+            _endpointDataSource = endpointDataSource;
         }
 
         [HttpGet]
         [Route("Get")]
-        public IEnumerable<Object>Get()
+        public IEnumerable<Object> Get()
         {
             var Endpoints = _endpointDataSource.Endpoints;
 
@@ -37,8 +35,8 @@ namespace Aponus_Web_API.Controllers
                 };
                 return null;
             }).Where(e => e != null);
-            return ListaEndPoints;  
-                
+            return ListaEndPoints;
+
         }
 
     }

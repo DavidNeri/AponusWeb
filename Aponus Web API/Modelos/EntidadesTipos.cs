@@ -8,7 +8,7 @@ namespace Aponus_Web_API.Modelos
         [Key]
         [Column("ID_TIPO")]
         public int IdTipo { get; set; }
-        
+
         [Column("NOMBRE")]
         public string NombreTipo { get; set; } = string.Empty;
 

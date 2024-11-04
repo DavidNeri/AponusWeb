@@ -26,11 +26,11 @@ namespace Aponus_Web_API.Modelos
         public int IdEstadoCuota { get; set; }
 
         [Column("FECHA_PAGO")]
-        public DateTime? FechaPago { get; set; }        
+        public DateTime? FechaPago { get; set; }
 
         public virtual Ventas Venta { get; set; } = new Ventas();
 
-        public virtual EstadosCuotasVentas EstadoCuota { get; set; }  = new EstadosCuotasVentas();
+        public virtual EstadosCuotasVentas EstadoCuota { get; set; } = new EstadosCuotasVentas();
 
     }
 }

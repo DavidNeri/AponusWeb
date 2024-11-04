@@ -1,7 +1,6 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
-using Aponus_Web_API.Data_Transfer_objects;
-using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -16,7 +15,7 @@ namespace Aponus_Web_API.Negocio
         private readonly AD_Stocks AdStocks;
         private readonly BS_Entidades BsEntidades;
 
-        public  BS_Stocks(AponusContext _aponusContext, AD_Stocks adStocks, AD_Componentes componentesProductos, BS_Entidades bsEntidades)
+        public BS_Stocks(AponusContext _aponusContext, AD_Stocks adStocks, AD_Componentes componentesProductos, BS_Entidades bsEntidades)
         {
             AponusDbContext = _aponusContext;
             AdStocks = adStocks;
@@ -47,7 +46,7 @@ namespace Aponus_Web_API.Negocio
 
                 Lista.ForEach(tpd => tpd.DescripcionProductos.ForEach(dpp =>
                 {
-                    dpp.Columnas = new UTL_Productos().ObtenerColumnas(dpp.Productos,null);
+                    dpp.Columnas = new UTL_Productos().ObtenerColumnas(dpp.Productos, null);
                 }));
 
 
@@ -97,13 +96,13 @@ namespace Aponus_Web_API.Negocio
         }
         internal IActionResult ProcesarDatosMovimiento(DTOMovimientosStock Movimiento)
         {
-            bool Rollback = false;            
-         
+            bool Rollback = false;
+
             using (var transaccion = AponusDbContext.Database.BeginTransaction())
             {
                 foreach (DTOSuministrosMovimientosStock suministro in Movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
                 {
-                    if (!AdStocks.ActualizarStockInsumo(AponusDbContext,new DTOStockUpdate()
+                    if (!AdStocks.ActualizarStockInsumo(AponusDbContext, new DTOStockUpdate()
                     {
                         Id = suministro.IdSuministro,
                         Origen = Movimiento.Origen,
@@ -118,8 +117,7 @@ namespace Aponus_Web_API.Negocio
                     CreadoUsuario = Movimiento.UsuarioCreacion ?? "ERROR",
                     ModificadoUsuario = Movimiento.UsuarioModificacion,
                     FechaHoraCreado = UTL_Fechas.ObtenerFechaHora(),
-                    IdProveedorOrigen = Movimiento.IdProveedorOrigen ?? 0,
-                    IdProveedorDestino = Movimiento.IdProveedorDestino ?? 0,
+                    IdProveedor = Movimiento.IdProveedorDestino ?? 0,
                     Tipo = Movimiento.Tipo,
                     Destino = !string.IsNullOrEmpty(Movimiento.Destino) ? Movimiento.Destino.ToUpper() : "",
                     Origen = !string.IsNullOrEmpty(Movimiento.Origen) ? Movimiento.Origen.ToUpper() : "",
@@ -132,25 +130,25 @@ namespace Aponus_Web_API.Negocio
                     {
                         IdMovimiento = IdMovimiento ?? 0,
                         Cantidad = Convert.ToDecimal(x.Cantidad),
-                        IdSuministro = x.IdSuministro,                           
+                        IdSuministro = x.IdSuministro,
 
                     })
                     .ToList();
 
                 if (!AdStocks.GuardarSuministrosMovimiento(AponusDbContext, Suministros)) Rollback = true;
 
-                //Obtener el Nombre del IdProveedor de Destino
-                IActionResult Proveedores =  BsEntidades.Listar(Movimiento.IdProveedorDestino ?? 0, 0, 0);
+                //Obtener el Nombre del IdProveedorNavigation de Destino
+                IActionResult Proveedores = BsEntidades.MapeoEntidadesDTO(Movimiento.IdProveedorDestino ?? 0, 0, 0);
                 DTOEntidades? proveedor = new DTOEntidades();
 
-                if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value!=null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)
+                if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value != null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)
                 {
                     proveedor = ProveedoresList.FirstOrDefault(x => x.IdEntidad == Movimiento.IdProveedorDestino);
-                        
+
                 }
                 string? NombreCompletoProveedor = proveedor?.Apellido + "_" + proveedor?.Nombre;
-                string? NombreClave = proveedor?.NombreClave; 
-                //Obtener el Nombre del IdProveedor de Destino
+                string? NombreClave = proveedor?.NombreClave;
+                //Obtener el Nombre del Proveedora de Destino
 
                 if (Movimiento.Archivos != null && Movimiento.Archivos.Count > 0)
                 {
@@ -163,7 +161,7 @@ namespace Aponus_Web_API.Negocio
                     DatosArchivosMovimiento.ForEach(x => x.IdMovimiento = IdMovimiento ?? 0);
                     if (!AdStocks.GuardarDatosArchivosMovimiento(AponusDbContext, DatosArchivosMovimiento)) Rollback = true;
 
-                }                    
+                }
 
                 if (Rollback)
                 {
@@ -174,17 +172,18 @@ namespace Aponus_Web_API.Negocio
                         ContentType = "Aplication/Json",
                         StatusCode = 500,
                     };
-                }else
+                }
+                else
                 {
                     AponusDbContext.Database.CommitTransaction();
                     AponusDbContext.SaveChanges();
                     AponusDbContext.Dispose();
                     return new StatusCodeResult(200);
-                }              
-                    
+                }
+
             }
         }
-        public  class StockProductos
+        public class StockProductos
         {
             private readonly AD_Componentes _componentesProductos;
             private readonly AponusContext AponusDbContext;
@@ -193,7 +192,7 @@ namespace Aponus_Web_API.Negocio
             {
                 _componentesProductos = componentesProductos;
                 AponusDbContext = _aponusDbContext;
-                AdStocks = _adStocks;   
+                AdStocks = _adStocks;
             }
             internal async Task<IActionResult> Actualizar(DTOStockProductos DTOStockProducto)
             {
@@ -232,18 +231,17 @@ namespace Aponus_Web_API.Negocio
                 }
             }
             internal async Task<IActionResult> Incrementar(DTOProducto Producto)
-            {      
+            {
 
                 //Obtener Componentes Producto
 
-                List<Productos_Componentes>? Componentes = !string.IsNullOrEmpty(Producto.IdProducto) ? 
+                List<Productos_Componentes>? Componentes = !string.IsNullOrEmpty(Producto.IdProducto) ?
                     await _componentesProductos.ObtenerComponentes(Producto.IdProducto) : null;
-                
+
 
                 //IdDescripcion y Tipos de Almacenamiento/Fraccionamiento
-                JsonResult JsonNombresComponentes = _componentesProductos.ListarNombresComponentes();
-                var stringJsonNombresComponentes = Newtonsoft.Json.JsonConvert.SerializeObject(JsonNombresComponentes.Value);
-                List<DTODescripcionComponentes> ListaDescripcionComponentes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<DTODescripcionComponentes>>(stringJsonNombresComponentes) ?? new List<DTODescripcionComponentes>();
+                List<ComponentesDescripcion>? ComponentesDetalle = _componentesProductos.ListarNombresComponentes();
+
                 //IdDescripcion y Tipos de Almacenamiento/Fraccionamiento
 
                 //IdDescripcion por cada Componente
@@ -264,8 +262,8 @@ namespace Aponus_Web_API.Negocio
                         Modelos.StockInsumos StockDisponibleComponente = AdStocks.BuscarInsumo(Componente.IdComponente) ?? new Modelos.StockInsumos();
 
                         int IdDescripcionComponente = ListaDetallesComponentes.Where(x => x.Item1.Equals(Componente.IdComponente)).Select(x => x.Item2).First();
-                        string TipoAlmacenamiento = ListaDescripcionComponentes?.Where(x => x.IdDescripcion == IdDescripcionComponente).Select(x => x.IdAlmacenamiento).First() ?? "";
-                        string? TipoFraccionamiento = ListaDescripcionComponentes?.Where(x => x.IdDescripcion == IdDescripcionComponente).Select(x => x.IdFraccionamiento).First();
+                        string TipoAlmacenamiento = ComponentesDetalle?.Where(x => x.IdDescripcion == IdDescripcionComponente).Select(x => x.IdAlmacenamiento).First() ?? "";
+                        string? TipoFraccionamiento = ComponentesDetalle?.Where(x => x.IdDescripcion == IdDescripcionComponente).Select(x => x.IdFraccionamiento).First();
 
                         //Verifico si hay diferencia entre entre el tipo de Almacenamiento y el tipo de fraccionamienrto
                         if (TipoFraccionamiento != null && TipoAlmacenamiento != TipoFraccionamiento)
@@ -353,7 +351,7 @@ namespace Aponus_Web_API.Negocio
                             }
                         }
 
-                     
+
                         bool NoRoolBack = false;
 
                         using (var transaccion = AponusDbContext.Database.BeginTransaction())
@@ -401,8 +399,8 @@ namespace Aponus_Web_API.Negocio
                         ContentType = "application/json",
                         StatusCode = 400
                     };
-                } 
-            }            
+                }
+            }
         }
 
         public class StockInsumos

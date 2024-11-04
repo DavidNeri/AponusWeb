@@ -1,8 +1,5 @@
-﻿using Aponus_Web_API.Modelos;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
@@ -11,7 +8,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         [JsonProperty(PropertyName = "idVenta", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdVenta { get; set; }
 
-        [Required(ErrorMessage ="El campo 'Cliente' es obligatorio"), JsonProperty(PropertyName = "idCliente", NullValueHandling = NullValueHandling.Ignore)]
+        [Required(ErrorMessage = "El campo 'Cliente' es obligatorio"), JsonProperty(PropertyName = "idCliente", NullValueHandling = NullValueHandling.Ignore)]
         public int IdCliente { get; set; }
 
         [JsonProperty(PropertyName = "fechaHora", NullValueHandling = NullValueHandling.Ignore)]
@@ -20,8 +17,8 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         [Required(ErrorMessage = "El campo 'Usuario' es obligatorio"), JsonProperty(PropertyName = "idUsuario", NullValueHandling = NullValueHandling.Ignore)]
         public string IdUsuario { get; set; } = string.Empty;
 
-        [JsonProperty(PropertyName = "total", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal Total { get; set; } = 0;
+        [JsonProperty(PropertyName = "montoTotal", NullValueHandling = NullValueHandling.Ignore)]
+        public decimal MontoTotal { get; set; } = 0;
 
         [JsonProperty(PropertyName = "saldoPendiente", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? SaldoPendiente { get; set; }
@@ -30,7 +27,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public int IdEstadoVenta { get; set; }
 
         [JsonProperty(PropertyName = "cliente", NullValueHandling = NullValueHandling.Ignore)]
-        public DTOEntidades? Cliente { get; set; } 
+        public DTOEntidades? Cliente { get; set; }
 
         [JsonProperty(PropertyName = "detallesVenta", NullValueHandling = NullValueHandling.Ignore)]
         public ICollection<DTOVentasDetalles>? DetallesVenta { get; set; }

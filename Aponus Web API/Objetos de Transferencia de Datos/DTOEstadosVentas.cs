@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {

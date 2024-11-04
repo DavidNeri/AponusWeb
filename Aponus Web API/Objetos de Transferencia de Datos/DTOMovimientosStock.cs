@@ -17,7 +17,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public DateTime? FechaHoraCreado { get; set; }
 
         [JsonProperty(PropertyName = "fechaHoraUltimaModificacion", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? FechaHoraUltimaModificacion{ get; set; }
+        public DateTime? FechaHoraUltimaModificacion { get; set; }
 
         [JsonProperty(PropertyName = "idProveedorOrigen", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdProveedorOrigen { get; set; }
@@ -32,7 +32,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public string? Destino { get; set; }
 
         [JsonProperty(PropertyName = "tipo", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Tipo{ get; set; }
+        public string? Tipo { get; set; }
 
         [JsonProperty(PropertyName = "proveedorDestino", NullValueHandling = NullValueHandling.Ignore)]
         public DTOEntidades? Proveedor { get; set; }

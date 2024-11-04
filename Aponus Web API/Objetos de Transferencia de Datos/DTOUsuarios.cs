@@ -1,17 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Newtonsoft.Json;
-using System.Text.Json.Serialization;
-using static NuGet.Client.ManagedCodeConventions;
+﻿using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Mapping
 {
     public class DTOUsuarios
     {
-        [JsonProperty(PropertyName ="usuario", NullValueHandling =NullValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "usuario", NullValueHandling = NullValueHandling.Ignore)]
         public string? Usuario { get; set; }
 
         [JsonProperty(PropertyName = "contraseña", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Contraseña{ get; set; }
+        public string? Contraseña { get; set; }
 
         [JsonProperty(PropertyName = "Correo", NullValueHandling = NullValueHandling.Ignore)]
         public string? Correo { get; set; }

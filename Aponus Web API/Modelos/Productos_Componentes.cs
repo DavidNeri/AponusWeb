@@ -1,11 +1,9 @@
-﻿using MessagePack;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Modelos
 {
     public class Productos_Componentes
-    {        
+    {
         public string IdProducto { get; set; } = string.Empty;
         public string IdComponente { get; set; } = string.Empty;
         public decimal? Cantidad { get; set; }

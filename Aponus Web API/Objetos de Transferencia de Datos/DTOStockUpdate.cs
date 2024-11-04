@@ -1,7 +1,6 @@
-﻿using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace Aponus_Web_API.Data_Transfer_objects
+namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
     public class DTOStockUpdate
     {
@@ -9,7 +8,7 @@ namespace Aponus_Web_API.Data_Transfer_objects
         public string? Id { get; set; }
 
         [JsonProperty(PropertyName = "idExistencia", NullValueHandling = NullValueHandling.Ignore)]
-        public string? IdExistencia { get; set; }       
+        public string? IdExistencia { get; set; }
 
         [JsonProperty(PropertyName = "idTipoExistencia", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdTipoExistencia { get; set; }
@@ -33,7 +32,7 @@ namespace Aponus_Web_API.Data_Transfer_objects
         public string? IdBulon { get; set; }
 
         [JsonProperty(PropertyName = "usuario", NullValueHandling = NullValueHandling.Ignore)]
-        public string?   Usuario { get; set; }
+        public string? Usuario { get; set; }
 
         [JsonProperty(PropertyName = "archivos", NullValueHandling = NullValueHandling.Ignore)]
         public List<IFormFile>? Archivos { get; set; }
@@ -42,10 +41,10 @@ namespace Aponus_Web_API.Data_Transfer_objects
         public int? IdProveedorOrigen { get; set; }
 
         [JsonProperty(PropertyName = "idEntidad", NullValueHandling = NullValueHandling.Ignore)]
-        public int? IdEntidad{ get; set; }
+        public int? IdEntidad { get; set; }
 
         [JsonProperty(PropertyName = "Suministros", NullValueHandling = NullValueHandling.Ignore)]
-        public List <DTOSuministrosMovimientosStock>? Suministros { get; set; }
+        public List<DTOSuministrosMovimientosStock>? Suministros { get; set; }
 
 
     }

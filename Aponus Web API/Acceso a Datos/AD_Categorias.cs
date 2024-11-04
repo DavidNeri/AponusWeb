@@ -1,7 +1,7 @@
-﻿using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using Aponus_Web_API.Modelos;
-using Microsoft.AspNetCore.Mvc;
+﻿using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Entity;
 
 namespace Aponus_Web_API.Acceso_a_Datos
 {
@@ -10,104 +10,107 @@ namespace Aponus_Web_API.Acceso_a_Datos
         private readonly AponusContext AponusDBContext;
         public AD_Categorias(AponusContext _AponusContext)
         {
-            AponusDBContext = _AponusContext;              
+            AponusDBContext = _AponusContext;
         }
-        public Productos Productos_Metodos()
+        public Productos MetodosProductos()
         {
             return new Productos(AponusDBContext);
         }
 
-        internal List<DTODescripciones> ListarDescripciones(string idTipo)
+        internal async Task<(List<ProductosDescripcion>? Listado, Exception? Error)> ListarDescripcionesProductos(string? idTipo)
         {
-            List<DTODescripciones> Descripciones = AponusDBContext.ProductosDescripcions
-                .Join(AponusDBContext.Producto_Tipo_Descripcion,
-                _Descripciones => _Descripciones.IdDescripcion, _Tipo => _Tipo.IdDescripcion,
-                (_Descripciones, _Tipo) => new {
-                    _idTipo = _Tipo.IdTipo,
-                    _Descripciones.IdDescripcion,
-                    _Descripciones.DescripcionProducto
-                })
-                .Where(Tipo => Tipo._idTipo == idTipo)
-                .Select(x => new DTODescripciones { IdDescripcion = x.IdDescripcion, Descripcion = x.DescripcionProducto })
-                .ToList();
-
-            return Descripciones;
-
-        }
-        internal async Task<IActionResult> NuevaDescripcion(ProductosDescripcion Categoria, string IdTipo)
-        {
-            using (var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
+            try
             {
-                try
-                {
-                    AponusDBContext.ProductosDescripcions.Add(new ProductosDescripcion
-                    {
-                        DescripcionProducto = Categoria.DescripcionProducto,
-                        IdEstadoNavigation  = await AponusDBContext.EstadosProductosDescripcione.FirstOrDefaultAsync(X => X.IdEstado == 1) ?? new EstadosProductosDescripciones()
-
-                    });
-
-                    await AponusDBContext.SaveChangesAsync();
-
-                    int? IdDescripcion = AponusDBContext.ProductosDescripcions
-                            .Where(x => x.DescripcionProducto == Categoria.DescripcionProducto)
-                            .Select(x => x.IdDescripcion).FirstOrDefault();
-
-                    if (IdDescripcion != null && !string.IsNullOrEmpty(IdTipo))
-                    {
-                        AponusDBContext.Producto_Tipo_Descripcion.Add(new Productos_Tipos_Descripcion()
+                return
+                    (
+                        await AponusDBContext.ProductosDescripcions.Join(AponusDBContext.Producto_Tipo_Descripcion,
+                        _Descripciones => _Descripciones.IdDescripcion,
+                        _Tipo => _Tipo.IdDescripcion,
+                        (_Descripciones, _Tipo) => new
                         {
-                            IdDescripcion = IdDescripcion,
-                            IdTipo = IdTipo,
-                            
-                            
-                        });
+                            _idTipo = _Tipo.IdTipo,
+                            _Descripciones.IdDescripcion,
+                            _Descripciones.DescripcionProducto
 
-                        AponusDBContext.SaveChanges();
-                        await transaccion.CommitAsync();
-                        return new StatusCodeResult(200);
-                    }
-                    else
-                    {
-                        await transaccion.RollbackAsync();
-                        return new ContentResult()
+                        }).Where(Tipo => Tipo._idTipo == idTipo || string.IsNullOrEmpty(idTipo))
+                        .Select(x => new ProductosDescripcion()
                         {
-                            Content="Error interno, no se aplicaron los cambios",
-                            ContentType="application/json",
-                            StatusCode=400
-                        };
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException?.Message ?? ex.Message,
-                        ContentType="application/json",
-                        StatusCode=400
-                    };
-                }
+                            IdDescripcion = x.IdDescripcion,
+                            DescripcionProducto = x.DescripcionProducto
+                        })
+                        .ToListAsync(),
+                        null
+                    );
+            }
+            catch (Exception error)
+            {
+                return (null, error);
             }
         }
-        internal void NuevoTipo(DTOCategorias NuevaCategoria)
-        {         
-                AponusDBContext.ProductosTipos.
-                Add(new ProductosTipo
+        internal async Task<(int? Resultado, Exception? Error)> AgregarDescripcionProducto(ProductosDescripcion Categoria, string IdTipo)
+        {
+            using var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
+            try
+            {
+                AponusDBContext.ProductosDescripcions.Add(new ProductosDescripcion
                 {
-                    IdTipo = NuevaCategoria.IdTipo ?? "",
-                    DescripcionTipo = NuevaCategoria.DescripcionTipo
+                    DescripcionProducto = Categoria.DescripcionProducto,
+                    IdEstadoNavigation = await AponusDBContext.EstadosProductosDescripcione.FirstOrDefaultAsync(X => X.IdEstado == 1) ?? new EstadosProductosDescripciones()
+
                 });
 
-                AponusDBContext.SaveChanges();
+                await AponusDBContext.SaveChangesAsync();
+
+                int? IdDescripcion = AponusDBContext.ProductosDescripcions
+                        .Where(x => x.DescripcionProducto == Categoria.DescripcionProducto)
+                        .Select(x => x.IdDescripcion).FirstOrDefault();
+
+                if (IdDescripcion != null && !string.IsNullOrEmpty(IdTipo))
+                {
+                    AponusDBContext.Producto_Tipo_Descripcion.Add(new Productos_Tipos_Descripcion()
+                    {
+                        IdDescripcion = IdDescripcion,
+                        IdTipo = IdTipo,
+                    });
+
+                    AponusDBContext.SaveChanges();
+                    await transaccion.CommitAsync();
+
+                    return (StatusCodes.Status200OK, null);
+                }
+                else
+                {
+                    await transaccion.RollbackAsync();
+                    return (null, new Exception("Error interno,no se aplicaron los cambios"));
+                }
+            }
+            catch (Exception error)
+            {
+                await transaccion.CommitAsync();
+                return (null, error);
+
+            }
+
         }
-        internal ProductosTipo? ObtenerTipo(ProductosTipo productosTipo)
+        internal void AgregarTipoProducto(DTOCategorias NuevaCategoria)
+        {
+            AponusDBContext.ProductosTipos.
+            Add(new ProductosTipo
+            {
+                IdTipo = NuevaCategoria.IdTipo ?? "",
+                DescripcionTipo = NuevaCategoria.DescripcionTipo
+            });
+
+            AponusDBContext.SaveChanges();
+        }
+        internal ProductosTipo? ObtenerTipo(string IdTipo)
         {
             ProductosTipo? TipoAnteriorExiste = AponusDBContext.ProductosTipos
-                .Where(T=>T.IdTipo==productosTipo.IdTipo)
-                .Select(x=>new ProductosTipo()
+                .Where(T => T.IdTipo.Equals(IdTipo))
+                .Select(x => new ProductosTipo()
                 {
-                    IdTipo=x.IdTipo,
-                    DescripcionTipo=x.DescripcionTipo,
+                    IdTipo = x.IdTipo,
+                    DescripcionTipo = x.DescripcionTipo,
                 }).FirstOrDefault();
 
             return TipoAnteriorExiste;
@@ -124,7 +127,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     TipoAnterior.IdTipo = actualizarCategorias.Nueva?.IdTipo ?? "";
                     AponusDBContext.SaveChanges();
                 }
-            }            
+            }
         }
         internal void ActualizarDescripcionProd(DTOActualizarCategorias actualizarCategorias)
         {
@@ -152,117 +155,54 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     RelacionAnterior.IdTipo = actualizarCategorias.Nueva.IdTipo ?? "";
                     AponusDBContext.SaveChanges();
                 }
-            }            
+            }
         }
-        internal IActionResult AgregarDescripcionCompoente(string descripcionComponente)
+        internal async Task<(int?, Exception?)> AgregarDescripcionCompoente(ComponentesDescripcion Componente)
         {
+
+            using var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
             try
             {
-                var Exists = AponusDBContext.ComponentesDescripcions.FirstOrDefault(x => x.Descripcion != null && x.Descripcion.Trim().ToUpper() == descripcionComponente.Trim().ToUpper()
-                );
+                var Exists = AponusDBContext.ComponentesDescripcions
+                    .FirstOrDefaultAsync(x => x.Descripcion != null && x.Descripcion.Equals(Componente.Descripcion));
+
                 if (Exists == null)
                 {
-                    AponusDBContext.ComponentesDescripcions.Add(new ComponentesDescripcion() { Descripcion = descripcionComponente.Trim().ToUpper(), });
-                    AponusDBContext.SaveChanges();
-                    return new StatusCodeResult(200);
+                    await AponusDBContext.ComponentesDescripcions.AddAsync(Componente);
+                    await AponusDBContext.SaveChangesAsync();
+                    await transaccion.CommitAsync();
+
+                    return (StatusCodes.Status200OK, null);
 
                 }
                 else
                 {
-                    return new ContentResult()
-                    {
-                        Content = "El nombre del componente ya existe",
-                        ContentType = "application/json",
-                        StatusCode = 400
-                    };
+                    return (null, new Exception("El nombre del componente ya existe"));
                 }
             }
-            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            catch (Exception error)
             {
-
-                if (ex.InnerException != null)
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-
-                    };
-                }
-                else
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-
-                    };
-                };
-            }catch(Exception ex) 
-            {
-                if (ex.InnerException != null)
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-
-                    };
-                }
-                else
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-
-                    };
-                };
+                return (null, error);
             }
         }
-        internal IActionResult ModificarDescripcionComponente(DTODescripcionComponentes descripcion)
+        internal async Task<(int? StatusCode, Exception? Error)> ModificarDescripcionComponente(ComponentesDescripcion descripcion)
         {
+            using var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
             try
             {
-                AponusDBContext.ComponentesDescripcions.Update(new ComponentesDescripcion()
-                {
-                    IdDescripcion = descripcion.IdDescripcion,
-                    Descripcion = descripcion.Descripcion.Trim().ToUpper(),
-                });
-                AponusDBContext.SaveChanges();
+                AponusDBContext.ComponentesDescripcions.Update(descripcion);
+                await AponusDBContext.SaveChangesAsync();
+                await transaccion.CommitAsync();
 
-                return new StatusCodeResult(200);
+                return (StatusCodes.Status200OK, null);
             }
-            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            catch (Exception error)
             {
-
-                if (ex.InnerException != null)
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.InnerException.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-
-                    };
-                }
-                else
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.Message,
-                        ContentType = "text/plain",
-                        StatusCode = 400,
-
-                    };
-                };
+                await transaccion.RollbackAsync();
+                return (null, error);
             }
-
         }
+
         public class Productos
         {
             private readonly AponusContext AponusDBContext;
@@ -272,43 +212,51 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 AponusDBContext = aponusDBContext;
             }
 
-            public IActionResult EliminarTipo(string IdTipo)
+            internal async Task<List<ProductosTipo>?> ListarTiposProductos()
             {
+                List<ProductosTipo>? TipoProductos = await AponusDBContext.ProductosTipos
+                   .OrderBy(x => x.DescripcionTipo)
+                   .Where(x => x.IdEstado != 0)
+                   .Select(x => new ProductosTipo()
+                   {
+                       IdTipo = x.IdTipo,
+                       DescripcionTipo = x.DescripcionTipo,
+                       IdEstado = x.IdEstado,
+                   })
+                   .ToListAsync();
+
+                return TipoProductos;
+            }
+
+            public async Task<(int? resultado, Exception? error)> DesactivarTipoProductoyRelaciones(ProductosTipo TipoProducto)
+            {
+                var Transaccion = await AponusDBContext.Database.BeginTransactionAsync();
                 try
                 {
-                    //Busar el Id Tipo
-                    ProductosTipo? TipoProdEliminar = AponusDBContext.ProductosTipos
-                        .FirstOrDefault(x => x.IdTipo == IdTipo);
-
-                    //Cambiar el estado del  Id Tipo a INACTIVO
-                    if (TipoProdEliminar != null)
-                    {
-                        TipoProdEliminar.IdEstado = 0;
-                        AponusDBContext.ProductosTipos.Update(TipoProdEliminar);
-                    }
+                    AponusDBContext.ProductosTipos.Update(TipoProducto);
 
                     //Buscar los Id Descripcion relacionados al IdDescripcion
-                    var IdDescripcionesEliminar = AponusDBContext.Producto_Tipo_Descripcion
-                        .Where(x => x.IdTipo.Equals(IdTipo))
+                    var IdDescripcionesEliminar = await AponusDBContext.Producto_Tipo_Descripcion
+                        .Where(x => x.IdTipo.Equals(TipoProducto.IdTipo))
                         .Select(x => x.IdDescripcion)
-                        .ToList();
+                        .ToListAsync();
 
                     //Con los Id Descripcion buscar la Lista de 'DescrpcionTìpo' relacionados (al IdDescripcion)
-                    List<ProductosDescripcion>? DescripcionProdEliminar = AponusDBContext.ProductosDescripcions
+                    List<ProductosDescripcion>? DescripcionProdEliminar = await AponusDBContext.ProductosDescripcions
                         .Where(x => IdDescripcionesEliminar.Contains(x.IdDescripcion))
-                        .ToList();
+                        .ToListAsync();
 
                     if (DescripcionProdEliminar != null)
                     {
                         DescripcionProdEliminar?.ForEach(x => x.IdEstado = 0);
-                        AponusDBContext.ProductosDescripcions.UpdateRange(DescripcionProdEliminar  ?? Enumerable.Empty<ProductosDescripcion>());
+                        AponusDBContext.ProductosDescripcions.UpdateRange(DescripcionProdEliminar ?? Enumerable.Empty<ProductosDescripcion>());
 
                         if (DescripcionProdEliminar != null)
                         {
-                            List<(string IdTIpo, int IdDescripcion)> ListaCategoriasProductos = DescripcionProdEliminar.Select(x => (IdTipo, x.IdDescripcion)).ToList();
+                            List<(string IdTIpo, int IdDescripcion)> ListaCategoriasProductos = DescripcionProdEliminar.Select(x => (TipoProducto.IdTipo, x.IdDescripcion)).ToList();
 
                             //Busco Los PRODUCTOS que pertenicen a esas duplas IdDescripcion/IDdescripcion
-                            List<Producto>? Productos = AponusDBContext.Productos
+                            List<Producto>? Productos = await AponusDBContext.Productos
                                 .Where(x => ListaCategoriasProductos.Any(Lista => Lista.IdTIpo == x.IdTipo && Lista.IdDescripcion == x.IdDescripcion))
                                 .Select(P => new Producto()
                                 {
@@ -323,137 +271,58 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                     PrecioLista = P.PrecioLista,
                                     PorcentajeGanancia = P.PorcentajeGanancia,
 
-                                }).ToList();
+                                }).ToListAsync();
 
                             //Cambio el estado a INACTIVO
                             AponusDBContext.Productos.UpdateRange(Productos);
+                            await AponusDBContext.SaveChangesAsync();
+                            return (StatusCodes.Status200OK, null);
                         }
                     }
-
-                    //Guardo los cambios en la DB
-                    using (var Transaccion = AponusDBContext.Database.BeginTransaction())
-                    {
-                        try
-                        {
-                            AponusDBContext.SaveChanges();
-                            Transaccion.Commit();
-                            return new StatusCodeResult(200);
-                        }
-                        catch (Exception ex)
-                        {
-                            string? ContenidoSalida = "No se aplicaron los cambios:\n";
-                            Transaccion.Rollback();
-
-                            ContentResult Salida = new ContentResult()
-                            {
-                                ContentType = "application/json",
-                                StatusCode = 400,
-                            };
-
-                            ContenidoSalida = ex.InnerException?.Message != null ? ContenidoSalida.Concat(ex.InnerException.Message).ToString() : ContenidoSalida.Concat(ex.Message).ToString();
-                            Salida.Content = ContenidoSalida;
-
-                            return Salida;
-                        }
-                    }
+                    return (null, null);
                 }
-                catch (Exception ex)
+                catch (Exception error)
                 {
-
-                    string? ContenidoSalida = "No se aplicaron los cambios:\n";
-
-                    ContentResult Salida = new ContentResult()
-                    {
-                        ContentType = "application/json",
-                        StatusCode = 400,
-                    };
-
-                    ContenidoSalida = ex.InnerException?.Message != null ? ContenidoSalida.Concat(ex.InnerException.Message).ToString() : ContenidoSalida.Concat(ex.Message).ToString();
-                    Salida.Content = ContenidoSalida;
-
-                    return Salida;
+                    await Transaccion.RollbackAsync();
+                    return (null, error);
                 }
-
             }
-            internal IActionResult EliminarDescripcion(int IdDescripcion)
+            internal async Task<(int? StatusCode, Exception? Error)> DesactivarDescripcionProductoyRelaciones(ProductosDescripcion Descripcion)
             {
+                using var Transaccion = await AponusDBContext.Database.BeginTransactionAsync();
                 try
                 {
-                    //Busar el IdDescripcion
-                    ProductosDescripcion? IdDescripcionEliminar = AponusDBContext.ProductosDescripcions
-                        .FirstOrDefault(x => x.IdDescripcion == IdDescripcion);
-
-                    //Cambiar el estado del IdDescripcion INACTIVO
-                    if (IdDescripcionEliminar != null)
-                    {
-                        IdDescripcionEliminar.IdEstado = 0;
-                        AponusDBContext.ProductosDescripcions.Update(IdDescripcionEliminar);
-
-                        //Busco Los PRODUCTOS relacioandos 
-                        List<Producto>? Productos = AponusDBContext.Productos
-                            .Where(x =>x.IdDescripcion == IdDescripcion)
-                            .Select(P => new Producto()
-                            {
-                                Cantidad = P.Cantidad,
-                                IdDescripcion = P.IdDescripcion,
-                                IdEstado = 0,
-                                IdTipo = P.IdTipo,
-                                DiametroNominal = P.DiametroNominal,
-                                IdProducto = P.IdProducto,
-                                PrecioFinal = P.PrecioFinal,
-                                Tolerancia = P.Tolerancia,
-                                PrecioLista = P.PrecioLista,
-                                PorcentajeGanancia = P.PorcentajeGanancia,
-
-                            }).ToList();
-
-                        // Cambio el estado de los PRODUCTOS a INACTIVO
-                        if(Productos.Count>0)AponusDBContext.Productos.UpdateRange(Productos) ;
-
-                    }
-
-                    //Guardo los cambios en la DB
-                    using (var Transaccion = AponusDBContext.Database.BeginTransaction())
-                    {
-                        try
+                    //Busco Los PRODUCTOS relacioandos 
+                    List<Producto> Productos = await AponusDBContext.Productos
+                        .Where(x => x.IdDescripcion == Descripcion.IdDescripcion)
+                        .Select(P => new Producto()
                         {
-                            AponusDBContext.SaveChanges();
-                            Transaccion.Commit();
-                            return new StatusCodeResult(200);
-                        }
-                        catch (Exception ex)
-                        {
-                            string? ContenidoSalida = "No se aplicaron los cambios:\n";
-                            Transaccion.Rollback();
+                            Cantidad = P.Cantidad,
+                            IdDescripcion = P.IdDescripcion,
+                            IdEstado = 0,
+                            IdTipo = P.IdTipo,
+                            DiametroNominal = P.DiametroNominal,
+                            IdProducto = P.IdProducto,
+                            PrecioFinal = P.PrecioFinal,
+                            Tolerancia = P.Tolerancia,
+                            PrecioLista = P.PrecioLista,
+                            PorcentajeGanancia = P.PorcentajeGanancia,
 
-                            ContentResult Salida = new ContentResult()
-                            {
-                                ContentType = "application/json",
-                                StatusCode = 400,
-                            };
+                        }).ToListAsync();
 
-                            ContenidoSalida = ex.InnerException?.Message != null ? ContenidoSalida.Concat(ex.InnerException.Message).ToString() : ContenidoSalida.Concat(ex.Message).ToString();
-                            Salida.Content = ContenidoSalida;
+                    // Cambio el estado de los PRODUCTOS a INACTIVO
+                    AponusDBContext.ProductosDescripcions.Update(Descripcion);
+                    if (Productos.Any()) AponusDBContext.Productos.UpdateRange(Productos);
 
-                            return Salida;
-                        }
-                    }
+                    await AponusDBContext.SaveChangesAsync();
+                    await Transaccion.CommitAsync();
+
+                    return (StatusCodes.Status200OK, null);
                 }
-                catch (Exception ex)
+                catch (Exception error)
                 {
-
-                    string? ContenidoSalida = "No se aplicaron los cambios:\n";
-
-                    ContentResult Salida = new ContentResult()
-                    {
-                        ContentType = "application/json",
-                        StatusCode = 400,
-                    };
-
-                    ContenidoSalida = ex.InnerException?.Message != null ? ContenidoSalida.Concat(ex.InnerException.Message).ToString() : ContenidoSalida.Concat(ex.Message).ToString();
-                    Salida.Content = ContenidoSalida;
-
-                    return Salida;
+                    await Transaccion.RollbackAsync();
+                    return (null, error);
                 }
             }
         }

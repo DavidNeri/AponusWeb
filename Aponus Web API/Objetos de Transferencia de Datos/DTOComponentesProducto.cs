@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Aponus_Web_API.Data_Transfer_objects
+namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
     public class DTOComponentesProducto
     {
@@ -18,7 +18,7 @@ namespace Aponus_Web_API.Data_Transfer_objects
 
         [JsonProperty(PropertyName = "largo", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? Largo { get; set; }
-        
+
 
     }
 }

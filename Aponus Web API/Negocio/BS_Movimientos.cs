@@ -1,7 +1,6 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
-using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Modelos;
-using Aponus_Web_API.Utilidades;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,7 @@ namespace Aponus_Web_API.Negocio
     public class BS_Movimientos
     {
         private readonly BS_Stocks BsStocks;
-        private readonly AD_Stocks _stocks; 
+        private readonly AD_Stocks _stocks;
         private readonly AponusContext AponusDbContext;
         private readonly AD_Movimientos _movimientosStock;
         private readonly UTL_Suministros _suministros;
@@ -34,7 +33,7 @@ namespace Aponus_Web_API.Negocio
         {
             try
             {
-                List<StockInsumos> Insumos = new();                
+                List<StockInsumos> Insumos = new();
 
                 foreach (DTOSuministrosMovimientosStock DTOSuministro in DTOMovimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
                 {
@@ -58,7 +57,7 @@ namespace Aponus_Web_API.Negocio
             {
                 return new ContentResult()
                 {
-                    Content =  ex.InnerException?.Message ?? ex.Message,
+                    Content = ex.InnerException?.Message ?? ex.Message,
                     ContentType = "application/json",
                     StatusCode = 400,
                 };
@@ -70,7 +69,7 @@ namespace Aponus_Web_API.Negocio
             try
             {
                 _movimientosStock.Actualizar(ActualizacionMovimiento);
-                
+
                 return new StatusCodeResult(200);
             }
             catch (Exception)
@@ -78,15 +77,15 @@ namespace Aponus_Web_API.Negocio
 
                 return new ContentResult()
                 {
-                    Content="Error interno, no se aplicaron los cambios",
-                    ContentType= "application/json",
-                    StatusCode=400
+                    Content = "Error interno, no se aplicaron los cambios",
+                    ContentType = "application/json",
+                    StatusCode = 400
                 };
             }
 
         }
 
-        internal async Task<IActionResult> Listar(UTL_Movimientos? Filtros)
+        internal async Task<IActionResult> Listar(UTL_FiltrosMovimientos? Filtros)
         {
             List<DTOMovimientosStock> ListaMovimientos = await _movimientosStock.Listar(Filtros);
 
@@ -144,11 +143,11 @@ namespace Aponus_Web_API.Negocio
 
 
             suministros?.ForEach(x => x.IdMovimiento = Movimiento.IdMovimiento ?? -1);
-            
-          
+
+
             using (var transaccion = AponusDbContext.Database.BeginTransaction())
             {
-                if (suministros != null && _stocks.GuardarSuministrosMovimiento(AponusDbContext, suministros )) RollBack = true;
+                if (suministros != null && _stocks.GuardarSuministrosMovimiento(AponusDbContext, suministros)) RollBack = true;
                 if (!_movimientosStock.RegistrarModificacion(AponusDbContext, Movimiento)) RollBack = true;
 
                 if (RollBack)
@@ -156,26 +155,26 @@ namespace Aponus_Web_API.Negocio
                     transaccion.Rollback();
                     return new ContentResult()
                     {
-                        Content="Error interno, no se aplicaron los cambios",
-                        ContentType ="application/json",
+                        Content = "Error interno, no se aplicaron los cambios",
+                        ContentType = "application/json",
                         StatusCode = 400,
                     };
                 }
                 else
                 {
                     AponusDbContext.Database.CommitTransaction();
-                    AponusDbContext.SaveChanges(); 
+                    AponusDbContext.SaveChanges();
                     return new StatusCodeResult(200);
                 }
             }
-            
+
 
         }
 
         internal IActionResult Eliminar(int IdMovimiento)
         {
             bool RollBack = false;
-         
+
             using (var transaction = AponusDbContext.Database.BeginTransaction())
             {
                 if (!_movimientosStock.Eliminar(AponusDbContext, IdMovimiento)) RollBack = true;
@@ -185,18 +184,19 @@ namespace Aponus_Web_API.Negocio
                     transaction.Rollback();
                     return new ContentResult()
                     {
-                        Content="Error interno, no se aplicaron los cambios",
-                        ContentType="application/json",
-                        StatusCode=400
+                        Content = "Error interno, no se aplicaron los cambios",
+                        ContentType = "application/json",
+                        StatusCode = 400
                     };
-                }else
+                }
+                else
                 {
                     transaction.Commit();
                     AponusDbContext.SaveChanges();
-                    return new StatusCodeResult(200);       
+                    return new StatusCodeResult(200);
                 }
             }
-            
+
         }
 
         public Archivos ArchivosMovimientos()
@@ -226,20 +226,20 @@ namespace Aponus_Web_API.Negocio
             internal async Task<IActionResult> Agregar(DTOMovimientosStock ArchivosMovimiento)
             {
 
-               
-                    //Obtener los datos completos del movimiento
+
+                //Obtener los datos completos del movimiento
                 DTOMovimientosStock? DatosMovimiento = await _movimientosStock.ObtenerDatosMovimiento(ArchivosMovimiento.IdMovimiento ?? -1);
                 List<DTOEntidades>? Proveedores = new List<DTOEntidades>();
 
                 if (DatosMovimiento != null)
                 {
-                    IActionResult ProveedoresActionResult = BsEntidades.Listar(ArchivosMovimiento.IdProveedorDestino ?? 0 , 0, 0);
+                    IActionResult ProveedoresActionResult = BsEntidades.MapeoEntidadesDTO(ArchivosMovimiento.IdProveedorDestino ?? 0, 0, 0);
 
                     if (ProveedoresActionResult is JsonResult jsonProveedores && jsonProveedores.Value != null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)
                     {
                         DTOEntidades? proveedor = ProveedoresList
                             .Where(x => x.IdEntidad == ArchivosMovimiento.IdProveedorDestino)
-                            .Select(x=> new DTOEntidades()
+                            .Select(x => new DTOEntidades()
                             {
                                 Apellido = x.Apellido,
                                 Nombre = x.Nombre,
@@ -253,7 +253,7 @@ namespace Aponus_Web_API.Negocio
                             List<ArchivosMovimientosStock> DatosArchivos = new UTL_Cloudinary().SubirArchivosMovimiento(ArchivosMovimiento.Archivos,
                                 !string.IsNullOrEmpty(proveedor?.NombreClave) ? proveedor.NombreClave : proveedor?.Apellido + "_" + proveedor?.Nombre);
 
-                            DatosArchivos.ForEach(x => x.IdMovimiento = ArchivosMovimiento.IdMovimiento ?? 0) ;
+                            DatosArchivos.ForEach(x => x.IdMovimiento = ArchivosMovimiento.IdMovimiento ?? 0);
 
                             //ProcesarDatos info Cloudiary
                             using (var transacccion = AponusDbContext.Database.BeginTransaction())
@@ -296,7 +296,7 @@ namespace Aponus_Web_API.Negocio
                     {
                         return new ContentResult()
                         {
-                            Content = "No se encontró el IdProveedor",
+                            Content = "No se encontró el IdProveedorNavigation",
                             ContentType = "application/json",
                             StatusCode = 400,
                         };
@@ -311,12 +311,12 @@ namespace Aponus_Web_API.Negocio
                         StatusCode = 400,
                     };
                 }
-                
+
             }
 
             internal IActionResult Eliminar(DTOMovimientosStock Movimiento)
             {
-           
+
                 var ArchivosMovimientos = _movimientosStock.Archivos();
 
                 bool Rollback = false;
@@ -327,10 +327,10 @@ namespace Aponus_Web_API.Negocio
                     {
                         try
                         {
-                            if (!ArchivosMovimientos.Eliminar(AponusDbContext, Movimiento?.IdMovimiento ?? -1, Movimiento?.DatosArchivos?.Select(x=>x.NombreArchivo ?? "").First() ?? "")) Rollback = true;
+                            if (!ArchivosMovimientos.Eliminar(AponusDbContext, Movimiento?.IdMovimiento ?? -1, Movimiento?.DatosArchivos?.Select(x => x.NombreArchivo ?? "").First() ?? "")) Rollback = true;
                             if (!_movimientosStock.RegistrarModificacion(AponusDbContext, Movimiento ?? new DTOMovimientosStock())) Rollback = true;
 
-                                
+
                             if (Rollback)
                             {
                                 transaccion.Rollback();
@@ -366,7 +366,7 @@ namespace Aponus_Web_API.Negocio
                 {
                     return new ContentResult()
                     {
-                        Content = "Faltan los archivos a Eliminar",
+                        Content = "Faltan los archivos a ValidarCategoria",
                         ContentType = "application/json",
                         StatusCode = 400,
                     };
@@ -394,30 +394,30 @@ namespace Aponus_Web_API.Negocio
                 string insert = @"INSERT INTO ""ESTADOS_MOVIMIENTOS_STOCK"" (""DESCRIPCION"") VALUES (@DESCRIPCION)";
 
                 try
-                {                   
+                {
                     var Existe = AponusDbContext.EstadoMovimientosStock.Find(estado.idEstadoMovimiento);
 
                     if (Existe != null)
                     {
                         Existe.IdEstado = estado.IdEstado ?? Existe.IdEstado;
                         Existe.Descripcion = estado.Descripcion ?? Existe.Descripcion;
-                        Existe.IdEstadoMovimiento = estado.idEstadoMovimiento ?? Existe.IdEstadoMovimiento;   
+                        Existe.IdEstadoMovimiento = estado.idEstadoMovimiento ?? Existe.IdEstadoMovimiento;
                         AponusDbContext.EstadoMovimientosStock.Update(Existe);
 
                         await AponusDbContext.SaveChangesAsync();
-                            
+
                         return new StatusCodeResult(200);
 
                     }
                     else
                     {
-                        await AponusDbContext.Database.ExecuteSqlRawAsync(insert,new NpgsqlParameter("@DESCRIPCION", estado.Descripcion)
+                        await AponusDbContext.Database.ExecuteSqlRawAsync(insert, new NpgsqlParameter("@DESCRIPCION", estado.Descripcion)
                         {
-                            NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Varchar 
+                            NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Varchar
                         });
 
                         return new StatusCodeResult(200);
-                    }                    
+                    }
                 }
                 catch (Exception ex)
                 {

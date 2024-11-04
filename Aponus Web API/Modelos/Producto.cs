@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Aponus_Web_API.Modelos;
 
@@ -30,7 +27,7 @@ public partial class Producto
     [ForeignKey("ID_ESTADO")]
     public int IdEstado { get; set; }
 
-    public virtual ProductosDescripcion IdDescripcionNavigation { get; set; }  = null!;
+    public virtual ProductosDescripcion IdDescripcionNavigation { get; set; } = null!;
     public virtual ProductosTipo IdTipoNavigation { get; set; } = null!;
     public virtual EstadosProductos IdEstadoNavigation { get; set; } = new EstadosProductos();
     public virtual ICollection<VentasDetalles> Ventas { get; set; } = default!;

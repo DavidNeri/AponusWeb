@@ -1,17 +1,17 @@
-﻿using Aponus_Web_API.Modelos;
+﻿using Aponus_Web_API.Acceso_a_Datos;
+using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Aponus_Web_API.Data_Transfer_objects;
-using Aponus_Web_API.Acceso_a_Datos;
 using System.Reflection;
 
 namespace Aponus_Web_API.Negocio
 {
-    public class BS_Productos 
+    public class BS_Productos
     {
         private readonly AD_Componentes _componentesProductos;
         private readonly AD_Productos AdProductos;
-        public BS_Productos( AD_Componentes componentesProductos, AD_Productos adProductos)
+        public BS_Productos(AD_Componentes componentesProductos, AD_Productos adProductos)
         {
             _componentesProductos = componentesProductos;
             AdProductos = adProductos;
@@ -19,7 +19,7 @@ namespace Aponus_Web_API.Negocio
 
         internal async Task<JsonResult> ListarDN(string? typeId)
         {
-             return await AdProductos.ListarDN(typeId ?? "");
+            return await AdProductos.ListarDN(typeId ?? "");
         }
         internal async Task<JsonResult> ListarDN(string? typeId, int? idDescription)
         {
@@ -32,7 +32,8 @@ namespace Aponus_Web_API.Negocio
 
             return _componentesProductos.ObtenerComponentesFormateados(Producto);
         }
-        internal JsonResult ListarProductos(string? TypeId) {
+        internal JsonResult ListarProductos(string? TypeId)
+        {
 
             return AdProductos.Listar(TypeId ?? "");
 
@@ -53,25 +54,25 @@ namespace Aponus_Web_API.Negocio
         }
         internal IActionResult ProcesarDatos(DTOProducto Producto)
         {
-            
+
             if (Producto.IdProducto == null)
             {
                 if (Producto.IdTipo != null && Producto.IdDescripcion != null && Producto.DiametroNominal != null && Producto.Tolerancia != null)
                 {
-                    
+
                     Producto.IdProducto = AdProductos.GenerarIdProd(Producto); //Producto Nuevo
                     Producto? _BuscarProducto = AdProductos.BuscarProducto(Producto.IdProducto);
 
-                    
+
                     if (_BuscarProducto == null) //Si no encontro el Producto despues de generar el ID, guarda el nuevo
                     {
                         AdProductos.GuardarProducto(Producto);
                     }
-                    else 
+                    else
                     {
                         ProductUpdate(Producto);
                     }
-                    
+
                     if (Producto.Componentes != null)
                     {
                         foreach (var Componente in Producto.Componentes)
@@ -105,7 +106,7 @@ namespace Aponus_Web_API.Negocio
 
             try
             {
-                Producto? ProductoOriginal = AdProductos.BuscarProducto(ActualizarProducto.IdProducto ?? "");               
+                Producto? ProductoOriginal = AdProductos.BuscarProducto(ActualizarProducto.IdProducto ?? "");
                 PropertyInfo[]? PropsActualizarProducto = ActualizarProducto.GetType().GetProperties().Where(prop => prop.GetValue(ActualizarProducto) != null).ToArray();
 
                 if (ProductoOriginal != null)
@@ -122,7 +123,7 @@ namespace Aponus_Web_API.Negocio
                             var valorOriginal = _valorOriginal.GetValue(ProductoOriginal);
                             var valorNuevo = prop.GetValue(ActualizarProducto);
 
-                            if (valorOriginal != null &&!valorOriginal.Equals(valorNuevo) && prop.Name != "idProducto")
+                            if (valorOriginal != null && !valorOriginal.Equals(valorNuevo) && prop.Name != "idProducto")
                             {
                                 _valorOriginal.SetValue(ProductoOriginal, valorNuevo);
                                 if (prop.Name.Contains("IdDescripcion") || prop.Name.Contains("Tolerancia") || prop.Name.Contains("IdTipo"))
@@ -143,12 +144,12 @@ namespace Aponus_Web_API.Negocio
                                     }
                                 }
                             }
-                        }                        
+                        }
                     }
 
                     //Asignar nuevo Nombre  al objeto 'ProductoOriginal'
                     Producto ProductoOriginalModificado = ProductoOriginal;
-                   
+
 
                     //En caso de corresponder actualizar el IDProducto
                     if (UpdateIdProd == true)
@@ -179,7 +180,7 @@ namespace Aponus_Web_API.Negocio
 
                             AdProductos.ModifyProductDetails(ProductoOriginalModificado);
                             AdProductos.ActualizarIdProd(IdAnterior, NuevoId);
-                            
+
                             return new JsonResult(NuevoId);
                         }
 
@@ -209,7 +210,7 @@ namespace Aponus_Web_API.Negocio
                 {
                     Content = "Producto existente, no se aplicaron los cambios",
                     ContentType = "application/json",
-                    StatusCode = 400    ,
+                    StatusCode = 400,
 
                 };
             }
@@ -220,21 +221,21 @@ namespace Aponus_Web_API.Negocio
 
             try
             {
-                if(Componentes != null)
+                if (Componentes != null)
                 {
-                    string IdProducto = Componentes.Where(x=>x.IdProducto != null).Select(x=>x.IdProducto).FirstOrDefault() ?? "";
+                    string IdProducto = Componentes.Where(x => x.IdProducto != null).Select(x => x.IdProducto).FirstOrDefault() ?? "";
                     AdProductos.DeleteAllProductComponents(IdProducto);
-                }               
+                }
 
                 foreach (DTOComponentesProducto componente in Componentes ?? Enumerable.Empty<DTOComponentesProducto>())
                 {
                     ListaComponentes.Add(new Productos_Componentes()
                     {
-                        Cantidad     = componente.Cantidad,
+                        Cantidad = componente.Cantidad,
                         IdComponente = componente.IdComponente ?? "",
-                        IdProducto   = componente.IdProducto   ?? "",
-                        Longitud     = componente.Largo,
-                        Peso         = componente.Peso,
+                        IdProducto = componente.IdProducto ?? "",
+                        Longitud = componente.Largo,
+                        Peso = componente.Peso,
 
                     });
                 }
@@ -246,24 +247,6 @@ namespace Aponus_Web_API.Negocio
                 return new StatusCodeResult(200);
             }
             catch (DbUpdateException ex)
-            {
-                if (ex.InnerException?.Message!=null)
-                {
-                    return new ContentResult()
-                    {
-                        Content= ex.InnerException.Message, 
-                        ContentType= "application/json",
-                    };
-                }
-                else
-                {
-                    return new ContentResult()
-                    {
-                        Content = ex.Message,
-                        ContentType = "application/json",
-                    };
-                }
-            }catch(Exception ex)
             {
                 if (ex.InnerException?.Message != null)
                 {
@@ -281,7 +264,26 @@ namespace Aponus_Web_API.Negocio
                         ContentType = "application/json",
                     };
                 }
-            }                
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException?.Message != null)
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException.Message,
+                        ContentType = "application/json",
+                    };
+                }
+                else
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.Message,
+                        ContentType = "application/json",
+                    };
+                }
+            }
         }
     }
 }

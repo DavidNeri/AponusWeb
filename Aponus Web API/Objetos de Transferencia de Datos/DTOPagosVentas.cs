@@ -1,6 +1,4 @@
-﻿using Aponus_Web_API.Modelos;
-using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
@@ -19,7 +17,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public decimal Monto { get; set; }
 
         [JsonProperty(PropertyName = "fechaPago", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? FechaPago { get; set; }
+        public DateTime? Fecha { get; set; }
 
         [JsonProperty(PropertyName = "medioPago", NullValueHandling = NullValueHandling.Ignore)]
         public DTOMediosPago? MedioPago { get; set; }

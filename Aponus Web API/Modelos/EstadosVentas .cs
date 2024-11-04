@@ -9,7 +9,7 @@ namespace Aponus_Web_API.Modelos
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("ID_ESTADO_VENTA")]
-        public int IdEstadoVenta{ get; set; }
+        public int IdEstadoVenta { get; set; }
 
         [Column("DESCRIPCION")]
         public string Descripcion { get; set; } = string.Empty;

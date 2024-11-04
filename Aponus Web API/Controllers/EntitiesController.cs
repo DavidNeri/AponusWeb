@@ -18,13 +18,13 @@ namespace Aponus_Web_API.Controllers
         [Route("Types/List")]
         public async Task<IActionResult> ListarTiposEntidades()
         {
-            return await BSEntidades.TiposEntidades().Listar();
+            return await BSEntidades.TiposEntidades().MapeoTiposEntidadesDTO();
         }
 
         [HttpPost]
         [Route("Types/Save")]
 
-        public async Task<IActionResult> GuardarTipoEntidad(DTOEntidadesTipos TipoEntidad)
+        public async Task<IActionResult> Guardar(DTOEntidadesTipos TipoEntidad)
         {
             if (string.IsNullOrEmpty(TipoEntidad.Nombre))
             {
@@ -37,7 +37,7 @@ namespace Aponus_Web_API.Controllers
             }
             else
             {
-                return await BSEntidades.TiposEntidades().Guardar(TipoEntidad);
+                return await BSEntidades.TiposEntidades().MapeoDTOTipoEntidadDB(TipoEntidad);
             }
         }
 
@@ -47,9 +47,9 @@ namespace Aponus_Web_API.Controllers
 
         public async Task<IActionResult> ListarCategoriasEntidades(int? IdTipo)
         {
-            return await BSEntidades.CategoriasEntidades().Listar(IdTipo);
+            return await BSEntidades.CategoriasEntidades().MapeoEntidadesCategoriasDTO(IdTipo);
         }
-       
+
 
         [HttpPost]
         [Route("Categories/Save")]
@@ -77,44 +77,43 @@ namespace Aponus_Web_API.Controllers
             }
             else
             {
-                return await BSEntidades.CategoriasEntidades().ValidarDatosCategoria(NuevaCategoria);
+                return await BSEntidades.CategoriasEntidades().MapeoNuevaCategoriaDB(NuevaCategoria);
             }
         }
+
         [HttpPost]
         [Route("Categories/Delete/{Id}")]
-        public IActionResult EliminarCategoria(int Id)
+        public async Task<IActionResult> EliminarCategoria(int Id)
         {
-            return BSEntidades.CategoriasEntidades().Eliminar(Id);
+            return await BSEntidades.CategoriasEntidades().ValidarCategoria(Id);
         }
 
         [HttpPost]
         [Route("Types/Delete/{Id}")]
-        public IActionResult EliminarTipo(int Id)
+        public async Task<IActionResult> EliminarTipo(int Id)
         {
-            return BSEntidades.TiposEntidades().Eliminar(Id);
+            return await BSEntidades.TiposEntidades().ValidarTipoEntidad(Id);
         }
-        
 
         [HttpPost]
         [Route("Save")]
         public IActionResult Nuevo(DTOEntidades Entidad)
         {
-            return BSEntidades.Guardar(Entidad);
+            return BSEntidades.ValidaryNormalizarDatos(Entidad);
         }
-
 
         [HttpGet]
         [Route("List/{typeId=0}/{CategoryId=0}/{EntityId=0}")]
         public IActionResult Listar(int TypeId, int CategoryId, int EntityId)
-        {            
-            return BSEntidades.Listar(TypeId, CategoryId, EntityId);
-        }       
+        {
+            return BSEntidades.MapeoEntidadesDTO(TypeId, CategoryId, EntityId);
+        }
 
         [HttpPost]
         [Route("Delete/{Id}")]
-        public IActionResult Eliminar(int Id)
+        public async Task<IActionResult> Eliminar(int Id)
         {
-            return BSEntidades.Eliminar(Id);
+            return await BSEntidades.ValidarEntidad(Id);
         }
     }
 }

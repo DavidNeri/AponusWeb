@@ -1,6 +1,4 @@
-﻿using Aponus_Web_API.Modelos;
-using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
@@ -25,7 +23,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public int IdEstadoCuota { get; set; }
 
         [JsonProperty(PropertyName = "fechaPago", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime? FechaPago { get; set; }    
+        public DateTime? FechaPago { get; set; }
 
         [JsonProperty(PropertyName = "estadoCuota", NullValueHandling = NullValueHandling.Ignore)]
         public virtual DTOEstadosCuotasVentas? EstadoCuota { get; set; }

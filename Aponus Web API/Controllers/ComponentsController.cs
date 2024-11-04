@@ -15,29 +15,20 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("FetchUnities")]
-
-        public async Task<IActionResult> ObtenerAlmacenamiento()
+        [Route("FetchUnities/{IdNombreComponente?}")]
+        public async Task<IActionResult> ObtenerAlmacenamientoComponentes(int? IdNombreComponente)
         {
-            try
-            {
-                return await _BsComponents.ObtenerTipoAlmacenamiento();
-            }
-            catch (DbUpdateException e)
-            {
-                string Mensaje = e.InnerException?.Message ?? e.Message;
-                return new JsonResult(Mensaje);
-            }
+            return await _BsComponents.MapeoDetalleNombreComponenteDTO(IdNombreComponente);
         }
 
-        [HttpGet]
+
+        [HttpGet] //¿Se usa?
         [Route("GetProperties")]
-
-        public  IActionResult ObtenerPropsComponentes()
+        public IActionResult ObtenerPropsComponentes()
         {
             try
             {
-                return  _BsComponents.ObtenerPropsComponentes();
+                return _BsComponents.ObtenerPropsComponentes();
             }
             catch (DbUpdateException e)
             {
@@ -45,22 +36,14 @@ namespace Aponus_Web_API.Controllers
                 return new JsonResult(Mensaje);
             }
         }
-        
+
 
         [HttpGet]
         [Route("List/{IdDescripcion?}")]
 
-        public IActionResult ListarComponentes(int? IdDescripcion)
+        public async Task<IActionResult> ObtenerListarComponentes(int? IdDescripcion)
         {
-            try
-            {
-                return _BsComponents.ListarComponentes(IdDescripcion);
-            }
-            catch (DbUpdateException e)
-            {
-                string Mensaje = e.InnerException?.Message ?? e.Message;
-                return new JsonResult(Mensaje);
-            }
+            return await _BsComponents.MapeoComponentesDetalleDTO(IdDescripcion);
         }
     }
 }
