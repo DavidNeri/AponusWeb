@@ -215,15 +215,15 @@ namespace Aponus_Web_API.Negocio
             {
                 if (NombresComponentes != null)
                 {
-                    List<DTODescripcionComponentes> DTODescripcionesComponentes = new List<DTODescripcionComponentes>();
+                    List<DTODescripcionComponentes> DTODescripcionesComponentes = new();
 
-                    DTODescripcionesComponentes.ForEach(componentes => new DTODescripcionComponentes()
+                    NombresComponentes.ForEach(componentes => DTODescripcionesComponentes.Add(new DTODescripcionComponentes()
                     {
-                        Descripcion = componentes.Descripcion,
+                        Descripcion = componentes.Descripcion ?? "",
                         IdAlmacenamiento = componentes.IdAlmacenamiento,
                         IdDescripcion = componentes.IdDescripcion,
                         IdFraccionamiento = componentes.IdFraccionamiento,
-                    });
+                    }));
 
                     return new JsonResult(DTODescripcionesComponentes);
                 }
