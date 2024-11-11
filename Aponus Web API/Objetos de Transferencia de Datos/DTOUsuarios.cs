@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Aponus_Web_API.Mapping
+namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
     public class DTOUsuarios
     {

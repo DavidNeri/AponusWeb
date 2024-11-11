@@ -1,4 +1,4 @@
-﻿using Aponus_Web_API.Mapping;
+﻿using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Systema;
 using Microsoft.AspNetCore.Mvc;
 

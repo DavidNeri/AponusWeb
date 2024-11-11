@@ -729,6 +729,10 @@ public partial class AponusContext : DbContext
             .HasColumnType("text")
             .HasColumnName("DESCRIPCION");
 
+            entity.Property(p => p.IdEstado)
+            .HasDefaultValueSql("1");
+
+
             entity.HasMany(e => e.ComponentesDetalle)
             .WithOne(e => e.IdEstadoNavigation)
             .HasForeignKey(e => e.IdEstado);

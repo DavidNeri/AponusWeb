@@ -7,7 +7,6 @@
         public int IdMedioPago { get; set; }
         public decimal Monto { get; set; }
         public DateTime? Fecha { get; set; }
-
         public virtual DTOMediosPago MedioPago { get; set; } = new();
         public virtual DTOCompras Compra { get; set; } = new();
 

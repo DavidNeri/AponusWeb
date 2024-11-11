@@ -1,5 +1,4 @@
-﻿using Aponus_Web_API.Modelos;
-using Aponus_Web_API.Negocio;
+﻿using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +10,8 @@ namespace Aponus_Web_API.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly BS_Categorias BsCategorias;
-        private readonly AponusContext AponusDBContext;
-        public CategoriesController(AponusContext aponusDBContext, BS_Categorias _BsCategorias)
+        public CategoriesController(BS_Categorias _BsCategorias)
         {
-            AponusDBContext = aponusDBContext;
             BsCategorias = _BsCategorias;
         }
 

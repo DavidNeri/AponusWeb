@@ -42,6 +42,8 @@ namespace Aponus_Web_API.Negocio
                         Perfil = componente.Perfil,
                         Peso = componente.Peso,
                         Tolerancia = componente.Tolerancia,
+                        IdEstado = 1,
+                        IdEstadoNavigation = new EstadosComponentesDetalles { IdEstado = 1 }
 
 
                     });

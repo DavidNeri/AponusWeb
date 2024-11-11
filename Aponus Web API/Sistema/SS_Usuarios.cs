@@ -1,5 +1,5 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
-using Aponus_Web_API.Mapping;
+using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Systema

@@ -1,5 +1,4 @@
-﻿using Aponus_Web_API.Modelos;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
@@ -30,19 +29,19 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public decimal? SaldoCancelado => SaldoTotal ?? 0 - (SaldoPendiente ?? 0);
 
         [JsonProperty(PropertyName = "usuario", NullValueHandling = NullValueHandling.Ignore)]
-        public virtual Usuarios Usuario { get; set; } = new();
+        public DTOUsuarios Usuario { get; set; } = new();
 
         [JsonProperty(PropertyName = "estado", NullValueHandling = NullValueHandling.Ignore)]
-        public virtual EstadosCompras Estado { get; set; } = new();
+        public virtual DTOEstadosCompras Estado { get; set; } = new();
 
         [JsonProperty(PropertyName = "proveedor", NullValueHandling = NullValueHandling.Ignore)]
-        public virtual Entidades Proveedor { get; set; } = new();
+        public virtual DTOEntidades Proveedor { get; set; } = new();
 
         [JsonProperty(PropertyName = "detallesCompra", NullValueHandling = NullValueHandling.Ignore)]
-        public virtual ICollection<ComprasDetalles> DetallesCompra { get; set; } = new HashSet<ComprasDetalles>();
+        public virtual ICollection<DTOComprasDetalles> DetallesCompra { get; set; } = new HashSet<DTOComprasDetalles>();
 
         [JsonProperty(PropertyName = "pagos", NullValueHandling = NullValueHandling.Ignore)]
-        public virtual ICollection<PagosCompras> Pagos { get; set; } = new HashSet<PagosCompras>();
+        public virtual ICollection<DTOPagosCompras> Pagos { get; set; } = new HashSet<DTOPagosCompras>();
 
 
 
