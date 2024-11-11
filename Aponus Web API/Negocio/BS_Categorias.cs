@@ -57,9 +57,9 @@ namespace Aponus_Web_API.Negocio
             }
 
         }
-        internal async Task<IActionResult> MapearDescripcionesProductosDTO(string IdTipo)
+        internal IActionResult MapearDescripcionesProductosDTO(string IdTipo)
         {
-            var (resultado, error) = await AdCategorias.ListarDescripcionesProductos(IdTipo);
+            var (resultado, error) = AdCategorias.ListarDescripcionesProductos(IdTipo);
 
             if (error != null)
                 return new ContentResult()
@@ -302,7 +302,7 @@ namespace Aponus_Web_API.Negocio
         }
         internal async Task<IActionResult> RegistrarCambioEstadoDescripcionProducto(int idDescription)
         {
-            var (Descripciones, error) = await AdCategorias.ListarDescripcionesProductos(string.Empty);
+            var (Descripciones, error) = AdCategorias.ListarDescripcionesProductos(string.Empty);
             if (error != null) return new ContentResult()
             {
                 Content = error.InnerException?.Message ?? error.Message,
@@ -330,9 +330,9 @@ namespace Aponus_Web_API.Negocio
             return new JsonResult(null);
         }
 
-        internal async Task<JsonResult> MapearTiposProductosDTO()
+        internal JsonResult MapearTiposProductosDTO()
         {
-            List<ProductosTipo>? TiposProductos = await AdCategorias.MetodosProductos().ListarTiposProductos();
+            List<ProductosTipo>? TiposProductos = AdCategorias.MetodosProductos().ListarTiposProductos();
 
             List<DTOTiposProductos> DTOTiposProducto = new List<DTOTiposProductos>();
 

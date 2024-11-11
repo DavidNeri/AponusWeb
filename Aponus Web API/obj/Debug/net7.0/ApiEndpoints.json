@@ -1556,7 +1556,7 @@
     "Parameters": [
       {
         "Name": "Usuario",
-        "Type": "Aponus_Web_API.Mapping.DTOUsuarios",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOUsuarios",
         "IsRequired": true
       }
     ],
@@ -1572,13 +1572,13 @@
     "Parameters": [
       {
         "Name": "Usuario",
-        "Type": "Aponus_Web_API.Mapping.DTOUsuarios",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOUsuarios",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "Aponus_Web_API.Mapping.DTOUsuarios",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOUsuarios",
         "MediaTypes": [
           "text/plain",
           "application/json",

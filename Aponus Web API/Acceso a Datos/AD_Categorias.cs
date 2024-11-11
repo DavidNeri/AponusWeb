@@ -17,13 +17,13 @@ namespace Aponus_Web_API.Acceso_a_Datos
             return new Productos(AponusDBContext);
         }
 
-        internal async Task<(List<ProductosDescripcion>? Listado, Exception? Error)> ListarDescripcionesProductos(string? idTipo)
+        internal (List<ProductosDescripcion>? Listado, Exception? Error) ListarDescripcionesProductos(string? idTipo)
         {
             try
             {
                 return
                     (
-                        await AponusDBContext.ProductosDescripcions.Join(AponusDBContext.Producto_Tipo_Descripcion,
+                        AponusDBContext.ProductosDescripcions.Join(AponusDBContext.Producto_Tipo_Descripcion,
                         _Descripciones => _Descripciones.IdDescripcion,
                         _Tipo => _Tipo.IdDescripcion,
                         (_Descripciones, _Tipo) => new
@@ -38,7 +38,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                             IdDescripcion = x.IdDescripcion,
                             DescripcionProducto = x.DescripcionProducto
                         })
-                        .ToListAsync(),
+                        .ToList(),
                         null
                     );
             }
@@ -212,9 +212,9 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 AponusDBContext = aponusDBContext;
             }
 
-            internal async Task<List<ProductosTipo>?> ListarTiposProductos()
+            internal List<ProductosTipo>? ListarTiposProductos()
             {
-                List<ProductosTipo>? TipoProductos = await AponusDBContext.ProductosTipos
+                List<ProductosTipo>? TipoProductos = AponusDBContext.ProductosTipos
                    .OrderBy(x => x.DescripcionTipo)
                    .Where(x => x.IdEstado != 0)
                    .Select(x => new ProductosTipo()
@@ -223,7 +223,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                        DescripcionTipo = x.DescripcionTipo,
                        IdEstado = x.IdEstado,
                    })
-                   .ToListAsync();
+                   .ToList();
 
                 return TipoProductos;
             }

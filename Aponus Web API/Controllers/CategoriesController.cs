@@ -17,16 +17,16 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Products/Types/List")]
-        public async Task<JsonResult> ListarTiposProductos()
+        public JsonResult ListarTiposProductos()
         {
-            return await BsCategorias.MapearTiposProductosDTO();
+            return BsCategorias.MapearTiposProductosDTO();
         }
 
         [HttpGet]
         [Route("Products/Descriptions/List/{idTipo}")]
-        public async Task<IActionResult> ListarDescripcionesProductos(string IdTipo)
+        public IActionResult ListarDescripcionesProductos(string IdTipo)
         {
-            return await BsCategorias.MapearDescripcionesProductosDTO(IdTipo);
+            return BsCategorias.MapearDescripcionesProductosDTO(IdTipo);
         }
 
 
