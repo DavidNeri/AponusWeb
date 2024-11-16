@@ -1136,7 +1136,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Producto",
+        "Name": "componentesProducto",
         "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOComponentesProducto, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }

@@ -90,6 +90,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     }
                 }
             }
+
+            
         }
 
         internal bool IncrementarStockProducto(DTOStockUpdate Actualizacion)
@@ -317,34 +319,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         }
 
 
-        internal bool NewSetearStockInsumo(DTOStockUpdate Actualizacion)
-        {
-            PropertyInfo? Propiedad = typeof(StockInsumos).GetProperties().FirstOrDefault(p => p.Name.Contains(Actualizacion.Destino ?? ""));
-            bool resultado = true;
-            try
-            {
-                var elementos = AponusDBContext.stockInsumos
-                       .Where(x => x.IdInsumo == Actualizacion.Id)
-                       .ToList();
-
-                foreach (var elemento in elementos)
-                {
-
-
-                    if (Propiedad != null)
-                    {
-                        Propiedad.SetValue(elemento, Actualizacion.Cantidad);
-                    }
-                }
-
-                AponusDBContext.SaveChanges(); // ProcesarDatos los cambios en la base de datos
-                return resultado;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
+      
 
         internal string? CrearDirectorioMovimientos_Local(string Proveedor)
         {
@@ -433,8 +408,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
         internal int? GuardarDatosMovimiento(AponusContext AponusDBContext, Stock_Movimientos Movimiento)
         {
-            string insertQuery = @"INSERT INTO ""STOCK_MOVIMIENTOS"" (""USUARIO_CREADO"", ""FECHA_HORA_CREADO"",""ORIGEN"",""DESTINO"",""ID_PROVEEDOR_ORIGEN"", ""ID_PROVEEDOR_DESTINO"", ""ID_ESTADO_MOVIMIENTO"") 
-                                    VALUES (@USUARIO_CREADO, @FECHA_HORA_CREADO,@ORIGEN,@DESTINO,  @ID_PROVEEDOR_ORIGEN, @ID_PROVEEDOR_DESTINO, 1)";
+            string insertQuery = @"INSERT INTO ""STOCK_MOVIMIENTOS"" (""USUARIO_CREADO"", ""FECHA_HORA_CREADO"",""ORIGEN"",""DESTINO"",""ID_PROVEEDOR"", ""ID_ESTADO_MOVIMIENTO"") 
+                                    VALUES (@USUARIO_CREADO, @FECHA_HORA_CREADO,@ORIGEN,@DESTINO,  @ID_PROVEEDOR, 1)";
 
 
             try
@@ -444,7 +419,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                                          new NpgsqlParameter("@FECHA_HORA_CREADO", Movimiento.FechaHoraCreado) { NpgsqlDbType = NpgsqlDbType.Timestamp },
                                                          new NpgsqlParameter("@ORIGEN", Movimiento.Origen) { NpgsqlDbType = NpgsqlDbType.Varchar },
                                                          new NpgsqlParameter("@DESTINO", Movimiento.Destino) { NpgsqlDbType = NpgsqlDbType.Varchar },
-                                                         new NpgsqlParameter("@ID_PROVEEDOR_DESTINO", Movimiento.IdProveedor) { NpgsqlDbType = NpgsqlDbType.Integer }
+                                                         new NpgsqlParameter("@ID_PROVEEDOR", Movimiento.IdProveedor) { NpgsqlDbType = NpgsqlDbType.Integer }
                                                          /*new NpgsqlParameter("@USUARIO_MODIFICA", Movimiento.ModificadoUsuario) { NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Varchar}*/);
 
                 int? IdMovimiento = AponusDBContext.Stock_Movimientos.Select(x => x.IdMovimiento).Max();

@@ -552,18 +552,45 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
             return query;
         }
-        internal void GuardarComponente(ComponentesDetalle componentesDetalle)
+        internal /*async Task<(int?Resultado, Exception?ex)>*/ void GuardarComponente(ComponentesDetalle componentesDetalle)
         {
-            var Existe = AponusDbContext.ComponentesDetalles.FirstOrDefault(x => x.IdInsumo == componentesDetalle.IdInsumo);
+            //using var transaccion = await AponusDbContext.Database.BeginTransactionAsync();
+            //var ExisteDetalleComponente = AponusDbContext.ComponentesDetalles.FirstOrDefault(x => x.IdInsumo == componentesDetalle.IdInsumo);
+            //var ExisteStockComponente= AponusDbContext.stockInsumos.FirstOrDefault(x => x.IdInsumo == componentesDetalle.IdInsumo);
 
-            if (Existe == null)
-            {
-                AponusDbContext.ComponentesDetalles.Add(componentesDetalle);
-            }
-            else
-            {
-                AponusDbContext.Entry(Existe).CurrentValues.SetValues(componentesDetalle);
-            }
+            //if (ExisteDetalleComponente == null)
+            //    await AponusDbContext.ComponentesDetalles.AddAsync(componentesDetalle);
+            //else
+            //    AponusDbContext.Entry(ExisteDetalleComponente).CurrentValues.SetValues(componentesDetalle);
+
+            //if (ExisteStockComponente == null)
+            //{
+            //    await AponusDbContext.stockInsumos.AddAsync(new StockInsumos()
+            //    {
+            //        Granallado = 0,
+            //        IdInsumo = componentesDetalle.IdInsumo,
+            //        Moldeado = 0,
+            //        Pendiente = 0,
+            //        Pintura = 0,
+            //        Proceso = 0,
+            //        Recibido = 0,
+            //    });
+
+            //}else
+            //{
+            //    ExisteStockComponente.Proceso = 0;
+            //    ExisteStockComponente.Granallado = 0;
+            //    ExisteStockComponente.Pintura = 0;
+            //    ExisteStockComponente.Pendiente = 0;
+            //    ExisteStockComponente.Recibido = 0;
+            //    ExisteStockComponente.Moldeado = 0;
+
+            //}
+
+
+            
+
+
 
             AponusDbContext.SaveChanges();
         }
