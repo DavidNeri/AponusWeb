@@ -39,7 +39,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             try
             {
                 string Tolerancia = Producto.Tolerancia ?? "".Replace("-", "_").Replace("/", "_");
-                IdProducto = $"{Producto.IdProducto}_{Producto.IdDescripcion}_{Producto.DiametroNominal}_{Producto.Tolerancia}";
+                IdProducto = $"{Producto.IdTipo}_{Producto.IdDescripcion}_{Producto.DiametroNominal}_{Producto.Tolerancia}";
 
             }
             catch (Exception)

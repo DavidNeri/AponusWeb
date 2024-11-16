@@ -37,7 +37,6 @@ namespace Aponus_Web_API.Controllers
             try
             {
                 return BsCategorias.NormalizarNombreTipoProducto(NuevaCategoria);
-
             }
             catch (Exception ex)
             {
