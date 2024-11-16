@@ -108,11 +108,11 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Components/Save")]
-        public IActionResult ActualizarComponentes(List<DTOComponentesProducto> Producto)
+        public IActionResult ActualizarComponentes(List<DTOComponentesProducto> componentesProducto)
         {
             try
             {
-                return BsProductos.ActualizarComponentes(Producto);
+                return BsProductos.ActualizarComponentes(componentesProducto);
             }
             catch (DbUpdateException ex)
             {

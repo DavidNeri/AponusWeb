@@ -236,8 +236,7 @@ namespace Aponus_Web_API.Negocio
                         IdProducto = componente.IdProducto ?? "",
                         Longitud = componente.Largo,
                         Peso = componente.Peso,
-                        IdEstado = 1,
-                        IdEstadoNavigation = new EstadosProductosComponentes { IdEstado = 1}
+                        IdEstado = 1
 
                     });
                 }
