@@ -752,7 +752,10 @@ public partial class AponusContext : DbContext
 
             entity.HasMany(e => e.ProductosComponentes)
             .WithOne(e => e.IdEstadoNavigation)
-            .HasForeignKey(e => e.IdEstado);
+            .HasForeignKey(e => e.IdEstado)            
+            .HasPrincipalKey(PK=>PK.IdEstado)
+            .HasForeignKey(FK=>FK.IdEstado)
+            .HasConstraintName("FK_PRODUCTOS_COMPONENTES_ESTADOS_PRODUCTOS_COMPONENTES_ID_ESTAD");
         });
 
         modelBuilder.Entity<EstadosProductos>(entity =>
@@ -865,6 +868,8 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.IdEstado)
             .HasColumnName("ID_ESTADO")
             .HasDefaultValueSql("1");
+
+
         });
 
 
