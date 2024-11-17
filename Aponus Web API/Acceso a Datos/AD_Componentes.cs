@@ -128,7 +128,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     .GroupBy(cp => new
                     {
                         cp._IdComponente,
-                        cp._IdProducto,
+                        cp._IdProducto,                        
                         cp._Descripcion,
                         cp._Longitud,
                         cp._Perfil,

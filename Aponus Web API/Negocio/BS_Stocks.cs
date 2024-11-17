@@ -121,6 +121,8 @@ namespace Aponus_Web_API.Negocio
                     Tipo = Movimiento.Tipo,
                     Destino = !string.IsNullOrEmpty(Movimiento.Destino) ? Movimiento.Destino.ToUpper() : "",
                     Origen = !string.IsNullOrEmpty(Movimiento.Origen) ? Movimiento.Origen.ToUpper() : "",
+                    Proveeedor = new Entidades { IdEntidad = Movimiento.IdProveedorDestino ?? 1 }
+
                 });
 
                 if (IdMovimiento == null) Rollback = true;

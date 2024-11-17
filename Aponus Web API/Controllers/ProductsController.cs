@@ -1,4 +1,5 @@
-﻿using Aponus_Web_API.Negocio;
+﻿using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,12 +32,12 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("ListProducts")]
-        public JsonResult ListProducts()
+        [Route("ListProducts/{IdProducto}")]
+        public JsonResult ListProducts(string IdProducto)
         {
             try
             {
-                return BsProductos.ListarProductos();
+                return BsProductos.ListarProducto(IdProducto);
             }
             catch (Exception e)
             {

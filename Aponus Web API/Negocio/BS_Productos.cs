@@ -236,8 +236,7 @@ namespace Aponus_Web_API.Negocio
                         IdProducto = componente.IdProducto ?? "",
                         Longitud = componente.Largo,
                         Peso = componente.Peso,
-                        IdEstado = 1,
-                        IdEstadoNavigation = {IdEstado = 1}
+                        IdEstado = 1
                     });
                 }
 
@@ -285,6 +284,11 @@ namespace Aponus_Web_API.Negocio
                     };
                 }
             }
+        }
+
+        internal JsonResult ListarProducto(string idProducto)
+        {
+            throw new NotImplementedException();
         }
     }
 }
