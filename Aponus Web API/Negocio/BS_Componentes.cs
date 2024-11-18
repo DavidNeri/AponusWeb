@@ -81,9 +81,9 @@ namespace Aponus_Web_API.Negocio
             return new StatusCodeResult(200);
 
         }
-        internal async Task<IActionResult> MapeoComponentesDetalleDTO(int? IdDescripcion)
+        internal IActionResult MapeoComponentesDetalleDTO(int? IdDescripcion)
         {
-            var (Listado, Ex) = await _componentesProductos.ListarDetalleComponentes(IdDescripcion);
+            var (Listado, Ex) = _componentesProductos.ListarDetalleComponentes(IdDescripcion);
 
             if (Ex != null) return new ContentResult()
             {

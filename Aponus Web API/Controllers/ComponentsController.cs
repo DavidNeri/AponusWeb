@@ -41,9 +41,9 @@ namespace Aponus_Web_API.Controllers
         [HttpGet]
         [Route("List/{IdDescripcion?}")]
 
-        public async Task<IActionResult> ObtenerListarComponentes(int? IdDescripcion)
+        public IActionResult ObtenerListarComponentes(int? IdDescripcion)
         {
-            return await _BsComponents.MapeoComponentesDetalleDTO(IdDescripcion);
+            return _BsComponents.MapeoComponentesDetalleDTO(IdDescripcion);
         }
     }
 }

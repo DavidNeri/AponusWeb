@@ -429,11 +429,11 @@ namespace Aponus_Web_API.Acceso_a_Datos
             return jsonResult;
 
         }
-        internal async Task<(List<ComponentesDetalle>? LstComponentes, Exception? Error)> ListarDetalleComponentes(int? IdDescripcion)
+        internal (List<ComponentesDetalle>? LstComponentes, Exception? Error) ListarDetalleComponentes(int? IdDescripcion)
         {
             try
             {
-                List<ComponentesDetalle> LstComponentes = await AponusDbContext.ComponentesDetalles
+                List<ComponentesDetalle> LstComponentes =  AponusDbContext.ComponentesDetalles
                .Where(x => x.IdEstado != 0 && (IdDescripcion == null || x.IdDescripcion == IdDescripcion))
                .Select(x => new ComponentesDetalle()
                {
@@ -457,7 +457,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                                         .Select(X => X.IdFraccionamiento)
                                                         .FirstOrDefault(),
                })
-               .ToListAsync();
+               .ToList();
 
                 return (LstComponentes, null);
             }
