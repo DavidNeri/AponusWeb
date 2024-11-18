@@ -22,8 +22,5 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         [JsonProperty(PropertyName = "mensajeError", NullValueHandling = NullValueHandling.Ignore)]
         public string? MensajeError { get; set; }
 
-        [JsonProperty(PropertyName = "datosArchivo", NullValueHandling = NullValueHandling.Ignore)]
-        public byte[]? DatosArchivo { get; set; }
-
     }
 }
