@@ -114,11 +114,11 @@ namespace Aponus_Web_API.Negocio
 
             foreach (DTODatosArchivosMovimientosStock item in InfoArchivosMovimientos ?? Enumerable.Empty<DTODatosArchivosMovimientosStock>())
             {
-                var (archivo, error) = await cloudinary.DescargarArchivo(item?.Path ?? "");
+                var (PublicUrl, error) = await cloudinary.DescargarArchivo(item?.Path ?? "");
 
                 if (item != null)
                 {
-                    item.DatosArchivo = archivo;
+                    item.NombreArchivo = PublicUrl;
                     item.MensajeError = error;
                 }
             }

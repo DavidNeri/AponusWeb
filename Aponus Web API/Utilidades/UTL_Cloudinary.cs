@@ -51,13 +51,13 @@ namespace Aponus_Web_API.Utilidades
             return DatosArchivosMovimiento;
         }
 
-        public async Task<(byte[]? Archivo, string? error)> DescargarArchivo(string publicId)
+        public async Task<(string? url, string? error)> DescargarArchivo(string publicId)
         {
             try
             {
                 var url = _cloudinary.Api.UrlImgUp.BuildUrl(publicId);
-                byte[] ArchivoBytes = await _httpClient.GetByteArrayAsync(url);
-                return (ArchivoBytes, null);
+                //byte[] ArchivoBytes = await _httpClient.GetByteArrayAsync(url);
+                return (url, null);
 
             }
             catch (Exception ex)

@@ -560,47 +560,57 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
             return query;
         }
-        internal /*async Task<(int?Resultado, Exception?ex)>*/ void GuardarComponente(ComponentesDetalle componentesDetalle)
+        internal async Task<(int?Resultado, Exception?ex)> GuardarComponente(ComponentesDetalle componentesDetalle)
         {
-            //using var transaccion = await AponusDbContext.Database.BeginTransactionAsync();
-            //var ExisteDetalleComponente = AponusDbContext.ComponentesDetalles.FirstOrDefault(x => x.IdInsumo == componentesDetalle.IdInsumo);
-            //var ExisteStockComponente= AponusDbContext.stockInsumos.FirstOrDefault(x => x.IdInsumo == componentesDetalle.IdInsumo);
+            using var transaccion = await AponusDbContext.Database.BeginTransactionAsync();
+            try
+            {
+                var ExisteDetalleComponente = AponusDbContext.ComponentesDetalles.FirstOrDefault(x => x.IdInsumo == componentesDetalle.IdInsumo);
+                var ExisteStockComponente = AponusDbContext.stockInsumos.FirstOrDefault(x => x.IdInsumo == componentesDetalle.IdInsumo);
+                componentesDetalle.IdEstadoNavigation = await AponusDbContext.EstadosComponentesDetalle.FirstOrDefaultAsync(x => x.IdEstado == componentesDetalle.IdEstado);
 
-            //if (ExisteDetalleComponente == null)
-            //    await AponusDbContext.ComponentesDetalles.AddAsync(componentesDetalle);
-            //else
-            //    AponusDbContext.Entry(ExisteDetalleComponente).CurrentValues.SetValues(componentesDetalle);
+                if (ExisteDetalleComponente == null)
+                    await AponusDbContext.ComponentesDetalles.AddAsync(componentesDetalle);
+                else
+                    AponusDbContext.Entry(ExisteDetalleComponente).CurrentValues.SetValues(componentesDetalle);
 
-            //if (ExisteStockComponente == null)
-            //{
-            //    await AponusDbContext.stockInsumos.AddAsync(new StockInsumos()
-            //    {
-            //        Granallado = 0,
-            //        IdInsumo = componentesDetalle.IdInsumo,
-            //        Moldeado = 0,
-            //        Pendiente = 0,
-            //        Pintura = 0,
-            //        Proceso = 0,
-            //        Recibido = 0,
-            //    });
+                if (ExisteStockComponente == null)
+                {
+                    await AponusDbContext.stockInsumos.AddAsync(new StockInsumos()
+                    {
+                        Granallado = 0,
+                        IdInsumo = componentesDetalle.IdInsumo,
+                        Moldeado = 0,
+                        Pendiente = 0,
+                        Pintura = 0,
+                        Proceso = 0,
+                        Recibido = 0,
+                    });
+                }
+                else
+                {
+                    ExisteStockComponente.Proceso = 0;
+                    ExisteStockComponente.Granallado = 0;
+                    ExisteStockComponente.Pintura = 0;
+                    ExisteStockComponente.Pendiente = 0;
+                    ExisteStockComponente.Recibido = 0;
+                    ExisteStockComponente.Moldeado = 0;
 
-            //}else
-            //{
-            //    ExisteStockComponente.Proceso = 0;
-            //    ExisteStockComponente.Granallado = 0;
-            //    ExisteStockComponente.Pintura = 0;
-            //    ExisteStockComponente.Pendiente = 0;
-            //    ExisteStockComponente.Recibido = 0;
-            //    ExisteStockComponente.Moldeado = 0;
+                    await AponusDbContext.AddAsync(ExisteStockComponente);
 
-            //}
+                }
 
+                await AponusDbContext.SaveChangesAsync();
+                await transaccion.CommitAsync();
 
+                return (StatusCodes.Status200OK, null);
+            }
+            catch (Exception ex ) 
+            {
+                await transaccion.RollbackAsync();    
+                return (null, ex);
+            }
             
-
-
-
-            AponusDbContext.SaveChanges();
         }
         internal async Task<(List<ComponentesDescripcion>? Listado, Exception? Error)> ListarTiposAlacenamiento(int? IdDescripcionComponente)
         {

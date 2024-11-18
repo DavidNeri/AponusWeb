@@ -46,17 +46,9 @@ namespace Aponus_Web_API.Controllers
         [HttpPost]
         [Route("Create-or-Update")]
 
-        public IActionResult ObtenerPropsComponentes(DTODetallesComponenteProducto InsumoProducto)
-        {
-            try
-            {
-                return BsSupplies.GuardarInsumoProducto(InsumoProducto);
-            }
-            catch (DbUpdateException e)
-            {
-                string Mensaje = e.InnerException.Message;
-                return new JsonResult(Mensaje);
-            }
+        public async Task<IActionResult> GuardarInsumoProducto(DTODetallesComponenteProducto InsumoProducto)
+        {            
+            return await BsSupplies.MapeoDTOtoDB(InsumoProducto);           
         }
 
         [HttpPost]

@@ -104,8 +104,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
             {
                 if (Archivo != null)
                 {
-                    var (archivo, error) = await cloudinary.DescargarArchivo(Archivo?.Path ?? "");
-                    Archivo.DatosArchivo = archivo;
+                    var (Publicurl, error) = await cloudinary.DescargarArchivo(Archivo?.Path ?? "");
+                    Archivo.NombreArchivo = Publicurl;
                     Archivo.MensajeError = error;
                 }
             }

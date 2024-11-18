@@ -1464,7 +1464,7 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.SuppliesController",
-    "Method": "ObtenerPropsComponentes",
+    "Method": "GuardarInsumoProducto",
     "RelativePath": "Aponus/Supplies/Create-or-Update",
     "HttpMethod": "POST",
     "IsController": true,

@@ -21,61 +21,33 @@ namespace Aponus_Web_API.Negocio
         {
             return Componentes.ObtenerNuevoId(ComponentDescription);
         }
-        internal IActionResult GuardarInsumoProducto(DTODetallesComponenteProducto componente)
+        internal async Task<IActionResult> MapeoDTOtoDB(DTODetallesComponenteProducto componente)
         {
-            try
+            var(resultado, error) = await Componentes.GuardarComponente(new ComponentesDetalle()
             {
+                IdInsumo          = componente.idComponente ?? "",
+                Diametro          = componente.Diametro,
+                Altura            = componente.Altura,
+                IdDescripcion     = componente.IdDescripcion ?? 0 ,
+                DiametroNominal   = componente.DiametroNominal,
+                Espesor           = componente.Espesor,
+                IdAlmacenamiento  = componente.idAlmacenamiento,
+                IdFraccionamiento = componente.idFraccionamiento,
+                Longitud          = componente.Longitud,
+                Perfil            = componente.Perfil,
+                Peso              = componente.Peso,
+                Tolerancia        = componente.Tolerancia,
+                IdEstado          = 1
+            });
 
-                if (componente.idComponente != null && componente.IdDescripcion != null)
-                {
-                    Componentes.GuardarComponente(new ComponentesDetalle()
-                    {
-                        IdInsumo = componente.idComponente,
-                        Diametro = componente.Diametro,
-                        Altura = componente.Altura,
-                        IdDescripcion = (int)componente.IdDescripcion,
-                        DiametroNominal = componente.DiametroNominal,
-                        Espesor = componente.Espesor,
-                        IdAlmacenamiento = componente.idAlmacenamiento,
-                        IdFraccionamiento = componente.idFraccionamiento,
-                        Longitud = componente.Longitud,
-                        Perfil = componente.Perfil,
-                        Peso = componente.Peso,
-                        Tolerancia = componente.Tolerancia,
-                        IdEstado = 1,
-                        IdEstadoNavigation = new EstadosComponentesDetalles { IdEstado = 1 }
-
-
-                    });
-                    return new StatusCodeResult(200);
-                }
-                else
-                {
-                    return new ContentResult()
-                    {
-                        Content = "El Codigo de Insumo y la Descripcion no pueden ser nulos",
-                        ContentType = "text/plan",
-                        StatusCode = 400
-
-                    };
-                }
-            }
-            catch (DbUpdateException ex)
+            if (error != null) return new ContentResult()
             {
-                string Mensaje;
-                if (ex.InnerException?.Message != null)
-                    Mensaje = ex.InnerException.Message;
-                else Mensaje = ex.Message;
+                Content = error.InnerException?.Message ?? error.Message,
+                ContentType = "text/plan",
+                StatusCode = 400
+            };
 
-
-                return new ContentResult()
-                {
-                    Content = Mensaje,
-                    ContentType = "text/plan",
-                    StatusCode = 500,
-                };
-
-            }
+            return new StatusCodeResult((int)resultado!);           
 
         }
         internal IActionResult ListarNombresFormateados()
