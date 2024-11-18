@@ -70,7 +70,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdDescripcion"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("character varying(50)")
@@ -442,7 +442,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -461,7 +461,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -481,7 +481,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoCompra"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -504,7 +504,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoCuota"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("varchar(MAX)")
                         .HasColumnName("DESCRIPCION");
@@ -529,7 +529,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("IdEstadoMovimiento"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -554,7 +554,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -573,7 +573,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -591,7 +591,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnName("ID_ESTADO")
                         .HasDefaultValueSql("1");
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -610,7 +610,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -629,7 +629,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoMovimiento"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -648,7 +648,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEstadoVenta"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -677,7 +677,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("CODIGO_MPAGO");
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DESCRIPCION");
@@ -784,7 +784,7 @@ namespace Aponus_Web_API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdPerfil"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("NombreDescripcion")
                         .IsRequired()
                         .HasColumnType("varcahr(100)")
                         .HasColumnName("DESCRIPCION");

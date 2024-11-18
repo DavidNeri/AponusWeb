@@ -235,13 +235,13 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 {
                     AponusDBContext.ProductosTipos.Update(TipoProducto);
 
-                    //Buscar los Id Descripcion relacionados al IdDescripcion
+                    //Buscar los Id NombreDescripcion relacionados al IdDescripcion
                     var IdDescripcionesEliminar = await AponusDBContext.Producto_Tipo_Descripcion
                         .Where(x => x.IdTipo.Equals(TipoProducto.IdTipo))
                         .Select(x => x.IdDescripcion)
                         .ToListAsync();
 
-                    //Con los Id Descripcion buscar la Lista de 'DescrpcionTìpo' relacionados (al IdDescripcion)
+                    //Con los Id NombreDescripcion buscar la Lista de 'DescrpcionTìpo' relacionados (al IdDescripcion)
                     List<ProductosDescripcion>? DescripcionProdEliminar = await AponusDBContext.ProductosDescripcions
                         .Where(x => IdDescripcionesEliminar.Contains(x.IdDescripcion))
                         .ToListAsync();

@@ -23,7 +23,7 @@ namespace Aponus_Web_API.Negocio
 
             ProductosDescripcion DescripcionProductoDB = new ProductosDescripcion()
             {
-                DescripcionProducto = Regex.Replace(NuevaCategoria.Descripcion ?? "", @"\s+", " ").Trim().ToUpper(),  //Inserta la Descripcion y obtiene el id
+                DescripcionProducto = Regex.Replace(NuevaCategoria.Descripcion ?? "", @"\s+", " ").Trim().ToUpper(),  //Inserta la NombreDescripcion y obtiene el id
             };
 
             var (StatusCode, Error) = await AdCategorias.AgregarDescripcionProducto(DescripcionProductoDB, NuevaCategoria.IdTipo ?? "");
@@ -119,7 +119,7 @@ namespace Aponus_Web_API.Negocio
                         return new ContentResult()
                         {
                             StatusCode = 400,
-                            Content = "Error: El campo 'Descripcion' no puede estar vacio",
+                            Content = "Error: El campo 'NombreDescripcion' no puede estar vacio",
                             ContentType = "text/plain"
 
                         };
@@ -159,7 +159,7 @@ namespace Aponus_Web_API.Negocio
                         return new ContentResult()
                         {
                             StatusCode = 400,
-                            Content = "El campo 'Descripcion' no puede estar vacio",
+                            Content = "El campo 'NombreDescripcion' no puede estar vacio",
                             ContentType = "text/plain"
 
                         };
@@ -177,7 +177,7 @@ namespace Aponus_Web_API.Negocio
                     }
 
                 }
-                // Axtualizar Descripcion (cambiar el TIPO al que pertenece)
+                // Axtualizar NombreDescripcion (cambiar el TIPO al que pertenece)
                 else if (ActualizarCategorias?.Anterior?.IdTipo != null && ActualizarCategorias.Nueva?.IdTipo != null && (ActualizarCategorias.Anterior.IdTipo != ActualizarCategorias.Nueva.IdTipo) && ActualizarCategorias.Anterior.IdDescripcion == ActualizarCategorias.Nueva.IdDescripcion)
                 {
                     AdCategorias.ActualizarTipos_Descripciones(ActualizarCategorias);
@@ -219,7 +219,7 @@ namespace Aponus_Web_API.Negocio
 
                     NombresComponentes.ForEach(componentes => DTODescripcionesComponentes.Add(new DTODescripcionComponentes()
                     {
-                        Descripcion = componentes.Descripcion ?? "",
+                        NombreDescripcion = componentes.Descripcion ?? "",
                         IdAlmacenamiento = componentes.IdAlmacenamiento,
                         IdDescripcion = componentes.IdDescripcion,
                         IdFraccionamiento = componentes.IdFraccionamiento,
@@ -247,7 +247,7 @@ namespace Aponus_Web_API.Negocio
         {
             ComponentesDescripcion componente = new ComponentesDescripcion()
             {
-                Descripcion = Regex.Replace(Componente.Descripcion, @"\s+", " ").Trim().ToUpper(),
+                Descripcion = Regex.Replace(Componente.NombreDescripcion, @"\s+", " ").Trim().ToUpper(),
                 IdAlmacenamiento = Componente.IdAlmacenamiento ?? "",
                 IdFraccionamiento = Componente?.IdFraccionamiento ?? "",
             };

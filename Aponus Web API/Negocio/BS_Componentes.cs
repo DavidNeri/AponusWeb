@@ -170,7 +170,7 @@ namespace Aponus_Web_API.Negocio
             Listado!.ForEach(x => ListadoDetallesNombresComponentes.Add(new DTODescripcionComponentes()
             {
                 IdDescripcion = x.IdDescripcion,
-                Descripcion = x.Descripcion ?? "",
+                NombreDescripcion = x.Descripcion ?? "",
                 IdAlmacenamiento = x.IdAlmacenamiento,
                 IdFraccionamiento = x.IdFraccionamiento
             }));
