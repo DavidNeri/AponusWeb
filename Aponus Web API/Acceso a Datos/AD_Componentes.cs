@@ -560,23 +560,23 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
             return query;
         }
-        internal async Task<(int?Resultado, Exception?ex)> GuardarComponente(ComponentesDetalle componentesDetalle)
+        internal (int?Resultado, Exception?ex) GuardarComponente(ComponentesDetalle componentesDetalle)
         {
-            using var transaccion = await AponusDbContext.Database.BeginTransactionAsync();
+            using var transaccion = AponusDbContext.Database.BeginTransaction();
             try
             {
                 var ExisteDetalleComponente = AponusDbContext.ComponentesDetalles.FirstOrDefault(x => x.IdInsumo == componentesDetalle.IdInsumo);
                 var ExisteStockComponente = AponusDbContext.stockInsumos.FirstOrDefault(x => x.IdInsumo == componentesDetalle.IdInsumo);
-                componentesDetalle.IdEstadoNavigation = await AponusDbContext.EstadosComponentesDetalle.FirstOrDefaultAsync(x => x.IdEstado == componentesDetalle.IdEstado);
+                componentesDetalle.IdEstadoNavigation = AponusDbContext.EstadosComponentesDetalle.FirstOrDefault(x => x.IdEstado == componentesDetalle.IdEstado);
 
                 if (ExisteDetalleComponente == null)
-                    await AponusDbContext.ComponentesDetalles.AddAsync(componentesDetalle);
+                    AponusDbContext.ComponentesDetalles.Add(componentesDetalle);
                 else
                     AponusDbContext.Entry(ExisteDetalleComponente).CurrentValues.SetValues(componentesDetalle);
 
                 if (ExisteStockComponente == null)
                 {
-                    await AponusDbContext.stockInsumos.AddAsync(new StockInsumos()
+                    AponusDbContext.stockInsumos.Add(new StockInsumos()
                     {
                         Granallado = 0,
                         IdInsumo = componentesDetalle.IdInsumo,
@@ -596,18 +596,18 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     ExisteStockComponente.Recibido = 0;
                     ExisteStockComponente.Moldeado = 0;
 
-                    await AponusDbContext.AddAsync(ExisteStockComponente);
+                    AponusDbContext.Add(ExisteStockComponente);
 
                 }
 
-                await AponusDbContext.SaveChangesAsync();
-                await transaccion.CommitAsync();
+                 AponusDbContext.SaveChanges();
+                 transaccion.Commit();
 
                 return (StatusCodes.Status200OK, null);
             }
             catch (Exception ex ) 
             {
-                await transaccion.RollbackAsync();    
+                 transaccion.Rollback();    
                 return (null, ex);
             }
             

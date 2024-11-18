@@ -46,9 +46,9 @@ namespace Aponus_Web_API.Controllers
         [HttpPost]
         [Route("Create-or-Update")]
 
-        public async Task<IActionResult> GuardarInsumoProducto(DTODetallesComponenteProducto InsumoProducto)
+        public IActionResult GuardarInsumoProducto(DTODetallesComponenteProducto InsumoProducto)
         {            
-            return await BsSupplies.MapeoDTOtoDB(InsumoProducto);           
+            return BsSupplies.MapeoDTOtoDB(InsumoProducto);           
         }
 
         [HttpPost]

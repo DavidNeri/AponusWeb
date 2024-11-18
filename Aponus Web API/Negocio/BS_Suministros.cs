@@ -21,9 +21,9 @@ namespace Aponus_Web_API.Negocio
         {
             return Componentes.ObtenerNuevoId(ComponentDescription);
         }
-        internal async Task<IActionResult> MapeoDTOtoDB(DTODetallesComponenteProducto componente)
+        internal IActionResult MapeoDTOtoDB(DTODetallesComponenteProducto componente)
         {
-            var(resultado, error) = await Componentes.GuardarComponente(new ComponentesDetalle()
+            var(resultado, error) = Componentes.GuardarComponente(new ComponentesDetalle()
             {
                 IdInsumo          = componente.idComponente ?? "",
                 Diametro          = componente.Diametro,
