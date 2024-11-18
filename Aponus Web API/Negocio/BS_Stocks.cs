@@ -121,7 +121,6 @@ namespace Aponus_Web_API.Negocio
                     Tipo = Movimiento.Tipo,
                     Destino = !string.IsNullOrEmpty(Movimiento.Destino) ? Movimiento.Destino.ToUpper() : "",
                     Origen = !string.IsNullOrEmpty(Movimiento.Origen) ? Movimiento.Origen.ToUpper() : "",
-                    Proveeedor = new Entidades { IdEntidad = Movimiento.IdProveedorDestino ?? 1 }
 
                 });
 
@@ -140,7 +139,7 @@ namespace Aponus_Web_API.Negocio
                 if (!AdStocks.GuardarSuministrosMovimiento(AponusDbContext, Suministros)) Rollback = true;
 
                 //Obtener el Nombre del IdProveedorNavigation de Destino
-                IActionResult Proveedores = BsEntidades.MapeoEntidadesDTO(Movimiento.IdProveedorDestino ?? 0, 0, 0);
+                IActionResult Proveedores = BsEntidades.MapeoEntidadesDTO(0,0, Movimiento.IdProveedorDestino ?? 0);
                 DTOEntidades? proveedor = new DTOEntidades();
 
                 if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value != null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)
@@ -158,6 +157,7 @@ namespace Aponus_Web_API.Negocio
                     string.IsNullOrEmpty(NombreClave) ? NombreCompletoProveedor : NombreClave);
 
                     if (DatosArchivosMovimiento.Count == 0) Rollback = true;
+
 
                     Movimiento.IdMovimiento = IdMovimiento;
                     DatosArchivosMovimiento.ForEach(x => x.IdMovimiento = IdMovimiento ?? 0);
@@ -177,14 +177,14 @@ namespace Aponus_Web_API.Negocio
                 }
                 else
                 {
-                    AponusDbContext.Database.CommitTransaction();
                     AponusDbContext.SaveChanges();
+                    AponusDbContext.Database.CommitTransaction();
                     AponusDbContext.Dispose();
                     return new StatusCodeResult(200);
                 }
-
             }
         }
+
         public class StockProductos
         {
             private readonly AD_Componentes _componentesProductos;

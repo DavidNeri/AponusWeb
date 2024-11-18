@@ -3,6 +3,7 @@ using System;
 using Aponus_Web_API.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Aponus_Web_API.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20241118042205_Chek_202411180121")]
+    partial class Chek_202411180121
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,7 +353,7 @@ namespace Aponus_Web_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO")
-                        .HasDefaultValueSql("1");
+                        .HasDefaultValueSql("(1)");
 
                     b.Property<string>("IdFiscal")
                         .IsRequired()
@@ -1508,7 +1511,7 @@ namespace Aponus_Web_API.Migrations
                     b.HasOne("Aponus_Web_API.Modelos.EstadosProductosComponentes", "IdEstadoNavigation")
                         .WithMany("ProductosComponentes")
                         .HasForeignKey("IdEstado")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_PRODUCTOS_COMPONENTES_ESTADOS_PRODUCTOS_COMPONENTES_ID_ESTAD");
 

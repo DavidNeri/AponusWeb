@@ -21,30 +21,37 @@ namespace Aponus_Web_API.Acceso_a_Datos
             {
                 if (Entidad.IdEntidad != null)
                 {
-                    var Existente = AponusDBContext.Entidades.FirstOrDefault(x => x.IdEntidad == Entidad.IdEntidad && x.IdEstado != 0);
+                    var Existente = AponusDBContext.Entidades.FirstOrDefault(x => x.IdEntidad == Entidad.IdEntidad);
 
                     if (Existente != null)
                     {
 
-                        Existente.NombreClave = Entidad.NombreClave ?? Existente.NombreClave;
-                        Existente.Pais = Entidad.Pais ?? Existente.Pais;
-                        Existente.Localidad = Entidad.Localidad ?? Existente.Localidad;
-                        Existente.Calle = Entidad.Calle ?? Existente.Calle;
-                        Existente.Altura = Entidad.Altura ?? Existente.Altura;
-                        Existente.CodigoPostal = Entidad.CodigoPostal ?? Existente.CodigoPostal;
-                        Existente.Telefono1 = Entidad.Telefono1 ?? Existente.Telefono1;
-                        Existente.Telefono2 = Entidad.Telefono2 ?? Existente.Telefono2;
-                        Existente.Telefono3 = Entidad.Telefono3 ?? Existente.Telefono3;
-                        Existente.Email = Entidad.Email ?? Existente.Email;
-                        Existente.IdFiscal = Entidad.IdFiscal ?? Existente.IdFiscal;
-                        Existente.Ciudad = Entidad.Ciudad ?? Existente.Ciudad;
-                        Existente.Provincia = Entidad.Provincia ?? Existente.Provincia;
-                        Existente.Apellido = Entidad.Apellido ?? Existente.Apellido;
-                        Existente.Nombre = Entidad.Nombre ?? Existente.Nombre;
+                        Existente.NombreClave       = Entidad.NombreClave ?? Existente.NombreClave;
+                        Existente.Pais              = Entidad.Pais ?? Existente.Pais;
+                        Existente.Localidad         = Entidad.Localidad ?? Existente.Localidad;
+                        Existente.Calle             = Entidad.Calle ?? Existente.Calle;
+                        Existente.Altura            = Entidad.Altura ?? Existente.Altura;
+                        Existente.CodigoPostal      = Entidad.CodigoPostal ?? Existente.CodigoPostal;
+                        Existente.Telefono1         = Entidad.Telefono1 ?? Existente.Telefono1;
+                        Existente.Telefono2         = Entidad.Telefono2 ?? Existente.Telefono2;
+                        Existente.Telefono3         = Entidad.Telefono3 ?? Existente.Telefono3;
+                        Existente.Email             = Entidad.Email ?? Existente.Email;
+                        Existente.IdFiscal          = Entidad.IdFiscal ?? Existente.IdFiscal;
+                        Existente.Ciudad            = Entidad.Ciudad ?? Existente.Ciudad;
+                        Existente.Provincia         = Entidad.Provincia ?? Existente.Provincia;
+                        Existente.Apellido          = Entidad.Apellido ?? Existente.Apellido;
+                        Existente.Nombre            = Entidad.Nombre ?? Existente.Nombre;
                         Existente.IdUsuarioRegistro = Entidad.IdUsuarioRegistro ?? Existente.IdUsuarioRegistro;
-                        Existente.Barrio = Entidad.Barrio ?? Existente.Barrio;
-                        Existente.IdCategoria = Entidad.IdCategoria;
-                        Existente.IdTipo = Entidad.IdTipo;
+                        Existente.Barrio            = Entidad.Barrio ?? Existente.Barrio;
+                        Existente.IdCategoria       = Entidad.IdCategoria;
+                        Existente.IdTipo            = Entidad.IdTipo;
+                        Existente.IdEstado          = 1;                       
+
+                        if (Entidad.IdTipo != Existente.IdTipo || Entidad.IdCategoria != Existente.IdCategoria)
+                        {
+                            Existente.CategoriaEntidad = AponusDBContext.CategoriasEntidades.First(x => x.IdCategoria == Entidad.IdCategoria);
+                            Existente.TipoEntidad      = AponusDBContext.TiposEntidades.First(x => x.IdTipo == Entidad.IdTipo);
+                        }
 
                         AponusDBContext.Entidades.Update(Existente);
                         AponusDBContext.SaveChanges();
@@ -57,29 +64,29 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 {
                     Entidades NuevaEntidad = new()
                     {
-                        NombreClave = Entidad.Nombre ?? "",
-                        Nombre = !string.IsNullOrEmpty(Entidad.Nombre) ? Entidad.Nombre.Trim().ToUpper().Replace(" ", "") : null,
-                        Apellido = !string.IsNullOrEmpty(Entidad.Apellido) ? Entidad.Apellido.Trim().ToUpper().Replace(" ", "") : null,
-                        Pais = !string.IsNullOrEmpty(Entidad.Pais) ? Entidad.Pais.Trim().ToUpper().Replace(" ", "") : null,
-                        Ciudad = !string.IsNullOrEmpty(Entidad.Ciudad) ? Entidad.Ciudad.Trim().ToUpper().Replace(" ", "") : null,
-                        Provincia = !string.IsNullOrEmpty(Entidad.Provincia) ? Entidad.Provincia.Trim().ToUpper().Replace(" ", "") : null,
-                        Localidad = !string.IsNullOrEmpty(Entidad.Localidad) ? Entidad.Localidad.Trim().ToUpper().Replace(" ", "") : null,
-                        Calle = !string.IsNullOrEmpty(Entidad.Calle) ? Entidad.Calle.Trim().ToUpper().Replace(" ", "") : null,
-                        Altura = !string.IsNullOrEmpty(Entidad.Altura) ? Entidad.Altura.Trim().ToUpper().Replace(" ", "") : null,
-                        CodigoPostal = !string.IsNullOrEmpty(Entidad.CodigoPostal) ? Entidad.CodigoPostal.Trim().ToUpper().Replace(" ", "") : null,
-                        Telefono1 = !string.IsNullOrEmpty(Entidad.Telefono1) ? Entidad.Telefono1.Trim().ToUpper().Replace(" ", "") : null,
-                        Telefono2 = !string.IsNullOrEmpty(Entidad.Telefono2) ? Entidad.Telefono2.Trim().ToUpper().Replace(" ", "") : null,
-                        Telefono3 = !string.IsNullOrEmpty(Entidad.Telefono3) ? Entidad.Telefono3.Trim().ToUpper().Replace(" ", "") : null,
-                        Email = !string.IsNullOrEmpty(Entidad.Email) ? Entidad.Email.Trim().ToUpper().Replace(" ", "") : null,
-                        IdFiscal = Entidad.IdFiscal.Trim().ToUpper().Replace(" ", "").Replace("-", "").Replace("_", ""),
-                        FechaRegistro = Entidad.FechaRegistro ?? UTL_Fechas.ObtenerFechaHora(),
+                        NombreClave       = Entidad.Nombre                              ?? "",
+                        Nombre            = !string.IsNullOrEmpty(Entidad.Nombre)       ? Entidad.Nombre.Trim().ToUpper().Replace(" ", "")       : null,
+                        Apellido          = !string.IsNullOrEmpty(Entidad.Apellido)     ? Entidad.Apellido.Trim().ToUpper().Replace(" ", "")     : null,
+                        Pais              = !string.IsNullOrEmpty(Entidad.Pais)         ? Entidad.Pais.Trim().ToUpper().Replace(" ", "")         : null,
+                        Ciudad            = !string.IsNullOrEmpty(Entidad.Ciudad)       ? Entidad.Ciudad.Trim().ToUpper().Replace(" ", "")       : null,
+                        Provincia         = !string.IsNullOrEmpty(Entidad.Provincia)    ? Entidad.Provincia.Trim().ToUpper().Replace(" ", "")    : null,
+                        Localidad         = !string.IsNullOrEmpty(Entidad.Localidad)    ? Entidad.Localidad.Trim().ToUpper().Replace(" ", "")    : null,
+                        Calle             = !string.IsNullOrEmpty(Entidad.Calle)        ? Entidad.Calle.Trim().ToUpper().Replace(" ", "")        : null,
+                        Altura            = !string.IsNullOrEmpty(Entidad.Altura)       ? Entidad.Altura.Trim().ToUpper().Replace(" ", "")       : null,
+                        CodigoPostal      = !string.IsNullOrEmpty(Entidad.CodigoPostal) ? Entidad.CodigoPostal.Trim().ToUpper().Replace(" ", "") : null,
+                        Telefono1         = !string.IsNullOrEmpty(Entidad.Telefono1)    ? Entidad.Telefono1.Trim().ToUpper().Replace(" ", "")    : null,
+                        Telefono2         = !string.IsNullOrEmpty(Entidad.Telefono2)    ? Entidad.Telefono2.Trim().ToUpper().Replace(" ", "")    : null,
+                        Telefono3         = !string.IsNullOrEmpty(Entidad.Telefono3)    ? Entidad.Telefono3.Trim().ToUpper().Replace(" ", "")    : null,
+                        Email             = !string.IsNullOrEmpty(Entidad.Email)        ? Entidad.Email.Trim().ToUpper().Replace(" ", "")        : null,
+                        IdFiscal          = Entidad.IdFiscal.Trim().ToUpper().Replace(" ", "").Replace("-", "").Replace("_", ""),
+                        FechaRegistro     = Entidad.FechaRegistro ?? UTL_Fechas.ObtenerFechaHora(),
                         IdUsuarioRegistro = Entidad.IdUsuarioRegistro ?? "",
-                        IdTipo = Entidad.IdTipo,
-                        IdCategoria = Entidad.IdCategoria,
-                        CategoriaEntidad = AponusDBContext.CategoriasEntidades.FirstOrDefault(x => x.IdCategoria == Entidad.IdCategoria) ?? new EntidadesCategorias(),
-                        TipoEntidad = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == Entidad.IdTipo) ?? new EntidadesTipos(),
-                        UsuarioRegistro = AponusDBContext.Usuarios.FirstOrDefault(x => x.Usuario == Entidad.IdUsuarioRegistro) ?? new Modelos.Usuarios(),
-
+                        IdTipo            = Entidad.IdTipo,
+                        IdCategoria       = Entidad.IdCategoria,
+                        CategoriaEntidad  = AponusDBContext.CategoriasEntidades.FirstOrDefault(x => x.IdCategoria == Entidad.IdCategoria) ?? new EntidadesCategorias(),
+                        TipoEntidad       = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == Entidad.IdTipo) ?? new EntidadesTipos(),
+                        UsuarioRegistro   = AponusDBContext.Usuarios.FirstOrDefault(x => x.Usuario == Entidad.IdUsuarioRegistro) ?? new Usuarios(),
+                        IdEstado          = 1,
 
                     };
 
@@ -87,12 +94,10 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     AponusDBContext.SaveChanges();
                     return new StatusCodeResult(200);
                 }
-
-
             }
             catch (Exception ex)
             {
-                ContentResult excepcion = new ContentResult()
+                ContentResult excepcion = new()
                 {
                     ContentType = "application/json",
                     StatusCode = 400,

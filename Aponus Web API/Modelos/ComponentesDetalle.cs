@@ -23,7 +23,6 @@ namespace Aponus_Web_API.Modelos
         [ForeignKey("ID_ESTADO")]
         public int IdEstado { get; set; }
 
-        [JsonIgnore]
         public virtual EstadosComponentesDetalles IdEstadoNavigation { get; set; } = new EstadosComponentesDetalles();
 
         public virtual ICollection<ComprasDetalles> ComprasNavigation { get; set; } = new HashSet<ComprasDetalles>();

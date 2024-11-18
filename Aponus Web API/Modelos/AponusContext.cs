@@ -728,14 +728,7 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.Descripcion)
             .HasColumnType("text")
             .HasColumnName("DESCRIPCION");
-
-            entity.Property(p => p.IdEstado)
-            .HasDefaultValueSql("1");
-
-
-            entity.HasMany(e => e.ComponentesDetalle)
-            .WithOne(e => e.IdEstadoNavigation)
-            .HasForeignKey(e => e.IdEstado);
+   
         });
 
         modelBuilder.Entity<EstadosProductosComponentes>(entity =>
@@ -749,13 +742,7 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.Descripcion)
             .HasColumnType("text")
             .HasColumnName("DESCRIPCION");
-
-            entity.HasMany(e => e.ProductosComponentes)
-            .WithOne(e => e.IdEstadoNavigation)
-            .HasForeignKey(e => e.IdEstado)            
-            .HasPrincipalKey(PK=>PK.IdEstado)
-            .HasForeignKey(FK=>FK.IdEstado)
-            .HasConstraintName("FK_PRODUCTOS_COMPONENTES_ESTADOS_PRODUCTOS_COMPONENTES_ID_ESTAD");
+            
         });
 
         modelBuilder.Entity<EstadosProductos>(entity =>
@@ -869,6 +856,15 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_ESTADO")
             .HasDefaultValueSql("1");
 
+            entity.HasOne(e => e.IdEstadoNavigation)
+            .WithMany(e => e.ProductosComponentes)
+            .HasForeignKey(e => e.IdEstado)
+            .HasPrincipalKey(PK => PK.IdEstado)
+            .HasForeignKey(FK => FK.IdEstado)
+            .HasConstraintName("FK_PRODUCTOS_COMPONENTES_ESTADOS_PRODUCTOS_COMPONENTES_ID_ESTAD")
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+
 
         });
 
@@ -934,6 +930,12 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_ALMACENAMIENTO")
             .HasColumnType("varchar(50)");
 
+            entity.HasOne(p => p.IdEstadoNavigation)
+            .WithMany(p => p.ComponentesDetalle)
+            .HasPrincipalKey(pk => pk.IdEstado)
+            .HasForeignKey(p => p.IdEstado)
+            .HasConstraintName("FK_COMPONENTES_DETALLE_ESTADOS_COMPONENTES_DETALLES_ID_ESTADO");
+            
 
         });
 
@@ -1293,7 +1295,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.IdEstado)
             .HasColumnName("ID_ESTADO")
-            .HasDefaultValueSql("(1)");
+            .HasDefaultValueSql("1");
         });
 
         OnModelCreatingPartial(modelBuilder);

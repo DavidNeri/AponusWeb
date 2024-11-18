@@ -13,7 +13,7 @@ namespace Aponus_Web_API.Modelos
         [ForeignKey("ID_ESTADO")]
         public int IdEstado { get; set; }
 
-        public virtual EstadosProductosComponentes IdEstadoNavigation { get; set; } = new EstadosProductosComponentes();
+        public virtual EstadosProductosComponentes? IdEstadoNavigation { get; set; } = new EstadosProductosComponentes();
 
     }
 }

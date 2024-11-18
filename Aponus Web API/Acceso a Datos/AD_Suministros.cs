@@ -54,7 +54,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                    Descripciones => Descripciones.IdDescripcion,
                    (_Detalles, _Descripciones) => new
                    {
-                       detales = _Detalles,
+                       detales = _Detalles, 
                        descripciones = _Descripciones,
                    })
                .Where(ProductosId => IdSuministrosTodos.Contains(ProductosId.detales.IdProducto))

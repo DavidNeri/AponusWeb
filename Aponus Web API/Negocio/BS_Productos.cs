@@ -115,7 +115,7 @@ namespace Aponus_Web_API.Negocio
 
                     foreach (PropertyInfo prop in PropsActualizarProducto)
                     {
-                        //Modificar atributos del producto existente
+                        //Modificar atributos del p existente
                         PropertyInfo? _valorOriginal = ProductoOriginal.GetType().GetProperty(prop.Name);
 
                         if (_valorOriginal != null)
@@ -235,8 +235,7 @@ namespace Aponus_Web_API.Negocio
                         IdComponente = componente.IdComponente ?? "",
                         IdProducto = componente.IdProducto ?? "",
                         Longitud = componente.Largo,
-                        Peso = componente.Peso,
-                        IdEstado = 1
+                        Peso = componente.Peso                    
                     });
                 }
 
@@ -286,9 +285,25 @@ namespace Aponus_Web_API.Negocio
             }
         }
 
-        internal JsonResult ListarProducto(string idProducto)
+        internal JsonResult MapeoDTOProducto(string idProducto)
         {
-            throw new NotImplementedException();
+            DTOProducto Prod = new();
+            Producto? p = AdProductos.BuscarProducto(idProducto);            
+
+            if (p != null)
+            {
+                Prod.DiametroNominal = p.DiametroNominal;
+                Prod.Cantidad = p.Cantidad;
+                Prod.IdDescripcion = p.IdDescripcion;
+                Prod.IdTipo = p.IdTipo;
+                Prod.IdProducto = p.IdProducto;
+                Prod.PorcentajeGanancia = p.PorcentajeGanancia;
+                Prod.PrecioFinal = p.PrecioFinal;
+                Prod.PrecioLista = p.PrecioLista;
+                Prod.Tolerancia = p.Tolerancia;                
+            }
+
+            return new JsonResult(Prod);
         }
     }
 }

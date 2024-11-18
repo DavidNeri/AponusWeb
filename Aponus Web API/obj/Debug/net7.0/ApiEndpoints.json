@@ -1204,11 +1204,17 @@
   {
     "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
     "Method": "ListProducts",
-    "RelativePath": "Aponus/Products/ListProducts",
+    "RelativePath": "Aponus/Products/ListProducts/{IdProducto}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "IdProducto",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

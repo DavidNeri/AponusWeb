@@ -394,7 +394,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             try
             {
-
+                int IdMovimiento = DatosArchivos.Select(x => x.IdMovimiento).First();
+                DatosArchivos.ForEach(x => x.StockMovimiento = AponusDBContext.Stock_Movimientos.First(y => y.IdMovimiento == IdMovimiento));
                 AponusDBContext.ArchivosStock.AddRange(DatosArchivos);
                 AponusDBContext.SaveChanges();
 

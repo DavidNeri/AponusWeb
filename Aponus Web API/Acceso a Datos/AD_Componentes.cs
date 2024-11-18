@@ -59,15 +59,23 @@ namespace Aponus_Web_API.Acceso_a_Datos
             .FirstOrDefault(c => c.IdProducto == componente.IdProducto &&
                                     c.IdComponente == componente.IdComponente);
 
+            var Estado = AponusDbContext.EstadosProductosComponente.FirstOrDefault(x => x.IdEstado == 1);
+
             if (ValidarExistencia != null)
             {
                 ValidarExistencia.Cantidad = componente.Cantidad;
                 ValidarExistencia.Peso = componente.Peso;
                 ValidarExistencia.Longitud = componente.Longitud;
+                ValidarExistencia.IdEstado = Estado!.IdEstado;
+                ValidarExistencia.IdEstadoNavigation = Estado!;
+
                 AponusDbContext.SaveChanges();
             }
             else
             {
+                componente.IdEstado = Estado!.IdEstado;
+                componente.IdEstadoNavigation = Estado!;
+
                 AponusDbContext.Componentes_Productos.Add(componente);
                 AponusDbContext.SaveChanges();
             }

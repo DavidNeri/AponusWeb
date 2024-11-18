@@ -33,7 +33,7 @@ namespace Aponus_Web_API.Utilidades
                     var DatosSubida = new RawUploadParams()
                     {
                         File = new FileDescription(Archivo.FileName, stream),
-                        PublicId = $"Aponus/Movimientos_Documentos/{Proveedor}/{Archivo.FileName}_{Fecha}_{Hora}"
+                        PublicId = $"Aponus/Movimientos_Documentos/{Proveedor}/{Path.GetFileNameWithoutExtension(Archivo.FileName)}_{Fecha}_{Hora}"
                     };
 
                     var Resultado = _cloudinary.Upload(DatosSubida);
@@ -42,7 +42,6 @@ namespace Aponus_Web_API.Utilidades
                     {
                         HashArchivo = Archivo.FileName,
                         PathArchivo = Resultado.SecureUrl.ToString(),
-
 
                     });
 

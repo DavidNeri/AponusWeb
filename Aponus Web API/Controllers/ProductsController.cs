@@ -37,7 +37,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return BsProductos.ListarProducto(IdProducto);
+                return BsProductos.MapeoDTOProducto(IdProducto);
             }
             catch (Exception e)
             {
