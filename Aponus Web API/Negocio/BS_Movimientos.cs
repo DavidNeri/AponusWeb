@@ -108,20 +108,20 @@ namespace Aponus_Web_API.Negocio
             }
 
             List<int?> MovimientosIds = ListaMovimientos.Select(m => m.IdMovimiento).Distinct().ToList();
-            UTL_Cloudinary cloudinary = new UTL_Cloudinary();
+            UTL_Cloudinary cloudinary = new ();
 
             List<DTODatosArchivosMovimientosStock> InfoArchivosMovimientos = await _movimientosStock.InfoArchivos(MovimientosIds);
 
-            foreach (DTODatosArchivosMovimientosStock item in InfoArchivosMovimientos ?? Enumerable.Empty<DTODatosArchivosMovimientosStock>())
-            {
-                var (PublicUrl, error) = await cloudinary.DescargarArchivo(item?.Path ?? "");
+            //foreach (DTODatosArchivosMovimientosStock item in InfoArchivosMovimientos ?? Enumerable.Empty<DTODatosArchivosMovimientosStock>())
+            //{
+            //    var (PublicUrl, error) = await cloudinary.DescargarArchivo(item?.Path ?? "");
 
-                if (item != null)
-                {
-                    item.NombreArchivo = PublicUrl;
-                    item.MensajeError = error;
-                }
-            }
+            //    if (item != null)
+            //    {
+            //        item.NombreArchivo = PublicUrl;
+            //        item.MensajeError = error;
+            //    }
+            //}
 
 
             foreach (DTOMovimientosStock Movimiento in ListaMovimientos)
