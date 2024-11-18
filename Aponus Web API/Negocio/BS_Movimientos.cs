@@ -96,7 +96,7 @@ namespace Aponus_Web_API.Negocio
             foreach (var movimiento in ListaMovimientos)
             {
                 string FechaHora = movimiento.FechaHoraCreado.HasValue ? movimiento.FechaHoraCreado.Value.ToString("dd/MM/yyyy HH:mm:ss") : string.Empty;
-                movimiento.FechaHoraCreado = Convert.ToDateTime(FechaHora);
+                //movimiento.FechaHoraCreado = Convert.ToDateTime(FechaHora);
 
                 foreach (var suministro in movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
                 {
