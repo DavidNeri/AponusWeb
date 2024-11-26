@@ -69,5 +69,11 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 
         [JsonProperty(Order = 19, PropertyName = "idEstado", NullValueHandling = NullValueHandling.Ignore)]
         public bool? IdEstado { get; set; }
+
+        [JsonProperty(Order = 19, PropertyName = "tipo", NullValueHandling = NullValueHandling.Ignore)]
+        public DTOEntidadesTipos Tipo { get; set; } = new();
+
+        [JsonProperty(Order = 19, PropertyName = "categoria", NullValueHandling = NullValueHandling.Ignore)]
+        public DTOEntidadesCategorias Categoria { get; set; } = new();
     }
 }
