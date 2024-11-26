@@ -433,7 +433,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             try
             {
-                List<ComponentesDetalle> LstComponentes =  AponusDbContext.ComponentesDetalles
+                List<ComponentesDetalle> LstComponentes = AponusDbContext.ComponentesDetalles
                .Where(x => x.IdEstado != 0 && (IdDescripcion == null || x.IdDescripcion == IdDescripcion))
                .Select(x => new ComponentesDetalle()
                {

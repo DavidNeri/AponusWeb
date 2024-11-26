@@ -60,7 +60,7 @@ namespace Aponus_Web_API.Negocio
                 if (Producto.IdTipo != null && Producto.IdDescripcion != null && Producto.DiametroNominal != null && Producto.Tolerancia != null)
                 {
 
-                    Producto.IdProducto = AdProductos.GenerarIdProd(Producto); //Producto Nuevo
+                    Producto.IdProducto = AdProductos.GenerarIdProd(Producto); //Producto NuevoAcceso
                     Producto? _BuscarProducto = AdProductos.BuscarProducto(Producto.IdProducto);
 
 
@@ -130,7 +130,7 @@ namespace Aponus_Web_API.Negocio
                                 {
                                     if (valorNuevo == null)
                                     {
-                                        //Si alguno de los campos necesarios para generar el Nuevo ID es Nulo
+                                        //Si alguno de los campos necesarios para generar el NuevoAcceso ID es Nulo
                                         return new ContentResult()
                                         {
                                             Content = "Faltan Datos, No se realizaron modificaciones",

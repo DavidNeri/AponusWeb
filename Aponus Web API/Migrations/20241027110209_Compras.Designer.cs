@@ -1175,7 +1175,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("USUARIO");
 
-                    b.Property<string>("Contraseña")
+                    b.Property<string>("HashContraseña")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasColumnName("CONTRASEÑA");

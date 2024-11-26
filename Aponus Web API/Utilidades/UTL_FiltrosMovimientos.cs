@@ -19,6 +19,10 @@ namespace Aponus_Web_API.Utilidades
         [JsonPropertyName("hasta")]
         public DateTime? Hasta { get; set; }
 
+        [JsonPropertyName("idMovimiento")]
+        public int? IdMovimiento { get; set; }
+
+
         public Expression<Func<DTOMovimientosStock, bool>> ConstruirCondicionWhere(UTL_FiltrosMovimientos filtros)
         {
             string Propiedad;
@@ -122,9 +126,21 @@ namespace Aponus_Web_API.Utilidades
                     Condiciones.Add(condicionNombreProveedor);
 
                 }
+                else if (Prop.Name.Equals("IdMovimiento"))
+                {
+                    Propiedad = "IdMovimiento";
 
+                    // Obtener la propiedad IdMovimiento de DTOMovimientosStock
+                    var PropMovimiento = Expression.Property(EntidadParametro, Propiedad);
 
+                    // Comparar el valor de filtros.IdMovimiento con la propiedad IdMovimiento
+                    var condicionIdMovimiento = Expression.Equal(
+                        PropMovimiento,                                         // La propiedad IdMovimiento en la entidad
+                        Expression.Constant(filtros.IdMovimiento, typeof(int)) // El valor que deseas comparar
+                    );
 
+                    Condiciones.Add(condicionIdMovimiento);
+                }
             }
 
             // Unir las condiciones con AND

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Aponus_Web_API.Utilidades;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Modelos;
 
@@ -30,16 +32,12 @@ public partial class AponusContext : DbContext
     public virtual DbSet<EntidadesCategorias> CategoriasEntidades { get; set; }
     public virtual DbSet<EntidadesTipos> TiposEntidades { get; set; }
     public virtual DbSet<EntidadesTiposCategorias> EntidadeTiposCategorias { get; set; }
-
     public virtual DbSet<Compras> Compra { get; set; }
     public virtual DbSet<PagosCompras> PagosCompra { get; set; }
     public virtual DbSet<ComprasDetalles> ComprasDetalle { get; set; }
     public virtual DbSet<EstadosCompras> EstadosCompra { get; set; }
-
     public virtual DbSet<CuotasCompras> CuotasCompra { get; set; }
     public virtual DbSet<EstadosCuotasCompras> EstadosCuotasCompra { get; set; }
-
-
     public virtual DbSet<MediosPago> MediosPagos { get; set; }
     public virtual DbSet<Ventas> ventas { get; set; }
     public virtual DbSet<PagosVentas> pagosVentas { get; set; }
@@ -48,6 +46,7 @@ public partial class AponusContext : DbContext
     public virtual DbSet<CuotasVentas> cuotasVentas { get; set; }
     public virtual DbSet<EstadosCuotasVentas> estadosCuotasVentas { get; set; }
     public virtual DbSet<PerfilesUsuarios> perfilesUsuarios { get; set; }
+    public virtual DbSet<Auditorias> Auditorias { get; set; }
 
 
 
@@ -56,9 +55,101 @@ public partial class AponusContext : DbContext
 
 
     }
+
+    public override int SaveChanges()
+    {
+        RegistrarAuditoria();
+        return base.SaveChanges();
+    }
+
+    private void RegistrarAuditoria()
+    {
+        //var Cambios = ChangeTracker.Entries()
+        //    .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted);
+
+        //foreach (var cambio in Cambios)
+        //{
+        //    var Tabla = cambio.GetType().Name;
+        //    var IdRegistro = ObtenerClavePrimaria(cambio);
+        //    var usuario = cambio.GetType().GetProperty("usuario").GetValue();
+
+        //    var auditoria = new Auditorias()
+        //    {
+        //        Tabla = Tabla,
+        //        IdRegistro = IdRegistro,
+        //        Usuario = usuario,
+        //        Fecha = UTL_Fechas.ObtenerFechaHora()
+        //    };
+
+        //    switch (cambio.State)
+        //    {
+        //        case EntityState.Added:
+        //            auditoria.Accion = "CREACION";
+        //            auditoria.ValoresPrevios = "";
+        //            auditoria.ValoresNuevos = JsonConvert.SerializeObject(cambio.CurrentValues.ToObject());
+        //            break;
+
+        //        case EntityState.Modified:
+        //            auditoria.Accion = "ACTUALIZACION";
+        //            auditoria.ValoresPrevios = JsonConvert.SerializeObject(cambio.OriginalValues.ToObject());
+        //            auditoria.ValoresNuevos = JsonConvert.SerializeObject(cambio.CurrentValues.ToObject());
+        //            break;
+
+        //        case EntityState.Deleted:
+        //            auditoria.Accion = "ELIMINACION";
+        //            auditoria.ValoresPrevios = JsonConvert.SerializeObject(cambio.OriginalValues.ToObject());
+        //            auditoria.ValoresNuevos = null;
+        //            break;
+
+        //    }
+        //}
+
+
+        throw new NotImplementedException();
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
+
+        modelBuilder.Entity<Auditorias>(entity =>
+        {
+            entity.ToTable("AUDITORIAS");
+
+            entity.HasKey(p => p.IdAuditoria);
+
+            entity.Property(p => p.IdAuditoria)
+            .UseIdentityColumn();
+
+            entity.Property(p => p.Tabla)
+            .HasColumnName("TABLA")
+            .HasColumnType("text");
+
+            entity.Property(p => p.IdRegistro)
+            .HasColumnName("ID_REGISTRO")
+            .HasColumnType("text");
+           
+            entity.Property(p => p.Accion)
+           .HasColumnName("ACCION")
+           .HasColumnType("text");
+
+            entity.Property(p => p.Usuario)
+           .HasColumnName("USUARIO")
+           .HasColumnType("text");
+
+            entity.Property(p => p.Fecha)
+           .HasColumnName("FECHA")
+           .HasColumnType("timestamp");
+
+            entity.Property(p => p.ValoresPrevios)
+           .HasColumnName("VALORES_PREVIOS")
+           .HasColumnType("text");
+
+            entity.Property(p => p.ValoresNuevos)
+           .HasColumnName("VALORES_NUEVOS")
+           .HasColumnType("text");
+
+        });
 
 
         modelBuilder.Entity<CuotasCompras>(entity =>
@@ -370,7 +461,6 @@ public partial class AponusContext : DbContext
             .HasColumnName("DESCRIPCION")
             .HasColumnType("text");
         });
-
 
 
 
@@ -1108,9 +1198,13 @@ public partial class AponusContext : DbContext
             .HasColumnName("CORREO")
             .HasColumnType("varchar(50)");
 
-            entity.Property(e => e.Contraseña)
-            .HasColumnName("CONTRASEÑA")
+            entity.Property(e => e.HashContraseña)
+            .HasColumnName("HASH_CONTRASEÑA")
             .HasColumnType("varchar(50)");
+
+            entity.Property(e => e.Sal)
+            .HasColumnName("SAL")
+            .HasColumnType("text");
 
             entity.HasMany(e => e.IdUsuarioRegistroNavigation)
             .WithOne(u => u.UsuarioRegistro)

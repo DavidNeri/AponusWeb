@@ -121,7 +121,9 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     (!Filtros.Desde.HasValue || movimiento.FechaHoraCreado >= Filtros.Desde.Value) &&
                     (!Filtros.Hasta.HasValue || movimiento.FechaHoraCreado <= Filtros.Hasta.Value) &&
                     (string.IsNullOrEmpty(Filtros.Etapa) || (movimiento.Destino != null && movimiento.Destino.Contains(Filtros.Etapa))) &&
-                    (!Filtros.IdProveedor.HasValue || movimiento.IdProveedor == Filtros.IdProveedor))
+                    (!Filtros.IdProveedor.HasValue || movimiento.IdProveedor == Filtros.IdProveedor) &&
+                    (!Filtros.IdMovimiento.HasValue || movimiento.IdMovimiento == Filtros.IdMovimiento.Value))
+                    
                 .Join(
                     AponusDBContext.Entidades,
                     movimientos => movimientos.IdProveedor,

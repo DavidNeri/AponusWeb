@@ -3,8 +3,9 @@
     public class Usuarios
     {
         public string Usuario { get; set; } = "";
-        public string Contraseña { get; set; } = "";
+        public string HashContraseña { get; set; } = "";
         public string Correo { get; set; } = "";
+        public string Sal { get; set; } = "";
         public int IdPerfil { get; set; }
 
         public virtual ICollection<Entidades> IdUsuarioRegistroNavigation { get; set; } = new HashSet<Entidades>();

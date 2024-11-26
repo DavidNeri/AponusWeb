@@ -15,15 +15,15 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpPost]
-        [Route("Validation")]
-        public DTOUsuarios? ValiadarUsuario(DTOUsuarios Usuario)
+        [Route("logIn")]
+        public async Task<IActionResult> IniciarSesion(DTOUsuarios Usuario)
         {
-            return _Usuarios.ValidarUsuario(Usuario);
+            return await _Usuarios.ValidarUsuario(Usuario);
         }
 
         [HttpPost]
-        [Route("New")]
-        public async Task<IActionResult> Nuevo(DTOUsuarios Usuario)
+        [Route("signIn")]
+        public async Task<IActionResult> NuevoAcceso(DTOUsuarios Usuario)
         {
             if (string.IsNullOrEmpty(Usuario.Usuario) || string.IsNullOrEmpty(Usuario.Contraseña) || Usuario.IdPerfil == null)
             {
@@ -36,10 +36,8 @@ namespace Aponus_Web_API.Controllers
             }
             else
             {
-                return await _Usuarios.NuevoUsuario(Usuario);
+                return await _Usuarios.ProcesarDatos(Usuario);
             }
         }
-
-
     }
 }

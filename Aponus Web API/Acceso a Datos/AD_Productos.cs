@@ -17,7 +17,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         }
         internal void GuardarProducto(DTOProducto producto)
         {
-            //AGregar Nuevo Producto 
+            //AGregar NuevoAcceso Producto 
             AponusDBContext.Productos.Add(new Producto
             {
                 IdProducto = producto.IdProducto ?? "",

@@ -290,3 +290,9 @@ D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\refint\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.pdb
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.genruntimeconfig.cache
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\ref\Aponus Web API.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.Bcl.TimeProvider.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll

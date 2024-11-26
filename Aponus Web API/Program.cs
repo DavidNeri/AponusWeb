@@ -46,6 +46,9 @@ builder.Services.AddScoped<UTL_Suministros>();
 builder.Services.AddScoped<UTL_Categorias>();
 builder.Services.AddScoped<SS_Usuarios>();
 
+builder.Services.AddTransient<UTL_Entorno>();
+
+
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
 {
@@ -75,6 +78,8 @@ builder.Services.Configure<FormOptions>(options =>
     options.ValueLengthLimit = int.MaxValue;
     options.MultipartBodyLengthLimit = int.MaxValue;
 });
+
+
 
 
 if (builder.Environment.IsProduction())
