@@ -1,13 +1,23 @@
 ﻿using Aponus_Web_API.Utilidades;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Aponus_Web_API.Modelos;
 
 public partial class AponusContext : DbContext
 {
-    public AponusContext(DbContextOptions<AponusContext> options) : base(options) { }
-    public AponusContext() { }
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public AponusContext(DbContextOptions<AponusContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
+    {
+        _httpContextAccessor = httpContextAccessor;
+
+    }
+    //public AponusContext() { }
     public virtual DbSet<ComponentesDetalle> ComponentesDetalles { get; set; }
     public virtual DbSet<Productos_Componentes> Componentes_Productos { get; set; }
     public virtual DbSet<Stock_Movimientos> Stock_Movimientos { get; set; }
@@ -45,9 +55,9 @@ public partial class AponusContext : DbContext
     public virtual DbSet<EstadosVentas> estadosVentas { get; set; }
     public virtual DbSet<CuotasVentas> cuotasVentas { get; set; }
     public virtual DbSet<EstadosCuotasVentas> estadosCuotasVentas { get; set; }
-    public virtual DbSet<PerfilesUsuarios> perfilesUsuarios { get; set; }
+    public virtual DbSet<RolesUsuarios> rolesUsuarios { get; set; }
     public virtual DbSet<Auditorias> Auditorias { get; set; }
-
+    public virtual DbSet<AsignacionPermisosRoles> asignacionRoles { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -62,55 +72,104 @@ public partial class AponusContext : DbContext
         return base.SaveChanges();
     }
 
+    public override async Task<int> SaveChangesAsync(CancellationToken TokenCancelacion = default)
+    {
+        RegistrarAuditoria();
+        return await base.SaveChangesAsync(TokenCancelacion);
+    }
     private void RegistrarAuditoria()
     {
-        //var Cambios = ChangeTracker.Entries()
-        //    .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted);
+        var auditorias = new List<Auditorias>();
 
-        //foreach (var cambio in Cambios)
-        //{
-        //    var Tabla = cambio.GetType().Name;
-        //    var IdRegistro = ObtenerClavePrimaria(cambio);
-        //    var usuario = cambio.GetType().GetProperty("usuario").GetValue();
+        var Cambios = ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted);
 
-        //    var auditoria = new Auditorias()
-        //    {
-        //        Tabla = Tabla,
-        //        IdRegistro = IdRegistro,
-        //        Usuario = usuario,
-        //        Fecha = UTL_Fechas.ObtenerFechaHora()
-        //    };
+        foreach (var cambio in Cambios)
+        {
+            var Tabla = cambio.Entity.GetType().Name;
+            var IdRegistro = ObtenerClavePrimaria(cambio);
+           
+            var usuario = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Usuario Desconocido";
 
-        //    switch (cambio.State)
-        //    {
-        //        case EntityState.Added:
-        //            auditoria.Accion = "CREACION";
-        //            auditoria.ValoresPrevios = "";
-        //            auditoria.ValoresNuevos = JsonConvert.SerializeObject(cambio.CurrentValues.ToObject());
-        //            break;
+            Auditorias auditoria = new()
+            {
+                Tabla = Tabla,
+                IdRegistro = IdRegistro,
+                Usuario = usuario,
+                Fecha = UTL_Fechas.ObtenerFechaHora()
+            };
 
-        //        case EntityState.Modified:
-        //            auditoria.Accion = "ACTUALIZACION";
-        //            auditoria.ValoresPrevios = JsonConvert.SerializeObject(cambio.OriginalValues.ToObject());
-        //            auditoria.ValoresNuevos = JsonConvert.SerializeObject(cambio.CurrentValues.ToObject());
-        //            break;
+            switch (cambio.State)
+            {
+                case EntityState.Added:
+                    auditoria.Accion = "CREACION";
+                    auditoria.ValoresPrevios = "";
+                    auditoria.ValoresNuevos = JsonConvert.SerializeObject(cambio.CurrentValues.ToObject());
+                    break;
 
-        //        case EntityState.Deleted:
-        //            auditoria.Accion = "ELIMINACION";
-        //            auditoria.ValoresPrevios = JsonConvert.SerializeObject(cambio.OriginalValues.ToObject());
-        //            auditoria.ValoresNuevos = null;
-        //            break;
+                case EntityState.Modified:
+                    auditoria.Accion = "ACTUALIZACION";
+                    auditoria.ValoresPrevios = JsonConvert.SerializeObject(cambio.OriginalValues.ToObject());
+                    auditoria.ValoresNuevos = JsonConvert.SerializeObject(cambio.CurrentValues.ToObject());
+                    break;
 
-        //    }
-        //}
+                case EntityState.Deleted:
+                    auditoria.Accion = "ELIMINACION";
+                    auditoria.ValoresPrevios = JsonConvert.SerializeObject(cambio.OriginalValues.ToObject());
+                    auditoria.ValoresNuevos = null;
+                    break;
 
+            }
 
-        throw new NotImplementedException();
+            auditorias.Add(auditoria);            
+        }
+        Auditorias.AddRange(auditorias);
+    }
+    private string ObtenerClavePrimaria(EntityEntry Entrada)
+    {
+        var PK = Entrada.Metadata.FindPrimaryKey();
+
+        if (PK == null) return "0";
+
+        var NombrePropPK = PK.Properties.FirstOrDefault();
+
+        if (NombrePropPK == null) return "0";
+        
+        return Entrada?.Property(NombrePropPK.Name)?.CurrentValue?.ToString() ?? "0";
+       
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
+
+        modelBuilder.Entity<AsignacionPermisosRoles>(entity =>
+        {
+            entity.HasNoKey();
+            entity.ToView("information_schema", "role_table_grants");
+            
+            entity.Property(p =>p.Otorgante)
+            .HasColumnName("Otorgante");
+
+            entity.Property(p => p.Beneficiario)
+            .HasColumnName("Beneficiario");
+
+            entity.Property(p => p.CatalogoTabla)
+            .HasColumnName("CatalogoTabla");
+
+            entity.Property(p => p.EsquemaTabla)
+            .HasColumnName("EsquemaTabla");
+
+            entity.Property(p => p.NombreTabla)
+            .HasColumnName("NombreTabla");
+
+            entity.Property(p => p.Atributo)
+            .HasColumnName("Atributo");
+
+            entity.Property(p => p.EsOtorgable)
+            .HasColumnName("EsOtorgable");
+
+        });
 
         modelBuilder.Entity<Auditorias>(entity =>
         {
@@ -198,24 +257,29 @@ public partial class AponusContext : DbContext
 
         });
 
-        modelBuilder.Entity<PerfilesUsuarios>(entity =>
+        modelBuilder.Entity<RolesUsuarios>(entity =>
         {
-            entity.ToTable("USUARIOS_PERFILES");
+            entity.ToTable("USUARIOS_ROLES");
 
-            entity.HasKey(PK => PK.IdPerfil);
+            entity.HasKey(PK => PK.IdRol);
 
-            entity.Property(p => p.IdPerfil)
-            .HasColumnName("ID_PERFIL")
+            entity.Property(p => p.IdRol)
+            .HasColumnName("ID_ROL")
             .HasColumnType("integer")
             .UseIdentityColumn();
+
+            entity.Property(p => p.NombreRol)
+            .HasColumnType("varchar(100)")
+            .HasColumnName("NOMBRE_ROL");
 
             entity.Property(p => p.Descripcion)
             .HasColumnType("varchar(100)")
             .HasColumnName("DESCRIPCION");
 
-            entity.Property(p => p.IdEstado)
-            .HasColumnType("integer")
-            .HasColumnName("ID_ESTADO");
+       
+
+
+
 
         });
 
@@ -1176,8 +1240,6 @@ public partial class AponusContext : DbContext
             .HasForeignKey(FK => FK.IdDescripcion)
             .HasConstraintName("FK_PRODUCTOS_TIPOS_DESCRIPCION_ID_DESCRIPCION")
             .OnDelete(DeleteBehavior.NoAction);
-
-
         });
 
         modelBuilder.Entity<Usuarios>(entity =>
@@ -1189,10 +1251,9 @@ public partial class AponusContext : DbContext
             .HasColumnName("USUARIO")
             .HasColumnType("varchar(50)");
 
-            entity.Property(e => e.IdPerfil)
-            .HasColumnName("ID_PERFIL")
+            entity.Property(e => e.IdRol)
+            .HasColumnName("ID_ROL")
             .HasColumnType("int");
-
 
             entity.Property(e => e.Correo)
             .HasColumnName("CORREO")
@@ -1210,13 +1271,11 @@ public partial class AponusContext : DbContext
             .WithOne(u => u.UsuarioRegistro)
             .HasForeignKey(e => e.IdUsuarioRegistro);
 
-            entity.HasOne(p => p.Perfil)
-            .WithMany(p => p.UsuariosNavigation)
-            .HasConstraintName("FK_USUARIOS_PERFILES_USUARIOS_ID_PERFIL")
-            .HasPrincipalKey(PK => PK.IdPerfil)
-            .HasForeignKey(FK => FK.IdPerfil);
-
-
+            entity.HasOne(p => p.Rol)
+            .WithMany(p => p.RolesUsuariosNavigation)
+            .HasConstraintName("FK_USUARIOS_ROLES_USUARIOS_ID_ROL")
+            .HasPrincipalKey(PK => PK.IdRol)
+            .HasForeignKey(FK => FK.IdRol);
 
         });
 

@@ -4,8 +4,11 @@ using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Systema;
 using Aponus_Web_API.Utilidades;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,10 +47,21 @@ builder.Services.AddScoped<UsersController>();
 
 builder.Services.AddScoped<UTL_Suministros>();
 builder.Services.AddScoped<UTL_Categorias>();
+builder.Services.AddScoped<UTL_JsonWebToken>();
+
+
 builder.Services.AddScoped<SS_Usuarios>();
 
 builder.Services.AddTransient<UTL_Entorno>();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
@@ -79,8 +93,31 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = int.MaxValue;
 });
 
+var Key = builder.Environment.IsDevelopment()
+                ? Environment.GetEnvironmentVariable("JWT_SECRET_KEY", EnvironmentVariableTarget.User)
+                    ?? throw new InvalidOperationException("JWT_SECRET_KEY no conigurada para Desarrollo")
+                : Environment.GetEnvironmentVariable("JWT_SECRET_KEY")
+                    ?? throw new InvalidOperationException("JWT_SECRET_KEY no conigurada para Produccion");
 
-
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(optiones =>
+    {
+        optiones.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "https://aponusweb.onrender.com/",
+            ValidAudience = "tu-dominio.com",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key))
+        };
+    });
 
 if (builder.Environment.IsProduction())
 {
@@ -91,11 +128,10 @@ if (builder.Environment.IsProduction())
 
 }
 
-
 var ConnectionString = builder.Environment.IsDevelopment() ? Environment.GetEnvironmentVariable("DATABASE_URL", EnvironmentVariableTarget.User) : Environment.GetEnvironmentVariable("DATABASE_URL");
 
 builder.Services.AddDbContext<AponusContext>(options => options.UseNpgsql(ConnectionString).EnableSensitiveDataLogging(false));
-Console.WriteLine($"Cadena de conexión obtenida: {ConnectionString}");
+
 
 var app = builder.Build();
 
@@ -105,7 +141,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseCors("NuevaPolitca");
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

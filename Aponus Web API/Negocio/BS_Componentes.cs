@@ -3,7 +3,6 @@ using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity.Validation;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -45,22 +44,7 @@ namespace Aponus_Web_API.Negocio
                     catch (DbUpdateException)
                     {
                         return new ContentResult { Content = "Error al actualizar la Base de Datos", ContentType = "text/plan", StatusCode = 400 };
-                    }
-                    catch (DbEntityValidationException ex)
-                    {
-                        string Mensaje = "";
-
-                        foreach (var entityValidationError in ex.EntityValidationErrors)
-                        {
-                            foreach (var validationError in entityValidationError.ValidationErrors)
-                            {
-                                Mensaje += "Error de validación: Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage + "\n";
-                            }
-                        }
-
-                        return new ContentResult { Content = Mensaje, StatusCode = 400 };
-
-                    }
+                    }                    
                     catch (InvalidOperationException)
                     {
                         return new ContentResult { Content = "Operacion Invalida", ContentType = "text/plan", StatusCode = 400 };

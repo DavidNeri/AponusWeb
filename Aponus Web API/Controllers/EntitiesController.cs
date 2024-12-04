@@ -1,5 +1,6 @@
 ﻿using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
@@ -23,7 +24,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Types/Save")]
-
+        [RequiredPermission("ENTIDADES_TIPOS", "INSERT")]
+        [RequiredPermission("ENTIDADES_TIPOS", "UPDATE")]
         public async Task<IActionResult> Guardar(DTOEntidadesTipos TipoEntidad)
         {
             if (string.IsNullOrEmpty(TipoEntidad.Nombre))
@@ -53,6 +55,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Categories/Save")]
+        [RequiredPermission("ENTIDADES_CATEGORIAS", "INSERT")]
+        [RequiredPermission("ENTIDADES_CATEGORIAS", "UPDATE")]
+        [RequiredPermission("ENTIDADES_TIPOS_CATEGORIAS", "INSERT")]
         public async Task<IActionResult> GuardarCategoria(DTOEntidadesCategorias NuevaCategoria)
         {
             if (string.IsNullOrEmpty(NuevaCategoria.NombreCategoria))
@@ -72,8 +77,6 @@ namespace Aponus_Web_API.Controllers
                     ContentType = "application/json",
                     StatusCode = 400
                 };
-
-
             }
             else
             {
@@ -83,6 +86,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Categories/Delete/{Id}")]
+        [RequiredPermission("ENTIDADES_CATEGORIAS", "UPDATE")]
         public async Task<IActionResult> EliminarCategoria(int Id)
         {
             return await BSEntidades.CategoriasEntidades().ValidarCategoria(Id);
@@ -90,6 +94,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Types/Delete/{Id}")]
+        [RequiredPermission("ENTIDADES", "UPDATE")]
+        [RequiredPermission("ENTIDADES_TIPOS", "UPDATE")]
         public async Task<IActionResult> EliminarTipo(int Id)
         {
             return await BSEntidades.TiposEntidades().ValidarTipoEntidad(Id);
@@ -97,6 +103,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Save")]
+        [RequiredPermission("ENTIDADES", "INSERT")]
+        [RequiredPermission("ENTIDADES", "UPDATE")]
         public IActionResult Nuevo(DTOEntidades Entidad)
         {
             return BSEntidades.ValidaryNormalizarDatos(Entidad);
@@ -111,6 +119,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Delete/{Id}")]
+        [RequiredPermission("ENTIDADES", "UPDATE")]
         public async Task<IActionResult> Eliminar(int Id)
         {
             return await BSEntidades.ValidarEntidad(Id);

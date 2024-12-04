@@ -127,7 +127,6 @@ namespace Aponus_Web_API.Negocio
                         ContentType = "application/json",
                         StatusCode = 400,
                     };
-
                 }
                 else
                 {

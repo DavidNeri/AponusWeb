@@ -124,7 +124,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("LONGITUD");
 
-                    b.Property<int?>("Perfil")
+                    b.Property<int?>("Rol")
                         .HasColumnType("integer")
                         .HasColumnName("PERFIL");
 
@@ -1094,7 +1094,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("CONTRASEÑA");
 
-                    b.Property<int>("IdPerfil")
+                    b.Property<int>("IdRol")
                         .HasColumnType("int")
                         .HasColumnName("ID_PERFIL");
 

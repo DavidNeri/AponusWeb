@@ -1,10 +1,7 @@
 ﻿using Aponus_Web_API.Modelos;
-using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using Microsoft.IdentityModel.Tokens;
-using System.Data.Entity;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
+
 
 namespace Aponus_Web_API.Acceso_a_Datos
 {
@@ -16,33 +13,49 @@ namespace Aponus_Web_API.Acceso_a_Datos
             AponusDBContext = _aponusContext;
         }
 
-        public async Task<(int? StatusCode200Ok, Exception? Ex)> Nuevo(Usuarios Usuario)
+        public async Task<(int? StatusCode200Ok, Exception? Ex)> Nuevo(Usuarios Usuario, string contraseña)
         {
-            Usuario.Perfil = AponusDBContext.perfilesUsuarios
-                .FirstOrDefault(x => x.IdPerfil == Usuario.IdPerfil) ?? new PerfilesUsuarios();
+            Usuario.Rol = AponusDBContext.rolesUsuarios
+                .FirstOrDefault(x => x.IdRol == Usuario.IdRol) ?? new RolesUsuarios();
 
-            using (var transaccion = await AponusDBContext.Database.BeginTransactionAsync())
-                try
+            using var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
+            try
+            {
+                if (Usuario.Rol != null)
                 {
-                    await AponusDBContext.Usuarios.AddAsync(Usuario);
-                    await AponusDBContext.SaveChangesAsync();
-                    await transaccion.CommitAsync();
-                    return (StatusCodes.Status200OK, null);
+                    RolesUsuarios rol = Usuario.Rol;
+
+                    using (var Conexion = new NpgsqlConnection(AponusDBContext.Database.GetConnectionString()))
+                    {
+                        await Conexion.OpenAsync();
+                        var QueryCrearUsuario = new NpgsqlCommand($"CREATE USER {Usuario.Usuario} WITH PASSWORD '{contraseña}';", Conexion);
+                        var QueryAsignarRol = new NpgsqlCommand($"GRANT {rol.NombreRol} TO {Usuario.Usuario};", Conexion);
+                        QueryCrearUsuario.ExecuteNonQuery();
+                        QueryAsignarRol.ExecuteNonQuery();
+                    }
                 }
-                catch (Exception ex)
-                {
-                    await transaccion.RollbackAsync();
-                    return (null, ex);
-                }
+
+                await AponusDBContext.Usuarios.AddAsync(Usuario);
+                await AponusDBContext.SaveChangesAsync();
+                await transaccion.CommitAsync();
+                return (StatusCodes.Status200OK, null);
+            }
+            catch (Exception ex)
+            {
+                await transaccion.RollbackAsync();
+                return (null, ex);
+            }
         }
 
 
-        public async Task<(Usuarios? Usuario, Exception? Error)> ObtenerDatosUsuario(string Usuario)
+        public async Task<(Usuarios? Usuario, Exception? Error)> ObtenerDatosUsuario(Usuarios usuario)
         {
             try
             {
+
                 var _Usuario = await AponusDBContext.Usuarios
-                    .FirstOrDefaultAsync(x=> x.Usuario.ToUpper().Equals(Usuario) || x.Correo.ToUpper().Equals(Usuario));
+                    .Include(x=>x.Rol)
+                    .FirstOrDefaultAsync(x => x.Usuario.ToUpper().Equals(usuario.Usuario.ToUpper()) || x.Correo.ToUpper().Equals(usuario.Correo.ToUpper()));
 
                 if (_Usuario != null)
                 {
@@ -58,5 +71,29 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 return (null, ex);
             }
         }
+
+        public (List<AsignacionPermisosRoles>? , Exception?) ListarPermisosRol(string rol)
+        {
+            try
+            {
+                return (AponusDBContext.asignacionRoles
+                                .Where(x => x.Equals("public") && x.Beneficiario.Equals(rol))
+                                .Select(x => new AsignacionPermisosRoles()
+                                {                                    
+                                    NombreTabla = x.NombreTabla,
+                                    Atributo = x.Atributo
+                                })
+                                .ToList(),
+                        null);
+            }
+            catch (Exception ex) 
+            {
+                return (null, ex);
+                
+            }
+           
+
+        }
+
     }
 }

@@ -31,8 +31,6 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Aponus Web API.pdb
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Annytab.Stemmer.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\CloudinaryDotNet.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\DataScope.Stemmer.NETStandart.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\EntityFramework.SqlServer.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\EntityFramework.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Fractions.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Humanizer.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\MessagePack.dll
@@ -41,6 +39,7 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.AspNetCore.JsonPatch.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.AspNetCore.Razor.Language.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.Bcl.TimeProvider.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.Build.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.Build.Framework.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.CodeAnalysis.AnalyzerUtilities.dll
@@ -64,6 +63,10 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstr
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.NET.StringTools.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.OpenApi.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.VisualStudio.Debugger.Contracts.dll
@@ -100,8 +103,8 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.Composition.Hosting.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.Composition.Runtime.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.Composition.TypedParts.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.Configuration.ConfigurationManager.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.Data.SqlClient.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.Drawing.Common.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.Management.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.Reflection.MetadataLoadContext.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.Security.Cryptography.ProtectedData.dll
@@ -267,11 +270,6 @@ D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\tr\Microsoft.CodeAnalysis.Workspace
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win-arm64\native\sni.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win-x64\native\sni.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win-x86\native\sni.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win\lib\netcoreapp2.0\System.Management.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
@@ -290,9 +288,6 @@ D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\refint\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.pdb
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.genruntimeconfig.cache
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\ref\Aponus Web API.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.Bcl.TimeProvider.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
-D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll

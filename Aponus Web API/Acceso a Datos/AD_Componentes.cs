@@ -2,7 +2,7 @@
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Fractions;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -218,7 +218,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 if (espesor != null)
                     sb.Append($", Espesor:{espesor}mm");
                 if (perfil != null)
-                    sb.Append($", Perfil:{perfil}");
+                    sb.Append($", Rol:{perfil}");
                 if (tolerancia != null && tolerancia != "")
                     sb.Append($", Tolerancia:{tolerancia}");
                 if (DiametroNominal != null && DiametroNominal != "")

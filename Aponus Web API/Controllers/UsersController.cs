@@ -25,7 +25,7 @@ namespace Aponus_Web_API.Controllers
         [Route("signIn")]
         public async Task<IActionResult> NuevoAcceso(DTOUsuarios Usuario)
         {
-            if (string.IsNullOrEmpty(Usuario.Usuario) || string.IsNullOrEmpty(Usuario.Contraseña) || Usuario.IdPerfil == null)
+            if (string.IsNullOrEmpty(Usuario.Usuario) || string.IsNullOrEmpty(Usuario.Contraseña) || Usuario.idRol == null)
             {
                 return new ContentResult()
                 {

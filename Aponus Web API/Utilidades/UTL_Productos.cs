@@ -19,7 +19,7 @@ namespace Aponus_Web_API.Utilidades
         public string? Espesor { get; set; } = "Espesor";
 
         [JsonProperty(PropertyName = "perfil", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Perfil { get; set; } = "Perfil";
+        public string? Perfil { get; set; } = "Rol";
 
         [JsonProperty(PropertyName = "diametro", NullValueHandling = NullValueHandling.Ignore)]
         public string? Diametro { get; set; } = "Diámetro";

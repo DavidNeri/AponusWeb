@@ -1,5 +1,7 @@
-﻿using Aponus_Web_API.Negocio;
+﻿using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +34,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Types/New")]
+        [RequiredPermission("PRODUCTOS_TIPOS","INSERT")]
         public JsonResult AgregarTipoProducto(DTOCategorias NuevaCategoria)
         {
             try
@@ -46,6 +49,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Types/{TypeId}/Delete/")]
+        [RequiredPermission("PRODUCTOS_TIPOS", "UPDATE")]
         public async Task<IActionResult> EliminarTipoProducto(string IdTipo)
         {
             try
@@ -61,6 +65,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Descriptions/New")]
+        [RequiredPermission("PRODUCTOS_DESCRIPCION", "UPDATE")]
+        [RequiredPermission("PRODUCTOS_TIPOS_DESCRIPCION", "UPDATE")]
         public async Task<IActionResult> NuevaDescripcionProducto(DTOCategorias NuevaCategoria)
         {
             try
@@ -80,6 +86,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Descriptions/{IdDescription}/Delete/")]
+        [RequiredPermission("PRODUCTOS", "UPDATE")]
+        [RequiredPermission("PRODUCTOS_DESCRIPCION", "UPDATE")]
         public async Task<IActionResult> EliminarDescripcionProducto(int IdDescription)
         {
             return await BsCategorias.RegistrarCambioEstadoDescripcionProducto(IdDescription);
@@ -87,6 +95,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Type-or-Description/Update")]
+        [RequiredPermission("PRODUCTOS_TIPOS", "UPDATE")]
+        [RequiredPermission("PRODUCTOS_DESCRIPCION", "UPDATE")]
+        [RequiredPermission("PRODUCTOS_TIPOS_DESCRIPCION", "UPDATE")]
         public IActionResult Actualizar_Tipo_Descripcion_Producto(DTOActualizarCategorias ActualizarCategorias)
         {
             try
@@ -109,6 +120,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Supplies/Descriptions/Save")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "INSERT")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "UPDATE")]
         public async Task<IActionResult> GuardarDescripcionComponente(DTODescripcionComponentes Componente)
         {
             return await BsCategorias.MapeoComponenteBD(Componente);

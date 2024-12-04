@@ -124,7 +124,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("LONGITUD");
 
-                    b.Property<int?>("Perfil")
+                    b.Property<int?>("Rol")
                         .HasColumnType("integer")
                         .HasColumnName("PERFIL");
 
@@ -775,14 +775,14 @@ namespace Aponus_Web_API.Migrations
                     b.ToTable("PAGOS_VENTAS", (string)null);
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Modelos.PerfilesUsuarios", b =>
+            modelBuilder.Entity("Aponus_Web_API.Modelos.rolesUsuarios", b =>
                 {
-                    b.Property<int>("IdPerfil")
+                    b.Property<int>("IdRol")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("ID_PERFIL");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdPerfil"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdRol"));
 
                     b.Property<string>("NombreDescripcion")
                         .IsRequired()
@@ -793,7 +793,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("ID_ESTADO");
 
-                    b.HasKey("IdPerfil");
+                    b.HasKey("IdRol");
 
                     b.ToTable("USUARIOS_PERFILES", (string)null);
                 });
@@ -1125,7 +1125,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("CONTRASEÑA");
 
-                    b.Property<int>("IdPerfil")
+                    b.Property<int>("IdRol")
                         .HasColumnType("int")
                         .HasColumnName("ID_PERFIL");
 
@@ -1136,7 +1136,7 @@ namespace Aponus_Web_API.Migrations
 
                     b.HasKey("Usuario");
 
-                    b.HasIndex("IdPerfil");
+                    b.HasIndex("IdRol");
 
                     b.ToTable("USUARIOS", (string)null);
                 });
@@ -1501,14 +1501,14 @@ namespace Aponus_Web_API.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.Usuarios", b =>
                 {
-                    b.HasOne("Aponus_Web_API.Modelos.PerfilesUsuarios", "Perfil")
-                        .WithMany("UsuariosNavigation")
-                        .HasForeignKey("IdPerfil")
+                    b.HasOne("Aponus_Web_API.Modelos.rolesUsuarios", "Rol")
+                        .WithMany("RolesUsuariosNavigation")
+                        .HasForeignKey("IdRol")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_USUARIOS_PERFILES_USUARIOS_ID_PERFIL");
 
-                    b.Navigation("Perfil");
+                    b.Navigation("Rol");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.Ventas", b =>
@@ -1657,9 +1657,9 @@ namespace Aponus_Web_API.Migrations
                     b.Navigation("PagosVentasNavigation");
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Modelos.PerfilesUsuarios", b =>
+            modelBuilder.Entity("Aponus_Web_API.Modelos.rolesUsuarios", b =>
                 {
-                    b.Navigation("UsuariosNavigation");
+                    b.Navigation("RolesUsuariosNavigation");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.Producto", b =>

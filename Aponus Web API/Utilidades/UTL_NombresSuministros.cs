@@ -34,7 +34,7 @@ namespace Aponus_Web_API.Utilidades
                 if (espesor != null)
                     sb.Append($", Espesor:{espesor}mm");
                 if (perfil != null)
-                    sb.Append($", Perfil:{perfil}");
+                    sb.Append($", Rol:{perfil}");
                 if (tolerancia != "")
                     sb.Append($", Tolerancia:{tolerancia}");
                 if (DiametroNominal != "")

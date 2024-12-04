@@ -1,7 +1,7 @@
 ﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aponus_Web_API.Acceso_a_Datos
 {

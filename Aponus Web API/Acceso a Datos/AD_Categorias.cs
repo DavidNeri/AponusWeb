@@ -1,7 +1,6 @@
 ﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity;
 
 namespace Aponus_Web_API.Acceso_a_Datos
 {
@@ -124,7 +123,15 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 if (TipoAnterior != null)
                 {
                     TipoAnterior.DescripcionTipo = actualizarCategorias.Nueva?.DescripcionTipo;
-                    TipoAnterior.IdTipo = actualizarCategorias.Nueva?.IdTipo ?? "";
+
+                    if (TipoAnterior.IdTipo != actualizarCategorias?.Nueva?.IdTipo && actualizarCategorias?.Nueva?.IdTipo != null)
+                    {
+                        string idTipo = actualizarCategorias.Nueva.IdTipo;
+                        string _idTipo = TipoAnterior.IdTipo;
+                        AponusDBContext.Database.ExecuteSqlInterpolated($"UPDATE \"PRODUCTOS_TIPOS\" SET \"ID_TIPO\" = {idTipo} WHERE \"ID_TIPO\" = {_idTipo}");
+                        AponusDBContext.ChangeTracker.Clear();
+                    }
+                    
                     AponusDBContext.SaveChanges();
                 }
             }
