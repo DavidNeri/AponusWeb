@@ -272,7 +272,6 @@ namespace Aponus_Web_API.Negocio
                                         ContentType = "application/json",
                                         StatusCode = 400,
                                     };
-
                                 }
                                 else
                                 {
@@ -311,7 +310,6 @@ namespace Aponus_Web_API.Negocio
                         StatusCode = 400,
                     };
                 }
-
             }
 
             internal IActionResult Eliminar(DTOMovimientosStock Movimiento)

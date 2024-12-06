@@ -17,6 +17,29 @@ namespace Aponus_Web_API.Systema
             JsonWebToken = _JsonWebToken;
         }
 
+        internal async Task<IActionResult> MapeoRolesDTO()
+        {
+            var(Roles, ex) = await AdUsuarios.ListaRoles();
+
+            if (ex!= null) return new ContentResult()
+            {
+                Content = ex.InnerException?.Message ?? ex.Message,
+                ContentType = "application/json",
+                StatusCode = 400
+            };
+
+            List<DTORolesUsuarios> dTORolesUsuarios = new();
+
+            Roles!.ForEach(x => dTORolesUsuarios.Add(new DTORolesUsuarios()
+            {
+                Descripcion = x.Descripcion,
+                NombreRol = x.NombreRol,
+                IdRol = x.IdRol
+            }));
+
+            return new JsonResult(dTORolesUsuarios);
+        }
+
         internal async Task<IActionResult> ValidarUsuario(DTOUsuarios _usuario)
         {
             Usuarios _Usuario = new Usuarios()

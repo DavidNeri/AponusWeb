@@ -43,7 +43,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     {
                         var Existe = await AponusDBContext.Productos.FindAsync(Producto.IdProducto);
 
-                        if (Existe != null)
+                        if (Existe != null)                            
                             AponusDBContext.Entry(Existe).CurrentValues.SetValues(Producto);
                         else
                             await AponusDBContext.Productos.AddAsync(Producto);
@@ -233,8 +233,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
         internal bool ActualizarStockInsumo(AponusContext AponusDBContext, DTOStockUpdate Actualizacion)
         {
-            string Origen = Actualizacion.Origen?.ToUpper() ?? "";
-            string Destino = Actualizacion.Destino?.ToUpper() ?? "";
+            string Origen = Actualizacion.Origen?.Trim().ToUpper() ?? "";
+            string Destino = Actualizacion.Destino?.Trim().ToUpper() ?? "";
             decimal Cantidad = Actualizacion.Cantidad ?? 0;
 
             StockInsumos? Insumo = AponusDBContext?.stockInsumos.FirstOrDefault(x => x.IdInsumo.Equals(Actualizacion.Id));
@@ -247,10 +247,20 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 if (string.IsNullOrEmpty(Actualizacion.Origen) && (Actualizacion.Destino?.ToUpper() ?? "").Contains("PENDIENTE")) //CompraNavigation con mercaderia pendiente de entrega
                 {
-                    return false;
+                    decimal CantidadDestino = (destino?.GetValue(Insumo) as decimal? ?? 0) + Cantidad;
+                    destino?.SetValue(Insumo, CantidadDestino);
+                    AponusDBContext!.Entry(Insumo).State = EntityState.Modified;
+                    AponusDBContext.SaveChanges();
+
+                    return true;
                 }
                 else if (string.IsNullOrEmpty(Actualizacion.Origen) && (Actualizacion.Destino?.ToUpper() ?? "").Contains("RECIBIDO")) //CompraNavigation con Mercaderia entregada al momento de la compra
                 {
+                    decimal CantidadDestino = (destino?.GetValue(Insumo) as decimal? ?? 0) + Cantidad;
+                    destino?.SetValue(Insumo, CantidadDestino);
+                    AponusDBContext!.Entry(Insumo).State = EntityState.Modified;
+                    AponusDBContext.SaveChanges();
+
                     return false;
                 }
                 else if (!string.IsNullOrEmpty(Actualizacion.Origen) && !string.IsNullOrEmpty(Actualizacion.Destino)) //Movimiento interno/Ingreso de Mercaderia 

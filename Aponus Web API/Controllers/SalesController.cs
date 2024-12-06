@@ -50,6 +50,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("States/Save")]
+        [RequiredPermission("ESTADOS_VENTAS", "INSERT")]
+        [RequiredPermission("ESTADOS_VENTAS", "UPDATE")]
         public async Task<IActionResult> GuardarEstadoVenta(DTOEstadosVentas Estados)
         {
             return await BsVentas.EstadosVentas().ValidarDatos(Estados);
@@ -57,18 +59,18 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("States/{Id}/Delete")]
+        [RequiredPermission("ESTADOS_VENTAS", "UPDATE")]
         public IActionResult EliminarEstadoVenta(int Id)
         {
             return BsVentas.EstadosVentas().Eliminar(Id);
-        }
-
-        //
+        }        
 
         [HttpPost]
         [Route("Save")]
+        [RequiredPermission("VENTAS", "INSERT")]
+        [RequiredPermission("PRODUCTOS", "UPDATE")]
         public async Task<IActionResult> Guardar(DTOVentas Venta)
         {
-            // If Venta.Cuotas es nulo errror 
 
             if (Venta.MontoTotal.Equals(0))
                 return new ContentResult()
@@ -94,12 +96,6 @@ namespace Aponus_Web_API.Controllers
                 }
 
             }
-
-
         }
-
-
-
-
     }
 }

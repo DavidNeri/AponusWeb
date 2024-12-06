@@ -34,23 +34,29 @@ namespace Aponus_Web_API.Negocio
                 ICollection<DTOCompras> Compras = await QueryCompras!
                 .Select(x => new DTOCompras()
                 {
+                    FechaHora = x.FechaHora,
+                    IdCompra = x.IdCompra,
+                    IdProveedor = x.IdProveedor,
+                    SaldoPendiente = x.SaldoPendiente,
+                    SaldoTotal = x.MontoTotal,
+                    IdUsuario = x.IdUsuario,
+
                     DetallesCompra = x.DetallesCompra.Select(y=> new DTOComprasDetalles()
                     {
                         IdCompra = y.IdCompra,
                         Cantidad = y.Cantidad,
                         IdInsumo = y.IdInsumo,
-                    }).ToList(),
 
-                    FechaHora = x.FechaHora,
-                    IdCompra = x.IdCompra,
-                    IdProveedor = x.IdProveedor,
+                    }).ToList(),                   
+
                     Pagos = x.Pagos.Select(y=>new DTOPagosCompras()
                     {                        
                         IdCompra = y.IdCompra,
                         Fecha = y.Fecha,
                         IdMedioPago = y.IdMedioPago,
                         Monto = y.Monto,
-                        IdPago = y.IdPago,                        
+                        IdPago = y.IdPago,
+                        
                     }).ToList(),
 
                     Proveedor = new DTOEntidades()
@@ -59,11 +65,7 @@ namespace Aponus_Web_API.Negocio
                         Apellido = x.IdProveedorNavigation.Apellido,
                         Nombre = x.IdProveedorNavigation.Nombre,
                         NombreClave = x.IdProveedorNavigation.NombreClave,                        
-                    },
-
-                    SaldoPendiente = x.SaldoPendiente,
-                    SaldoTotal = x.MontoTotal,
-                    IdUsuario = x.IdUsuario
+                    }                    
 
                 }).ToListAsync();
 
@@ -90,6 +92,7 @@ namespace Aponus_Web_API.Negocio
                 {
                     IdProveedor = Compra.IdProveedor,
                     IdUsuario = Compra.IdUsuario,
+
                     DetallesCompra = Compra.DetallesCompra.Select(dc => new ComprasDetalles()
                     {
                         Cantidad = dc.Cantidad,
@@ -99,7 +102,9 @@ namespace Aponus_Web_API.Negocio
                         
 
                     }).ToList(),
+
                     FechaHora = UTL_Fechas.ObtenerFechaHora(),
+
                     Pagos = Compra.Pagos.Select(p => new PagosCompras()
                     {
                         IdCompra = p.IdCompra,
@@ -108,6 +113,7 @@ namespace Aponus_Web_API.Negocio
                         MedioPago = new MediosPago() { IdMedioPago = p.IdMedioPago },
                         IdPago = p.IdPago,
                         Monto = p.Monto,
+
                     }).ToList(),
 
                     IdProveedorNavigation = new Entidades { IdEntidad = Compra.IdProveedor },

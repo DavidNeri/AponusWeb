@@ -95,7 +95,7 @@ namespace Aponus_Web_API.Negocio
             }
             else
             {
-                Modelos.Ventas NuevaVenta = new Modelos.Ventas()
+                Ventas NuevaVenta = new()
                 {
                     IdCliente = Venta.IdCliente,
                     FechaHora = UTL_Fechas.ObtenerFechaHora(),

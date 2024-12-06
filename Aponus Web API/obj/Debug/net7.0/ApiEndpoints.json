@@ -1213,9 +1213,9 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.MovmentsController",
-    "Method": "ActualizarProveedor",
+    "Method": "ActualizarDatosMovimiento",
     "RelativePath": "Aponus/Movments/Update",
-    "HttpMethod": "PUT",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -1666,6 +1666,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.UsersController",
+    "Method": "ObtenerPerfiles",
+    "RelativePath": "Aponus/Users/roles/list",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

@@ -146,28 +146,28 @@ public partial class AponusContext : DbContext
         modelBuilder.Entity<AsignacionPermisosRoles>(entity =>
         {
             entity.HasNoKey();
-            entity.ToView("information_schema", "role_table_grants");
+            entity.ToView("role_table_grants", "information_schema");
             
             entity.Property(p =>p.Otorgante)
-            .HasColumnName("Otorgante");
+            .HasColumnName("grantor");
 
             entity.Property(p => p.Beneficiario)
-            .HasColumnName("Beneficiario");
+            .HasColumnName("grantee");
 
             entity.Property(p => p.CatalogoTabla)
-            .HasColumnName("CatalogoTabla");
+            .HasColumnName("table_catalog");
 
             entity.Property(p => p.EsquemaTabla)
-            .HasColumnName("EsquemaTabla");
+            .HasColumnName("table_schema");
 
             entity.Property(p => p.NombreTabla)
-            .HasColumnName("NombreTabla");
+            .HasColumnName("table_name");
 
             entity.Property(p => p.Atributo)
-            .HasColumnName("Atributo");
+            .HasColumnName("privilege_type");
 
             entity.Property(p => p.EsOtorgable)
-            .HasColumnName("EsOtorgable");
+            .HasColumnName("is_grantable");
 
         });
 

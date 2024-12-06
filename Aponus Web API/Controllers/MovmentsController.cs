@@ -17,6 +17,11 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("New")]
+        [RequiredPermission("STOCK_INSUMOS", "UPDATE")]
+        [RequiredPermission("STOCK_MOVIMIENTOS", "INSERT")]
+        [RequiredPermission("SUMINISTROS_MOVIMIENTOS_STOCK", "INSERT")]
+        [RequiredPermission("SUMINISTROS_MOVIMIENTOS_STOCK", "UPDATE")]
+        [RequiredPermission("ARCHIVOS_STOCK", "INSERT")]
         public IActionResult NuevoMovimiento([FromForm] DTOMovimientosStock Actualizacion)
         {
             try
@@ -46,6 +51,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("{IdMovimiento}/Delete")]
+        [RequiredPermission("STOCK_MOVIMIENTOS", "UPDATE")]
         public IActionResult EliminarMovimiento(int IdMovimiento)
         {
             return BsMovimientos.Eliminar(IdMovimiento);
@@ -54,6 +60,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Files/Delete")]
+        [RequiredPermission("ARCHIVOS_STOCK", "UPDATE")]
+        [RequiredPermission("STOCK_MOVIMIENTOS", "UPDATE")]
         public IActionResult EliminarArchivo(DTOMovimientosStock Archivos)
         {
             return BsMovimientos.ArchivosMovimientos().Eliminar(Archivos);
@@ -61,24 +69,26 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Files/New")]
-
+        [RequiredPermission("ARCHIVOS_STOCK", "INSERT")]
+        [RequiredPermission("STOCK_MOVIMIENTOS", "UPDATE")]
         public async Task<IActionResult> AgregarArchivo([FromForm] DTOMovimientosStock Archivos)
         {
             return await BsMovimientos.ArchivosMovimientos().Agregar(Archivos);
         }
 
-
-
-        [HttpPut]
+        [HttpPost]
         [Route("Update")]
-        public IActionResult ActualizarProveedor(DTOMovimientosStock Movimiento)
+        [RequiredPermission("STOCK_MOVIMIENTOS", "UPDATE")]
+        public IActionResult ActualizarDatosMovimiento(DTOMovimientosStock Movimiento)
         {
             return BsMovimientos.Actualizar(Movimiento);
         }
 
         [HttpPost]
         [Route("Supplies/Update")]
-
+        [RequiredPermission("SUMINISTROS_MOVIMIENTOS_STOCK", "INSERT")]
+        [RequiredPermission("SUMINISTROS_MOVIMIENTOS_STOCK", "UPDATE")]
+        [RequiredPermission("STOCK_MOVIMIENTOS", "UPDATE")]
         public IActionResult ActualizarInsumos(DTOMovimientosStock Movimiento)
         {
             if (Movimiento.IdMovimiento == null)
@@ -100,7 +110,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("States/Save")]
-
+        [RequiredPermission("ESTADOS_MOVIMIENTOS_STOCK", "INSERT")]
+        [RequiredPermission("ESTADOS_MOVIMIENTOS_STOCK", "UPDATE")]
         public async Task<IActionResult> NuevoEstado(DTOEstadosMovimientosStock Estado)
         {
             if (string.IsNullOrEmpty(Estado.Descripcion))

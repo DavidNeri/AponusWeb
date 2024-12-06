@@ -1,5 +1,6 @@
 ﻿using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
@@ -37,6 +38,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Supplies/Update")]
+        [RequiredPermission("STOCK_INSUMOS", "INSERT")]
+        [RequiredPermission("STOCK_INSUMOS", "UPDATE")]
+
         public async Task<IActionResult> Actualizar(DTOStock StockInsumo)
         {
             return await BsStocks.OperacionesStockInsumos().Actualizar(StockInsumo);
@@ -44,6 +48,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Update")]
+        [RequiredPermission("PRODUCTOS", "INSERT")]
+        [RequiredPermission("PRODUCTOS", "UPDATE")]
+
         public async Task<IActionResult> Actualizar(DTOStockProductos StockProducto)
         {
             return await BsStocks.OperacionesStockProductos().Actualizar(StockProducto);
@@ -51,6 +58,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Increment")]
+        [RequiredPermission("PRODUCTOS", "INSERT")]
+        [RequiredPermission("PRODUCTOS", "UPDATE")]
+        [RequiredPermission("STOCK_INSUMOS", "UPDATE")]
         public async Task<IActionResult> Incrementar(DTOProducto Producto)
         {
             return await BsStocks.OperacionesStockProductos().Incrementar(Producto);

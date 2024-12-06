@@ -13,14 +13,16 @@ namespace Aponus_Web_API.Negocio
         private readonly AponusContext AponusDbContext;
         private readonly AD_Componentes _ComponentesProductos;
         private readonly AD_Stocks AdStocks;
+        private readonly AD_Productos AdProductos;
         private readonly BS_Entidades BsEntidades;
 
-        public BS_Stocks(AponusContext _aponusContext, AD_Stocks adStocks, AD_Componentes componentesProductos, BS_Entidades bsEntidades)
+        public BS_Stocks(AponusContext _aponusContext, AD_Stocks adStocks, AD_Componentes componentesProductos, BS_Entidades bsEntidades, AD_Productos adProductos)
         {
             AponusDbContext = _aponusContext;
             AdStocks = adStocks;
             _ComponentesProductos = componentesProductos;
             BsEntidades = bsEntidades;
+            AdProductos = adProductos;
         }
 
         public StockInsumos OperacionesStockInsumos()
@@ -30,7 +32,7 @@ namespace Aponus_Web_API.Negocio
 
         public StockProductos OperacionesStockProductos()
         {
-            return new StockProductos(_ComponentesProductos, AponusDbContext, AdStocks);
+            return new StockProductos(_ComponentesProductos, AponusDbContext, AdStocks, AdProductos);
         }
         internal JsonResult ListarProductos(string typeId, int idDescription)
         {
@@ -190,11 +192,15 @@ namespace Aponus_Web_API.Negocio
             private readonly AD_Componentes _componentesProductos;
             private readonly AponusContext AponusDbContext;
             private readonly AD_Stocks AdStocks;
-            public StockProductos(AD_Componentes componentesProductos, AponusContext _aponusDbContext, AD_Stocks _adStocks)
+            private readonly AD_Productos AdProductos;
+
+
+            public StockProductos(AD_Componentes componentesProductos, AponusContext _aponusDbContext, AD_Stocks _adStocks, AD_Productos adProductos)
             {
                 _componentesProductos = componentesProductos;
                 AponusDbContext = _aponusDbContext;
                 AdStocks = _adStocks;
+                AdProductos = adProductos;
             }
             internal async Task<IActionResult> Actualizar(DTOStockProductos DTOStockProducto)
             {
@@ -360,6 +366,12 @@ namespace Aponus_Web_API.Negocio
                         {
                             try
                             {
+
+                                var prod = AdProductos.BuscarProducto(Producto.IdProducto ?? "") ?? new Producto();
+                                prod.Cantidad = Producto.Cantidad != null ? (prod.Cantidad - Producto.Cantidad) : prod.Cantidad;
+
+                                NoRoolBack = await AdStocks.StockProductos().Actualizar(prod);
+
                                 foreach (var item in StockComponentes)
                                 {
                                     NoRoolBack = AdStocks.ActualizarStockInsumo(AponusDbContext, new DTOStockUpdate() { Id = item.IdInsumo, Cantidad = item.Proceso });

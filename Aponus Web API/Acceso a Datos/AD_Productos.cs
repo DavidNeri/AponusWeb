@@ -32,24 +32,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             // ProcesarDatos los cambios en la base de datos
             AponusDBContext.SaveChanges();
         }
-        public string GenerarIdProd(DTOProducto Producto)
-        {
-            string IdProducto;
-
-            try
-            {
-                string Tolerancia = Producto.Tolerancia ?? "".Replace("-", "_").Replace("/", "_");
-                IdProducto = $"{Producto.IdTipo}_{Producto.IdDescripcion}_{Producto.DiametroNominal}_{Producto.Tolerancia}";
-
-            }
-            catch (Exception)
-            {
-
-                return "";
-            }
-
-            return IdProducto;
-        }
+       
         internal void GuardarComponentes(List<DTOComponentesProducto> Componentes)
         {
             bool ChkIdProd = Componentes.All(x => x.IdProducto != null);
@@ -98,7 +81,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 }).SingleOrDefault();
         }
-        internal void ModifyProductDetails(Producto ProductUpdate)
+        internal void ActualizarDetallesProducto(Producto ProductUpdate)
         {
             AponusDBContext.Entry(ProductUpdate).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             AponusDBContext.SaveChanges();

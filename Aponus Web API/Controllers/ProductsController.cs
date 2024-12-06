@@ -1,8 +1,10 @@
 ﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -93,6 +95,11 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Save")]
+        [RequiredPermission("PRODUCTOS", "INSERT")]
+        [RequiredPermission("PRODUCTOS", "UPDATE")]
+        [RequiredPermission("PRODUCTOS_COMPONENTES", "INSERT")]
+        [RequiredPermission("PRODUCTOS_COMPONENTES", "UPDATE")]
+        [RequiredPermission("PRODUCTOS_COMPONENTES", "DELETE")]
         public IActionResult Guardar(DTOProducto Producto)
         {
             try
@@ -109,6 +116,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Components/Save")]
+        [RequiredPermission("PRODUCTOS_COMPONENTES", "DELETE")]
+        [RequiredPermission("PRODUCTOS_COMPONENTES", "INSERT")]
+        [RequiredPermission("PRODUCTOS_COMPONENTES", "UPDATE")]
         public IActionResult ActualizarComponentes(List<DTOComponentesProducto> componentesProducto)
         {
             try

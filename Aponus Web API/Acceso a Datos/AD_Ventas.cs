@@ -22,16 +22,13 @@ namespace Aponus_Web_API.Acceso_a_Datos
             bool roolbackResult = false;
             using (var transaccion = AponusDBContext.Database.BeginTransaction())
             {
-                Venta.Cliente = AponusDBContext.Entidades.Find(Venta.IdCliente) ?? new Modelos.Entidades();
-                Venta.Usuario = AponusDBContext.Usuarios.Find(Venta.IdUsuario) ?? new Modelos.Usuarios();
+                Venta.Cliente = AponusDBContext.Entidades.Find(Venta.IdCliente) ?? new Entidades();
+                Venta.Usuario = AponusDBContext.Usuarios.Find(Venta.IdUsuario) ?? new Usuarios();
                 Venta.Estado = AponusDBContext.estadosVentas.Find(Venta.IdEstadoVenta) ?? new EstadosVentas();
 
-                if (Venta.Pagos != null)
-                    Venta.Pagos.ToList().ForEach(item => { item.MedioPago = AponusDBContext.MediosPagos.Find(item.IdMedioPago) ?? new MediosPago(); });
-                if (Venta.DetallesVenta != null)
-                    Venta.DetallesVenta.ToList().ForEach(item => { item.IdProductoNavigation = AponusDBContext.Productos.Find(item.IdProducto) ?? new Producto(); });
-                if (Venta.Cuotas != null)
-                    Venta.Cuotas.ToList().ForEach(item => { item.EstadoCuota = AponusDBContext.estadosCuotasVentas.Find(item.IdEstadoCuota) ?? new EstadosCuotasVentas(); });
+                Venta.Pagos?.ToList().ForEach(item => { item.MedioPago = AponusDBContext.MediosPagos.Find(item.IdMedioPago) ?? new MediosPago(); });
+                Venta.DetallesVenta?.ToList().ForEach(item => { item.IdProductoNavigation = AponusDBContext.Productos.Find(item.IdProducto) ?? new Producto(); });
+                Venta.Cuotas?.ToList().ForEach(item => { item.EstadoCuota = AponusDBContext.estadosCuotasVentas.Find(item.IdEstadoCuota) ?? new EstadosCuotasVentas(); });
 
                 await AponusDBContext.ventas.AddAsync(Venta);
 
@@ -88,11 +85,11 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             if (NuevoEstado.IdEstadoVenta != null)
             {
-                EstadosVentas? Estado = await AponusDBContext.estadosVentas.FirstOrDefaultAsync(x => x.IdEstadoVenta == NuevoEstado.IdEstado && x.IdEstado != 0);
+                EstadosVentas? Estado = await AponusDBContext.estadosVentas.FirstOrDefaultAsync(x => x.IdEstadoVenta == NuevoEstado.IdEstadoVenta);
                 if (Estado != null)
                 {
                     Estado.Descripcion = NuevoEstado.Descripcion ?? Estado.Descripcion;
-                    Estado.IdEstado = NuevoEstado.IdEstado ?? Estado.IdEstado;
+                    Estado.IdEstado = 1;
                     await AponusDBContext.SaveChangesAsync();
                 }
                 else

@@ -39,5 +39,13 @@ namespace Aponus_Web_API.Controllers
                 return await _Usuarios.ProcesarDatos(Usuario);
             }
         }
+
+        [HttpPost]
+        [Route("roles/list")]
+
+        public async Task<IActionResult> ObtenerPerfiles()
+        {
+            return await _Usuarios.MapeoRolesDTO();
+        }
     }
 }

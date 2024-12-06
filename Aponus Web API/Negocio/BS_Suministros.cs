@@ -62,10 +62,8 @@ namespace Aponus_Web_API.Negocio
                 InsumosAgrupados = InsumosJsonResult.Value as List<DTOTipoInsumos>;
             }
 
-
             foreach (DTOTipoInsumos insumo in InsumosAgrupados ?? Enumerable.Empty<DTOTipoInsumos>())
             {
-
                 foreach (DTOComponenteFormateado item in insumo.especificacionesFormato ?? Enumerable.Empty<DTOComponenteFormateado>())
                 {
                     InsumosDesagrupados.Add(new UTL_FormatoSuministros()

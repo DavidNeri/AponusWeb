@@ -60,7 +60,7 @@ namespace Aponus_Web_API.Negocio
                 if (Producto.IdTipo != null && Producto.IdDescripcion != null && Producto.DiametroNominal != null && Producto.Tolerancia != null)
                 {
 
-                    Producto.IdProducto = AdProductos.GenerarIdProd(Producto); //Producto NuevoAcceso
+                    Producto.IdProducto = GenerarIdProd(Producto); //Producto NuevoAcceso
                     Producto? _BuscarProducto = AdProductos.BuscarProducto(Producto.IdProducto);
 
 
@@ -100,6 +100,26 @@ namespace Aponus_Web_API.Negocio
                 return ProductUpdate(Producto);
             }
         }
+
+        public string GenerarIdProd(DTOProducto Producto)
+        {
+            string IdProducto;
+
+            try
+            {
+                string Tolerancia = Producto.Tolerancia ?? "".Replace("-", "_").Replace("/", "_");
+                IdProducto = $"{Producto.IdTipo}_{Producto.IdDescripcion}_{Producto.DiametroNominal}_{Producto.Tolerancia}";
+
+            }
+            catch (Exception)
+            {
+
+                return "";
+            }
+
+            return IdProducto;
+        }
+
         internal IActionResult ProductUpdate(DTOProducto ActualizarProducto)
         {
             bool UpdateIdProd = false;
@@ -156,7 +176,7 @@ namespace Aponus_Web_API.Negocio
                     {
                         string IdAnterior = ActualizarProducto.IdProducto ?? "";
 
-                        string NuevoId = AdProductos.GenerarIdProd(new DTOProducto()
+                        string NuevoId = GenerarIdProd(new DTOProducto()
                         {
                             IdProducto = null,
                             DiametroNominal = ProductoOriginalModificado.DiametroNominal,
@@ -178,7 +198,7 @@ namespace Aponus_Web_API.Negocio
                                 };
                             }
 
-                            AdProductos.ModifyProductDetails(ProductoOriginalModificado);
+                            AdProductos.ActualizarDetallesProducto(ProductoOriginalModificado);
                             AdProductos.ActualizarIdProd(IdAnterior, NuevoId);
 
                             return new JsonResult(NuevoId);
@@ -187,7 +207,7 @@ namespace Aponus_Web_API.Negocio
                     }
                     else
                     {
-                        if (ProductoOriginalModificado != null) AdProductos.ModifyProductDetails(ProductoOriginalModificado);
+                        if (ProductoOriginalModificado != null) AdProductos.ActualizarDetallesProducto(ProductoOriginalModificado);
                     }
 
                     return new JsonResult(ProductoOriginalModificado?.IdProducto ?? null);

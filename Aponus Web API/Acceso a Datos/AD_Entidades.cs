@@ -58,7 +58,6 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     }
 
                     return new StatusCodeResult(200);
-
                 }
                 else
                 {
@@ -161,7 +160,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
             {
                 if (NuevoTipo.IdTipo != 0)
                 {
-                    EntidadesTipos? ExisteId = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == NuevoTipo.IdTipo);
+                    EntidadesTipos? ExisteId = AponusDBContext.TiposEntidades                       
+                        .FirstOrDefault(x => x.IdTipo == NuevoTipo.IdTipo);
 
                     if (ExisteId?.IdTipo != null && ExisteId?.IdTipo != 0 && !string.IsNullOrEmpty(NuevoTipo.NombreTipo))
                     {

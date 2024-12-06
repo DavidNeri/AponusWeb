@@ -1,5 +1,6 @@
 ﻿using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,24 +39,22 @@ namespace Aponus_Web_API.Controllers
         [Route("ListFormatted")]
         public IActionResult ListarInsumosFormateados()
         {
-
             return BsSupplies.ListarNombresFormateados();
-
         }
 
         [HttpPost]
         [Route("Create-or-Update")]
-
+        [RequiredPermission("COMPONENTES_DETALLE", "INSERT")]
+        [RequiredPermission("COMPONENTES_DETALLE", "UPDATE")]
+        [RequiredPermission("STOCK_INSUMOS", "INSERT")]
+        [RequiredPermission("STOCK_INSUMOS", "UPDATE")]
         public IActionResult GuardarInsumoProducto(DTODetallesComponenteProducto InsumoProducto)
         {            
             return BsSupplies.MapeoDTOtoDB(InsumoProducto);           
         }
 
         [HttpPost]
-
-
         [Route("ListProp")]
-
         public JsonResult? Listar(DTODetallesComponenteProducto Especificaciones)
         {
             return BsComponents.DeterminarProp(Especificaciones);
@@ -64,7 +63,6 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("GetId")]
-
         public JsonResult? ObtenerId(DTODetallesComponenteProducto Especificaciones)
         {
             return BsComponents.ObtenerIdComponente(Especificaciones);
@@ -73,12 +71,12 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("SaveProductComponents")]
-
+        [RequiredPermission("PRODUCTOS_COMPONENTES", "INSERT")]
+        [RequiredPermission("PRODUCTOS_COMPONENTES", "UPDATE")]
         public IActionResult? GuardarComponentesProducto(List<DTOComponentesProducto> ComponentesProd)
         {
             return BsComponents.GuardarComponentesProducto(ComponentesProd);
 
         }
-
     }
 }
