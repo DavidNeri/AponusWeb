@@ -29,7 +29,8 @@ namespace Aponus_Web_API.Modelos
         public DateTime? FechaPago { get; set; }
 
         public virtual Compras CompraNavigation { get; set; } = new Compras();
-
         public virtual EstadosCuotasCompras EstadoCuotaCompra { get; set; } = new EstadosCuotasCompras();
+        public virtual ICollection<PagosCuotasCompras> pagosCuotasCompras { get; set; } = new HashSet<PagosCuotasCompras>();
+
     }
 }

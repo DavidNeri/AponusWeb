@@ -96,7 +96,6 @@ namespace Aponus_Web_API.Negocio
             foreach (var movimiento in ListaMovimientos)
             {
                 string FechaHora = movimiento.FechaHoraCreado.HasValue ? movimiento.FechaHoraCreado.Value.ToString("dd/MM/yyyy HH:mm:ss") : string.Empty;
-                //movimiento.FechaHoraCreado = Convert.ToDateTime(FechaHora);
 
                 foreach (var suministro in movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
                 {
@@ -108,25 +107,14 @@ namespace Aponus_Web_API.Negocio
             }
 
             List<int?> MovimientosIds = ListaMovimientos.Select(m => m.IdMovimiento).Distinct().ToList();
-            UTL_Cloudinary cloudinary = new ();
 
-            List<DTODatosArchivosMovimientosStock> InfoArchivosMovimientos = await _movimientosStock.InfoArchivos(MovimientosIds);
-
-            //foreach (DTODatosArchivosMovimientosStock item in InfoArchivosMovimientos ?? Enumerable.Empty<DTODatosArchivosMovimientosStock>())
-            //{
-            //    var (PublicUrl, error) = await cloudinary.DescargarArchivo(item?.Path ?? "");
-
-            //    if (item != null)
-            //    {
-            //        item.NombreArchivo = PublicUrl;
-            //        item.MensajeError = error;
-            //    }
-            //}
+            List<DTODatosArchivosMovimientosStock> InfoArchivosMovimientos = await _movimientosStock.InfoArchivos(MovimientosIds); 
 
 
             foreach (DTOMovimientosStock Movimiento in ListaMovimientos)
                 Movimiento.DatosArchivos = InfoArchivosMovimientos?.Where(x => x.IdMovimiento == Movimiento.IdMovimiento).ToList();
 
+            ListaMovimientos = ListaMovimientos.Distinct().ToList();
             return new JsonResult(ListaMovimientos);
 
         }

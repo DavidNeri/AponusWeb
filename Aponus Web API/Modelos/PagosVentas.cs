@@ -21,7 +21,14 @@ namespace Aponus_Web_API.Modelos
 
         [Column("FECHA")]
         public DateTime? Fecha { get; set; }
+
+        [ForeignKey("ID_ENTIDAD_PAGO")]
+        public int IdEntidadPago { get; set; }   
+
         public virtual MediosPago MedioPago { get; set; } = new();
         public virtual Ventas Venta { get; set; } = new();
+        public virtual EntidadesPago EntidadesPago { get; set; } = new();
+        public virtual ICollection<PagosCuotasVentas> pagosCuotasVentas { get; set; } = new HashSet<PagosCuotasVentas>();
+
     }
 }

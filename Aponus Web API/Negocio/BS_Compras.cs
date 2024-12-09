@@ -38,7 +38,7 @@ namespace Aponus_Web_API.Negocio
                     IdCompra = x.IdCompra,
                     IdProveedor = x.IdProveedor,
                     SaldoPendiente = x.SaldoPendiente,
-                    SaldoTotal = x.MontoTotal,
+                    MontoTotal = x.MontoTotal,
                     IdUsuario = x.IdUsuario,
 
                     DetallesCompra = x.DetallesCompra.Select(y=> new DTOComprasDetalles()
@@ -77,7 +77,7 @@ namespace Aponus_Web_API.Negocio
 
         internal async Task<IActionResult> ProcesarDatosCompra(DTOCompras Compra)
         {
-            if (string.IsNullOrEmpty(Compra.IdUsuario) || Compra.DetallesCompra.Count == 0 || Compra.SaldoTotal == 0)
+            if (string.IsNullOrEmpty(Compra.IdUsuario) || Compra.DetallesCompra.Count == 0 || Compra.MontoTotal == 0)
             {
                 return new ContentResult()
                 {
@@ -88,38 +88,46 @@ namespace Aponus_Web_API.Negocio
             }
             else
             {
+                if (Compra.Cuotas != null || Compra?.Cuotas?.Count > 0)
+                {
+
+                }
+
                 Compras compra = new()
                 {
                     IdProveedor = Compra.IdProveedor,
                     IdUsuario = Compra.IdUsuario,
+                    FechaHora = UTL_Fechas.ObtenerFechaHora(),
+                    IdProveedorNavigation = new Entidades { IdEntidad = Compra.IdProveedor },
+                    Usuario = new Usuarios { Usuario = Compra.IdUsuario },
+                    MontoTotal = Compra.MontoTotal ?? 0,
+                    SaldoPendiente = Compra.SaldoPendiente ?? 0,
+                    IdEstadoCompra = Compra.IdEstadoCompra ?? 1,
 
                     DetallesCompra = Compra.DetallesCompra.Select(dc => new ComprasDetalles()
                     {
                         Cantidad = dc.Cantidad,
                         IdInsumo = dc.IdInsumo,
                         IdCompra = dc.IdCompra,
-                        DetallesInsumo = new ComponentesDetalle { IdInsumo = dc.IdInsumo}
-                        
+                        DetallesInsumo = new ComponentesDetalle { IdInsumo = dc.IdInsumo}                        
 
                     }).ToList(),
 
-                    FechaHora = UTL_Fechas.ObtenerFechaHora(),
+
 
                     Pagos = Compra.Pagos.Select(p => new PagosCompras()
                     {
                         IdCompra = p.IdCompra,
-                        Fecha = p.Fecha,
+                        Fecha = p.Fecha ?? UTL_Fechas.ObtenerFechaHora(),
                         IdMedioPago = p.IdMedioPago,
+                        IdEntidadPago = p.IdEntidadPago,
                         MedioPago = new MediosPago() { IdMedioPago = p.IdMedioPago },
+                        entidadPago = new EntidadesPago() { IdEntidad= p.IdEntidadPago},
                         IdPago = p.IdPago,
                         Monto = p.Monto,
 
                     }).ToList(),
-
-                    IdProveedorNavigation = new Entidades { IdEntidad = Compra.IdProveedor },
-                    Usuario = new Usuarios { Usuario = Compra.IdUsuario },
-                    MontoTotal = Compra.SaldoTotal ?? 0,
-                    SaldoPendiente = Compra.SaldoPendiente ?? 0,
+                   
                 };
 
                 if (Compra.IdCompra != null && Compra.IdCompra.HasValue)

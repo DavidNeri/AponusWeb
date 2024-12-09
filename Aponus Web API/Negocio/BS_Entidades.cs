@@ -168,6 +168,20 @@ namespace Aponus_Web_API.Negocio
             }
         }
 
+        //internal async IActionResult MapeoEntidadesPagoDTO()
+        //{
+        //    return null;
+
+        //    var (Listado, ex) = await AdEntidades.ListarEntidadesPago();
+
+        //    if (ex != null) return new ContentResult()
+        //    {
+        //        Content = ex.InnerException?.Message ?? ex?.Message,
+        //        ContentType = "application/json",
+        //        StatusCode = 400,
+        //    };
+        //}
+
         public class Tipos
         {
             private readonly AD_Entidades AdEntidades;

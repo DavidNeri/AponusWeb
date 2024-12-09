@@ -38,7 +38,6 @@ namespace Aponus_Web_API.Controllers
                     StatusCode = 500,
                 };
             }
-
         }
 
         

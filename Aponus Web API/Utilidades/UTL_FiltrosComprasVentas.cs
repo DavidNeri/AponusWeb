@@ -7,6 +7,5 @@
         public int? IdEntidad { get; set; }
         public int? IdCompraVenta { get; set; }
 
-
     }
 }

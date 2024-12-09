@@ -32,5 +32,8 @@ namespace Aponus_Web_API.Modelos
 
         public virtual EstadosCuotasVentas EstadoCuota { get; set; } = new EstadosCuotasVentas();
 
+        public virtual ICollection<PagosCuotasVentas> pagosCuotasVentas { get; set; } = new HashSet<PagosCuotasVentas>();
+
+
     }
 }

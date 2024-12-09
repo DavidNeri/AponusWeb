@@ -3,6 +3,7 @@ using System;
 using Aponus_Web_API.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Aponus_Web_API.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20241207202026_Creacion TablasPagosCuotasComprasyPagosCuotasVentas")]
+    partial class CreacionTablasPagosCuotasComprasyPagosCuotasVentas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -898,10 +901,6 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID_COMPRA");
 
-                    b.Property<int>("IdEntidadPago")
-                        .HasColumnType("int")
-                        .HasColumnName("ID_ENTIDAD_PAGO");
-
                     b.Property<int>("IdMedioPago")
                         .HasColumnType("int")
                         .HasColumnName("ID_MEDIO_PAGO");
@@ -914,8 +913,6 @@ namespace Aponus_Web_API.Migrations
 
                     b.HasIndex("IdCompra");
 
-                    b.HasIndex("IdEntidadPago");
-
                     b.HasIndex("IdMedioPago");
 
                     b.ToTable("PAGOS_COMPRAS", (string)null);
@@ -925,34 +922,32 @@ namespace Aponus_Web_API.Migrations
                 {
                     b.Property<int>("IdPago")
                         .HasColumnType("int")
-                        .HasColumnName("ID_PAGO");
+                        .HasColumnName("ID_CUOTA");
 
                     b.Property<int>("IdCuota")
-                        .HasColumnType("integer")
-                        .HasColumnName("ID_CUOTA");
+                        .HasColumnType("integer");
 
                     b.HasKey("IdPago", "IdCuota");
 
                     b.HasIndex("IdCuota");
 
-                    b.ToTable("PAGOS_CUOTAS_COMPRAS", (string)null);
+                    b.ToTable("pagosCuotasCompras");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.PagosCuotasVentas", b =>
                 {
                     b.Property<int>("IdPago")
                         .HasColumnType("int")
-                        .HasColumnName("ID_PAGO");
+                        .HasColumnName("ID_CUOTA");
 
                     b.Property<int>("IdCuota")
-                        .HasColumnType("int")
-                        .HasColumnName("ID_CUOTA");
+                        .HasColumnType("int");
 
                     b.HasKey("IdPago", "IdCuota");
 
                     b.HasIndex("IdCuota");
 
-                    b.ToTable("PAGOS_CUOTAS_VENTAS", (string)null);
+                    b.ToTable("pagosCuotasVentas");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.PagosVentas", b =>
@@ -969,9 +964,8 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("timestamp")
                         .HasColumnName("FECHA");
 
-                    b.Property<int>("IdEntidadPago")
-                        .HasColumnType("int")
-                        .HasColumnName("ID_ENTIDAD_PAGO");
+                    b.Property<int>("IdEntidadaPago")
+                        .HasColumnType("integer");
 
                     b.Property<int>("IdMedioPago")
                         .HasColumnType("int")
@@ -987,7 +981,7 @@ namespace Aponus_Web_API.Migrations
 
                     b.HasKey("IdPago");
 
-                    b.HasIndex("IdEntidadPago");
+                    b.HasIndex("IdEntidadaPago");
 
                     b.HasIndex("IdMedioPago");
 
@@ -1595,13 +1589,6 @@ namespace Aponus_Web_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aponus_Web_API.Modelos.EntidadesPago", "entidadPago")
-                        .WithMany("pagosCompras")
-                        .HasForeignKey("IdEntidadPago")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_PAGOS_COMPRAS_ENTIDADES_PAGO_ID_ENTIDAD_PAGO");
-
                     b.HasOne("Aponus_Web_API.Modelos.MediosPago", "MedioPago")
                         .WithMany("PagosComprasNavigation")
                         .HasForeignKey("IdMedioPago")
@@ -1611,8 +1598,6 @@ namespace Aponus_Web_API.Migrations
                     b.Navigation("Compra");
 
                     b.Navigation("MedioPago");
-
-                    b.Navigation("entidadPago");
                 });
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.PagosCuotasCompras", b =>
@@ -1661,7 +1646,7 @@ namespace Aponus_Web_API.Migrations
                 {
                     b.HasOne("Aponus_Web_API.Modelos.EntidadesPago", "EntidadesPago")
                         .WithMany("pagosVentas")
-                        .HasForeignKey("IdEntidadPago")
+                        .HasForeignKey("IdEntidadaPago")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_PAGOS_VENTAS_ENTIDADES_PAGO_ID_ENTIDAD_PAGO");
@@ -1906,8 +1891,6 @@ namespace Aponus_Web_API.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.EntidadesPago", b =>
                 {
-                    b.Navigation("pagosCompras");
-
                     b.Navigation("pagosVentas");
                 });
 

@@ -261,7 +261,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     AponusDBContext!.Entry(Insumo).State = EntityState.Modified;
                     AponusDBContext.SaveChanges();
 
-                    return false;
+                    return true;
                 }
                 else if (!string.IsNullOrEmpty(Actualizacion.Origen) && !string.IsNullOrEmpty(Actualizacion.Destino)) //Movimiento interno/Ingreso de Mercaderia 
                 {

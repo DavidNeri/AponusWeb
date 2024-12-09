@@ -14,10 +14,10 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public DateTime? FechaHora { get; set; }
 
         [JsonProperty(PropertyName = "idUsuario", NullValueHandling = NullValueHandling.Ignore)]
-        public string IdUsuario { get; set; } = string.Empty;
+        public string? IdUsuario { get; set; }
 
         [JsonProperty(PropertyName = "montoTotal", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? SaldoTotal { get; set; }
+        public decimal? MontoTotal { get; set; }
 
         [JsonProperty(PropertyName = "saldoPendiente", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? SaldoPendiente { get; set; }
@@ -26,7 +26,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public int? IdEstadoCompra { get; set; }
 
         [JsonProperty(PropertyName = "saldoCancelado", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal? SaldoCancelado => SaldoTotal ?? 0 - (SaldoPendiente ?? 0);
+        public decimal? SaldoCancelado => MontoTotal ?? 0 - (SaldoPendiente ?? 0);
 
         [JsonProperty(PropertyName = "usuario", NullValueHandling = NullValueHandling.Ignore)]
         public DTOUsuarios Usuario { get; set; } = new();
@@ -43,6 +43,8 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         [JsonProperty(PropertyName = "pagos", NullValueHandling = NullValueHandling.Ignore)]
         public virtual ICollection<DTOPagosCompras> Pagos { get; set; } = new HashSet<DTOPagosCompras>();
 
+        [JsonProperty(PropertyName = "cuotas", NullValueHandling = NullValueHandling.Ignore)]
+        public virtual ICollection<DTOCuotasCompras> Cuotas { get; set; } = new HashSet<DTOCuotasCompras>();
 
 
     }

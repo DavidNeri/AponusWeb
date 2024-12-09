@@ -339,6 +339,17 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 return (null, ex);
             }
         }
+
+        //internal async Task<(List<EntidadesPago>? Listado, Exception? ex)> ListarEntidadesPago()
+        //{
+        //    return (await AponusDBContext.entidadespago
+        //        .Select(x => new EntidadesPago()
+        //        {
+        //            Descripcion = x.Descripcion,
+        //            Emisor = x.Emisor,
+        //            IdEntidad = x.IdEntidad,
+        //            Tipo = x.Tipo
+        //        }).ToListAsync(), 
     }
 
 }

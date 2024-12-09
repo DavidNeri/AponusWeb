@@ -58,6 +58,10 @@ public partial class AponusContext : DbContext
     public virtual DbSet<RolesUsuarios> rolesUsuarios { get; set; }
     public virtual DbSet<Auditorias> Auditorias { get; set; }
     public virtual DbSet<AsignacionPermisosRoles> asignacionRoles { get; set; }
+    public virtual DbSet<EntidadesPago> entidadespago { get; set; }
+    public virtual DbSet<PagosCuotasVentas> pagosCuotasVentas{ get; set; }
+    public virtual DbSet<PagosCuotasCompras> pagosCuotasCompras { get; set; }
+
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -65,13 +69,11 @@ public partial class AponusContext : DbContext
 
 
     }
-
     public override int SaveChanges()
     {
         RegistrarAuditoria();
         return base.SaveChanges();
     }
-
     public override async Task<int> SaveChangesAsync(CancellationToken TokenCancelacion = default)
     {
         RegistrarAuditoria();
@@ -139,9 +141,100 @@ public partial class AponusContext : DbContext
        
     }
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
+
+        modelBuilder.Entity<PagosCuotasCompras>(entity =>
+        {
+            entity.ToTable("PAGOS_CUOTAS_COMPRAS");
+
+            entity.HasKey(PK => new
+            {
+                PK.IdPago,
+                PK.IdCuota
+            });
+
+            entity.Property(p => p.IdPago)
+            .HasColumnName("ID_PAGO")
+            .HasColumnType("integer");
+
+            entity.Property(p => p.IdCuota)
+            .HasColumnName("ID_CUOTA")
+            .HasColumnType("integer");
+
+            entity.HasOne(p => p.Pago)
+            .WithMany(p => p.pagosCuotasCompras)
+            .HasPrincipalKey(PK => PK.IdPago)
+            .HasForeignKey(FK => FK.IdPago)
+            .HasConstraintName("FK_PAGOS_CUOTAS_COMPRAS_PAGOS_COMPRAS_ID_PAGO");
+
+            entity.HasOne(p => p.Cuota)
+            .WithMany(p => p.pagosCuotasCompras)
+            .HasPrincipalKey(PK => PK.IdCuota)
+            .HasForeignKey(FK => FK.IdCuota)
+            .HasConstraintName("FK_PAGOS_CUOTAS_COMPRAS_CUOTAS_COMPRAS_ID_CUOTA");
+
+        });
+
+        modelBuilder.Entity<PagosCuotasVentas>(entity =>
+        {
+            entity.ToTable("PAGOS_CUOTAS_VENTAS");
+
+            entity.HasKey(PK => new
+            {
+                PK.IdPago,
+                PK.IdCuota
+            });
+
+            entity.Property(p => p.IdPago)
+            .HasColumnName("ID_PAGO");
+
+            entity.Property(p => p.IdCuota)
+            .HasColumnName("ID_CUOTA");
+
+            entity.HasOne(p => p.Pago)
+            .WithMany(p => p.pagosCuotasVentas)
+            .HasPrincipalKey(PK => PK.IdPago)
+            .HasForeignKey(FK => FK.IdPago)
+            .HasConstraintName("FK_PAGOS_CUOTAS_VENTAS_PAGOS_VENTAS_ID_PAGO");
+
+            entity.HasOne(p => p.Cuota)
+            .WithMany(p => p.pagosCuotasVentas)
+            .HasPrincipalKey(PK => PK.IdCuota)
+            .HasForeignKey(FK => FK.IdCuota)
+            .HasConstraintName("FK_PAGOS_CUOTAS_VENTAS_CUOTAS_VENTAS_ID_CUOTA");
+
+        });
+
+        modelBuilder.Entity<EntidadesPago>(entity =>
+        {
+            entity.ToTable("ENTIDADES_PAGO");
+
+            entity.HasKey(p => p.IdEntidad);
+
+            entity.Property(p => p.IdEntidad)
+            .HasColumnName("ID_ENTIDAD")
+            .ValueGeneratedOnAdd()
+            .IsRequired();
+
+            entity.Property(p => p.Tipo)
+            .HasColumnName("TIPO")
+            .HasColumnType("text")
+            .IsRequired(false);
+
+            entity.Property(p => p.Descripcion)
+            .HasColumnName("DESCRIPCION")
+            .HasColumnType("text")
+            .IsRequired(false);
+
+            entity.Property(p => p.Emisor)
+           .HasColumnName("EMISOR")
+           .HasColumnType("text")
+           .IsRequired(false);
+
+        });
 
         modelBuilder.Entity<AsignacionPermisosRoles>(entity =>
         {
@@ -486,6 +579,10 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_MEDIO_PAGO")
             .HasColumnType("int");
 
+            entity.Property(p => p.IdEntidadPago)
+           .HasColumnName("ID_ENTIDAD_PAGO")
+           .HasColumnType("int");
+
             entity.Property(p => p.Monto)
             .HasColumnName("MONTO")
             .HasColumnType("decimal(18,2)");
@@ -503,6 +600,12 @@ public partial class AponusContext : DbContext
             .WithMany(p => p.Pagos)
             .HasPrincipalKey(PK => PK.IdVenta)
             .HasForeignKey(FK => FK.IdVenta);
+
+            entity.HasOne(p => p.EntidadesPago)
+            .WithMany(p => p.pagosVentas)
+            .HasPrincipalKey(PK => PK.IdEntidad)
+            .HasForeignKey(FK => FK.IdEntidadPago)
+            .HasConstraintName("FK_PAGOS_VENTAS_ENTIDADES_PAGO_ID_ENTIDAD_PAGO");
         });
 
         modelBuilder.Entity<EstadosVentas>(entity =>
@@ -605,6 +708,10 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_MEDIO_PAGO")
             .HasColumnType("int");
 
+            entity.Property(p => p.IdEntidadPago)
+            .HasColumnName("ID_ENTIDAD_PAGO")
+            .HasColumnType("int");
+
             entity.Property(p => p.Monto)
             .HasColumnName("SUBTOTAL")
             .HasColumnType("decimal(18,2)");
@@ -622,6 +729,12 @@ public partial class AponusContext : DbContext
             .HasPrincipalKey(PK => PK.IdCompra)
             .HasForeignKey(FK => FK.IdCompra);
 
+            entity.HasOne(p => p.entidadPago)
+           .WithMany(p => p.pagosCompras)
+           .HasPrincipalKey(PK => PK.IdEntidad)
+           .HasForeignKey(FK => FK.IdEntidadPago)
+           .HasConstraintName("FK_PAGOS_COMPRAS_ENTIDADES_PAGO_ID_ENTIDAD_PAGO");
+
 
         });
 
@@ -634,7 +747,7 @@ public partial class AponusContext : DbContext
             entity.Property(P => P.IdEstadoCompra)
             .HasColumnName("ID_ESTADO_COMPRA")
             .HasColumnType("int")
-            .HasAnnotation("SqlServer:Identity", "1, 1");
+            .UseIdentityColumn();
 
             entity.Property(P => P.IdEstado)
             .HasColumnName("ID_ESTADO")

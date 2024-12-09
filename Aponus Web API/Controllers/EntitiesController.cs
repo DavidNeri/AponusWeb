@@ -124,5 +124,12 @@ namespace Aponus_Web_API.Controllers
         {
             return await BSEntidades.ValidarEntidad(Id);
         }
+
+        //[HttpPost]
+        //[Route("Billing/List")]
+        //public async Task<IActionResult> ObtenerEntidadesPago()
+        //{
+        //    return BSEntidades.MapeoEntidadesPagoDTO();
+        //}
     }
 }
