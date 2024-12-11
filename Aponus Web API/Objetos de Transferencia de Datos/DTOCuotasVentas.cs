@@ -27,5 +27,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 
         [JsonProperty(PropertyName = "estadoCuota", NullValueHandling = NullValueHandling.Ignore)]
         public virtual DTOEstadosCuotasVentas? EstadoCuota { get; set; }
+        public virtual ICollection<DTOPagosVentas> Pagos { get; set; } = new HashSet<DTOPagosVentas>();
+
     }
 }

@@ -530,7 +530,7 @@ namespace Aponus_Web_API.Migrations
                     b.ToTable("ENTIDADES_CATEGORIAS", (string)null);
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Modelos.EntidadesPago", b =>
+            modelBuilder.Entity("Aponus_Web_API.Modelos.EntidadPago", b =>
                 {
                     b.Property<int>("IdEntidad")
                         .ValueGeneratedOnAdd()
@@ -1598,7 +1598,7 @@ namespace Aponus_Web_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aponus_Web_API.Modelos.EntidadesPago", "entidadPago")
+                    b.HasOne("Aponus_Web_API.Modelos.EntidadPago", "entidadPago")
                         .WithMany("pagosCompras")
                         .HasForeignKey("IdEntidadPago")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1662,7 +1662,7 @@ namespace Aponus_Web_API.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.PagosVentas", b =>
                 {
-                    b.HasOne("Aponus_Web_API.Modelos.EntidadesPago", "EntidadesPago")
+                    b.HasOne("Aponus_Web_API.Modelos.EntidadPago", "EntidadPago")
                         .WithMany("pagosVentas")
                         .HasForeignKey("IdEntidadPago")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1681,7 +1681,7 @@ namespace Aponus_Web_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("EntidadesPago");
+                    b.Navigation("EntidadPago");
 
                     b.Navigation("MedioPago");
 
@@ -1907,7 +1907,7 @@ namespace Aponus_Web_API.Migrations
                     b.Navigation("TiposCategoriasNavigation");
                 });
 
-            modelBuilder.Entity("Aponus_Web_API.Modelos.EntidadesPago", b =>
+            modelBuilder.Entity("Aponus_Web_API.Modelos.EntidadPago", b =>
                 {
                     b.Navigation("pagosCompras");
 

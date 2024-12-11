@@ -73,7 +73,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
         }
 
-        public (List<AsignacionPermisosRoles>? , Exception?) ListarPermisosRol(string rol)
+        public (List<AsignacionPermisosRoles>? permisosRol, Exception? ex) ListarPermisosRol(string rol)
         {
             try
             {

@@ -97,5 +97,26 @@ namespace Aponus_Web_API.Controllers
 
             }
         }
+
+        [HttpPost]
+        [Route("Bills/new")]
+
+        public async Task<IActionResult> RegistrarPago(DTOPagosVentas Pago)
+        {
+            try
+            {
+                return await BsVentas.MapeoDTOPagosVenta(Pago);
+            }
+            catch (Exception ex)
+            {
+                return new ContentResult()
+                {
+                    Content = ex.InnerException?.Message ?? ex.Message,
+                    ContentType = "applcation/json",
+                    StatusCode = 400
+                };
+            }
+        }
+
     }
 }

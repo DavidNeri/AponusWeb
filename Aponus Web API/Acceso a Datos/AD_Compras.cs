@@ -14,7 +14,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             aponusContext = _aponusContext;
         }
 
-        internal async Task<Compras>? BuscarCompra(int IdCompra)
+        internal async Task<Compras?> BuscarCompra(int IdCompra)
         {
             Compras? Compra = await aponusContext.Compra
                 .Include(x => x.DetallesCompra)
@@ -29,38 +29,34 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             using var transaccion = aponusContext.Database.BeginTransaction();
             var DetallesInsumosCompras = compra.DetallesCompra;
+
             var pagosCompra = compra.Pagos;
-            var estadoCompra = aponusContext.EstadosCompra.FirstOrDefault(x => x.IdEstado == compra.IdEstadoCompra) ?? new EstadosCompras();
+            var CuotasCompra = compra.CuotasCompra;
+
+            compra.Pagos = null;
+            compra.CuotasCompra = null;
+            var estadoCompra = aponusContext.EstadosCompra.First(x => x.IdEstado == compra.IdEstadoCompra) ?? new EstadosCompras();
             compra.Estado = estadoCompra;
-            compra.Usuario = aponusContext.Usuarios.FirstOrDefault(x => x.Usuario.Equals(compra.IdUsuario)) ?? new Usuarios();
-            compra.IdProveedorNavigation = aponusContext.Entidades.FirstOrDefault(x => x.IdEntidad == compra.IdProveedor) ?? new Entidades();
+            compra.Usuario = aponusContext.Usuarios.First(x => x.Usuario.Equals(compra.IdUsuario)) ?? new Usuarios();
+            compra.IdProveedorNavigation = aponusContext.Entidades.First(x => x.IdEntidad == compra.IdProveedor) ?? new Entidades();
 
             foreach (var item in compra.DetallesCompra)
             {
                 item.DetallesInsumo.IdEstado = 1;
-                item.DetallesInsumo.IdEstadoNavigation = aponusContext.EstadosComponentesDetalle.First(x => x.IdEstado == 1);
+                item.DetallesInsumo.IdEstadoNavigation = await aponusContext.EstadosComponentesDetalle.FirstAsync(x => x.IdEstado == 1);
             }
 
             foreach (var item in DetallesInsumosCompras)
             {
-                var Insumo = aponusContext.ComponentesDetalles.FirstOrDefault(x => x.IdInsumo.Equals(item.IdInsumo));
+                var Insumo =  aponusContext.ComponentesDetalles.First(x => x.IdInsumo.Equals(item.IdInsumo));
 
                 item.DetallesInsumo = aponusContext.ComponentesDetalles.Where(x => x.IdInsumo.Equals(item.IdInsumo)).First();
                 item.DetallesInsumo.IdEstado = Insumo.IdEstado;
                 item.DetallesInsumo.IdEstadoNavigation = Insumo.IdEstadoNavigation;
             }
-
-            foreach (var item in pagosCompra)
-            {
-                var EntidadPago = aponusContext.entidadespago.First(X => X.IdEntidad == item.IdEntidadPago);
-                var medioPago  = aponusContext.MediosPagos.First(X => X.IdMedioPago == item.IdMedioPago);
-
-                item.entidadPago = EntidadPago;
-                item.MedioPago = medioPago;
-            }
-
-
+           
             
+
             try
             {
                 var CompraExistente = aponusContext.Compra.Find(compra.IdCompra);
@@ -70,14 +66,45 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     await aponusContext.Compra.AddAsync(compra);
                 }
                 else
-                {
-                    
+                {                    
                     aponusContext.Entry(CompraExistente).CurrentValues.SetValues(compra);
                     aponusContext.Entry(CompraExistente).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 }
 
-                await transaccion.CommitAsync();
                 await aponusContext.SaveChangesAsync();
+
+                foreach (var pago in pagosCompra)
+                {
+                    pago.IdCompra = compra.IdCompra;
+                    var EntidadPago = aponusContext.entidadespago.First(X => X.IdEntidad == pago.IdEntidadPago);
+                    var medioPago = aponusContext.MediosPagos.First(X => X.IdMedioPago == pago.IdMedioPago);
+                    pago.entidadPago = EntidadPago;
+                    pago.MedioPago = medioPago;
+                    pago.Compra = aponusContext.Compra.Single(x => x.IdCompra == compra.IdCompra);
+                    await aponusContext.PagosCompra.AddAsync(pago);
+                }
+
+                if (CuotasCompra != null || CuotasCompra?.Count > 0)
+                {
+                    foreach (var cuota in CuotasCompra)
+                    {
+                        cuota.EstadoCuotaCompra = await aponusContext.EstadosCuotasCompra.SingleAsync(x => x.IdEstadoCuota == cuota.IdEstadoCuota);
+                        cuota.CompraNavigation = aponusContext.Compra.Single(x => x.IdCompra == compra.IdCompra);
+                        foreach (var PagoCuotaCompra in cuota.Pagos)
+                        {
+                            PagoCuotaCompra.MedioPago = aponusContext.MediosPagos.Single(x => x.IdMedioPago == PagoCuotaCompra.IdMedioPago);
+                            PagoCuotaCompra.entidadPago = aponusContext.entidadespago.Single(x => x.IdEntidad == PagoCuotaCompra.IdEntidadPago);
+                            PagoCuotaCompra.IdCompra = compra.IdCompra;
+                        }                       
+                    }
+
+                    await aponusContext.AddRangeAsync(CuotasCompra);
+                }
+                
+
+                await aponusContext.SaveChangesAsync();
+
+                await transaccion.CommitAsync();
                 return true;
 
             }

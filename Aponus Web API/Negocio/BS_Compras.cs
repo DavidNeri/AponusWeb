@@ -87,11 +87,7 @@ namespace Aponus_Web_API.Negocio
                 };
             }
             else
-            {
-                if (Compra.Cuotas != null || Compra?.Cuotas?.Count > 0)
-                {
-
-                }
+            {                
 
                 Compras compra = new()
                 {
@@ -113,8 +109,6 @@ namespace Aponus_Web_API.Negocio
 
                     }).ToList(),
 
-
-
                     Pagos = Compra.Pagos.Select(p => new PagosCompras()
                     {
                         IdCompra = p.IdCompra,
@@ -130,16 +124,46 @@ namespace Aponus_Web_API.Negocio
                    
                 };
 
-                if (Compra.IdCompra != null && Compra.IdCompra.HasValue)
+                if (Compra.Cuotas != null || Compra?.Cuotas?.Count > 0)
+                {
+                    List<CuotasCompras> cuotas = new List<CuotasCompras>();
+                    var cuotasCompra = Compra.Cuotas;
+
+                    foreach (var cuota in cuotasCompra)
+                    {
+                        cuotas.Add(new CuotasCompras()
+                        {
+                            IdCuota = cuota.IdCuota ?? 0,
+                            FechaVencimiento = cuota.FechaVencimiento,
+                            FechaPago = cuota.FechaPago,
+                            IdEstadoCuota = cuota.FechaPago != null ? 2 : 1,
+                            NumeroCuota = cuota.NumeroCuota,
+                            Monto = cuota.Monto,
+                            Pagos = cuota.Pagos.Select(x=> new PagosCompras()
+                            {
+                                IdCuota = x.IdCuota ?? 0 ,
+                                IdMedioPago = x.IdMedioPago,
+                                Monto = x.Monto,
+                                Fecha = x.Fecha,
+                                IdEntidadPago = x.IdEntidadPago,
+                                Compra = null,
+                                
+                            }).ToList(),
+                        });
+                    }
+
+                    compra.CuotasCompra = cuotas;
+
+                }
+
+                if (Compra?.IdCompra != null && Compra.IdCompra.HasValue)
                 {
                     int IdCompra = Compra.IdCompra.Value;
-
                     Compras? _Compra = await AdCompras.BuscarCompra(IdCompra);
 
                     if (_Compra != null)
                     {
                         compra.IdCompra = _Compra.IdCompra;
-
                     }
                 }
 

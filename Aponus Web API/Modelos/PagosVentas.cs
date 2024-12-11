@@ -13,6 +13,9 @@ namespace Aponus_Web_API.Modelos
         [ForeignKey("ID_VENTA")]
         public int IdVenta { get; set; }
 
+        [ForeignKey("ID_CUOTA")]
+        public int? IdCuota { get; set; }        
+
         [ForeignKey("ID_MEDIO_PAGO")]
         public int IdMedioPago { get; set; }
 
@@ -27,8 +30,9 @@ namespace Aponus_Web_API.Modelos
 
         public virtual MediosPago MedioPago { get; set; } = new();
         public virtual Ventas Venta { get; set; } = new();
-        public virtual EntidadesPago EntidadesPago { get; set; } = new();
-        public virtual ICollection<PagosCuotasVentas> pagosCuotasVentas { get; set; } = new HashSet<PagosCuotasVentas>();
+        public virtual EntidadesPago EntidadPago { get; set; } = new();
+        public virtual CuotasVentas? Cuota { get; set; }
+
 
     }
 }

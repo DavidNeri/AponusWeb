@@ -18,11 +18,11 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Save")]
-        //[RequiredPermission("COMPRAS", "INSERT")]
-        //[RequiredPermission("COMPRAS", "UPDATE")]
-        //[RequiredPermission("COMPRAS_DETALLE", "INSERT")]
-        //[RequiredPermission("CUOTAS_COMPRAS", "INSERT")]
-        //[RequiredPermission("PAGOS_COMPRAS", "INSERT")]
+        [RequiredPermission("COMPRAS", "INSERT")]
+        [RequiredPermission("COMPRAS", "UPDATE")]
+        [RequiredPermission("COMPRAS_DETALLE", "INSERT")]
+        [RequiredPermission("CUOTAS_COMPRAS", "INSERT")]
+        [RequiredPermission("PAGOS_COMPRAS", "INSERT")]
         public async Task<IActionResult> NuevaCompra(DTOCompras Compras)
         {
             return await BsCompras.ProcesarDatosCompra(Compras);

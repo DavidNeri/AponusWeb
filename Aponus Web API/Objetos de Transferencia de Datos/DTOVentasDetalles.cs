@@ -13,6 +13,10 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         [JsonProperty(PropertyName = "cantidad", NullValueHandling = NullValueHandling.Ignore)]
         public int Cantidad { get; set; }
 
+        [JsonProperty(PropertyName = "entregados", NullValueHandling = NullValueHandling.Ignore)]
+
+        public int? Entregados { get; set; }
+
         [JsonProperty(PropertyName = "precio", NullValueHandling = NullValueHandling.Ignore)]
         public decimal Precio { get; set; }
 

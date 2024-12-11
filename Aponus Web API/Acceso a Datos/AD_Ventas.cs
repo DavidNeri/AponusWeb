@@ -17,45 +17,99 @@ namespace Aponus_Web_API.Acceso_a_Datos
             stocks = _stocks;
         }
 
-        public async Task<bool> Guardar(Modelos.Ventas Venta)
+        public async Task<bool> Guardar(Ventas Venta)
         {
-            bool roolbackResult = false;
-            using (var transaccion = AponusDBContext.Database.BeginTransaction())
+            var roolbackResult = false;
+            using var transaccion = AponusDBContext.Database.BeginTransaction();
+            var ProductosVenta= Venta.DetallesVenta;
+
+            var pagosVenta= Venta.Pagos;
+            var CuotasVenta= Venta.Cuotas;
+
+            Venta.Pagos = null;
+            Venta.Cuotas= null;
+
+            var estadoVenta= AponusDBContext.estadosVentas.First(x => x.IdEstado == Venta.IdEstadoVenta) ?? new EstadosVentas();
+            //IDestadoVenta = 1 
+            //validacion de idcompra!= null
+            Venta.Estado = estadoVenta;
+            Venta.Usuario = AponusDBContext.Usuarios.First(x => x.Usuario.Equals(Venta.IdUsuario)) ?? new Usuarios();
+            Venta.Cliente = AponusDBContext.Entidades.First(x => x.IdEntidad == Venta.IdCliente) ?? new Entidades();
+
+
+            if (Venta?.IdVenta != null && Venta?.IdVenta != 0)
             {
-                Venta.Cliente = AponusDBContext.Entidades.Find(Venta.IdCliente) ?? new Entidades();
-                Venta.Usuario = AponusDBContext.Usuarios.Find(Venta.IdUsuario) ?? new Usuarios();
-                Venta.Estado = AponusDBContext.estadosVentas.Find(Venta.IdEstadoVenta) ?? new EstadosVentas();
+                var VentaAnterior = BuscarVenta(Venta!.IdVenta);
 
-                Venta.Pagos?.ToList().ForEach(item => { item.MedioPago = AponusDBContext.MediosPagos.Find(item.IdMedioPago) ?? new MediosPago(); });
-                Venta.DetallesVenta?.ToList().ForEach(item => { item.IdProductoNavigation = AponusDBContext.Productos.Find(item.IdProducto) ?? new Producto(); });
-                Venta.Cuotas?.ToList().ForEach(item => { item.EstadoCuota = AponusDBContext.estadosCuotasVentas.Find(item.IdEstadoCuota) ?? new EstadosCuotasVentas(); });
+                var ProductosVentaAnterior = Venta.DetallesVenta;
 
-                await AponusDBContext.ventas.AddAsync(Venta);
-
-                foreach (VentasDetalles item in Venta.DetallesVenta ?? Enumerable.Empty<VentasDetalles>())
+                foreach (var Prod in ProductosVentaAnterior)
                 {
-                    roolbackResult = stocks.DisminuirStockProducto(new DTOStockUpdate()
+                    roolbackResult = stocks.IncrementarStockProducto(new DTOStockUpdate()
                     {
-                        IdExistencia = item.IdProducto,
-                        Cantidad = item.Cantidad,
-                    }, AponusDBContext);
+                        IdExistencia = Prod.IdProducto,
+                        Cantidad = Prod.Cantidad,
+                    });                    
                 }
+            }  
 
-                if (roolbackResult)
+            foreach (var item in ProductosVenta)
+            {
+                item.IdProductoNavigation = AponusDBContext.Productos.First(x => x.IdProducto == item.IdProducto);
+                roolbackResult = stocks.DisminuirStockProducto(new DTOStockUpdate()
                 {
-                    await AponusDBContext.SaveChangesAsync();
-                    await transaccion.CommitAsync();
-                    await AponusDBContext.DisposeAsync();
-                    return true;
+                    IdExistencia = item.IdProducto,
+                    Cantidad = item.Cantidad,
+                }, AponusDBContext);
+            }                      
 
-                }
-                else
-                {
-                    transaccion.Rollback();
-                    await AponusDBContext.DisposeAsync();
-                    return false;
-                }
+            await AponusDBContext.ventas.AddAsync(Venta);
+            await AponusDBContext.SaveChangesAsync();
+
+            foreach (var pago in pagosVenta)
+            {
+                pago.IdVenta = Venta.IdVenta;
+                var EntidadPago = AponusDBContext.entidadespago.First(X => X.IdEntidad == pago.IdEntidadPago);
+                var medioPago = AponusDBContext.MediosPagos.First(X => X.IdMedioPago == pago.IdMedioPago);
+                pago.EntidadPago = EntidadPago;
+                pago.MedioPago = medioPago;
+                pago.Venta = AponusDBContext.ventas.Single(x => x.IdVenta == Venta.IdVenta);
+                await AponusDBContext.pagosVentas.AddAsync(pago);
             }
+
+            if (CuotasVenta != null || CuotasVenta?.Count > 0)
+            {
+                foreach (var Cuota in CuotasVenta)
+                {
+                    Cuota.EstadoCuota = await AponusDBContext.estadosCuotasVentas.SingleAsync(x => x.IdEstadoCuota == Cuota.IdEstadoCuota);
+                    Cuota.Venta = AponusDBContext.ventas.Single(x => x.IdVenta == Venta.IdVenta);
+
+                    foreach (var PagoCuotaVenta in Cuota.Pagos)
+                    {
+                        PagoCuotaVenta.MedioPago = AponusDBContext.MediosPagos.Single(x => x.IdMedioPago == PagoCuotaVenta.IdMedioPago);
+                        PagoCuotaVenta.EntidadPago = AponusDBContext.entidadespago.Single(x => x.IdEntidad == PagoCuotaVenta.IdEntidadPago);
+                        PagoCuotaVenta.IdVenta = Venta.IdVenta;
+                    }
+                }
+
+                await AponusDBContext.AddRangeAsync(CuotasVenta);
+            }
+
+            if (roolbackResult)
+            {
+                await AponusDBContext.SaveChangesAsync();
+                await transaccion.CommitAsync();
+                await AponusDBContext.DisposeAsync();
+                return true;
+
+            }
+            else
+            {
+                transaccion.Rollback();
+                await AponusDBContext.DisposeAsync();
+                return false;
+            }
+            
         }
 
         public IQueryable<Modelos.Ventas> ListarVentas()
@@ -67,6 +121,17 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 .Include(x => x.Pagos)
                 .Include(Cli => Cli.Cliente)
                 .AsQueryable();
+        }
+
+        internal async Task<Ventas?> BuscarVenta(int idVenta)
+        {
+            Ventas? venta = await AponusDBContext.ventas
+               .Include(x => x.DetallesVenta)
+               .Include(x => x.Cliente)
+               .Include(x => x.Pagos)
+               .FirstOrDefaultAsync(x => x.IdVenta == idVenta);
+
+            return venta;
         }
 
         internal void EliminarEstado(EstadosVentas EstadoVenta)
@@ -120,6 +185,46 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     return new StatusCodeResult(200);
                 }
             }
+        }
+
+        internal async Task<(int? Resultado, Exception? ex)> GuardarPago(PagosVentas pago)
+        {
+            using var transaccion = AponusDBContext.Database.BeginTransaction();
+
+            try
+            {
+                if (pago.IdCuota != null &&  pago.IdCuota != 0 )
+                {
+                    pago.Cuota = AponusDBContext.cuotasVentas.First(x => x.IdCuota == pago.IdCuota);
+                }
+
+                pago.EntidadPago = AponusDBContext.entidadespago.First(x => x.IdEntidad == pago.IdEntidadPago);
+                pago.MedioPago = AponusDBContext.MediosPagos.First(x => x.IdMedioPago == pago.IdMedioPago);
+                pago.Venta = AponusDBContext.ventas.First(x => x.IdVenta == pago.IdVenta);
+                
+                if (pago?.IdPago != null && pago.IdPago != 0)
+                {
+                    AponusDBContext.pagosVentas.Update(pago);
+                    AponusDBContext.SaveChanges();
+                }
+                else
+                {
+                    AponusDBContext.pagosVentas.Add(pago!);    
+                }
+
+                AponusDBContext.SaveChanges();
+                transaccion.Commit();
+
+                return (StatusCodes.Status200OK, null);
+
+            }
+            catch (Exception ex)
+            {
+                transaccion.Rollback();
+
+                return (null, ex);
+            }
+            
         }
     }
 }

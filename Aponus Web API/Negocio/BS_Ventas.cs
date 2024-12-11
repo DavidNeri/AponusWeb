@@ -98,27 +98,26 @@ namespace Aponus_Web_API.Negocio
                 Ventas NuevaVenta = new()
                 {
                     IdCliente = Venta.IdCliente,
-                    FechaHora = UTL_Fechas.ObtenerFechaHora(),
                     IdUsuario = Venta.IdUsuario,
-                    IdEstadoVenta = Venta.IdEstadoVenta,
+                    FechaHora = UTL_Fechas.ObtenerFechaHora(),
+                    Cliente = new Entidades { IdEntidad = Venta.IdCliente},
+                    Usuario = new Usuarios {  Usuario = Venta.IdUsuario },                    
                     MontoTotal = Venta.MontoTotal,
+                    SaldoPendiente = Venta.SaldoPendiente ?? 0,
+                    IdEstadoVenta = Venta.IdEstadoVenta,
 
-                };
-
-                if (Venta.DetallesVenta != null)
-                {
-                    foreach (var vta in Venta.DetallesVenta)
+                    DetallesVenta = Venta.DetallesVenta.Select(vta=> new VentasDetalles()
                     {
-                        NuevaVenta.DetallesVenta.Add(new VentasDetalles()
-                        {
-                            IdProducto = vta.IdProducto,
-                            Cantidad = vta.Cantidad,
-                            Precio = vta.Precio,
-                            IdProductoNavigation = new Producto { IdProducto = vta.IdProducto }
+                        IdProducto = vta.IdProducto,
+                        Cantidad = vta.Cantidad,
+                        Precio = vta.Precio,
+                        IdProductoNavigation = new Producto { IdProducto = vta.IdProducto },
+                        Entregados = vta.Entregados ?? 0,
 
-                        });
-                    }
-                }
+                    }).ToList(),
+                };
+              
+                
                 if (Venta.Pagos != null)
                 {
                     foreach (var vtaPagos in Venta.Pagos)
@@ -130,40 +129,66 @@ namespace Aponus_Web_API.Negocio
                             Fecha = vtaPagos.Fecha ?? UTL_Fechas.ObtenerFechaHora(),
                             Monto = vtaPagos.Monto,
                             IdMedioPago = vtaPagos.IdMedioPago,
-
+                            IdEntidadPago = vtaPagos.IdEntidadPago
                         });
                     }
 
-                    NuevaVenta.SaldoPendiente = saldoPendiente;
+                    NuevaVenta.SaldoPendiente = NuevaVenta.SaldoPendiente ?? saldoPendiente;
                 }
-                if (Venta.Cuotas != null)
+                if (Venta.Cuotas != null || Venta?.Cuotas?.Count > 0)
                 {
-                    foreach (var Cuota in Venta.Cuotas)
+                    List<CuotasVentas> cuotasVenta = new List<CuotasVentas>();
+                    var CuotasVenta = Venta.Cuotas;
+
+                    foreach (var Cuota in CuotasVenta)
                     {
-                        NuevaVenta.Cuotas.Add(new CuotasVentas()
+                        cuotasVenta.Add(new CuotasVentas()
                         {
+                            IdCuota = Cuota.IdCuota ?? 0,
+                            FechaVencimiento = Cuota.FechaVencimiento,
+                            FechaPago = Cuota.FechaPago,
+                            IdEstadoCuota = Cuota.FechaPago != null ? 1 : 2,
                             NumeroCuota = Cuota.NumeroCuota,
                             Monto = Cuota.Monto,
-                            FechaVencimiento = Cuota.FechaVencimiento,
-                            IdEstadoCuota = Cuota.IdEstadoCuota,
+                            Pagos = Cuota.Pagos.Select(x => new PagosVentas()
+                            {
+                                IdCuota = x.IdCuota ?? 0,
+                                IdMedioPago = x.IdMedioPago,
+                                Monto = x.Monto,
+                                Fecha = x.Fecha,
+                                IdEntidadPago = x.IdEntidadPago,
+                                Venta = null,
 
+                            }).ToList(),
                         });
                     }
+
+                    NuevaVenta.Cuotas = cuotasVenta;
                 }
 
+                if (Venta?.IdVenta != null && Venta.IdVenta.HasValue)
+                {
+                    int IdVenta = Venta.IdVenta.Value;
+                    Ventas? _Venta = await AdVentas.BuscarVenta(IdVenta);
+
+                    if (_Venta != null)
+                    {
+                        Venta.IdVenta = IdVenta;
+                    }
+                }
 
                 bool Resultado = await AdVentas.Guardar(NuevaVenta);
 
-
-                return new ContentResult()
-                {
-                    Content = Resultado ? "Datos Guardados" : "Error interno, no se guardaron los datos",
-                    ContentType = "Application/Json",
-                    StatusCode = Resultado ? 200 : 500
-                };
+                if(Resultado)
+                    return new StatusCodeResult(200);
+                else
+                    return new ContentResult()
+                    {
+                        Content = "Error interno, no se aplicaron los cambios",
+                        ContentType = "application/json",
+                        StatusCode = 400
+                    };
             }
-
-
         }
         public static ICollection<DTOCuotasVentas> CalcularCuotas(UTL_ParametrosCuotas Parametros)
         {
@@ -285,6 +310,30 @@ namespace Aponus_Web_API.Negocio
 
 
 
+        }
+
+        internal async Task<IActionResult> MapeoDTOPagosVenta(DTOPagosVentas Pago)
+        {
+           PagosVentas pago = new PagosVentas()
+           {
+               Fecha = Pago.Fecha ?? UTL_Fechas.ObtenerFechaHora(),
+               IdCuota = Pago.IdCuota ?? null,
+               IdEntidadPago = Pago.IdEntidadPago, 
+               IdMedioPago = Pago.IdMedioPago,
+               IdVenta = Pago.IdVenta, 
+               IdPago = Pago.IdPago               
+           };
+
+            var (Resultado, ex) = await AdVentas.GuardarPago(pago);
+
+            if (ex != null) return new ContentResult()
+            {
+                Content = ex.InnerException?.Message ?? ex.Message,
+                ContentType = "application/json",
+                StatusCode = 400
+            };
+
+            return new StatusCodeResult((int)Resultado!);
         }
     }
 }
