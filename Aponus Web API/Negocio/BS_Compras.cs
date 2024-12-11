@@ -181,19 +181,20 @@ namespace Aponus_Web_API.Negocio
             }
         }
 
-        internal async Task<IActionResult> RegistrarPago(DTOPagosCompras pago)
+        internal async Task<IActionResult> MapeoDTOPagosCompra(DTOPagosCompras pago)
         {
             PagosCompras Pago = new()
             {
-                IdCompra = pago.IdCompra,
-                Compra = new Compras() { IdCompra = pago.IdCompra },
-                Monto = pago.Monto,
                 Fecha = UTL_Fechas.ObtenerFechaHora(),
+                IdCuota = pago.IdCuota ?? null,
+                IdEntidadPago = pago.IdEntidadPago,
                 IdMedioPago = pago.IdMedioPago,
-                MedioPago = new MediosPago { IdMedioPago = pago.IdMedioPago }
+                IdCompra = pago.IdCompra,
+                IdPago = pago.IdPago,
+                Monto = pago.Monto,
             };
 
-            var (Resultado, Error) = await AdCompras.RegistrarPago(Pago);
+            var (Resultado, Error) = await AdCompras.GuardarPago(Pago);
 
             if (Error != null)
                 return new ContentResult()

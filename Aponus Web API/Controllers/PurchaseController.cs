@@ -36,12 +36,13 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpPost]
-        [Route("Billings/New")]
+        [Route("Bills/New")]
         [RequiredPermission("PAGOS_COMPRAS", "INSERT")]
+        [RequiredPermission("PAGOS_VENTAS", "UPDATE")]
 
         public async Task<IActionResult> RegistrarPago(DTOPagosCompras Pago)
         {
-            return await BsCompras.RegistrarPago(Pago);
+            return await BsCompras.MapeoDTOPagosCompra(Pago);
         }
 
         //Modiicar Stock cunado se elimina o modifica una compra

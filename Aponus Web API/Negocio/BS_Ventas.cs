@@ -321,7 +321,8 @@ namespace Aponus_Web_API.Negocio
                IdEntidadPago = Pago.IdEntidadPago, 
                IdMedioPago = Pago.IdMedioPago,
                IdVenta = Pago.IdVenta, 
-               IdPago = Pago.IdPago               
+               IdPago = Pago.IdPago,
+               Monto = Pago.Monto,
            };
 
             var (Resultado, ex) = await AdVentas.GuardarPago(pago);

@@ -1399,6 +1399,22 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.SalesController",
+    "Method": "RegistrarPago",
+    "RelativePath": "Aponus/Sales/Bills/new",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Pago",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOPagosVentas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SalesController",
     "Method": "List",
     "RelativePath": "Aponus/Sales/List",
     "HttpMethod": "GET",

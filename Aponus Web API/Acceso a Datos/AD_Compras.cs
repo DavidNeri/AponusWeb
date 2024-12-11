@@ -2,6 +2,7 @@
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Z.EntityFramework.Plus;
 
 namespace Aponus_Web_API.Acceso_a_Datos
 {
@@ -142,24 +143,43 @@ namespace Aponus_Web_API.Acceso_a_Datos
             {
                 return (null, Error);
             }
-
-
-
-
         }
 
-        internal async Task<(StatusCodeResult? ResultadoOk, Exception? Error)> RegistrarPago(PagosCompras pago)
+        internal async Task<(int? Resultado, Exception? Error)> GuardarPago(PagosCompras pago)
         {
             using var transaccion = await aponusContext.Database.BeginTransactionAsync();
+
             try
             {
-                await aponusContext.PagosCompra.AddAsync(pago);
+                if (pago.IdCuota != null && pago.IdCuota != 0)
+                {
+                    pago.Cuota = aponusContext.CuotasCompra.First(x => x.IdCuota == pago.IdCuota);
+                }
+
+                pago.entidadPago = await aponusContext.entidadespago.FirstAsync(x => x.IdEntidad == pago.IdEntidadPago);
+                pago.MedioPago = await aponusContext.MediosPagos.FirstAsync(x => x.IdMedioPago == pago.IdMedioPago);
+                pago.Compra = await aponusContext.Compra.FirstAsync(x => x.IdCompra == pago.IdCompra);
+
+                if (pago?.IdPago != null && pago.IdPago != 0)
+                {
+                    aponusContext.PagosCompra.Update(pago);
+                    await aponusContext.SaveChangesAsync();
+                }
+                else
+                {
+                    aponusContext.PagosCompra.Add(pago!);
+                }
+
                 await aponusContext.SaveChangesAsync();
                 await transaccion.CommitAsync();
-                return (new StatusCodeResult(200), null);
+
+                return (StatusCodes.Status200OK, null);
+
             }
             catch (Exception ex)
             {
+                await transaccion.RollbackAsync();
+
                 return (null, ex);
             }
         }
