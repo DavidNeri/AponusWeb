@@ -30,7 +30,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             Venta.Cuotas= null;
 
             var estadoVenta= AponusDBContext.estadosVentas.First(x => x.IdEstado == Venta.IdEstadoVenta) ?? new EstadosVentas();
-            //IDestadoVenta = 1 
+            
             //validacion de idcompra!= null
             Venta.Estado = estadoVenta;
             Venta.Usuario = AponusDBContext.Usuarios.First(x => x.Usuario.Equals(Venta.IdUsuario)) ?? new Usuarios();

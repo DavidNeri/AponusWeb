@@ -98,13 +98,14 @@ namespace Aponus_Web_API.Negocio
                 Ventas NuevaVenta = new()
                 {
                     IdCliente = Venta.IdCliente,
+                    
                     IdUsuario = Venta.IdUsuario,
                     FechaHora = UTL_Fechas.ObtenerFechaHora(),
                     Cliente = new Entidades { IdEntidad = Venta.IdCliente},
                     Usuario = new Usuarios {  Usuario = Venta.IdUsuario },                    
                     MontoTotal = Venta.MontoTotal,
                     SaldoPendiente = Venta.SaldoPendiente ?? 0,
-                    IdEstadoVenta = Venta.IdEstadoVenta,
+                    IdEstadoVenta = 1,
 
                     DetallesVenta = Venta.DetallesVenta.Select(vta=> new VentasDetalles()
                     {

@@ -204,7 +204,7 @@ namespace Aponus_Web_API.Negocio
                     StatusCode = 500
                 };
 
-            return Resultado!;
+            return new StatusCodeResult((int)Resultado!);
 
         }
     }
