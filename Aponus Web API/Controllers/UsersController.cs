@@ -40,6 +40,7 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
+
         [HttpPost]
         [Route("roles/list")]
 
@@ -47,7 +48,7 @@ namespace Aponus_Web_API.Controllers
         {
             return await _Usuarios.MapeoRolesDTO();
         }
-
+  
 
     }
 }
