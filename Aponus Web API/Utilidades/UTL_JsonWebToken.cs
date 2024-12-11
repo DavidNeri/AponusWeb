@@ -42,8 +42,9 @@ namespace Aponus_Web_API.Utilidades
                 new (ClaimTypes.NameIdentifier, _usuario.Usuario.ToString()),
                 new (ClaimTypes.Email, _usuario.Correo),
                 new ("Rol", _usuario.Rol.NombreRol),
-                new ("Permisos", string.Join(',', permisos!.Select(x=>$"{x.NombreTabla}:{x.Atributo}")))
+                new ("TokenId",Guid.NewGuid().ToString())
             };
+
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
             var Credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

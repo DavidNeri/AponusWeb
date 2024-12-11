@@ -1352,7 +1352,7 @@
   {
     "ContainingType": "Aponus_Web_API.Controllers.PurchaseController",
     "Method": "RegistrarPago",
-    "RelativePath": "Aponus/Purchase/Billings/New",
+    "RelativePath": "Aponus/Purchase/Bills/New",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -1686,9 +1686,25 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.UsersController",
+    "Method": "GenerarContrase\u00F1a",
+    "RelativePath": "Aponus/Users/Password/Reset/{usuario}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuario",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.UsersController",
     "Method": "ObtenerPerfiles",
     "RelativePath": "Aponus/Users/roles/list",
-    "HttpMethod": "POST",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],

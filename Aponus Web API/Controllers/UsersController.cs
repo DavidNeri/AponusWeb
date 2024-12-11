@@ -41,14 +41,22 @@ namespace Aponus_Web_API.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("roles/list")]
 
         public async Task<IActionResult> ObtenerPerfiles()
         {
             return await _Usuarios.MapeoRolesDTO();
         }
-  
+
+        [HttpPost]
+        [Route("Password/Reset/{usuario}")]
+
+        public async Task<IActionResult> GenerarContraseña(string usuario)
+        {
+            return await _Usuarios.GenerarContraseña(usuario);
+        }
+
 
     }
 }

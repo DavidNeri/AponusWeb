@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Aponus_Web_API.Acceso_a_Datos;
+using Aponus_Web_API.Modelos;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Aponus_Web_API.Utilidades
 {
@@ -8,7 +12,7 @@ namespace Aponus_Web_API.Utilidades
     public class RequiredPermissionAttribute : Attribute, IAuthorizationFilter
     {
         private readonly string _tabla;
-        private readonly string _Atributo;
+        private readonly string _Atributo;  
 
         public RequiredPermissionAttribute(string tabla, string atributo)
         {
@@ -18,14 +22,33 @@ namespace Aponus_Web_API.Utilidades
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var ClaimsUsuario = context.HttpContext.User.Claims;
+            var RolUsuario = context.HttpContext.User.FindFirst("Rol")?.Value;
 
-            var permisos = ClaimsUsuario.FirstOrDefault(x=>x.Type == "Permisos")?.Value;
+            if (string.IsNullOrEmpty(RolUsuario))
+            {
+                context.Result = new UnauthorizedResult();
+                return;
+            }
 
-            if (string.IsNullOrEmpty(permisos) || !permisos.Split(',').Contains($"{_tabla}:{_Atributo}"))
+            var permisos = ObtenerPermisosDB(context, RolUsuario);
+
+            if (!permisos.Contains($"{_tabla}:{_Atributo}"))
             {
                 context.Result = new ForbidResult("No tienes permisos para realizar esta acción");
             }
+
+        }
+
+        private List<string> ObtenerPermisosDB(AuthorizationFilterContext context, string RolUsuario)
+        {
+            var services = context.HttpContext.RequestServices;
+            var aponusContext = services.GetRequiredService<AponusContext>();
+            var adUsuarios = services.GetRequiredService<AD_Usuarios>();
+
+            return aponusContext.asignacionRoles
+                .Where(p => p.Beneficiario == RolUsuario)
+                .Select(p => $"{p.NombreTabla}:{p.Atributo}")
+                .ToList();
         }
     }
 

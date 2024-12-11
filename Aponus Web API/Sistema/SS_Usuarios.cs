@@ -3,6 +3,7 @@ using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace Aponus_Web_API.Systema
 {
@@ -48,7 +49,7 @@ namespace Aponus_Web_API.Systema
                 Correo = _usuario.Correo ?? "",
             };
 
-            var (Usuario, ex) = await AdUsuarios.ObtenerDatosUsuario(_Usuario);
+            var (Usuario, ex) = AdUsuarios.ObtenerDatosUsuario(_Usuario);
 
             if (ex != null) return new ContentResult()
             {
@@ -85,7 +86,7 @@ namespace Aponus_Web_API.Systema
                 HashContraseña = HasContraseña,
                 Sal = Sal
             };
-            var (UsuarioExistente, _) = await AdUsuarios.ObtenerDatosUsuario(_Usuario);
+            var (UsuarioExistente, _) = AdUsuarios.ObtenerDatosUsuario(_Usuario);
 
             if (UsuarioExistente != null)
             {
@@ -119,6 +120,55 @@ namespace Aponus_Web_API.Systema
             };
             
             return new StatusCodeResult((int)StatusCode200OK!);
+        }
+
+        internal async Task<IActionResult> GenerarContraseña(string usuario)
+        {
+            Usuarios _Usuario = new Usuarios { Usuario = usuario };
+
+            var (Usuario, ex) = AdUsuarios.ObtenerDatosUsuario(_Usuario);
+
+            if (ex != null) return new ContentResult()
+            {
+                Content = ex.InnerException?.Message ?? ex.Message,
+                ContentType = "application/json",
+                StatusCode = 400
+            };
+
+            string contraseña = GenerarContraseña();
+
+            var (HasContraseña, Sal) = UTL_Contraseñas.HashContraseña(contraseña);
+            _Usuario.HashContraseña = HasContraseña;
+            _Usuario.Sal = Sal;
+
+            var (resultado, error ) = await AdUsuarios.ResetearContraseña(_Usuario);
+
+            if (error != null) return new ContentResult()
+            {
+                Content = error.InnerException?.Message ?? error.Message,
+                ContentType = "application/json",
+                StatusCode = 400
+            };
+
+
+            return null;
+
+
+        }
+
+
+        private string GenerarContraseña()
+        {
+            const string Caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            StringBuilder Contraseña = new StringBuilder();
+            Random Aleatorio = new Random();
+
+            for (int i = 0; i < 6; i++)
+            {
+                Contraseña.Append(Caracteres[Aleatorio.Next(Caracteres.Length)]);
+            }
+
+            return Contraseña.ToString();
         }
     }
 }

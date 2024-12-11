@@ -48,15 +48,31 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
         }
 
+        public async Task<(int? Resultado, Exception? ex)> ResetearContraseña(Usuarios usuario)
+        {
+            try
+            {
+                AponusDBContext.Usuarios.Update(usuario);
+                await AponusDBContext.SaveChangesAsync();
 
-        public async Task<(Usuarios? Usuario, Exception? Error)> ObtenerDatosUsuario(Usuarios usuario)
+                return (StatusCodes.Status200OK, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex);
+            }
+        }
+
+
+
+        public (Usuarios? Usuario, Exception? Error) ObtenerDatosUsuario(Usuarios usuario)
         {
             try
             {
 
-                var _Usuario = await AponusDBContext.Usuarios
+                var _Usuario = AponusDBContext.Usuarios
                     .Include(x=>x.Rol)
-                    .FirstOrDefaultAsync(x => x.Usuario.ToUpper().Equals(usuario.Usuario.ToUpper()) || x.Correo.ToUpper().Equals(usuario.Correo.ToUpper()));
+                    .FirstOrDefault(x => x.Usuario.ToUpper().Equals(usuario.Usuario.ToUpper()) || x.Correo.ToUpper().Equals(usuario.Correo.ToUpper()));
 
                 if (_Usuario != null)
                 {
