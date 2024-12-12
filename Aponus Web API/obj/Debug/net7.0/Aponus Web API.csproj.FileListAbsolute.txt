@@ -291,3 +291,5 @@ D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\ref\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\FluentEmail.Core.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\FluentEmail.Smtp.dll

@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "Il7IeAto9m8=",
+  "dgSpecHash": "yqysWJh+8H4=",
   "success": true,
   "projectFilePath": "D:\\Aponus SA\\Aponus Web API\\Aponus Web API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\David\\.nuget\\packages\\annytab.stemmer\\1.2.4\\annytab.stemmer.1.2.4.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\cloudinarydotnet\\1.26.2\\cloudinarydotnet.1.26.2.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\datascope.stemmer.netstandart\\1.0.0.6\\datascope.stemmer.netstandart.1.0.0.6.nupkg.sha512",
+    "C:\\Users\\David\\.nuget\\packages\\fluentemail.core\\3.0.2\\fluentemail.core.3.0.2.nupkg.sha512",
+    "C:\\Users\\David\\.nuget\\packages\\fluentemail.smtp\\3.0.2\\fluentemail.smtp.3.0.2.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\fractions\\7.2.1\\fractions.7.2.1.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\David\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",

@@ -58,6 +58,10 @@
               "target": "Package",
               "version": "[1.0.0.6, )"
             },
+            "FluentEmail.Smtp": {
+              "target": "Package",
+              "version": "[3.0.2, )"
+            },
             "Fractions": {
               "target": "Package",
               "version": "[7.2.1, )"

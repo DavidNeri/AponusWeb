@@ -3,6 +3,8 @@ using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 
 namespace Aponus_Web_API.Systema
@@ -124,7 +126,7 @@ namespace Aponus_Web_API.Systema
 
         internal async Task<IActionResult> GenerarContraseña(string usuario)
         {
-            Usuarios _Usuario = new Usuarios { Usuario = usuario };
+            Usuarios _Usuario = new Usuarios { Usuario = usuario, Correo = usuario };
 
             var (Usuario, ex) = AdUsuarios.ObtenerDatosUsuario(_Usuario);
 
@@ -136,12 +138,14 @@ namespace Aponus_Web_API.Systema
             };
 
             string contraseña = GenerarContraseña();
-
+            
             var (HasContraseña, Sal) = UTL_Contraseñas.HashContraseña(contraseña);
-            _Usuario.HashContraseña = HasContraseña;
-            _Usuario.Sal = Sal;
+            Usuario!.HashContraseña = HasContraseña;
+            Usuario.Sal = Sal;
 
-            var (resultado, error ) = await AdUsuarios.ResetearContraseña(_Usuario);
+
+
+            var (resultado, error ) = await AdUsuarios.ResetearContraseña(Usuario!);
 
             if (error != null) return new ContentResult()
             {
@@ -150,8 +154,16 @@ namespace Aponus_Web_API.Systema
                 StatusCode = 400
             };
 
+            var (mensaje, errocontraseña) = Enviar_Correo(Usuario.Correo, Usuario.Usuario, contraseña);
 
-            return null;
+            if (errocontraseña != null) return new ContentResult()
+            {
+                Content = errocontraseña.InnerException?.Message ?? errocontraseña.Message,
+                ContentType = "application/json",
+                StatusCode = 400
+            };
+
+            return new JsonResult(mensaje);
 
 
         }
@@ -170,5 +182,38 @@ namespace Aponus_Web_API.Systema
 
             return Contraseña.ToString();
         }
+
+        private (string? Mensaje, Exception? ) Enviar_Correo(string Correo, string Usuario,string Contraseña)
+        {     
+            try
+            {
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                var _client = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential("davidcneri@gmail.com", "pqix uhbp goye yddw"),
+                    
+                    DeliveryMethod = SmtpDeliveryMethod.Network
+                };                
+
+                _client.SendAsync(new MailMessage(
+                    "davidcneri@gmail.com",
+                    Correo,
+                    "Sistema APONUS - Mensaje Automatico de recuperacion de contraseña",
+                    $"Usuario: {Usuario} \n Contraseña: {Contraseña}"),
+                    null);
+
+
+                return ($"La contraseña se envio por correo a {Correo}", null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex);
+            }
+
+        }
+       
+
     }
 }
