@@ -105,7 +105,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
 
         }
-        internal void DeleteAllProductComponents(string IdProducto)
+        internal void EliminarComponentesProducto(string IdProducto)
         {
             var DeleteComponents = AponusDBContext.Componentes_Productos.Where(x => x.IdProducto == IdProducto).ToArray();
             if (DeleteComponents != null)

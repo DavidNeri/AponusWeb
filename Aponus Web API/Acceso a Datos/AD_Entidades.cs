@@ -340,16 +340,30 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
         }
 
-        //internal async Task<(List<EntidadPago>? Listado, Exception? ex)> ListarEntidadesPago()
-        //{
-        //    return (await AponusDBContext.entidadespago
-        //        .Select(x => new EntidadPago()
-        //        {
-        //            Descripcion = x.Descripcion,
-        //            Emisor = x.Emisor,
-        //            IdEntidad = x.IdEntidad,
-        //            Tipo = x.Tipo
-        //        }).ToListAsync(), 
-    }
 
+
+        internal async Task<(List<EntidadesPago>? Listado, Exception? ex)> ListarEntidadesPago()
+        {
+            try
+            {
+                var Entidades = await AponusDBContext.entidadespago
+                .Select(x => new EntidadesPago()
+                {
+                    Descripcion = x.Descripcion,
+                    Emisor = x.Emisor,
+                    IdEntidad = x.IdEntidad,
+                    Tipo = x.Tipo
+                }).ToListAsync();
+
+                return (Entidades, null);
+            }
+            catch (Exception ex )
+            {
+                return (null,ex);
+
+            }
+            
+        
+        }
+    }
 }

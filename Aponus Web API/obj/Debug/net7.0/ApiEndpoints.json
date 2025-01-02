@@ -216,6 +216,16 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
+    "Method": "ObtenerEntidadesPago",
+    "RelativePath": "Aponus/Entities/Billing/List",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
     "Method": "EliminarCategoria",
     "RelativePath": "Aponus/Entities/Categories/Delete/{Id}",
     "HttpMethod": "POST",

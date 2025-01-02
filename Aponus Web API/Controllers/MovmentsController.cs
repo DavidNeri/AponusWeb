@@ -22,11 +22,11 @@ namespace Aponus_Web_API.Controllers
         [RequiredPermission("SUMINISTROS_MOVIMIENTOS_STOCK", "INSERT")]
         [RequiredPermission("SUMINISTROS_MOVIMIENTOS_STOCK", "UPDATE")]
         [RequiredPermission("ARCHIVOS_STOCK", "INSERT")]
-        public IActionResult NuevoMovimiento([FromForm] DTOMovimientosStock Actualizacion)
+        public IActionResult NuevoMovimiento([FromForm] DTOMovimientosStock Movimiento)
         {
             try
             {
-                return BsMovimientos.ProcesarDatosMovimiento(Actualizacion);
+                return BsMovimientos.ProcesarDatosMovimiento(Movimiento);
 
             }
             catch (Exception)

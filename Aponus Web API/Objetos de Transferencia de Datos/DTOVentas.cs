@@ -41,6 +41,9 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         [JsonProperty(PropertyName = "estado", NullValueHandling = NullValueHandling.Ignore)]
         public ICollection<DTOEstadosVentas>? Estado { get; set; }
 
+        [JsonProperty(PropertyName = "archivos", NullValueHandling = NullValueHandling.Ignore)]
+
+        public List<IFormFile>? Archivos;
 
 
     }

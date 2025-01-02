@@ -31,13 +31,11 @@ namespace Aponus_Web_API.Controllers
             try
             {
                 ICollection<DTOCuotasVentas> ListadoCuotas = BS_Ventas.CalcularCuotas(Parametros);
-
                 return new JsonResult(ListadoCuotas);
 
             }
             catch (Exception ex)
             {
-
                 return new ContentResult()
                 {
                     Content = ex.InnerException?.Message ?? ex.Message,
@@ -45,8 +43,8 @@ namespace Aponus_Web_API.Controllers
                     StatusCode = 400
                 };
             }
-
         }
+
 
         [HttpPost]
         [Route("States/Save")]

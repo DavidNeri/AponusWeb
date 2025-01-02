@@ -2,7 +2,9 @@
 using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Aponus_Web_API.Negocio
@@ -10,9 +12,12 @@ namespace Aponus_Web_API.Negocio
     public class BS_Ventas
     {
         private readonly AD_Ventas AdVentas;
-        public BS_Ventas(AD_Ventas adVentas)
+        private readonly AD_Entidades AdEntidades;
+
+        public BS_Ventas(AD_Ventas adVentas, AD_Entidades adEntidades)
         {
             AdVentas = adVentas;
+            AdEntidades = adEntidades;
         }
 
         public Estados EstadosVentas()
@@ -179,6 +184,20 @@ namespace Aponus_Web_API.Negocio
                 }
 
                 bool Resultado = await AdVentas.Guardar(NuevaVenta);
+
+                
+
+                if (Venta?.Archivos != null)
+                {
+                    IQueryable<Entidades> Entidades = AdEntidades.ListarEntidades();
+                    var DatosCliente = Entidades.SingleOrDefault(x => x.IdEntidad == Venta.IdCliente);
+                    string Cliente = string.IsNullOrEmpty(DatosCliente?.NombreClave) ?
+                        $"{DatosCliente?.Apellido}_{DatosCliente?.Nombre}" :
+                        DatosCliente.NombreClave;
+
+                    new UTL_Cloudinary().SubirArchivosMovimiento(Venta.Archivos, Cliente);
+
+                }
 
                 if(Resultado)
                     return new StatusCodeResult(200);

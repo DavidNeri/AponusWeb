@@ -70,7 +70,7 @@ namespace Aponus_Web_API.Negocio
                     }
                     else
                     {
-                        ProductUpdate(Producto);
+                        ActualizarProducto(Producto);
                     }
 
                     if (Producto.Componentes != null)
@@ -97,7 +97,7 @@ namespace Aponus_Web_API.Negocio
             }
             else
             {
-                return ProductUpdate(Producto);
+                return ActualizarProducto(Producto);
             }
         }
 
@@ -120,7 +120,7 @@ namespace Aponus_Web_API.Negocio
             return IdProducto;
         }
 
-        internal IActionResult ProductUpdate(DTOProducto ActualizarProducto)
+        internal IActionResult ActualizarProducto(DTOProducto ActualizarProducto)
         {
             bool UpdateIdProd = false;
 
@@ -168,7 +168,7 @@ namespace Aponus_Web_API.Negocio
                     }
 
                     //Asignar nuevo Nombre  al objeto 'ProductoOriginal'
-                    Producto ProductoOriginalModificado = ProductoOriginal;
+                    Producto ProductoModificado = ProductoOriginal;
 
 
                     //En caso de corresponder actualizar el IDProducto
@@ -179,10 +179,10 @@ namespace Aponus_Web_API.Negocio
                         string NuevoId = GenerarIdProd(new DTOProducto()
                         {
                             IdProducto = null,
-                            DiametroNominal = ProductoOriginalModificado.DiametroNominal,
-                            IdDescripcion = ProductoOriginalModificado.IdDescripcion,
-                            IdTipo = ProductoOriginalModificado.IdTipo,
-                            Tolerancia = ProductoOriginalModificado.Tolerancia
+                            DiametroNominal = ProductoModificado.DiametroNominal,
+                            IdDescripcion = ProductoModificado.IdDescripcion,
+                            IdTipo = ProductoModificado.IdTipo,
+                            Tolerancia = ProductoModificado.Tolerancia
                         });
 
                         if (IdAnterior != NuevoId)
@@ -198,7 +198,7 @@ namespace Aponus_Web_API.Negocio
                                 };
                             }
 
-                            AdProductos.ActualizarDetallesProducto(ProductoOriginalModificado);
+                            AdProductos.ActualizarDetallesProducto(ProductoModificado);
                             AdProductos.ActualizarIdProd(IdAnterior, NuevoId);
 
                             return new JsonResult(NuevoId);
@@ -207,10 +207,10 @@ namespace Aponus_Web_API.Negocio
                     }
                     else
                     {
-                        if (ProductoOriginalModificado != null) AdProductos.ActualizarDetallesProducto(ProductoOriginalModificado);
+                        if (ProductoModificado != null) AdProductos.ActualizarDetallesProducto(ProductoModificado);
                     }
 
-                    return new JsonResult(ProductoOriginalModificado?.IdProducto ?? null);
+                    return new JsonResult(ProductoModificado?.IdProducto ?? null);
                 }
                 else
                 {
@@ -244,7 +244,7 @@ namespace Aponus_Web_API.Negocio
                 if (Componentes != null)
                 {
                     string IdProducto = Componentes.Where(x => x.IdProducto != null).Select(x => x.IdProducto).FirstOrDefault() ?? "";
-                    AdProductos.DeleteAllProductComponents(IdProducto);
+                    AdProductos.EliminarComponentesProducto(IdProducto);
                 }
 
                 foreach (DTOComponentesProducto componente in Componentes ?? Enumerable.Empty<DTOComponentesProducto>())
