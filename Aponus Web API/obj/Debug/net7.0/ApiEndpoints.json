@@ -218,7 +218,7 @@
     "ContainingType": "Aponus_Web_API.Controllers.EntitiesController",
     "Method": "ObtenerEntidadesPago",
     "RelativePath": "Aponus/Entities/Billing/List",
-    "HttpMethod": "POST",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
