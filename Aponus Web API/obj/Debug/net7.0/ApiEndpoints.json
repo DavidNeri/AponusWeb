@@ -195,6 +195,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Aponus_Web_API.Controllers.DashBoardController",
+    "Method": "ObtenerDatosTablero",
+    "RelativePath": "Aponus/DashBoard/Dashboard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Aponus_Web_API.Controllers.EndpointsController",
     "Method": "Get",
     "RelativePath": "Aponus/Endpoints/Get",
@@ -1419,6 +1429,217 @@
         "Name": "Pago",
         "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOPagosVentas",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SalesController",
+    "Method": "SubirArchivosVenta",
+    "RelativePath": "Aponus/Sales/Files/Upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdVenta",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdCliente",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "FechaHora",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdUsuario",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "MontoTotal",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "SaldoPendiente",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "IdEstadoVenta",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.IdEntidad",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.NombreClave",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Nombre",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Apellido",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Pais",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Ciudad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Provincia",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Localidad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Calle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Altura",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.CodigoPostal",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Barrio",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Telefono1",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Telefono2",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Telefono3",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.IdFiscal",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.FechaRegistro",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.IdUsuarioRegistro",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.IdTipo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.IdCategoria",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.IdEstado",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Tipo.IdTipo",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Tipo.Nombre",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Categoria.IdTipo",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Categoria.IdCategoria",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cliente.Categoria.NombreCategoria",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "DetallesVenta",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOVentasDetalles, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Pagos",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOPagosVentas, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Cuotas",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOCuotasVentas, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Estado",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOEstadosVentas, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Archivos",
+        "Type": "System.Collections.Generic.List\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "infoArchivos",
+        "Type": "System.Collections.Generic.List\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOArchivosVentas, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

@@ -25,16 +25,19 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         [JsonProperty(Order = 21, PropertyName = "moldeado", NullValueHandling = NullValueHandling.Ignore)]
         public string? Moldeado { get; set; }
 
-        [JsonProperty(Order = 22, PropertyName = "requerido", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(Order = 22, PropertyName = "pendiente", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Pendiente { get; set; }
+
+        [JsonProperty(Order = 23, PropertyName = "requerido", NullValueHandling = NullValueHandling.Ignore)]
         public string? Requerido { get; set; }
 
-        [JsonProperty(Order = 23, PropertyName = "disponibles", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(Order = 24, PropertyName = "disponibles", NullValueHandling = NullValueHandling.Ignore)]
         public string? Disponibles { get; set; }
 
-        [JsonProperty(Order = 24, PropertyName = "faltantes", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(Order = 25, PropertyName = "faltantes", NullValueHandling = NullValueHandling.Ignore)]
         public string? Faltantes { get; set; }
 
-        [JsonProperty(Order = 25, PropertyName = "total", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(Order = 26, PropertyName = "total", NullValueHandling = NullValueHandling.Ignore)]
         public string? Total { get; set; }
 
     }

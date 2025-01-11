@@ -1,4 +1,5 @@
-﻿using Aponus_Web_API.Utilidades;
+﻿using Aponus_Web_API.Acceso_a_Datos;
+using Aponus_Web_API.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -59,6 +60,7 @@ public partial class AponusContext : DbContext
     public virtual DbSet<Auditorias> Auditorias { get; set; }
     public virtual DbSet<AsignacionPermisosRoles> asignacionRoles { get; set; }
     public virtual DbSet<EntidadesPago> entidadespago { get; set; }
+    public virtual DbSet<ArchivosVentas> ArchivosVentas { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -141,7 +143,52 @@ public partial class AponusContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Modern_Spanish_CI_AI");
-       
+
+        modelBuilder.Entity<ArchivosVentas>(entity =>
+        {
+            entity.ToTable("ARCHIVOS_VENTAS");
+
+            entity.HasKey(p => p.IdArchivo)
+            .HasName("PK_ARCHIVOS_VENTAS_ID_ARCHIVO");  
+            
+            entity.HasIndex(p => p.IdArchivo)
+            .HasDatabaseName("IX_ARCHIVOS_VENTAS_ID_ARCHIVO");
+
+            entity.Property(p => p.IdVenta)
+            .HasColumnName("ID_VENTA")
+            .HasColumnType("int");
+
+            entity.Property(p => p.IdArchivo)
+            .HasColumnName("ID_ARCHIVO")
+            .HasColumnType("int")
+            .ValueGeneratedOnAdd()
+            .IsRequired();
+
+            entity.Property(p => p.HashArchivo)
+            .HasColumnName("HASH_ARCHIVO")
+            .HasColumnType("text");
+
+            entity.Property(p => p.PathArchivo)
+            .HasColumnName("PATH_ARCHIVO")
+            .HasColumnType("text");
+
+            entity.Property(p => p.MimeType)
+            .HasColumnName("MIME_TYPE")
+            .HasColumnType("text");
+
+            entity.Property(p => p.IdEstado)
+            .HasColumnName("ID_ESTADO")
+            .HasColumnType("int");
+
+            entity.HasOne(p => p.VentasNavigation)
+            .WithMany(p => p.Archivos)
+            .HasPrincipalKey(p => p.IdVenta)
+            .HasForeignKey(p => p.IdVenta)
+            .HasConstraintName("FK_ARCHIVOS_VENTAS_VENTAS_ID_VENTA");
+
+
+        });
+
 
         modelBuilder.Entity<EntidadesPago>(entity =>
         {

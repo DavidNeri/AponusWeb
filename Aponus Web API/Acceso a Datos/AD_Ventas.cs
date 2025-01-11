@@ -17,7 +17,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             stocks = _stocks;
         }
 
-        public async Task<bool> Guardar(Ventas Venta)
+        public async Task<int?> Guardar(Ventas Venta)
         {
             var roolbackResult = false;
             using var transaccion = AponusDBContext.Database.BeginTransaction();
@@ -26,8 +26,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
             var pagosVenta= Venta.Pagos;
             var CuotasVenta= Venta.Cuotas;
 
-            Venta.Pagos = null;
-            Venta.Cuotas= null;
+            //Venta.Pagos = null;
+            //Venta.Cuotas= null;
 
             var estadoVenta= AponusDBContext.estadosVentas.First(x => x.IdEstado == Venta.IdEstadoVenta) ?? new EstadosVentas();
             
@@ -99,14 +99,14 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 await AponusDBContext.SaveChangesAsync();
                 await transaccion.CommitAsync();
                 await AponusDBContext.DisposeAsync();
-                return true;
+                return Venta.IdVenta;
 
             }
             else
             {
                 transaccion.Rollback();
                 await AponusDBContext.DisposeAsync();
-                return false;
+                return null;
             }
             
         }
@@ -119,6 +119,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 .Include(x => x.Cuotas)
                 .Include(x => x.Pagos)
                 .Include(Cli => Cli.Cliente)
+                .Include(X=>X.Archivos)
                 .AsQueryable();
         }
 
@@ -128,6 +129,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                .Include(x => x.DetallesVenta)
                .Include(x => x.Cliente)
                .Include(x => x.Pagos)
+               .Include(x=>x.Archivos)
                .FirstOrDefaultAsync(x => x.IdVenta == idVenta);
 
             return venta;
@@ -142,6 +144,31 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 Estado.IdEstado = 0;
                 AponusDBContext.SaveChanges();
 
+            }
+        }
+
+        internal async Task<(int? Resultado, Exception? error)> GuardarArchivos (List<ArchivosVentas> archivosVentas)
+        {
+            using var Transaccion = await AponusDBContext.Database.BeginTransactionAsync();
+            try
+            {
+                var idVenta = archivosVentas.Select(x => x.IdVenta).First();
+                var Venta = AponusDBContext.ventas.Find(idVenta);
+
+                archivosVentas.ForEach(x => x.VentasNavigation = Venta ?? new Ventas());
+                await AponusDBContext.ArchivosVentas.AddRangeAsync(archivosVentas);
+                await AponusDBContext.SaveChangesAsync();
+                await Transaccion.CommitAsync();
+                await AponusDBContext.DisposeAsync();
+
+                return (StatusCodes.Status200OK, null);
+
+            }
+            catch (Exception ex)
+            {
+                await Transaccion.RollbackAsync();
+                await AponusDBContext.DisposeAsync();
+                return (null, ex);
             }
         }
 

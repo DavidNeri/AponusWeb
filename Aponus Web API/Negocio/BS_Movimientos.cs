@@ -238,10 +238,18 @@ namespace Aponus_Web_API.Negocio
                         //Copiar los archivos 
                         if (ArchivosMovimiento.Archivos != null && proveedor != null)
                         {
-                            List<ArchivosMovimientosStock> DatosArchivos = new UTL_Cloudinary().SubirArchivosMovimiento(ArchivosMovimiento.Archivos,
+                            List<(string Hash, string Path)> DatosArchivosUpload = new UTL_Cloudinary().SubirArchivosCloudinary(ArchivosMovimiento.Archivos,
                                 !string.IsNullOrEmpty(proveedor?.NombreClave) ? proveedor.NombreClave : proveedor?.Apellido + "_" + proveedor?.Nombre);
 
-                            DatosArchivos.ForEach(x => x.IdMovimiento = ArchivosMovimiento.IdMovimiento ?? 0);
+                            List<ArchivosMovimientosStock> DatosArchivos = new List<ArchivosMovimientosStock>();                      
+
+                            DatosArchivosUpload.ForEach(x => DatosArchivos.Add(new ArchivosMovimientosStock()
+                            {
+                                IdMovimiento = ArchivosMovimiento.IdMovimiento ?? 0,
+                                HashArchivo = x.Hash,
+                                PathArchivo = x.Path
+
+                            }));
 
                             //ProcesarDatos info Cloudiary
                             using (var transacccion = AponusDbContext.Database.BeginTransaction())

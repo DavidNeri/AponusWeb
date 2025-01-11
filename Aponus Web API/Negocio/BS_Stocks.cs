@@ -3,7 +3,9 @@ using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json;
 using Z.EntityFramework.Plus;
 
 namespace Aponus_Web_API.Negocio
@@ -15,14 +17,15 @@ namespace Aponus_Web_API.Negocio
         private readonly AD_Stocks AdStocks;
         private readonly AD_Productos AdProductos;
         private readonly BS_Entidades BsEntidades;
-
-        public BS_Stocks(AponusContext _aponusContext, AD_Stocks adStocks, AD_Componentes componentesProductos, BS_Entidades bsEntidades, AD_Productos adProductos)
+        private readonly AD_Componentes AdComponentes;
+        public BS_Stocks(AponusContext _aponusContext, AD_Stocks adStocks, AD_Componentes componentesProductos, BS_Entidades bsEntidades, AD_Productos adProductos, AD_Componentes _adComponentes)
         {
             AponusDbContext = _aponusContext;
             AdStocks = adStocks;
             _ComponentesProductos = componentesProductos;
             BsEntidades = bsEntidades;
             AdProductos = adProductos;
+            AdComponentes = _adComponentes;
         }
 
         public StockInsumos OperacionesStockInsumos()
@@ -92,6 +95,80 @@ namespace Aponus_Web_API.Negocio
             }
 
         }
+
+        internal async Task<object> ObentenerInsumosFaltantes()
+        {
+            List<Modelos.StockInsumos> ListadoStockInsumos = await AdStocks.StockInsumos().ListarStockInsumos();
+            var (ComponentesDetalle, error) = AdComponentes.ListarDetalleComponentes(null);
+
+            for (int i = ListadoStockInsumos.Count -1 ; i >=0;  i--)
+            {
+                var insumo = ListadoStockInsumos[i];
+
+                if (insumo.Proceso > 100)
+                {
+                    ListadoStockInsumos.RemoveAt(i);
+                }
+            }
+
+            ComponentesDetalle = ComponentesDetalle!
+                .Where(x => ListadoStockInsumos.Select(y => y.IdInsumo).ToList().Contains(x.IdInsumo)).ToList();
+
+            List<ComponentesDescripcion>? NombreComponentes = AdComponentes.ListarNombresComponentes();
+
+
+            var InsumosFaltantes = ListadoStockInsumos
+                .Join(ComponentesDetalle, Stock => Stock.IdInsumo, Detalles => Detalles.IdInsumo, (stock, detalles) => new
+                {
+                    stock,
+                    detalles
+                })
+                .Join(NombreComponentes!, StockDetalles => StockDetalles.detalles.IdDescripcion, Nombres => Nombres.IdDescripcion, (SDet, Nombres) => new
+                {
+                    SDet,
+                    Nombres
+                })
+                .Select(x => new DTOComponenteFormateado
+                {
+                    Nombre = x.Nombres.Descripcion,
+                    Diametro = x.SDet.detalles.Diametro != null ? x.SDet.detalles.Diametro.ToString() : null,
+                    Espesor = x.SDet.detalles.Espesor != null ? x.SDet.detalles.Espesor.ToString() : null,
+                    Longitud = x.SDet.detalles.Longitud != null ? x.SDet.detalles.Longitud.ToString() : null,
+                    Altura = x.SDet.detalles.Altura != null ? x.SDet.detalles.Altura.ToString() : null,
+                    Perfil = x.SDet.detalles.Perfil != null ? x.SDet.detalles.Perfil.ToString() : null,
+                    Tolerancia = x.SDet.detalles.Tolerancia != null ? x.SDet.detalles.Tolerancia.ToString() : null,                 
+
+                    DiametroNominal = x.SDet.detalles.DiametroNominal != null ? 
+                        $"{x.SDet.detalles.DiametroNominal.ToString()} mm" : null,
+
+                    Peso =  x.SDet.detalles.Peso != null ?
+                        $"{x.SDet.detalles.Peso} Kg" : null,
+
+                    Granallado = x.SDet.stock.Granallado != null ?
+                        $"{x.SDet.stock.Granallado} {x.Nombres.IdFraccionamiento ?? x.Nombres.IdAlmacenamiento}" : null,
+
+                    Pintura = x.SDet.stock.Pintura != null ?
+                        $"{x.SDet.stock.Pintura} {x.Nombres.IdFraccionamiento ?? x.Nombres.IdAlmacenamiento}" : null,
+
+                    Proceso = x.SDet.stock.Proceso != null ?
+                        $"{x.SDet.stock.Proceso} {x.Nombres.IdFraccionamiento ?? x.Nombres.IdAlmacenamiento}" : null,
+
+                    Moldeado = x.SDet.stock.Moldeado != null ?
+                        $"{x.SDet.stock.Moldeado} {x.Nombres.IdFraccionamiento ?? x.Nombres.IdAlmacenamiento}" : null,
+
+                    Pendiente = x.SDet.stock.Pendiente != null ?
+                        $"{x.SDet.stock.Pendiente} {x.Nombres.IdFraccionamiento ?? x.Nombres.IdAlmacenamiento}" : null,
+
+                    Recibido = x.SDet.stock.Recibido != null ?
+                        $"{x.SDet.stock.Recibido} {x.Nombres.IdFraccionamiento ?? x.Nombres.IdAlmacenamiento}" : null,
+                  
+                })
+                .ToList();
+                   
+
+            return InsumosFaltantes;
+        }
+
         internal IActionResult ObtenerDatosInsumos(int? IdDescripcion)
         {
             return AdStocks.ListarInsumosProducto(IdDescripcion);
@@ -155,14 +232,21 @@ namespace Aponus_Web_API.Negocio
 
                 if (Movimiento.Archivos != null && Movimiento.Archivos.Count > 0)
                 {
-                    List<ArchivosMovimientosStock> DatosArchivosMovimiento = new UTL_Cloudinary().SubirArchivosMovimiento(Movimiento.Archivos,
+                    List<(string Hash, string Path)> DatosArchivosMovimientoUpload = new UTL_Cloudinary().SubirArchivosCloudinary(Movimiento.Archivos,
                     string.IsNullOrEmpty(NombreClave) ? NombreCompletoProveedor : NombreClave);
 
-                    if (DatosArchivosMovimiento.Count == 0) Rollback = true;
+                    if (DatosArchivosMovimientoUpload.Count == 0) Rollback = true;
+
+                    List<ArchivosMovimientosStock> DatosArchivosMovimiento = new List<ArchivosMovimientosStock>();
 
 
                     Movimiento.IdMovimiento = IdMovimiento;
-                    DatosArchivosMovimiento.ForEach(x => x.IdMovimiento = IdMovimiento ?? 0);
+                    DatosArchivosMovimientoUpload.ForEach(x=> DatosArchivosMovimiento.Add(new ArchivosMovimientosStock()
+                    {
+                        IdMovimiento = IdMovimiento ?? 0,
+                        HashArchivo = x.Hash,
+                        PathArchivo = x.Path
+                    }));
                     if (!AdStocks.GuardarDatosArchivosMovimiento(AponusDbContext, DatosArchivosMovimiento)) Rollback = true;
 
                 }

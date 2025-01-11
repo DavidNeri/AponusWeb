@@ -7,6 +7,9 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         [JsonProperty(Order = 1, PropertyName = "idDescripcion", NullValueHandling = NullValueHandling.Ignore)]
         public int? IdDescripcion { get; set; }
 
+        [JsonProperty(PropertyName = "nombre", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Nombre { get; set; }
+
         [JsonProperty(Order = 2, PropertyName = "IdComponente", NullValueHandling = NullValueHandling.Ignore)]
         public string? idComponente { get; set; }
 

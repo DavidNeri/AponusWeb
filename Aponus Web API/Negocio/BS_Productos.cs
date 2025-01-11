@@ -40,7 +40,7 @@ namespace Aponus_Web_API.Negocio
         }
         internal JsonResult ListarProductos()
         {
-            return AdProductos.Listar();
+            return new JsonResult(AdProductos.Listar());
         }
         internal JsonResult ListarProductos(string? typeId, int? IdDescription)
         {
@@ -324,6 +324,17 @@ namespace Aponus_Web_API.Negocio
             }
 
             return new JsonResult(Prod);
+        }
+
+        internal async Task<object> ObtenerProductosFaltantes()
+        {
+            List<ProductosDescripcion> Productos =  AdProductos.Listar() 
+                as List<ProductosDescripcion> ?? new List<ProductosDescripcion>();          
+
+            return(Productos
+                .Select(x => x.Productos.Where(x => x.Cantidad <= 100).ToList())
+                .ToList());
+
         }
     }
 }

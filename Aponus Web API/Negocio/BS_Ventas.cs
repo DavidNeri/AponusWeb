@@ -1,11 +1,16 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
+using Aponus_Web_API.Migrations;
 using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ArchivosVentas = Aponus_Web_API.Modelos.ArchivosVentas;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -174,18 +179,17 @@ namespace Aponus_Web_API.Negocio
 
                 if (Venta?.IdVenta != null && Venta.IdVenta.HasValue)
                 {
-                    int IdVenta = Venta.IdVenta.Value;
-                    Ventas? _Venta = await AdVentas.BuscarVenta(IdVenta);
+                    int _IdVenta = Venta.IdVenta.Value;
+                    Ventas? _Venta = await AdVentas.BuscarVenta(_IdVenta);
 
                     if (_Venta != null)
                     {
-                        Venta.IdVenta = IdVenta;
+                        Venta.IdVenta = _IdVenta;
                     }
                 }
-
-                bool Resultado = await AdVentas.Guardar(NuevaVenta);
-
                 
+
+                int? IdVenta = await AdVentas.Guardar(NuevaVenta);
 
                 if (Venta?.Archivos != null)
                 {
@@ -195,11 +199,36 @@ namespace Aponus_Web_API.Negocio
                         $"{DatosCliente?.Apellido}_{DatosCliente?.Nombre}" :
                         DatosCliente.NombreClave;
 
-                    new UTL_Cloudinary().SubirArchivosMovimiento(Venta.Archivos, Cliente);
+                    List<(string Hash, string Path)> DatosUpload = new UTL_Cloudinary().SubirArchivosCloudinary(Venta.Archivos, Cliente);
+
+                    List<ArchivosVentas> archivosVentas = new();
+
+                    foreach (var Dato in DatosUpload)
+                    {
+                        archivosVentas.Add(new ArchivosVentas()
+                        {
+                            HashArchivo = Dato.Hash,
+                            IdEstado = 1,
+                            IdVenta = IdVenta ?? 0,
+                            PathArchivo = Dato.Path,
+                        });
+                    }
+
+                    var (Resultado, error) = await AdVentas.GuardarArchivos(archivosVentas);
+
+                    if (error != null)
+                    {
+                        return new ContentResult()
+                        {
+                            Content = error.InnerException?.Message ?? error.Message,
+                            ContentType = "application/json",
+                            StatusCode = 400
+                        };
+                    }
 
                 }
 
-                if(Resultado)
+                if (IdVenta != null)
                     return new StatusCodeResult(200);
                 else
                     return new ContentResult()
@@ -312,6 +341,18 @@ namespace Aponus_Web_API.Negocio
 
                     }).ToList(),
 
+                    infoArchivos = x.Archivos
+                                        .Where(x=>x.IdEstado != 0)
+                                        .Select(y=> new DTOArchivosVentas()
+                                        {
+                                            HashArchivo = y.HashArchivo,
+                                            IdArchivo = y.IdArchivo,
+                                            IdVenta = y.IdVenta,
+                                            PathArchivo = y.PathArchivo,
+                                            MimeType = y.MimeType,
+                                            IdEstado = y.IdEstado
+                                        }).ToList()
+
                 }).ToList();
 
 
@@ -355,6 +396,86 @@ namespace Aponus_Web_API.Negocio
             };
 
             return new StatusCodeResult((int)Resultado!);
+        }
+
+        internal async Task<IActionResult> ProcesarArchivos(DTOVentas ArchivosVenta)
+        {
+            IQueryable<Entidades> Entidades = AdEntidades.ListarEntidades();
+            var DatosCliente = Entidades.SingleOrDefault(x => x.IdEntidad == ArchivosVenta.IdCliente);
+            string Cliente = string.IsNullOrEmpty(DatosCliente?.NombreClave) ?
+                $"{DatosCliente?.Apellido}_{DatosCliente?.Nombre}" :
+                DatosCliente.NombreClave;
+
+            if (ArchivosVenta.Archivos != null)
+            {
+                List<(string Hash, string Path)> DatosUpload = new UTL_Cloudinary().SubirArchivosCloudinary(ArchivosVenta.Archivos, Cliente);
+
+                List<ArchivosVentas> InfoArchivosVentas = new();
+
+                foreach (var Archivo in DatosUpload)
+                {
+                    InfoArchivosVentas.Add(new ArchivosVentas()
+                    {
+                        HashArchivo =  Archivo.Hash,
+                        IdVenta = ArchivosVenta.IdVenta ?? 0,
+                        IdEstado = 1,
+                        PathArchivo = Archivo.Path,
+                    });
+                }
+
+                var (Resultado, error) = await AdVentas.GuardarArchivos(InfoArchivosVentas);
+
+                if (error != null)
+                    return new ContentResult()
+                    {
+                        Content = error.InnerException?.Message ?? error.Message,
+                        ContentType = "application/json",
+                        StatusCode = 400
+                    };
+
+                return new StatusCodeResult(200);
+            }
+
+            return new ContentResult()
+            {
+                Content = "No se encontraron archivos para subir",
+                ContentType = "application/json",
+                StatusCode = 400
+            };
+
+        }
+
+        internal async Task<List<Ventas>> ObtenerVentasPendientesEntrega()
+        {
+            IQueryable<Ventas> QueryVentas = AdVentas.ListarVentas();
+
+            List<Ventas> ListadoVentas =await QueryVentas.Where(x=>x.IdEstadoVenta==1).ToListAsync();
+
+            int ProductosEntregados = 0;
+            List<int> IdVentasPendientes = new List<int>(); 
+
+            foreach (Ventas venta in ListadoVentas)
+            {
+                foreach (VentasDetalles DetallesVenta in venta.DetallesVenta)
+                {
+                    if (DetallesVenta.Entregados == DetallesVenta.Cantidad)
+                    {
+                        ProductosEntregados += 1;
+                    }
+                }
+
+                if (ProductosEntregados < venta.DetallesVenta.Count)
+                {
+                    IdVentasPendientes.Add(venta.IdVenta);
+                }
+                
+            }
+            var ListadoVentasPendientes = QueryVentas.Where(x => IdVentasPendientes.Contains(x.IdVenta)).ToList();
+
+
+            return ListadoVentasPendientes;
+
+                
         }
     }
 }

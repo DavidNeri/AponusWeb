@@ -117,5 +117,13 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("Files/Upload")]
+        public async Task<IActionResult> SubirArchivosVenta([FromForm] DTOVentas Venta)
+        {
+            return await BsVentas.ProcesarArchivos(Venta);
+
+        }
+
     }
 }

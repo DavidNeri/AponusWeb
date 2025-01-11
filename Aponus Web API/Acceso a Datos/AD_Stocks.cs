@@ -91,6 +91,10 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 }
             }
 
+            public async Task<List<StockInsumos>> ListarStockInsumos()
+            {
+                return await AponusDBContext.stockInsumos.ToListAsync();
+            }
             
         }
 
@@ -173,6 +177,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                     Pintura = Stock.Pintura != null ? Stock.Pintura.ToString() : "-",
                                     Proceso = Stock.Proceso != null ? Stock.Proceso.ToString() : "-",
                                     Moldeado = Stock.Moldeado != null ? Stock.Moldeado.ToString() : "-",
+                                    Pendiente = Stock.Pendiente != null ? Stock.Pendiente.ToString(): "-",
                                     DiametroNominal = JoinResult.Detalles.DiametroNominal  != null ? JoinResult.Detalles.DiametroNominal.ToString() : "-",
 
                                 }
@@ -219,6 +224,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                          espec.Granallado = espec.Granallado != null && !espec.Granallado.Equals("-") ? espec.Granallado + unidad.Unidad : espec.Granallado;
                          espec.Proceso = espec.Proceso != null && !espec.Proceso.Equals("-") ? espec.Proceso + unidad.Unidad : espec.Proceso;
                          espec.Moldeado = espec.Moldeado != null && !espec.Moldeado.Equals("-") ? espec.Moldeado + unidad.Unidad : espec.Moldeado;
+                         espec.Pendiente= espec.Pendiente!= null && !espec.Pendiente.Equals("-") ? espec.Pendiente + unidad.Unidad : espec.Pendiente;
                          espec.Recibido = espec.Recibido != null && !espec.Recibido.Equals("-") ? espec.Recibido + unidad.Unidad : espec.Recibido;
 
                          return tipoInsumosList;

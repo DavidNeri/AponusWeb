@@ -18,9 +18,9 @@ namespace Aponus_Web_API.Utilidades
         }
 
 
-        public List<ArchivosMovimientosStock> SubirArchivosMovimiento(List<IFormFile> Archivos, string Proveedor)
+        public List<(string HashArchivo, string Path)> SubirArchivosCloudinary(List<IFormFile> Archivos, string Proveedor)
         {
-            List<ArchivosMovimientosStock> DatosArchivosMovimiento = new List<ArchivosMovimientosStock>();
+            List<(string HashArchivo, string Path)> DatosArchivosMovimiento = new List<(string HashArchivo, string Path)>();
             DateTime FechaHora = UTL_Fechas.ObtenerFechaHora();
             string Fecha = FechaHora.ToString("yyyyMMdd");
             string Hora = FechaHora.ToString("HHmmss");
@@ -38,12 +38,7 @@ namespace Aponus_Web_API.Utilidades
 
                     var Resultado = _cloudinary.Upload(DatosSubida);
 
-                    DatosArchivosMovimiento.Add(new ArchivosMovimientosStock()
-                    {
-                        HashArchivo = Archivo.FileName,
-                        PathArchivo = Resultado.SecureUrl.ToString(),
-
-                    });
+                    DatosArchivosMovimiento.Add((Archivo.FileName, Resultado.SecureUrl.ToString()));
 
                 }
             }

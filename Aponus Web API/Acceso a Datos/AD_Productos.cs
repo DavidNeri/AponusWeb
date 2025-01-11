@@ -129,10 +129,11 @@ namespace Aponus_Web_API.Acceso_a_Datos
             AponusDBContext.Productos.Where(x => x.IdProducto == idAnterior).UpdateFromQuery(x => new Producto { IdProducto = nuevoId });
             AponusDBContext.SaveChanges();
         }
-        public JsonResult Listar()
+        public object Listar()
         {
 
             var Products = AponusDBContext.ProductosDescripcions
+                .Where(x=>x.IdEstado != 0)
                 .Select(x => new ProductosDescripcion
                 {
                     IdDescripcion = x.IdDescripcion,
@@ -140,9 +141,20 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     Productos = x.Productos.Select(P => new Producto()
                     {
                         Cantidad = P.Cantidad,
+                        DiametroNominal = P.DiametroNominal,
+                        IdDescripcion = P.IdDescripcion,
+                        IdProducto = P.IdProducto,
+                        IdTipo = P.IdTipo,
+                        PrecioFinal = P.PrecioFinal,
+                        PrecioLista = P.PrecioLista,
+                        Tolerancia = P.Tolerancia,
+                        PorcentajeGanancia = P.PorcentajeGanancia,
+                        
                     }).ToList(),
-                });
-            return new JsonResult(Products);
+                })
+                .ToList();
+
+            return Products;
         }
         public JsonResult Listar(string? typeId)
         {

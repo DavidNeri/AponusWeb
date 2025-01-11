@@ -42,8 +42,10 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public ICollection<DTOEstadosVentas>? Estado { get; set; }
 
         [JsonProperty(PropertyName = "archivos", NullValueHandling = NullValueHandling.Ignore)]
+        public List<IFormFile>? Archivos { get; set; }
 
-        public List<IFormFile>? Archivos;
+        [JsonProperty(PropertyName = "infoArchivos", NullValueHandling = NullValueHandling.Ignore)]
+        public List<DTOArchivosVentas>? infoArchivos { get; set; }
 
 
     }

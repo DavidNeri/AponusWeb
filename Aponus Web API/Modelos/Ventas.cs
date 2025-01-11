@@ -39,6 +39,8 @@ namespace Aponus_Web_API.Modelos
         public virtual ICollection<VentasDetalles> DetallesVenta { get; set; } = new HashSet<VentasDetalles>();
         public virtual ICollection<PagosVentas> Pagos { get; set; } = new HashSet<PagosVentas>();
         public virtual ICollection<CuotasVentas> Cuotas { get; set; } = new HashSet<CuotasVentas>();
+        public virtual ICollection<ArchivosVentas> Archivos { get; set; } = new HashSet<ArchivosVentas>();
+
 
     }
 }
