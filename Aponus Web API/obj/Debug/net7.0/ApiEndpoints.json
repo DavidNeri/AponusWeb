@@ -1274,7 +1274,7 @@
       {
         "Name": "TypeId",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       },
       {
         "Name": "IdDescription",

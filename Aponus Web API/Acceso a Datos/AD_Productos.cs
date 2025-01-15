@@ -181,19 +181,34 @@ namespace Aponus_Web_API.Acceso_a_Datos
             try
             {
                 var Products = AponusDBContext.ProductosDescripcions
-                    .Select(x => new ProductosDescripcion
+                    .Select(x => new
                     {
                         DescripcionProducto = x.DescripcionProducto,
                         Productos = x.Productos
                             .Where(y => (typeId==null || y.IdTipo == typeId) && (IdDescription == null || y.IdDescripcion == IdDescription))
+                            .Select(producto => new
+                            {
+                                nombre = $"{x.DescripcionProducto} DN:{producto.DiametroNominal} Tolerancia:{producto.Tolerancia}",
+                                producto.IdProducto,
+                                producto.DiametroNominal,
+                                producto.IdDescripcion,
+                                producto.IdTipo,
+                                producto.Tolerancia,
+                                producto.Cantidad,
+                                producto.PrecioFinal,
+                                producto.PrecioLista,
+                                producto.PorcentajeGanancia,
+                            })
                             .OrderBy(x => x.DiametroNominal)
                             .ToList()
                     })
-                    .Where(x => x.Productos.Count > 0);
+                    .Where(x => x.Productos.Count > 0)
+                    .ToList();
+               
 
 
 
-                return new JsonResult(Products.ToList());
+                return new JsonResult(Products);
 
             }
             catch (DbException e)
