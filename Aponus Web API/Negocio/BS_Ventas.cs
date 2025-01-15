@@ -18,11 +18,13 @@ namespace Aponus_Web_API.Negocio
     {
         private readonly AD_Ventas AdVentas;
         private readonly AD_Entidades AdEntidades;
+        private readonly AD_Productos AdProductos;
 
-        public BS_Ventas(AD_Ventas adVentas, AD_Entidades adEntidades)
+        public BS_Ventas(AD_Ventas adVentas, AD_Entidades adEntidades, AD_Productos adProductos)
         {
             AdVentas = adVentas;
             AdEntidades = adEntidades;
+            AdProductos = adProductos;
         }
 
         public Estados EstadosVentas()
@@ -476,6 +478,11 @@ namespace Aponus_Web_API.Negocio
             return ListadoVentasPendientes;
 
                 
+        }
+
+        internal async Task<IActionResult> ListarProductos()
+        {
+            return await AdProductos.ListarProdVentas();
         }
     }
 }

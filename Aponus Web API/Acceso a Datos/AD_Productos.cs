@@ -204,7 +204,6 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     })
                     .Where(x => x.Productos.Count > 0)
                     .ToList();
-               
 
 
 
@@ -266,6 +265,32 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 .Distinct().ToListAsync();
 
             return new JsonResult(DN);
+        }
+
+        internal async Task<IActionResult> ListarProdVentas()
+        {
+            var Products = await AponusDBContext.Productos
+                .Join(AponusDBContext.ProductosDescripcions, Prod => Prod.IdDescripcion, Desc => Desc.IdDescripcion, (prod, Desc) => new
+                {
+                    prod,
+                    Desc
+                })
+                .Select(x => new
+                {
+                    nombre = $"{x.Desc.DescripcionProducto} DN:{x.prod.DiametroNominal} Tolerancia:{x.prod.Tolerancia}",
+                    x.prod.IdProducto,
+                    x.prod.DiametroNominal,
+                    x.prod.IdDescripcion,
+                    x.prod.IdTipo,
+                    x.prod.Tolerancia,
+                    x.prod.Cantidad,
+                    x.prod.PrecioFinal,
+                    x.prod.PrecioLista,
+                    x.prod.PorcentajeGanancia,
+                })
+                .ToListAsync();
+            return new JsonResult(Products);
+                    
         }
     }
 }

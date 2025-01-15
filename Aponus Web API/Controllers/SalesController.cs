@@ -45,6 +45,12 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("Products/List")]
+        public async Task<IActionResult> ListarProductosVentas()
+        {
+            return await BsVentas.ListarProductos();
+        }
 
         [HttpPost]
         [Route("States/Save")]
