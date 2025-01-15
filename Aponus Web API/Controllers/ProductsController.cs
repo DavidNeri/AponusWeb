@@ -20,8 +20,8 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("List/{TypeId}/{IdDescription?}")]
-        public JsonResult ListProducts(string TypeId, int? IdDescription)
+        [Route("List/{TypeId?}/{IdDescription?}")]
+        public JsonResult ListProducts(string? TypeId, int? IdDescription)
         {
             try
             {

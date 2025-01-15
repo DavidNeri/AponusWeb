@@ -45,6 +45,8 @@ namespace Aponus_Web_API.Negocio
         internal JsonResult ListarProductos(string? typeId, int? IdDescription)
         {
             return AdProductos.Listar(typeId, IdDescription);
+
+
         }
         internal JsonResult ListarProductos(string? typeId, int? IdDescription, int? Dn)
         {

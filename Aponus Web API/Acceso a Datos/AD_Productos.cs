@@ -184,13 +184,16 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     .Select(x => new ProductosDescripcion
                     {
                         DescripcionProducto = x.DescripcionProducto,
-                        Productos = (ICollection<Producto>)x.Productos
-                                                            .Where(x => x.IdTipo == typeId && x.IdDescripcion == IdDescription)
-                                                            .OrderBy(x => x.DiametroNominal)
-                    }).AsEnumerable()
+                        Productos = x.Productos
+                            .Where(y => (typeId==null || y.IdTipo == typeId) && (IdDescription == null || y.IdDescripcion == IdDescription))
+                            .OrderBy(x => x.DiametroNominal)
+                            .ToList()
+                    })
                     .Where(x => x.Productos.Count > 0);
 
-                return new JsonResult(Products);
+
+
+                return new JsonResult(Products.ToList());
 
             }
             catch (DbException e)
@@ -212,13 +215,15 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                   Productos = (ICollection<Producto>)x.Productos
                                .Where(x => x.IdTipo == typeId && x.IdDescripcion == IdDescription && x.DiametroNominal == Dn)
+                               .ToList()
                                .OrderBy(x => x.DiametroNominal)
+                               
 
               }
               ).AsEnumerable()
               .Where(x => x.Productos.Count > 0);
 
-                return new JsonResult(Products);
+                return new JsonResult(Products.ToList());
 
 
             }
