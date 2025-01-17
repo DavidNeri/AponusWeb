@@ -65,9 +65,9 @@ namespace Aponus_Web_API.Negocio
             return new StatusCodeResult(200);
 
         }
-        internal IActionResult MapeoComponentesDetalleDTO(int? IdDescripcion)
+        internal IActionResult MapeoComponentesDetalleDTO(int? IdDescripcion, string? idInsumo)
         {
-            var (Listado, Ex) = _componentesProductos.ListarDetalleComponentes(IdDescripcion);
+            var (Listado, Ex) = _componentesProductos.ListarDetalleComponentes(IdDescripcion, idInsumo);
 
             if (Ex != null) return new ContentResult()
             {

@@ -181,7 +181,7 @@
   {
     "ContainingType": "Aponus_Web_API.Controllers.ComponentsController",
     "Method": "ObtenerListarComponentes",
-    "RelativePath": "Aponus/Components/List/{IdDescripcion}",
+    "RelativePath": "Aponus/Components/List/{IdDescripcion}/{idInsumo}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -189,6 +189,11 @@
       {
         "Name": "IdDescripcion",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "idInsumo",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],

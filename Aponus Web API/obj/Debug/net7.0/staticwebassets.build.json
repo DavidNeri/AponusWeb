@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "0QUJtECEcLi36dG1JTk7pJxZz1U00l1DxSjRHGg1jnE=",
+  "Hash": "JeHb1ofNsajpaE4vYvKEql167lZ2uTvrd3LVJhVLwJU=",
   "Source": "Aponus Web API",
   "BasePath": "_content/Aponus Web API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

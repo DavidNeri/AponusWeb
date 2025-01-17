@@ -99,7 +99,7 @@ namespace Aponus_Web_API.Negocio
         internal async Task<object> ObentenerInsumosFaltantes()
         {
             List<Modelos.StockInsumos> ListadoStockInsumos = await AdStocks.StockInsumos().ListarStockInsumos();
-            var (ComponentesDetalle, error) = AdComponentes.ListarDetalleComponentes(null);
+            var (ComponentesDetalle, error) = AdComponentes.ListarDetalleComponentes(null, null);
 
             for (int i = ListadoStockInsumos.Count -1 ; i >=0;  i--)
             {

@@ -429,12 +429,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
             return jsonResult;
 
         }
-        internal (List<ComponentesDetalle>? LstComponentes, Exception? Error) ListarDetalleComponentes(int? IdDescripcion)
+        internal (List<ComponentesDetalle>? LstComponentes, Exception? Error) ListarDetalleComponentes(int? IdDescripcion, string? idInsumo)
         {
             try
             {
                 List<ComponentesDetalle> LstComponentes = AponusDbContext.ComponentesDetalles
-               .Where(x => x.IdEstado != 0 && (IdDescripcion == null || x.IdDescripcion == IdDescripcion))
+               .Where(x => x.IdEstado != 0 && (IdDescripcion == null || x.IdDescripcion == IdDescripcion) && (idInsumo == null || x.IdInsumo.Equals(idInsumo)))
                .Select(x => new ComponentesDetalle()
                {
                    IdInsumo = x.IdInsumo,

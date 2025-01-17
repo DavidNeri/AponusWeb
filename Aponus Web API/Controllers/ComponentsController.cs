@@ -39,11 +39,11 @@ namespace Aponus_Web_API.Controllers
 
 
         [HttpGet]
-        [Route("List/{IdDescripcion?}")]
+        [Route("List/{IdDescripcion?}/{idInsumo?}")]
 
-        public IActionResult ObtenerListarComponentes(int? IdDescripcion)
+        public IActionResult ObtenerListarComponentes(int? IdDescripcion, string? idInsumo)
         {
-            return _BsComponents.MapeoComponentesDetalleDTO(IdDescripcion);
+            return _BsComponents.MapeoComponentesDetalleDTO(IdDescripcion, idInsumo);
         }
     }
 }

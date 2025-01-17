@@ -1,0 +1,4542 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Aponus Web API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/Aponus/BINServices/GetCardInfo/{BIN}": {
+      "get": {
+        "tags": [
+          "BINServices"
+        ],
+        "parameters": [
+          {
+            "name": "BIN",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Categories/Products/Types/List": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Categories/Products/Descriptions/List/{idTipo}": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "IdTipo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Categories/Products/Types/New": {
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCategorias"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCategorias"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCategorias"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCategorias"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Categories/Products/Types/{TypeId}/Delete": {
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "IdTipo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "TypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Categories/Products/Descriptions/New": {
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCategorias"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCategorias"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCategorias"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCategorias"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Categories/Products/Descriptions/{IdDescription}/Delete": {
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "IdDescription",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Categories/Products/Type-or-Description/Update": {
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOActualizarCategorias"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOActualizarCategorias"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOActualizarCategorias"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOActualizarCategorias"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Categories/Supplies/Descriptions/List": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Categories/Supplies/Descriptions/Save": {
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODescripcionComponentes"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODescripcionComponentes"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODescripcionComponentes"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODescripcionComponentes"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Components/FetchUnities/{IdNombreComponente}": {
+      "get": {
+        "tags": [
+          "Components"
+        ],
+        "parameters": [
+          {
+            "name": "IdNombreComponente",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Components/GetProperties": {
+      "get": {
+        "tags": [
+          "Components"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Components/List/{IdDescripcion}/{idInsumo}": {
+      "get": {
+        "tags": [
+          "Components"
+        ],
+        "parameters": [
+          {
+            "name": "IdDescripcion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idInsumo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/DashBoard/Dashboard": {
+      "get": {
+        "tags": [
+          "DashBoard"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Endpoints/Get": {
+      "get": {
+        "tags": [
+          "Endpoints"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Aponus/Entities/Types/List": {
+      "get": {
+        "tags": [
+          "Entities"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Entities/Types/Save": {
+      "post": {
+        "tags": [
+          "Entities"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidadesTipos"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidadesTipos"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidadesTipos"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidadesTipos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Entities/Categories/List/{IdTipo}": {
+      "get": {
+        "tags": [
+          "Entities"
+        ],
+        "parameters": [
+          {
+            "name": "IdTipo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Entities/Categories/Save": {
+      "post": {
+        "tags": [
+          "Entities"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidadesCategorias"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidadesCategorias"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidadesCategorias"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidadesCategorias"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Entities/Categories/Delete/{Id}": {
+      "post": {
+        "tags": [
+          "Entities"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Entities/Types/Delete/{Id}": {
+      "post": {
+        "tags": [
+          "Entities"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Entities/Save": {
+      "post": {
+        "tags": [
+          "Entities"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidades"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidades"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidades"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEntidades"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Entities/List/{typeId}/{CategoryId}/{EntityId}": {
+      "get": {
+        "tags": [
+          "Entities"
+        ],
+        "parameters": [
+          {
+            "name": "TypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "CategoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "EntityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Entities/Delete/{Id}": {
+      "post": {
+        "tags": [
+          "Entities"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Entities/Billing/List": {
+      "get": {
+        "tags": [
+          "Entities"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/GeoNames/Countries": {
+      "get": {
+        "tags": [
+          "GeoNames"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/GeoNames/Provinces_States/{geonameId}": {
+      "get": {
+        "tags": [
+          "GeoNames"
+        ],
+        "parameters": [
+          {
+            "name": "geonameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/GeoNames/Cities/{countryCode}/{adminCode1}": {
+      "get": {
+        "tags": [
+          "GeoNames"
+        ],
+        "parameters": [
+          {
+            "name": "countryCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "adminCode1",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Movments/New": {
+      "post": {
+        "tags": [
+          "Movments"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "IdMovimiento": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "UsuarioCreacion": {
+                    "type": "string"
+                  },
+                  "UsuarioModificacion": {
+                    "type": "string"
+                  },
+                  "FechaHoraCreado": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "FechaHoraUltimaModificacion": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "IdProveedorOrigen": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IdProveedorDestino": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Origen": {
+                    "type": "string"
+                  },
+                  "Destino": {
+                    "type": "string"
+                  },
+                  "Tipo": {
+                    "type": "string"
+                  },
+                  "Proveedor.IdEntidad": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.NombreClave": {
+                    "type": "string"
+                  },
+                  "Proveedor.Nombre": {
+                    "type": "string"
+                  },
+                  "Proveedor.Apellido": {
+                    "type": "string"
+                  },
+                  "Proveedor.Pais": {
+                    "type": "string"
+                  },
+                  "Proveedor.Ciudad": {
+                    "type": "string"
+                  },
+                  "Proveedor.Provincia": {
+                    "type": "string"
+                  },
+                  "Proveedor.Localidad": {
+                    "type": "string"
+                  },
+                  "Proveedor.Calle": {
+                    "type": "string"
+                  },
+                  "Proveedor.Altura": {
+                    "type": "string"
+                  },
+                  "Proveedor.CodigoPostal": {
+                    "type": "string"
+                  },
+                  "Proveedor.Barrio": {
+                    "type": "string"
+                  },
+                  "Proveedor.Telefono1": {
+                    "type": "string"
+                  },
+                  "Proveedor.Telefono2": {
+                    "type": "string"
+                  },
+                  "Proveedor.Telefono3": {
+                    "type": "string"
+                  },
+                  "Proveedor.Email": {
+                    "type": "string"
+                  },
+                  "Proveedor.IdFiscal": {
+                    "type": "string"
+                  },
+                  "Proveedor.FechaRegistro": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "Proveedor.IdUsuarioRegistro": {
+                    "type": "string"
+                  },
+                  "Proveedor.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.IdCategoria": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.IdEstado": {
+                    "type": "boolean"
+                  },
+                  "Proveedor.Tipo.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.Tipo.Nombre": {
+                    "type": "string"
+                  },
+                  "Proveedor.Categoria.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.Categoria.IdCategoria": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.Categoria.NombreCategoria": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.IdEntidad": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.NombreClave": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Nombre": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Apellido": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Pais": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Ciudad": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Provincia": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Localidad": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Calle": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Altura": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.CodigoPostal": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Barrio": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Telefono1": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Telefono2": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Telefono3": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Email": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.IdFiscal": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.FechaRegistro": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "ProveedorOrigen.IdUsuarioRegistro": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.IdCategoria": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.IdEstado": {
+                    "type": "boolean"
+                  },
+                  "ProveedorOrigen.Tipo.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.Tipo.Nombre": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Categoria.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.Categoria.IdCategoria": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.Categoria.NombreCategoria": {
+                    "type": "string"
+                  },
+                  "Suministros": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DTOSuministrosMovimientosStock"
+                    }
+                  },
+                  "DatosArchivos": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DTODatosArchivosMovimientosStock"
+                    }
+                  },
+                  "Archivos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "IdEstado": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Estado": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "IdMovimiento": {
+                  "style": "form"
+                },
+                "UsuarioCreacion": {
+                  "style": "form"
+                },
+                "UsuarioModificacion": {
+                  "style": "form"
+                },
+                "FechaHoraCreado": {
+                  "style": "form"
+                },
+                "FechaHoraUltimaModificacion": {
+                  "style": "form"
+                },
+                "IdProveedorOrigen": {
+                  "style": "form"
+                },
+                "IdProveedorDestino": {
+                  "style": "form"
+                },
+                "Origen": {
+                  "style": "form"
+                },
+                "Destino": {
+                  "style": "form"
+                },
+                "Tipo": {
+                  "style": "form"
+                },
+                "Proveedor.IdEntidad": {
+                  "style": "form"
+                },
+                "Proveedor.NombreClave": {
+                  "style": "form"
+                },
+                "Proveedor.Nombre": {
+                  "style": "form"
+                },
+                "Proveedor.Apellido": {
+                  "style": "form"
+                },
+                "Proveedor.Pais": {
+                  "style": "form"
+                },
+                "Proveedor.Ciudad": {
+                  "style": "form"
+                },
+                "Proveedor.Provincia": {
+                  "style": "form"
+                },
+                "Proveedor.Localidad": {
+                  "style": "form"
+                },
+                "Proveedor.Calle": {
+                  "style": "form"
+                },
+                "Proveedor.Altura": {
+                  "style": "form"
+                },
+                "Proveedor.CodigoPostal": {
+                  "style": "form"
+                },
+                "Proveedor.Barrio": {
+                  "style": "form"
+                },
+                "Proveedor.Telefono1": {
+                  "style": "form"
+                },
+                "Proveedor.Telefono2": {
+                  "style": "form"
+                },
+                "Proveedor.Telefono3": {
+                  "style": "form"
+                },
+                "Proveedor.Email": {
+                  "style": "form"
+                },
+                "Proveedor.IdFiscal": {
+                  "style": "form"
+                },
+                "Proveedor.FechaRegistro": {
+                  "style": "form"
+                },
+                "Proveedor.IdUsuarioRegistro": {
+                  "style": "form"
+                },
+                "Proveedor.IdTipo": {
+                  "style": "form"
+                },
+                "Proveedor.IdCategoria": {
+                  "style": "form"
+                },
+                "Proveedor.IdEstado": {
+                  "style": "form"
+                },
+                "Proveedor.Tipo.IdTipo": {
+                  "style": "form"
+                },
+                "Proveedor.Tipo.Nombre": {
+                  "style": "form"
+                },
+                "Proveedor.Categoria.IdTipo": {
+                  "style": "form"
+                },
+                "Proveedor.Categoria.IdCategoria": {
+                  "style": "form"
+                },
+                "Proveedor.Categoria.NombreCategoria": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdEntidad": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.NombreClave": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Nombre": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Apellido": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Pais": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Ciudad": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Provincia": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Localidad": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Calle": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Altura": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.CodigoPostal": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Barrio": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Telefono1": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Telefono2": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Telefono3": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Email": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdFiscal": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.FechaRegistro": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdUsuarioRegistro": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdTipo": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdCategoria": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdEstado": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Tipo.IdTipo": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Tipo.Nombre": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Categoria.IdTipo": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Categoria.IdCategoria": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Categoria.NombreCategoria": {
+                  "style": "form"
+                },
+                "Suministros": {
+                  "style": "form"
+                },
+                "DatosArchivos": {
+                  "style": "form"
+                },
+                "Archivos": {
+                  "style": "form"
+                },
+                "IdEstado": {
+                  "style": "form"
+                },
+                "Estado": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Movments/List": {
+      "get": {
+        "tags": [
+          "Movments"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosMovimientos"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosMovimientos"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosMovimientos"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosMovimientos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Movments/{IdMovimiento}/Delete": {
+      "post": {
+        "tags": [
+          "Movments"
+        ],
+        "parameters": [
+          {
+            "name": "IdMovimiento",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Movments/Files/Delete": {
+      "post": {
+        "tags": [
+          "Movments"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Movments/Files/New": {
+      "post": {
+        "tags": [
+          "Movments"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "IdMovimiento": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "UsuarioCreacion": {
+                    "type": "string"
+                  },
+                  "UsuarioModificacion": {
+                    "type": "string"
+                  },
+                  "FechaHoraCreado": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "FechaHoraUltimaModificacion": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "IdProveedorOrigen": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IdProveedorDestino": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Origen": {
+                    "type": "string"
+                  },
+                  "Destino": {
+                    "type": "string"
+                  },
+                  "Tipo": {
+                    "type": "string"
+                  },
+                  "Proveedor.IdEntidad": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.NombreClave": {
+                    "type": "string"
+                  },
+                  "Proveedor.Nombre": {
+                    "type": "string"
+                  },
+                  "Proveedor.Apellido": {
+                    "type": "string"
+                  },
+                  "Proveedor.Pais": {
+                    "type": "string"
+                  },
+                  "Proveedor.Ciudad": {
+                    "type": "string"
+                  },
+                  "Proveedor.Provincia": {
+                    "type": "string"
+                  },
+                  "Proveedor.Localidad": {
+                    "type": "string"
+                  },
+                  "Proveedor.Calle": {
+                    "type": "string"
+                  },
+                  "Proveedor.Altura": {
+                    "type": "string"
+                  },
+                  "Proveedor.CodigoPostal": {
+                    "type": "string"
+                  },
+                  "Proveedor.Barrio": {
+                    "type": "string"
+                  },
+                  "Proveedor.Telefono1": {
+                    "type": "string"
+                  },
+                  "Proveedor.Telefono2": {
+                    "type": "string"
+                  },
+                  "Proveedor.Telefono3": {
+                    "type": "string"
+                  },
+                  "Proveedor.Email": {
+                    "type": "string"
+                  },
+                  "Proveedor.IdFiscal": {
+                    "type": "string"
+                  },
+                  "Proveedor.FechaRegistro": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "Proveedor.IdUsuarioRegistro": {
+                    "type": "string"
+                  },
+                  "Proveedor.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.IdCategoria": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.IdEstado": {
+                    "type": "boolean"
+                  },
+                  "Proveedor.Tipo.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.Tipo.Nombre": {
+                    "type": "string"
+                  },
+                  "Proveedor.Categoria.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.Categoria.IdCategoria": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Proveedor.Categoria.NombreCategoria": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.IdEntidad": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.NombreClave": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Nombre": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Apellido": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Pais": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Ciudad": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Provincia": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Localidad": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Calle": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Altura": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.CodigoPostal": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Barrio": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Telefono1": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Telefono2": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Telefono3": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Email": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.IdFiscal": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.FechaRegistro": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "ProveedorOrigen.IdUsuarioRegistro": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.IdCategoria": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.IdEstado": {
+                    "type": "boolean"
+                  },
+                  "ProveedorOrigen.Tipo.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.Tipo.Nombre": {
+                    "type": "string"
+                  },
+                  "ProveedorOrigen.Categoria.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.Categoria.IdCategoria": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ProveedorOrigen.Categoria.NombreCategoria": {
+                    "type": "string"
+                  },
+                  "Suministros": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DTOSuministrosMovimientosStock"
+                    }
+                  },
+                  "DatosArchivos": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DTODatosArchivosMovimientosStock"
+                    }
+                  },
+                  "Archivos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "IdEstado": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Estado": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "IdMovimiento": {
+                  "style": "form"
+                },
+                "UsuarioCreacion": {
+                  "style": "form"
+                },
+                "UsuarioModificacion": {
+                  "style": "form"
+                },
+                "FechaHoraCreado": {
+                  "style": "form"
+                },
+                "FechaHoraUltimaModificacion": {
+                  "style": "form"
+                },
+                "IdProveedorOrigen": {
+                  "style": "form"
+                },
+                "IdProveedorDestino": {
+                  "style": "form"
+                },
+                "Origen": {
+                  "style": "form"
+                },
+                "Destino": {
+                  "style": "form"
+                },
+                "Tipo": {
+                  "style": "form"
+                },
+                "Proveedor.IdEntidad": {
+                  "style": "form"
+                },
+                "Proveedor.NombreClave": {
+                  "style": "form"
+                },
+                "Proveedor.Nombre": {
+                  "style": "form"
+                },
+                "Proveedor.Apellido": {
+                  "style": "form"
+                },
+                "Proveedor.Pais": {
+                  "style": "form"
+                },
+                "Proveedor.Ciudad": {
+                  "style": "form"
+                },
+                "Proveedor.Provincia": {
+                  "style": "form"
+                },
+                "Proveedor.Localidad": {
+                  "style": "form"
+                },
+                "Proveedor.Calle": {
+                  "style": "form"
+                },
+                "Proveedor.Altura": {
+                  "style": "form"
+                },
+                "Proveedor.CodigoPostal": {
+                  "style": "form"
+                },
+                "Proveedor.Barrio": {
+                  "style": "form"
+                },
+                "Proveedor.Telefono1": {
+                  "style": "form"
+                },
+                "Proveedor.Telefono2": {
+                  "style": "form"
+                },
+                "Proveedor.Telefono3": {
+                  "style": "form"
+                },
+                "Proveedor.Email": {
+                  "style": "form"
+                },
+                "Proveedor.IdFiscal": {
+                  "style": "form"
+                },
+                "Proveedor.FechaRegistro": {
+                  "style": "form"
+                },
+                "Proveedor.IdUsuarioRegistro": {
+                  "style": "form"
+                },
+                "Proveedor.IdTipo": {
+                  "style": "form"
+                },
+                "Proveedor.IdCategoria": {
+                  "style": "form"
+                },
+                "Proveedor.IdEstado": {
+                  "style": "form"
+                },
+                "Proveedor.Tipo.IdTipo": {
+                  "style": "form"
+                },
+                "Proveedor.Tipo.Nombre": {
+                  "style": "form"
+                },
+                "Proveedor.Categoria.IdTipo": {
+                  "style": "form"
+                },
+                "Proveedor.Categoria.IdCategoria": {
+                  "style": "form"
+                },
+                "Proveedor.Categoria.NombreCategoria": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdEntidad": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.NombreClave": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Nombre": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Apellido": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Pais": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Ciudad": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Provincia": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Localidad": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Calle": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Altura": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.CodigoPostal": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Barrio": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Telefono1": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Telefono2": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Telefono3": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Email": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdFiscal": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.FechaRegistro": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdUsuarioRegistro": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdTipo": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdCategoria": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.IdEstado": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Tipo.IdTipo": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Tipo.Nombre": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Categoria.IdTipo": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Categoria.IdCategoria": {
+                  "style": "form"
+                },
+                "ProveedorOrigen.Categoria.NombreCategoria": {
+                  "style": "form"
+                },
+                "Suministros": {
+                  "style": "form"
+                },
+                "DatosArchivos": {
+                  "style": "form"
+                },
+                "Archivos": {
+                  "style": "form"
+                },
+                "IdEstado": {
+                  "style": "form"
+                },
+                "Estado": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Movments/Update": {
+      "post": {
+        "tags": [
+          "Movments"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Movments/Supplies/Update": {
+      "post": {
+        "tags": [
+          "Movments"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOMovimientosStock"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Movments/States/List": {
+      "get": {
+        "tags": [
+          "Movments"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Movments/States/Save": {
+      "post": {
+        "tags": [
+          "Movments"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEstadosMovimientosStock"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEstadosMovimientosStock"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEstadosMovimientosStock"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEstadosMovimientosStock"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Products/List/{TypeId}/{IdDescription}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "TypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IdDescription",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Products/ListProducts/{IdProducto}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "IdProducto",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Products/NewListComponents": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Products/ListDN/{TypeId}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "TypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Products/ListDN/{TypeId}/{IdDescription}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "TypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IdDescription",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Products/Save": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Products/Components/Save": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DTOComponentesProducto"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DTOComponentesProducto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DTOComponentesProducto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DTOComponentesProducto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Purchase/Save": {
+      "post": {
+        "tags": [
+          "Purchase"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCompras"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCompras"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCompras"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOCompras"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Purchase/List": {
+      "get": {
+        "tags": [
+          "Purchase"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosComprasVentas"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosComprasVentas"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosComprasVentas"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosComprasVentas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Purchase/Bills/New": {
+      "post": {
+        "tags": [
+          "Purchase"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOPagosCompras"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOPagosCompras"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOPagosCompras"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOPagosCompras"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Sales/List": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosComprasVentas"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosComprasVentas"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosComprasVentas"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_FiltrosComprasVentas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Sales/Quotation": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_ParametrosCuotas"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_ParametrosCuotas"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_ParametrosCuotas"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UTL_ParametrosCuotas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Sales/Products/List": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Sales/States/Save": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEstadosVentas"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEstadosVentas"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEstadosVentas"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOEstadosVentas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Sales/States/{Id}/Delete": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Sales/Save": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOVentas"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOVentas"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOVentas"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOVentas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Sales/Bills/new": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOPagosVentas"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOPagosVentas"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOPagosVentas"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOPagosVentas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Sales/Files/Upload": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "IdCliente",
+                  "IdUsuario"
+                ],
+                "type": "object",
+                "properties": {
+                  "IdVenta": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IdCliente": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "FechaHora": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "IdUsuario": {
+                    "type": "string"
+                  },
+                  "MontoTotal": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "SaldoPendiente": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "IdEstadoVenta": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Cliente.IdEntidad": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Cliente.NombreClave": {
+                    "type": "string"
+                  },
+                  "Cliente.Nombre": {
+                    "type": "string"
+                  },
+                  "Cliente.Apellido": {
+                    "type": "string"
+                  },
+                  "Cliente.Pais": {
+                    "type": "string"
+                  },
+                  "Cliente.Ciudad": {
+                    "type": "string"
+                  },
+                  "Cliente.Provincia": {
+                    "type": "string"
+                  },
+                  "Cliente.Localidad": {
+                    "type": "string"
+                  },
+                  "Cliente.Calle": {
+                    "type": "string"
+                  },
+                  "Cliente.Altura": {
+                    "type": "string"
+                  },
+                  "Cliente.CodigoPostal": {
+                    "type": "string"
+                  },
+                  "Cliente.Barrio": {
+                    "type": "string"
+                  },
+                  "Cliente.Telefono1": {
+                    "type": "string"
+                  },
+                  "Cliente.Telefono2": {
+                    "type": "string"
+                  },
+                  "Cliente.Telefono3": {
+                    "type": "string"
+                  },
+                  "Cliente.Email": {
+                    "type": "string"
+                  },
+                  "Cliente.IdFiscal": {
+                    "type": "string"
+                  },
+                  "Cliente.FechaRegistro": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "Cliente.IdUsuarioRegistro": {
+                    "type": "string"
+                  },
+                  "Cliente.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Cliente.IdCategoria": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Cliente.IdEstado": {
+                    "type": "boolean"
+                  },
+                  "Cliente.Tipo.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Cliente.Tipo.Nombre": {
+                    "type": "string"
+                  },
+                  "Cliente.Categoria.IdTipo": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Cliente.Categoria.IdCategoria": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Cliente.Categoria.NombreCategoria": {
+                    "type": "string"
+                  },
+                  "DetallesVenta": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DTOVentasDetalles"
+                    }
+                  },
+                  "Pagos": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DTOPagosVentas"
+                    }
+                  },
+                  "Cuotas": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DTOCuotasVentas"
+                    }
+                  },
+                  "Estado": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DTOEstadosVentas"
+                    }
+                  },
+                  "Archivos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "infoArchivos": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DTOArchivosVentas"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "IdVenta": {
+                  "style": "form"
+                },
+                "IdCliente": {
+                  "style": "form"
+                },
+                "FechaHora": {
+                  "style": "form"
+                },
+                "IdUsuario": {
+                  "style": "form"
+                },
+                "MontoTotal": {
+                  "style": "form"
+                },
+                "SaldoPendiente": {
+                  "style": "form"
+                },
+                "IdEstadoVenta": {
+                  "style": "form"
+                },
+                "Cliente.IdEntidad": {
+                  "style": "form"
+                },
+                "Cliente.NombreClave": {
+                  "style": "form"
+                },
+                "Cliente.Nombre": {
+                  "style": "form"
+                },
+                "Cliente.Apellido": {
+                  "style": "form"
+                },
+                "Cliente.Pais": {
+                  "style": "form"
+                },
+                "Cliente.Ciudad": {
+                  "style": "form"
+                },
+                "Cliente.Provincia": {
+                  "style": "form"
+                },
+                "Cliente.Localidad": {
+                  "style": "form"
+                },
+                "Cliente.Calle": {
+                  "style": "form"
+                },
+                "Cliente.Altura": {
+                  "style": "form"
+                },
+                "Cliente.CodigoPostal": {
+                  "style": "form"
+                },
+                "Cliente.Barrio": {
+                  "style": "form"
+                },
+                "Cliente.Telefono1": {
+                  "style": "form"
+                },
+                "Cliente.Telefono2": {
+                  "style": "form"
+                },
+                "Cliente.Telefono3": {
+                  "style": "form"
+                },
+                "Cliente.Email": {
+                  "style": "form"
+                },
+                "Cliente.IdFiscal": {
+                  "style": "form"
+                },
+                "Cliente.FechaRegistro": {
+                  "style": "form"
+                },
+                "Cliente.IdUsuarioRegistro": {
+                  "style": "form"
+                },
+                "Cliente.IdTipo": {
+                  "style": "form"
+                },
+                "Cliente.IdCategoria": {
+                  "style": "form"
+                },
+                "Cliente.IdEstado": {
+                  "style": "form"
+                },
+                "Cliente.Tipo.IdTipo": {
+                  "style": "form"
+                },
+                "Cliente.Tipo.Nombre": {
+                  "style": "form"
+                },
+                "Cliente.Categoria.IdTipo": {
+                  "style": "form"
+                },
+                "Cliente.Categoria.IdCategoria": {
+                  "style": "form"
+                },
+                "Cliente.Categoria.NombreCategoria": {
+                  "style": "form"
+                },
+                "DetallesVenta": {
+                  "style": "form"
+                },
+                "Pagos": {
+                  "style": "form"
+                },
+                "Cuotas": {
+                  "style": "form"
+                },
+                "Estado": {
+                  "style": "form"
+                },
+                "Archivos": {
+                  "style": "form"
+                },
+                "infoArchivos": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Stocks/Supplies/List/{idDescription}": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "parameters": [
+          {
+            "name": "idDescription",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Stocks/Products/List/{TypeId}/{IdDescription}": {
+      "get": {
+        "tags": [
+          "Stocks"
+        ],
+        "parameters": [
+          {
+            "name": "TypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IdDescription",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Stocks/Supplies/Update": {
+      "post": {
+        "tags": [
+          "Stocks"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOStock"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOStock"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOStock"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOStock"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Stocks/Products/Update": {
+      "post": {
+        "tags": [
+          "Stocks"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOStockProductos"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOStockProductos"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOStockProductos"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOStockProductos"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Stocks/Products/Increment": {
+      "post": {
+        "tags": [
+          "Stocks"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOProducto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Supplies/new-id/{sypplyName}": {
+      "get": {
+        "tags": [
+          "Supplies"
+        ],
+        "parameters": [
+          {
+            "name": "sypplyName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Supplies/ListFormatted": {
+      "get": {
+        "tags": [
+          "Supplies"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Supplies/Create-or-Update": {
+      "post": {
+        "tags": [
+          "Supplies"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Supplies/ListProp": {
+      "post": {
+        "tags": [
+          "Supplies"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Supplies/GetId": {
+      "get": {
+        "tags": [
+          "Supplies"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTODetallesComponenteProducto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Supplies/SaveProductComponents": {
+      "post": {
+        "tags": [
+          "Supplies"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DTOComponentesProducto"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DTOComponentesProducto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DTOComponentesProducto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DTOComponentesProducto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Users/logIn": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOUsuarios"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOUsuarios"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOUsuarios"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOUsuarios"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Users/signIn": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOUsuarios"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOUsuarios"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOUsuarios"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DTOUsuarios"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Users/roles/list": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/Users/Password/Reset/{usuario}": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "usuario",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DTOActualizarCategorias": {
+        "type": "object",
+        "properties": {
+          "anterior": {
+            "$ref": "#/components/schemas/DTOCategorias"
+          },
+          "nueva": {
+            "$ref": "#/components/schemas/DTOCategorias"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOArchivosVentas": {
+        "type": "object",
+        "properties": {
+          "idVenta": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idArchivo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hashArchivo": {
+            "type": "string",
+            "nullable": true
+          },
+          "pathArchivo": {
+            "type": "string",
+            "nullable": true
+          },
+          "mimeType": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEstado": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOCategorias": {
+        "type": "object",
+        "properties": {
+          "idDescripcion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "idTipo": {
+            "type": "string",
+            "nullable": true
+          },
+          "descripcionTipo": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOComponentesProducto": {
+        "type": "object",
+        "properties": {
+          "idProducto": {
+            "type": "string",
+            "nullable": true
+          },
+          "idComponente": {
+            "type": "string",
+            "nullable": true
+          },
+          "cantidad": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "peso": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "largo": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOCompras": {
+        "type": "object",
+        "properties": {
+          "idCompra": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idProveedor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fechaHora": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "idUsuario": {
+            "type": "string",
+            "nullable": true
+          },
+          "montoTotal": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "saldoPendiente": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "idEstadoCompra": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "saldoCancelado": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "readOnly": true
+          },
+          "usuario": {
+            "$ref": "#/components/schemas/DTOUsuarios"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/DTOEstadosCompras"
+          },
+          "proveedor": {
+            "$ref": "#/components/schemas/DTOEntidades"
+          },
+          "detallesCompra": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOComprasDetalles"
+            },
+            "nullable": true
+          },
+          "pagos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOPagosCompras"
+            },
+            "nullable": true
+          },
+          "cuotas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOCuotasCompras"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOComprasDetalles": {
+        "type": "object",
+        "properties": {
+          "idCompra": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idInsumo": {
+            "type": "string",
+            "nullable": true
+          },
+          "cantidad": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOCuotasCompras": {
+        "type": "object",
+        "properties": {
+          "idCuota": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idVenta": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "numeroCuota": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monto": {
+            "type": "number",
+            "format": "double"
+          },
+          "fechaVencimiento": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "idEstadoCuota": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fechaPago": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "estadoCuota": {
+            "$ref": "#/components/schemas/DTOEstadosCuotasCompras"
+          },
+          "pagos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOPagosCompras"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOCuotasVentas": {
+        "type": "object",
+        "properties": {
+          "idCuota": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idVenta": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "numeroCuota": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monto": {
+            "type": "number",
+            "format": "double"
+          },
+          "fechaVencimiento": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "idEstadoCuota": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fechaPago": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "estadoCuota": {
+            "$ref": "#/components/schemas/DTOEstadosCuotasVentas"
+          },
+          "pagos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOPagosVentas"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTODatosArchivosMovimientosStock": {
+        "type": "object",
+        "properties": {
+          "idMovimiento": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "nombreArchivo": {
+            "type": "string",
+            "nullable": true
+          },
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "mimeType": {
+            "type": "string",
+            "nullable": true
+          },
+          "extension": {
+            "type": "string",
+            "nullable": true
+          },
+          "mensajeError": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTODescripcionComponentes": {
+        "type": "object",
+        "properties": {
+          "idDescripcion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombreDescripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "idAlmacenamiento": {
+            "type": "string",
+            "nullable": true
+          },
+          "idFraccionamiento": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTODetallesComponenteProducto": {
+        "type": "object",
+        "properties": {
+          "idInsumo": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombreInsumo": {
+            "type": "string",
+            "nullable": true
+          },
+          "recibido": {
+            "type": "string",
+            "nullable": true
+          },
+          "granallado": {
+            "type": "string",
+            "nullable": true
+          },
+          "pintura": {
+            "type": "string",
+            "nullable": true
+          },
+          "proceso": {
+            "type": "string",
+            "nullable": true
+          },
+          "moldeado": {
+            "type": "string",
+            "nullable": true
+          },
+          "pendiente": {
+            "type": "string",
+            "nullable": true
+          },
+          "requerido": {
+            "type": "string",
+            "nullable": true
+          },
+          "disponibles": {
+            "type": "string",
+            "nullable": true
+          },
+          "faltantes": {
+            "type": "string",
+            "nullable": true
+          },
+          "total": {
+            "type": "string",
+            "nullable": true
+          },
+          "idDescripcion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idComponente": {
+            "type": "string",
+            "nullable": true
+          },
+          "largo": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "ancho": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "espesor": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "perfil": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "diametro": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "diametroNominal": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "altura": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "tolerancia": {
+            "type": "string",
+            "nullable": true
+          },
+          "longitud": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "idFraccionamiento": {
+            "type": "string",
+            "nullable": true
+          },
+          "idAlmacenamiento": {
+            "type": "string",
+            "nullable": true
+          },
+          "peso": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOEntidades": {
+        "type": "object",
+        "properties": {
+          "idEntidad": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "nombreClave": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombre": {
+            "type": "string",
+            "nullable": true
+          },
+          "apellido": {
+            "type": "string",
+            "nullable": true
+          },
+          "pais": {
+            "type": "string",
+            "nullable": true
+          },
+          "ciudad": {
+            "type": "string",
+            "nullable": true
+          },
+          "provincia": {
+            "type": "string",
+            "nullable": true
+          },
+          "localidad": {
+            "type": "string",
+            "nullable": true
+          },
+          "calle": {
+            "type": "string",
+            "nullable": true
+          },
+          "altura": {
+            "type": "string",
+            "nullable": true
+          },
+          "codigoPostal": {
+            "type": "string",
+            "nullable": true
+          },
+          "barrio": {
+            "type": "string",
+            "nullable": true
+          },
+          "telefono1": {
+            "type": "string",
+            "nullable": true
+          },
+          "telefono2": {
+            "type": "string",
+            "nullable": true
+          },
+          "telefono3": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "idFiscal": {
+            "type": "string",
+            "nullable": true
+          },
+          "fechaRegistro": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "idUsuarioRegistro": {
+            "type": "string",
+            "nullable": true
+          },
+          "idTipo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idCategoria": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEstado": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "tipo": {
+            "$ref": "#/components/schemas/DTOEntidadesTipos"
+          },
+          "categoria": {
+            "$ref": "#/components/schemas/DTOEntidadesCategorias"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOEntidadesCategorias": {
+        "type": "object",
+        "properties": {
+          "idTipo": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCategoria": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "nombreCategoria": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOEntidadesPago": {
+        "type": "object",
+        "properties": {
+          "idEntidad": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipo": {
+            "type": "string",
+            "nullable": true
+          },
+          "descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "emisor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOEntidadesTipos": {
+        "type": "object",
+        "properties": {
+          "idTipo": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "nombre": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOEstadosCompras": {
+        "type": "object",
+        "properties": {
+          "idEstadoCompra": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "descripcion": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOEstadosCuotasCompras": {
+        "type": "object",
+        "properties": {
+          "idEstadoCuota": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEstado": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOEstadosCuotasVentas": {
+        "type": "object",
+        "properties": {
+          "idEstadoCuota": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEstado": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOEstadosMovimientosStock": {
+        "type": "object",
+        "properties": {
+          "idEstadoMovimiento": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEstado": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOEstadosVentas": {
+        "type": "object",
+        "properties": {
+          "idEstadoVenta": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEstado": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOMediosPago": {
+        "type": "object",
+        "properties": {
+          "idMedioPago": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codigoMPago": {
+            "type": "string",
+            "nullable": true
+          },
+          "descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEstado": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOMovimientosStock": {
+        "type": "object",
+        "properties": {
+          "idMovimiento": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "usuarioCreacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "usuarioModificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "fechaHoraCreado": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "fechaHoraUltimaModificacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "idProveedorOrigen": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idProveedorDestino": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "origen": {
+            "type": "string",
+            "nullable": true
+          },
+          "destino": {
+            "type": "string",
+            "nullable": true
+          },
+          "tipo": {
+            "type": "string",
+            "nullable": true
+          },
+          "proveedor": {
+            "$ref": "#/components/schemas/DTOEntidades"
+          },
+          "proveedorOrigen": {
+            "$ref": "#/components/schemas/DTOEntidades"
+          },
+          "suministros": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOSuministrosMovimientosStock"
+            },
+            "nullable": true
+          },
+          "datosArchivos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTODatosArchivosMovimientosStock"
+            },
+            "nullable": true
+          },
+          "archivos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            },
+            "nullable": true
+          },
+          "idEstado": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "estado": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOPagosCompras": {
+        "type": "object",
+        "properties": {
+          "idPago": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idCompra": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idCuota": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idMedioPago": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEntidadPago": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monto": {
+            "type": "number",
+            "format": "double"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "medioPago": {
+            "$ref": "#/components/schemas/DTOMediosPago"
+          },
+          "entidadesPago": {
+            "$ref": "#/components/schemas/DTOEntidadesPago"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOPagosVentas": {
+        "type": "object",
+        "properties": {
+          "idPago": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idVenta": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idCuota": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idMedioPago": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEntidadPago": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monto": {
+            "type": "number",
+            "format": "double"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "medioPago": {
+            "$ref": "#/components/schemas/DTOMediosPago"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOProducto": {
+        "type": "object",
+        "properties": {
+          "idTipo": {
+            "type": "string",
+            "nullable": true
+          },
+          "idProducto": {
+            "type": "string",
+            "nullable": true
+          },
+          "idDescripcion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "diametroNominal": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "tolerancia": {
+            "type": "string",
+            "nullable": true
+          },
+          "cantidad": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "precioLista": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "precioFinal": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "porcentajeGanancia": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "componentes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOComponentesProducto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOStock": {
+        "type": "object",
+        "properties": {
+          "idInsumo": {
+            "type": "string",
+            "nullable": true
+          },
+          "peso": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "cantidad": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "longitud": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "recibido": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "granallado": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pintura": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "moldeado": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "proceso": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pendientes": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "total": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "faltantes": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "disponibles": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOStockProductos": {
+        "type": "object",
+        "properties": {
+          "idInsumo": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombreInsumo": {
+            "type": "string",
+            "nullable": true
+          },
+          "recibido": {
+            "type": "string",
+            "nullable": true
+          },
+          "granallado": {
+            "type": "string",
+            "nullable": true
+          },
+          "pintura": {
+            "type": "string",
+            "nullable": true
+          },
+          "proceso": {
+            "type": "string",
+            "nullable": true
+          },
+          "moldeado": {
+            "type": "string",
+            "nullable": true
+          },
+          "pendiente": {
+            "type": "string",
+            "nullable": true
+          },
+          "requerido": {
+            "type": "string",
+            "nullable": true
+          },
+          "disponibles": {
+            "type": "string",
+            "nullable": true
+          },
+          "faltantes": {
+            "type": "string",
+            "nullable": true
+          },
+          "total": {
+            "type": "string",
+            "nullable": true
+          },
+          "idProducto": {
+            "type": "string",
+            "nullable": true
+          },
+          "idTipo": {
+            "type": "string",
+            "nullable": true
+          },
+          "idDescripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "diametroNominal": {
+            "type": "string",
+            "nullable": true
+          },
+          "tolerancia": {
+            "type": "string",
+            "nullable": true
+          },
+          "cantidad": {
+            "type": "string",
+            "nullable": true
+          },
+          "precioLista": {
+            "type": "string",
+            "nullable": true
+          },
+          "precioFinal": {
+            "type": "string",
+            "nullable": true
+          },
+          "porcentajeGanancia": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOSuministrosMovimientosStock": {
+        "type": "object",
+        "properties": {
+          "idMovimiento": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idSuministro": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombreSuministro": {
+            "type": "string",
+            "nullable": true
+          },
+          "valorAnteriorOrigen": {
+            "type": "string",
+            "nullable": true
+          },
+          "valorAnteriorDestino": {
+            "type": "string",
+            "nullable": true
+          },
+          "valorNuevoOrigen": {
+            "type": "string",
+            "nullable": true
+          },
+          "valorNuevoDestino": {
+            "type": "string",
+            "nullable": true
+          },
+          "cantidad": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOUsuarios": {
+        "type": "object",
+        "properties": {
+          "usuario": {
+            "type": "string",
+            "nullable": true
+          },
+          "contraseña": {
+            "type": "string",
+            "nullable": true
+          },
+          "correo": {
+            "type": "string",
+            "nullable": true
+          },
+          "idRol": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOVentas": {
+        "required": [
+          "idCliente",
+          "idUsuario"
+        ],
+        "type": "object",
+        "properties": {
+          "idVenta": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCliente": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fechaHora": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "idUsuario": {
+            "type": "string"
+          },
+          "montoTotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "saldoPendiente": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "idEstadoVenta": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cliente": {
+            "$ref": "#/components/schemas/DTOEntidades"
+          },
+          "detallesVenta": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOVentasDetalles"
+            },
+            "nullable": true
+          },
+          "pagos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOPagosVentas"
+            },
+            "nullable": true
+          },
+          "cuotas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOCuotasVentas"
+            },
+            "nullable": true
+          },
+          "estado": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOEstadosVentas"
+            },
+            "nullable": true
+          },
+          "archivos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            },
+            "nullable": true
+          },
+          "infoArchivos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DTOArchivosVentas"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DTOVentasDetalles": {
+        "type": "object",
+        "properties": {
+          "idVenta": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idProducto": {
+            "type": "string",
+            "nullable": true
+          },
+          "cantidad": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "entregados": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "precio": {
+            "type": "number",
+            "format": "double"
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UTL_FiltrosComprasVentas": {
+        "type": "object",
+        "properties": {
+          "desde": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "hasta": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "idEntidad": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCompraVenta": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UTL_FiltrosMovimientos": {
+        "type": "object",
+        "properties": {
+          "idProveedor": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "etapa": {
+            "type": "string",
+            "nullable": true
+          },
+          "desde": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "hasta": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "idMovimiento": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UTL_ParametrosCuotas": {
+        "type": "object",
+        "properties": {
+          "cantidadCuotas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "montoVenta": {
+            "type": "number",
+            "format": "double"
+          },
+          "interes": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

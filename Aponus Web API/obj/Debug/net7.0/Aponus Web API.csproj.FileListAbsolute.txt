@@ -291,3 +291,7 @@ D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\ref\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
 D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Aponus SA\Aponus Web API\bin\Debug\net7.0\Aponus Web API.staticwebassets.endpoints.json
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets.build.endpoints.json
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets\msbuild.Aponus Web API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets.upToDateCheck.txt
