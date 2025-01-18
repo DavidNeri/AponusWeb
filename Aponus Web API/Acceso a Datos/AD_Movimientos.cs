@@ -117,12 +117,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
           
                 IQueryable<DTOMovimientosStock> IQMovimientos = AponusDBContext.Stock_Movimientos
                 .Where(movimiento =>
-                    (Filtros == null || Filtros.Desde.HasValue  || movimiento.FechaHoraCreado >= Filtros.Desde.Value) &&
-                    (Filtros == null || Filtros.Hasta.HasValue || movimiento.FechaHoraCreado <= Filtros.Hasta.Value) &&
-                    (Filtros == null || string.IsNullOrEmpty(Filtros.Etapa) || (movimiento.Destino != null && movimiento.Destino.Contains(Filtros.Etapa))) &&
-                    (Filtros == null || Filtros.IdProveedor.HasValue || movimiento.IdProveedor == Filtros.IdProveedor) &&
-                    (Filtros == null || Filtros.IdMovimiento.HasValue || movimiento.IdMovimiento == Filtros.IdMovimiento.Value))
-                    
+                        (Filtros == null || // Si no hay filtros, devuelve todo
+                         ((Filtros.Desde.HasValue && movimiento.FechaHoraCreado >= Filtros.Desde.Value) || !Filtros.Desde.HasValue)) &&
+                        ((Filtros.Hasta.HasValue && movimiento.FechaHoraCreado <= Filtros.Hasta.Value) || !Filtros.Hasta.HasValue) &&
+                        (string.IsNullOrEmpty(Filtros.Etapa) || (movimiento.Destino != null && movimiento.Destino.Contains(Filtros.Etapa))) &&
+                        ((Filtros.IdProveedor.HasValue && movimiento.IdProveedor == Filtros.IdProveedor.Value) || !Filtros.IdProveedor.HasValue) &&
+                        ((Filtros.IdMovimiento.HasValue && movimiento.IdMovimiento == Filtros.IdMovimiento.Value) || !Filtros.IdMovimiento.HasValue))
                 .Join(
                     AponusDBContext.Entidades,
                     movimientos => movimientos.IdProveedor,
