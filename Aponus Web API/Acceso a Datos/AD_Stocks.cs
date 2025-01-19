@@ -43,10 +43,29 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     {
                         var Existe = await AponusDBContext.Productos.FindAsync(Producto.IdProducto);
 
-                        if (Existe != null)                            
+                        if (Existe != null)
+                        {
+                            Producto.Cantidad ??= Existe.Cantidad;
+
+                            Producto.PrecioLista = (Producto.PrecioLista != 0 && Producto.PrecioLista != null) ? Producto.PrecioLista : Existe.PrecioLista;
+
+                            Producto.PrecioFinal= (Producto.PrecioFinal != 0 && Producto.PrecioFinal != null) ? Producto.PrecioFinal : Existe.PrecioFinal;
+
+                            Producto.PorcentajeGanancia??= Existe.PorcentajeGanancia;
+
+                            Producto.IdDescripcion = Existe.IdDescripcion;
+                            Producto.IdTipo = Existe.IdTipo;
+                            Producto.DiametroNominal = Existe.DiametroNominal;
+                            Producto.Tolerancia = Existe.Tolerancia;
+                            Producto.IdEstado = Existe.IdEstado;
+
                             AponusDBContext.Entry(Existe).CurrentValues.SetValues(Producto);
+                        }
                         else
+                        {
                             await AponusDBContext.Productos.AddAsync(Producto);
+                        }
+                           
 
                         await AponusDBContext.SaveChangesAsync();
                         await transaccion.CommitAsync();
@@ -76,13 +95,27 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         var Existe = await AponusDBContext.stockInsumos.FindAsync(stockInsumo.IdInsumo);
 
                         if (Existe != null)
-                            AponusDBContext.Entry(Existe).CurrentValues.SetValues(stockInsumo);
+                        {
+
+                            stockInsumo.Granallado = stockInsumo.Granallado ?? Existe?.Granallado ??0;
+                            stockInsumo.Pintura = stockInsumo.Pintura ?? Existe?.Pintura ?? 0;
+                            stockInsumo.Proceso = stockInsumo.Proceso ?? Existe?.Proceso ?? 0;
+                            stockInsumo.Recibido = stockInsumo.Recibido ?? Existe?.Recibido ?? 0;
+                            stockInsumo.Pendiente = stockInsumo.Pendiente ?? Existe?.Pendiente ?? 0;
+                            stockInsumo.Moldeado = stockInsumo.Moldeado ?? Existe?.Moldeado ?? 0;
+
+                            AponusDBContext.Entry(Existe!).CurrentValues.SetValues(stockInsumo);
+                        }
                         else
+                        {
                             await AponusDBContext.stockInsumos.AddAsync(stockInsumo);
+                        }
 
                         await AponusDBContext.SaveChangesAsync();
                         await transaccion.CommitAsync();
                         return true;
+
+
                     }
                     catch (Exception)
                     {
@@ -168,7 +201,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                     Largo = JoinResult.Detalles.Longitud != null ? $"{JoinResult.Detalles.Longitud}mm" : "-",
                                     Espesor = JoinResult.Detalles.Espesor != null ? $"{JoinResult.Detalles.Espesor}mm" : "-",
                                     Perfil = JoinResult.Detalles.Perfil != null ? JoinResult.Detalles.Perfil.ToString() : "-",
-                                    Diametro = JoinResult.Detalles.Diametro != null ? $"{JoinResult.Detalles.Diametro}mm" : null,
+                                    Diametro = JoinResult.Detalles.Diametro != null ? $"{JoinResult.Detalles.Diametro}mm" : "-",
                                     Peso= JoinResult.Detalles.Peso != null ? $"{JoinResult.Detalles.Peso}g" : "-",
                                     Altura = JoinResult.Detalles.Altura != null ? $"{JoinResult.Detalles.Altura}mm" : "-",
                                     Tolerancia = JoinResult.Detalles.Tolerancia != null ? JoinResult.Detalles.Tolerancia : "-",

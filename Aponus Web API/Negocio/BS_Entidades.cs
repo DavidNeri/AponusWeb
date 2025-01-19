@@ -42,6 +42,7 @@ namespace Aponus_Web_API.Negocio
             }
             else
             {
+                Entidad.IdEstado = 0;
                 var (Status, error) = await AdEntidades.DeshabilitarEntidad(Entidad);
                 if (error != null) return new ContentResult()
                 {

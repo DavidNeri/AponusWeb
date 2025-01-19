@@ -290,14 +290,13 @@ namespace Aponus_Web_API.Negocio
             {
                 try
                 {
-                    Producto StockProductoDB = new Producto();
-                    PropertyInfo[] PropsDTOStockProducto = DTOStockProducto.GetType().GetProperties(); //Valores que recibo                    
-                    PropertyInfo[] PropsObjStockInsumosDB = StockProductoDB.GetType().GetProperties(); //Objeto para la Base de Datos
-
-                    foreach (var PropDTO in PropsDTOStockProducto)
-                        foreach (var PropObjDB in PropsObjStockInsumosDB)
-                            if (PropObjDB.Name.ToLower().Contains(PropDTO.Name.ToLower()) && PropDTO.GetValue(DTOStockProducto) != null)
-                                PropObjDB.SetValue(StockProductoDB, PropDTO.GetValue(DTOStockProducto));
+                    Producto StockProductoDB = new Producto()
+                    {
+                        IdProducto = !string.IsNullOrEmpty(DTOStockProducto.IdProducto) ? DTOStockProducto.IdProducto : "",
+                        Cantidad  = !string.IsNullOrEmpty(DTOStockProducto.Cantidad) ? Convert.ToInt32(DTOStockProducto.Cantidad) : 0,
+                        PrecioLista = !string.IsNullOrEmpty(DTOStockProducto.PrecioLista) ? Convert.ToDecimal(DTOStockProducto.PrecioLista) : 0,
+                        PrecioFinal= !string.IsNullOrEmpty(DTOStockProducto.PrecioFinal) ? Convert.ToDecimal(DTOStockProducto.PrecioFinal) : 0,
+                    };                   
 
                     bool Resultado = await AdStocks.StockProductos().Actualizar(StockProductoDB);
 
@@ -319,7 +318,6 @@ namespace Aponus_Web_API.Negocio
                         ContentType = "application/json",
                         StatusCode = 400
                     };
-
                 }
             }
             internal async Task<IActionResult> Incrementar(DTOProducto Producto)
@@ -504,7 +502,6 @@ namespace Aponus_Web_API.Negocio
         public class StockInsumos
         {
             private readonly AD_Stocks AdStocks;
-
             public StockInsumos(AD_Stocks adStocks)
             {
                 AdStocks = adStocks;
@@ -519,7 +516,9 @@ namespace Aponus_Web_API.Negocio
 
                     foreach (var PropDTO in PropsDTOStockInsumo)
                         foreach (var PropObjDB in PropsObjStockInsumosDB)
-                            if (PropObjDB.Name.ToLower().Contains(PropDTO.Name.ToLower()) && PropDTO.GetValue(DtoStockInsumo) != null)
+                            if (PropObjDB.Name.ToLower().Contains(PropDTO.Name.ToLower()) &&                                
+                                PropDTO.GetValue(DtoStockInsumo) != null)
+
                                 PropObjDB.SetValue(ObjStockInsumosDB, PropDTO.GetValue(DtoStockInsumo));
 
                     bool Resultado = await AdStocks.StockInsumos().Actualizar(ObjStockInsumosDB);

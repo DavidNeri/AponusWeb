@@ -119,18 +119,44 @@ namespace Aponus_Web_API.Acceso_a_Datos
                             _Tolerancia = _JoinResult._DetComponentes._DetalleComponentes.Tolerancia ?? "",
                             _DiametroNominal = _JoinResult._DetComponentes._DetalleComponentes.DiametroNominal ?? null,
                             _Largo = _JoinResult._DetComponentes._Componentes.Longitud ?? null,
-
                             StockComponente = new DTOStockFormateado
                             {
                                 IdInsumo = _StockComponentes.IdInsumo,
                                 Recibido = _StockComponentes.Recibido != null ? _StockComponentes.Recibido.ToString() : "Sin Stock",
+                                Pendiente = _StockComponentes.Pendiente != null ? _StockComponentes.Pendiente.ToString() : "Sin Stock",
                                 Granallado = _StockComponentes.Granallado != null ? _StockComponentes.Granallado.ToString() : "Sin Stock",
                                 Pintura = _StockComponentes.Pintura != null ? _StockComponentes.Pintura.ToString() : "Sin Stock",
                                 Proceso = _StockComponentes.Proceso != null ? _StockComponentes.Proceso.ToString() : "Sin Stock",
                                 Moldeado = _StockComponentes.Moldeado != null ? _StockComponentes.Moldeado.ToString() : "Sin Stock",
-
-                                Total = ((_StockComponentes.Pintura ?? 0) + (_StockComponentes.Moldeado ?? 0) + (_StockComponentes.Recibido ?? 0) + (_StockComponentes.Proceso ?? 0) + (_StockComponentes.Granallado ?? 0)).ToString(),
+                                
+                                Total = ((_StockComponentes.Pintura ?? 0) + 
+                                        (_StockComponentes.Moldeado ?? 0) + 
+                                        (_StockComponentes.Recibido ?? 0) + 
+                                        (_StockComponentes.Proceso ?? 0) + 
+                                        (_StockComponentes.Granallado ?? 0) + 
+                                        (_StockComponentes.Pendiente ?? 0 ))
+                                        .ToString(),
+                                
                                 Requerido = ((_JoinResult._DetComponentes._Componentes.Cantidad ?? 0) * Producto.Cantidad).ToString(),
+
+                                Faltantes = (_StockComponentes.Pintura    ?? 0)    +
+                                            (_StockComponentes.Moldeado   ?? 0)    +
+                                            (_StockComponentes.Recibido   ?? 0)    +
+                                            (_StockComponentes.Proceso    ?? 0)    +
+                                            (_StockComponentes.Granallado ?? 0)    +
+                                            (_StockComponentes.Pendiente  ?? 0)
+                                            -
+                                            ((_JoinResult._DetComponentes._Componentes.Cantidad ?? 0) * Producto.Cantidad)
+                                            < 0 ?
+                                            (((_StockComponentes.Pintura  ?? 0) +
+                                            (_StockComponentes.Moldeado   ?? 0) +
+                                            (_StockComponentes.Recibido   ?? 0) +
+                                            (_StockComponentes.Proceso    ?? 0) +
+                                            (_StockComponentes.Granallado ?? 0) +
+                                            (_StockComponentes.Pendiente  ?? 0)
+                                            -
+                                            ((_JoinResult._DetComponentes._Componentes.Cantidad ?? 0) * Producto.Cantidad)) * (-1)).ToString() :
+                                            "0"
                             }
                         })
                     .GroupBy(cp => new
@@ -147,7 +173,6 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         cp._Diametro,
                         cp._Tolerancia
                     })
-
                     .Select(group => new
                     {
                         idProducto = group.Key._IdProducto,
@@ -166,10 +191,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     })
                     .ToList();
 
-
-
             List<string> AllComponentesIds = ComponentesProducto.Select(cp => cp.IdComponente).ToList();
-
             List<DTODetallesComponenteProducto> PropiedadesComponentes = AponusDbContext.ComponentesDetalles
                 .Where(x => AllComponentesIds.Contains(x.IdInsumo))
                 .Select(x => new DTODetallesComponenteProducto()
@@ -188,9 +210,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 })
                 .ToList();
-
             List<DTOProductoComponente> productos = new List<DTOProductoComponente>();
-
             foreach (var cp in ComponentesProducto)
             {
                 string? IdComponente = cp.IdComponente ?? "";
@@ -203,9 +223,6 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 string? tolerancia = cp.Tolerancia ?? "";
                 string? DiametroNominal = cp.DiametroNominal.ToString() ?? "";
                 string? largo = cp.Largo != null ? string.Format("{0:####}", cp.Largo) : null;
-
-
-
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append($"{descripcion}");
@@ -247,8 +264,6 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 productos.Add(productoComponente);
             }
-
-
             foreach (var producto in productos)
             {
 
@@ -363,17 +378,20 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     }
                 }
             }
-
             string? IdProd = ComponentesProducto.Select(x => x.idProducto).FirstOrDefault();
-
             var result = new
             {
                 idProducto = IdProd,
                 Componentes = productos
             };
-
             return new JsonResult(result);
         }
+
+        private string CalcularFaltantes(decimal Pintura, decimal Moldeado, decimal Recibido, decimal Proceso, decimal Granallado, decimal Pendiente, decimal requerido )
+        {
+            return "asd";
+        }
+
         internal JsonResult? ListarProp(string[] propiedadesNulas, List<(string Nombre, string Valor)> propiedadesNoNulas)
         {
 
@@ -596,7 +614,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     ExisteStockComponente.Recibido = 0;
                     ExisteStockComponente.Moldeado = 0;
 
-                    AponusDbContext.Add(ExisteStockComponente);
+                    AponusDbContext.stockInsumos.Update(ExisteStockComponente);
 
                 }
 
