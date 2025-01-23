@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NpgsqlTypes;
 using System.Reflection;
+using System.Security.Claims;
 using Z.EntityFramework.Plus;
 
 namespace Aponus_Web_API.Acceso_a_Datos
@@ -13,9 +14,11 @@ namespace Aponus_Web_API.Acceso_a_Datos
     public class AD_Stocks
     {
         private readonly AponusContext AponusDBContext;
-        public AD_Stocks(AponusContext _aponusContext)
+        private readonly IHttpContextAccessor Context;
+        public AD_Stocks(AponusContext _aponusContext, IHttpContextAccessor context)
         {
             AponusDBContext = _aponusContext;
+            Context = context;
         }
 
         public Productos StockProductos()
@@ -458,6 +461,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
         internal int? GuardarDatosMovimiento(AponusContext AponusDBContext, Stock_Movimientos Movimiento)
         {
+            string Usuario = Context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+
             string insertQuery = @"INSERT INTO ""STOCK_MOVIMIENTOS"" (""USUARIO_CREADO"", ""FECHA_HORA_CREADO"",""ORIGEN"",""DESTINO"",""ID_PROVEEDOR"", ""ID_ESTADO_MOVIMIENTO"") 
                                     VALUES (@USUARIO_CREADO, @FECHA_HORA_CREADO,@ORIGEN,@DESTINO,  @ID_PROVEEDOR, 1)";
 
@@ -465,7 +470,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             try
             {
                 AponusDBContext.Database.ExecuteSqlRaw(insertQuery,
-                                                         new NpgsqlParameter("@USUARIO_CREADO", Movimiento.CreadoUsuario) { NpgsqlDbType = NpgsqlDbType.Varchar },
+                                                         new NpgsqlParameter("@USUARIO_CREADO", Usuario) { NpgsqlDbType = NpgsqlDbType.Varchar },
                                                          new NpgsqlParameter("@FECHA_HORA_CREADO", Movimiento.FechaHoraCreado) { NpgsqlDbType = NpgsqlDbType.Timestamp },
                                                          new NpgsqlParameter("@ORIGEN", Movimiento.Origen) { NpgsqlDbType = NpgsqlDbType.Varchar },
                                                          new NpgsqlParameter("@DESTINO", Movimiento.Destino) { NpgsqlDbType = NpgsqlDbType.Varchar },

@@ -3,15 +3,18 @@ using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace Aponus_Web_API.Acceso_a_Datos
 {
     public class AD_Movimientos
     {
         private readonly AponusContext AponusDBContext;
-        public AD_Movimientos(AponusContext _AponusDbContext)
+        private readonly IHttpContextAccessor Context;
+        public AD_Movimientos(AponusContext _AponusDbContext, IHttpContextAccessor _context)
         {
             AponusDBContext = _AponusDbContext;
+            Context = _context;
         }
 
         public ArchivosMovimientos Archivos()
@@ -118,11 +121,14 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 IQueryable<DTOMovimientosStock> IQMovimientos = AponusDBContext.Stock_Movimientos
                 .Where(movimiento =>
                         (Filtros == null || // Si no hay filtros, devuelve todo
-                         ((Filtros.Desde.HasValue && movimiento.FechaHoraCreado >= Filtros.Desde.Value) || !Filtros.Desde.HasValue)) &&
-                        ((Filtros.Hasta.HasValue && movimiento.FechaHoraCreado <= Filtros.Hasta.Value) || !Filtros.Hasta.HasValue) &&
-                        (string.IsNullOrEmpty(Filtros.Etapa) || (movimiento.Destino != null && movimiento.Destino.Contains(Filtros.Etapa))) &&
-                        ((Filtros.IdProveedor.HasValue && movimiento.IdProveedor == Filtros.IdProveedor.Value) || !Filtros.IdProveedor.HasValue) &&
-                        ((Filtros.IdMovimiento.HasValue && movimiento.IdMovimiento == Filtros.IdMovimiento.Value) || !Filtros.IdMovimiento.HasValue))
+                        ((Filtros.Desde != null && Filtros.Desde.HasValue && movimiento.FechaHoraCreado >= Filtros.Desde.Value) || Filtros.Desde == null)) &&
+                        (Filtros == null || // Validar Filtros.Hasta
+                        ((Filtros.Hasta != null && Filtros.Hasta.HasValue && movimiento.FechaHoraCreado <= Filtros.Hasta.Value) || Filtros.Hasta == null)) &&
+                        (Filtros == null || string.IsNullOrEmpty(Filtros.Etapa) || (movimiento.Destino != null && movimiento.Destino.Contains(Filtros.Etapa))) &&
+                        (Filtros == null ||
+                        (Filtros.IdProveedor.HasValue && movimiento.IdProveedor == Filtros.IdProveedor.Value) || !Filtros.IdProveedor.HasValue) &&
+                        (Filtros == null ||
+                        (Filtros.IdMovimiento.HasValue && movimiento.IdMovimiento == Filtros.IdMovimiento.Value) || !Filtros.IdMovimiento.HasValue))
                 .Join(
                     AponusDBContext.Entidades,
                     movimientos => movimientos.IdProveedor,
@@ -251,11 +257,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 DateTime FechaHora = UTL_Fechas.ObtenerFechaHora();
 
                 var Movimiento = AponusDbContext.Stock_Movimientos.Where(x => x.IdMovimiento == Mov.IdMovimiento).FirstOrDefault();
+                string Usuario = Context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
                 if (Movimiento != null)
                 {
                     Movimiento.FechaHoraUltimaModificacion = FechaHora;
-                    Movimiento.ModificadoUsuario = Mov.UsuarioModificacion;
+                    Movimiento.ModificadoUsuario = Usuario;
                     AponusDbContext.Stock_Movimientos.Update(Movimiento);
 
                     return true;
@@ -302,8 +309,10 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 if (Movimiento != null)
                 {
+                    string Usuario = Context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+
                     Movimiento.FechaHoraUltimaModificacion = UTL_Fechas.ObtenerFechaHora();
-                    Movimiento.ModificadoUsuario = actualizacionMovimiento.UsuarioModificacion ?? Movimiento.ModificadoUsuario;
+                    Movimiento.ModificadoUsuario = Usuario;
                     Movimiento.IdProveedor = actualizacionMovimiento.IdProveedorDestino ?? Movimiento.IdProveedor;
                     Movimiento.Origen = actualizacionMovimiento.Origen ?? Movimiento.Origen;
                     Movimiento.Destino = actualizacionMovimiento.Destino ?? Movimiento.Destino;

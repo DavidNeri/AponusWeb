@@ -328,7 +328,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnName("ID_ESTADO_CUOTA")
                         .HasDefaultValueSql("1");
 
-                    b.Property<int>("IdVenta")
+                    b.Property<int>("IdCompra")
                         .HasColumnType("int")
                         .HasColumnName("ID_VENTA");
 
@@ -346,7 +346,7 @@ namespace Aponus_Web_API.Migrations
 
                     b.HasIndex("IdEstadoCuota");
 
-                    b.HasIndex("IdVenta");
+                    b.HasIndex("IdCompra");
 
                     b.ToTable("CUOTAS_VENTAS", (string)null);
                 });
@@ -864,7 +864,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID_MEDIO_PAGO");
 
-                    b.Property<int>("IdVenta")
+                    b.Property<int>("IdCompra")
                         .HasColumnType("int")
                         .HasColumnName("ID_VENTA");
 
@@ -876,7 +876,7 @@ namespace Aponus_Web_API.Migrations
 
                     b.HasIndex("IdMedioPago");
 
-                    b.HasIndex("IdVenta");
+                    b.HasIndex("IdCompra");
 
                     b.ToTable("PAGOS_VENTAS", (string)null);
                 });
@@ -1228,12 +1228,12 @@ namespace Aponus_Web_API.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.Ventas", b =>
                 {
-                    b.Property<int>("IdVenta")
+                    b.Property<int>("IdCompra")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID_VENTA");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdVenta"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdCompra"));
 
                     b.Property<DateTime>("FechaHora")
                         .HasColumnType("timestamp")
@@ -1260,7 +1260,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("SALDO_PENDIENTE");
 
-                    b.HasKey("IdVenta");
+                    b.HasKey("IdCompra");
 
                     b.HasIndex("IdCliente");
 
@@ -1273,7 +1273,7 @@ namespace Aponus_Web_API.Migrations
 
             modelBuilder.Entity("Aponus_Web_API.Modelos.VentasDetalles", b =>
                 {
-                    b.Property<int>("IdVenta")
+                    b.Property<int>("IdCompra")
                         .HasColumnType("int")
                         .HasColumnName("ID_VENTA");
 
@@ -1293,7 +1293,7 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("PRECIO");
 
-                    b.HasKey("IdVenta", "IdProducto");
+                    b.HasKey("IdCompra", "IdProducto");
 
                     b.HasIndex("IdProducto");
 
@@ -1411,7 +1411,7 @@ namespace Aponus_Web_API.Migrations
 
                     b.HasOne("Aponus_Web_API.Modelos.Ventas", "Venta")
                         .WithMany("Cuotas")
-                        .HasForeignKey("IdVenta")
+                        .HasForeignKey("IdCompra")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1495,7 +1495,7 @@ namespace Aponus_Web_API.Migrations
 
                     b.HasOne("Aponus_Web_API.Modelos.Ventas", "Venta")
                         .WithMany("Pagos")
-                        .HasForeignKey("IdVenta")
+                        .HasForeignKey("IdCompra")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1674,7 +1674,7 @@ namespace Aponus_Web_API.Migrations
 
                     b.HasOne("Aponus_Web_API.Modelos.Ventas", "Venta")
                         .WithMany("DetallesVenta")
-                        .HasForeignKey("IdVenta")
+                        .HasForeignKey("IdCompra")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

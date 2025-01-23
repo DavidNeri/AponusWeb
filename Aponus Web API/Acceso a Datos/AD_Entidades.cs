@@ -3,6 +3,8 @@ using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using System.Security.Claims;
 using Z.EntityFramework.Plus;
 
 namespace Aponus_Web_API.Acceso_a_Datos
@@ -10,9 +12,11 @@ namespace Aponus_Web_API.Acceso_a_Datos
     public class AD_Entidades
     {
         private readonly AponusContext AponusDBContext;
-        public AD_Entidades(AponusContext _aponusDBContext)
+        private readonly IHttpContextAccessor Context;
+        public AD_Entidades(AponusContext _aponusDBContext, IHttpContextAccessor context)
         {
             AponusDBContext = _aponusDBContext;
+            Context = context;
         }
         public IActionResult GuardarEntidad(DTOEntidades Entidad)
         {
@@ -41,7 +45,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         Existente.Provincia         = Entidad.Provincia ?? Existente.Provincia;
                         Existente.Apellido          = Entidad.Apellido ?? Existente.Apellido;
                         Existente.Nombre            = Entidad.Nombre ?? Existente.Nombre;
-                        Existente.IdUsuarioRegistro = Entidad.IdUsuarioRegistro ?? Existente.IdUsuarioRegistro;
+                        Existente.IdUsuarioRegistro = Context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Existente.IdUsuarioRegistro;
                         Existente.Barrio            = Entidad.Barrio ?? Existente.Barrio;
                         Existente.IdCategoria       = Entidad.IdCategoria;
                         Existente.IdTipo            = Entidad.IdTipo;
@@ -61,6 +65,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 }
                 else
                 {
+                    string UsuarioContext = Context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
                     Entidades NuevaEntidad = new()
                     {
                         NombreClave       = Entidad.Nombre                              ?? "",
@@ -79,12 +84,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         Email             = !string.IsNullOrEmpty(Entidad.Email)        ? Entidad.Email.Trim().ToUpper().Replace(" ", "")        : null,
                         IdFiscal          = Entidad.IdFiscal.Trim().ToUpper().Replace(" ", "").Replace("-", "").Replace("_", ""),
                         FechaRegistro     = Entidad.FechaRegistro ?? UTL_Fechas.ObtenerFechaHora(),
-                        IdUsuarioRegistro = Entidad.IdUsuarioRegistro ?? "",
+                        IdUsuarioRegistro = Context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "",
                         IdTipo            = Entidad.IdTipo,
                         IdCategoria       = Entidad.IdCategoria,
                         CategoriaEntidad  = AponusDBContext.CategoriasEntidades.FirstOrDefault(x => x.IdCategoria == Entidad.IdCategoria) ?? new EntidadesCategorias(),
                         TipoEntidad       = AponusDBContext.TiposEntidades.FirstOrDefault(x => x.IdTipo == Entidad.IdTipo) ?? new EntidadesTipos(),
-                        UsuarioRegistro   = AponusDBContext.Usuarios.FirstOrDefault(x => x.Usuario == Entidad.IdUsuarioRegistro) ?? new Usuarios(),
+                        UsuarioRegistro   = AponusDBContext.Usuarios.FirstOrDefault(x => x.Usuario == UsuarioContext) ?? new Usuarios(),
                         IdEstado          = 1,
 
                     };

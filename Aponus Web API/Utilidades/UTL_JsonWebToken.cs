@@ -26,7 +26,7 @@ namespace Aponus_Web_API.Utilidades
 
             _issuer = configuration["Jwt:Issuer"] ?? throw new ArgumentNullException("Issuer no configurado");
             _audience = configuration["Jwt:Audience"] ?? throw new ArgumentNullException("Audience no configurado");
-            _expiracion = int.Parse(configuration["Jwt:ExpirationInHours"] ?? "1");
+            _expiracion = int.Parse(configuration["Jwt:ExpirationInHours"] ?? "15");
             AdUsuarios = adUsuarios;
         }
 

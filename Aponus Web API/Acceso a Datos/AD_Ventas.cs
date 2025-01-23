@@ -1,7 +1,9 @@
 ﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using Z.EntityFramework.Plus;
 
 namespace Aponus_Web_API.Acceso_a_Datos
@@ -9,12 +11,14 @@ namespace Aponus_Web_API.Acceso_a_Datos
     public class AD_Ventas
     {
         private readonly AponusContext AponusDBContext;
-        private readonly AD_Stocks stocks;
+        private readonly AD_Stocks AdStocks;
+        private readonly IHttpContextAccessor Context;
 
-        public AD_Ventas(AponusContext _aponusContext, AD_Stocks _stocks)
+        public AD_Ventas(AponusContext _aponusContext, AD_Stocks adStocks, IHttpContextAccessor _context)
         {
             AponusDBContext = _aponusContext;
-            stocks = _stocks;
+            AdStocks = adStocks;
+            Context = _context;
         }
 
         public async Task<int?> Guardar(Ventas Venta)
@@ -32,7 +36,10 @@ namespace Aponus_Web_API.Acceso_a_Datos
             var estadoVenta= AponusDBContext.estadosVentas.First(x => x.IdEstado == Venta.IdEstadoVenta) ?? new EstadosVentas();
             
             Venta.Estado = estadoVenta;
-            Venta.Usuario = AponusDBContext.Usuarios.First(x => x.Usuario.Equals(Venta.IdUsuario)) ?? new Usuarios();
+
+            var UsuarioHttpContext = Context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            Venta.Usuario = AponusDBContext.Usuarios.First(x => x.Usuario.Equals(UsuarioHttpContext)) ?? new Usuarios();
             Venta.Cliente = AponusDBContext.Entidades.First(x => x.IdEntidad == Venta.IdCliente) ?? new Entidades();
 
 
@@ -44,7 +51,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 foreach (var Prod in ProductosVentaAnterior)
                 {
-                    roolbackResult = stocks.IncrementarStockProducto(new DTOStockUpdate()
+                    roolbackResult = AdStocks.IncrementarStockProducto(new DTOStockUpdate()
                     {
                         IdExistencia = Prod.IdProducto,
                         Cantidad = Prod.Cantidad,
@@ -55,7 +62,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             foreach (var item in ProductosVenta)
             {
                 item.IdProductoNavigation = AponusDBContext.Productos.First(x => x.IdProducto == item.IdProducto);
-                roolbackResult = stocks.DisminuirStockProducto(new DTOStockUpdate()
+                roolbackResult = AdStocks.DisminuirStockProducto(new DTOStockUpdate()
                 {
                     IdExistencia = item.IdProducto,
                     Cantidad = item.Cantidad,

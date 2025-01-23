@@ -8,7 +8,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public int? IdCuota { get; set; }
 
         [JsonProperty(PropertyName = "idCompra", NullValueHandling = NullValueHandling.Ignore)]
-        public int? IdVenta { get; set; }
+        public int? IdCompra { get; set; }
 
         [JsonProperty(PropertyName = "numeroCuota", NullValueHandling = NullValueHandling.Ignore)]
         public int NumeroCuota { get; set; }

@@ -41,6 +41,12 @@ namespace Aponus_Web_API.Negocio
                     MontoTotal = x.MontoTotal,
                     IdUsuario = x.IdUsuario,
 
+                    Estado = new DTOEstadosCompras()
+                    {
+                        Descripcion = x.Estado.Descripcion,
+                        IdEstadoCompra = x.Estado.IdEstadoCompra
+                    },
+
                     DetallesCompra = x.DetallesCompra.Select(y=> new DTOComprasDetalles()
                     {
                         IdCompra = y.IdCompra,
@@ -56,7 +62,52 @@ namespace Aponus_Web_API.Negocio
                         IdMedioPago = y.IdMedioPago,
                         Monto = y.Monto,
                         IdPago = y.IdPago,
+                        MedioPago = new DTOMediosPago()
+                        {
+                            CodigoMPago = y.MedioPago.CodigoMPago,
+                            Descripcion = y.MedioPago.Descripcion,
+                            IdMedioPago = y.MedioPago.IdMedioPago
+                        },
+                        EntidadesPago = new DTOEntidadesPago()
+                        {
+                            Descripcion = y.entidadPago.Descripcion,
+                            Emisor = y.entidadPago.Emisor,
+                            IdEntidad = y.entidadPago.IdEntidad,
+                            Tipo = y.entidadPago.Tipo
+                        }
+                    }).ToList(),
+
+                    Cuotas = x.CuotasCompra.Select(c=>new DTOCuotasCompras()
+                    {
+                        IdCompra = c.IdCompra,
+                        Monto = c.Monto,
+                        FechaPago = c.FechaPago,
+                        FechaVencimiento = c.FechaVencimiento,
+                        IdEstadoCuota = c.IdEstadoCuota,
+                        NumeroCuota = c.NumeroCuota,                        
                         
+                        EstadoCuota = new DTOEstadosCuotasCompras()
+                        {
+                            Descripcion = c.EstadoCuotaCompra.Descripcion,
+                            IdEstadoCuota = c.EstadoCuotaCompra.IdEstadoCuota,
+                            IdEstado = c.EstadoCuotaCompra.IdEstado,
+                        },
+
+                        Pagos = c.Pagos.Select(x=>new DTOPagosCompras()
+                        {
+                            IdCompra = x.IdCompra,
+                            Fecha = x.Fecha,
+                            IdCuota = x.IdCuota,
+                            Monto = x.Monto,
+                            EntidadesPago = new DTOEntidadesPago()
+                            {
+                                Descripcion = x.entidadPago.Descripcion,
+                                Emisor = x.entidadPago.Emisor,
+                                IdEntidad = x.entidadPago.IdEntidad,
+                                Tipo = x.entidadPago.Tipo
+                            }
+                        }).ToList(),
+
                     }).ToList(),
 
                     Proveedor = new DTOEntidades()

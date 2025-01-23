@@ -11,7 +11,7 @@ namespace Aponus_Web_API.Modelos
         public string? MimeType { get; set; }
         public int IdEstado { get; set; } = 1;
 
-        [ForeignKey("IdVenta")]
+        [ForeignKey("IdCompra")]
         public virtual Ventas VentasNavigation{ get; set; } = new Ventas();
     }
 }

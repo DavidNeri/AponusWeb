@@ -672,6 +672,7 @@ public partial class AponusContext : DbContext
             .HasPrincipalKey(PK => PK.IdCompra)
             .HasForeignKey(FK => FK.IdCompra);
 
+
             entity.HasOne(p => p.DetallesInsumo)
             .WithMany(p => p.ComprasNavigation)
             .HasForeignKey(FK => FK.IdInsumo)
@@ -738,7 +739,7 @@ public partial class AponusContext : DbContext
            .HasColumnType("integer")
            .IsRequired(false)           
            .HasDefaultValue(null);
-           
+
             entity.HasOne(p => p.MedioPago)
             .WithMany(p => p.PagosComprasNavigation)
             .HasForeignKey(FK => FK.IdMedioPago)
@@ -840,10 +841,11 @@ public partial class AponusContext : DbContext
             .HasForeignKey(p => p.IdProveedor)
             .HasPrincipalKey(p => p.IdEntidad)
             .OnDelete(DeleteBehavior.NoAction);
-
+            
             entity.HasMany(p => p.Pagos)
             .WithOne(p => p.Compra)
             .HasForeignKey(p => p.IdCompra);
+
         });
 
         modelBuilder.Entity<EntidadesTipos>(entity =>

@@ -3367,7 +3367,7 @@
             "format": "int32",
             "nullable": true
           },
-          "idVenta": {
+          "idCompra": {
             "type": "integer",
             "format": "int32",
             "nullable": true

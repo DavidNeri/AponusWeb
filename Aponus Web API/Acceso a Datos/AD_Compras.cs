@@ -2,6 +2,7 @@
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using Z.EntityFramework.Plus;
 
 namespace Aponus_Web_API.Acceso_a_Datos
@@ -9,10 +10,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
     public class AD_Compras
     {
         private readonly AponusContext aponusContext;
+        private readonly IHttpContextAccessor Context;
 
-        public AD_Compras(AponusContext _aponusContext)
+        public AD_Compras(AponusContext _aponusContext, IHttpContextAccessor context)
         {
             aponusContext = _aponusContext;
+            Context = context;
         }
 
         internal async Task<Compras?> BuscarCompra(int IdCompra)
@@ -38,7 +41,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
             compra.CuotasCompra = null;
             var estadoCompra = aponusContext.EstadosCompra.First(x => x.IdEstado == compra.IdEstadoCompra) ?? new EstadosCompras();
             compra.Estado = estadoCompra;
-            compra.Usuario = aponusContext.Usuarios.First(x => x.Usuario.Equals(compra.IdUsuario)) ?? new Usuarios();
+            var UsuarioContext = Context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            compra.Usuario = aponusContext.Usuarios.First(x => x.Usuario.Equals(UsuarioContext)) ?? new Usuarios();
             compra.IdProveedorNavigation = aponusContext.Entidades.First(x => x.IdEntidad == compra.IdProveedor) ?? new Entidades();
 
             foreach (var item in compra.DetallesCompra)
@@ -121,9 +125,10 @@ namespace Aponus_Web_API.Acceso_a_Datos
             try
             {
                 IQueryable<Compras> compras = aponusContext.Compra
-                    .Include(x => x.DetallesCompra)
-                    .Include(x => x.Pagos)
-                    .Include(x => x.IdProveedorNavigation)
+                    .Include(x=>x.DetallesCompra)
+                    .Include(x=>x.Pagos).ThenInclude(x=>x.MedioPago)
+                    .Include(x=>x.IdProveedorNavigation)
+                    .Include(c=>c.CuotasCompra).ThenInclude(x=>x.Pagos)
                     .AsQueryable();
 
                 if (Filtros != null)
