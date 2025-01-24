@@ -140,7 +140,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     if (Filtros.IdEntidad != null)
                         compras = compras.Where(x => x.IdProveedor == Filtros.IdEntidad);
                     if (Filtros.IdCompraVenta != null)
-                        compras = compras.Where(x => x.IdCompra >= Filtros.IdCompraVenta);
+                        compras = compras.Where(x => x.IdCompra == Filtros.IdCompraVenta);
                 }
                 return (compras, null);
             }
