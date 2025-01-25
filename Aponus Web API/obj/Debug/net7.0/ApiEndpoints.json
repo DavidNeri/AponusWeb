@@ -1,5 +1,26 @@
 [
   {
+    "ContainingType": "Aponus_Web_API.Controllers.AuditController",
+    "Method": "ObtenerAuditorias",
+    "RelativePath": "Aponus/Audit/List/{Usuario}/{Accion}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Usuario",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "Accion",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Aponus_Web_API.Controllers.BINServicesController",
     "Method": "ObtenerInformacionTarjeta",
     "RelativePath": "Aponus/BINServices/GetCardInfo/{BIN}",

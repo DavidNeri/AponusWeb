@@ -89,7 +89,7 @@ public partial class AponusContext : DbContext
             var Tabla = cambio.Entity.GetType().Name;
             var IdRegistro = ObtenerClavePrimaria(cambio);
            
-            var usuario = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Usuario Desconocido";
+            var usuario = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Desconocido";
 
             Auditorias auditoria = new()
             {

@@ -5,6 +5,36 @@
     "version": "1.0"
   },
   "paths": {
+    "/Aponus/Audit/List/{Usuario}/{Accion}": {
+      "get": {
+        "tags": [
+          "Audit"
+        ],
+        "parameters": [
+          {
+            "name": "Usuario",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/Aponus/BINServices/GetCardInfo/{BIN}": {
       "get": {
         "tags": [

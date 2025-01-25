@@ -22,6 +22,7 @@ builder.Services.AddScoped<AD_Movimientos>();
 builder.Services.AddScoped<AD_Stocks>();
 builder.Services.AddScoped<AD_Usuarios>();
 builder.Services.AddScoped<AD_Ventas>();
+builder.Services.AddScoped<AD_Auditorias>();
 
 builder.Services.AddScoped<BS_Categorias>();
 builder.Services.AddScoped<BS_Compras>();
@@ -33,6 +34,8 @@ builder.Services.AddScoped<BS_Stocks>();
 builder.Services.AddScoped<BS_Suministros>();
 builder.Services.AddScoped<BS_Ventas>();
 builder.Services.AddScoped<BS_Dashboard>();
+builder.Services.AddScoped<SS_Aditorias>();
+
 
 builder.Services.AddScoped<CategoriesController>();
 builder.Services.AddScoped<ComponentsController>();
@@ -45,6 +48,8 @@ builder.Services.AddScoped<StocksController>();
 builder.Services.AddScoped<SuppliesController>();
 builder.Services.AddScoped<UsersController>();
 builder.Services.AddScoped<DashBoardController>();
+builder.Services.AddScoped<AuditController>();
+
 
 
 builder.Services.AddScoped<UTL_Suministros>();

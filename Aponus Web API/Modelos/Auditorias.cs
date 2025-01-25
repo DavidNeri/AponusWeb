@@ -8,7 +8,7 @@
         public string Accion { get; set; } = "";
         public string Usuario { get; set; } = "";
         public DateTime Fecha { get; set; }
-        public string ValoresPrevios { get; set; } = "";
-        public string ValoresNuevos { get; set; } = "";
+        public string? ValoresPrevios { get; set; }
+        public string? ValoresNuevos { get; set; } 
     }
 }
