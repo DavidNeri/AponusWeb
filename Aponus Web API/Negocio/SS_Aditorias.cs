@@ -34,39 +34,74 @@ namespace Aponus_Web_API.Negocio
                 ListadoAuditorias=ListadoAuditorias!.Where(x => x.Accion.Equals(Accion));
 
             var Resultado = ListadoAuditorias!
-    .Select(a => new DTOAuditorias()
-    {
-        Accion = a.Accion,
-        Fecha = a.Fecha,
-        IdAuditoria = a.IdAuditoria,
-        IdRegistro = a.IdRegistro,
-        Tabla = a.Tabla,
-        Usuario = a.Usuario,
-        ValoresNuevos = !string.IsNullOrEmpty(a.ValoresNuevos)
-        ? JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(a.ValoresNuevos)
-            .ToDictionary(
-            kvp => kvp.Key,
-            kvp => kvp.Value.ValueKind == JsonValueKind.Number ? (object)kvp.Value.GetDecimal() :
-                            kvp.Value.ValueKind == JsonValueKind.String ? (object)kvp.Value.GetString() :
-                            kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? (object)kvp.Value.GetBoolean() :
-                            (object)null
-                )
-            : null,
+                .Select(a => new DTOAuditorias()
+                {
+                    Accion = a.Accion,
+                    Fecha = a.Fecha,
+                    IdAuditoria = a.IdAuditoria,
+                    IdRegistro = a.IdRegistro,
+                    Tabla = a.Tabla,
+                    Usuario = a.Usuario,
+                    ValoresNuevos = !string.IsNullOrEmpty(a.ValoresNuevos)
+                    ? JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(a.ValoresNuevos)?
+                        .ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value.ValueKind == JsonValueKind.Number ? (object)kvp.Value.GetDecimal() :
+                                        kvp.Value.ValueKind == JsonValueKind.String ? (object?)kvp.Value.GetString() :
+                                        kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? (object)kvp.Value.GetBoolean() :
+                                        (object?)null)
+                        : null,
 
-        ValoresPrevios = !string.IsNullOrEmpty(a.ValoresPrevios)
-            ? JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(a.ValoresPrevios)
-                .ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value.ValueKind == JsonValueKind.Number ? (object)kvp.Value.GetDecimal() :
-                            kvp.Value.ValueKind == JsonValueKind.String ? (object)kvp.Value.GetString() :
-                            kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? (object)kvp.Value.GetBoolean() :
-                            (object)null
-                )
-            : null
-    })
-    .ToList();
+                    ValoresPrevios = !string.IsNullOrEmpty(a.ValoresPrevios)
+                        ? JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(a.ValoresPrevios)?
+                            .ToDictionary(
+                                kvp => kvp.Key,
+                                kvp => kvp.Value.ValueKind == JsonValueKind.Number ? (object)kvp.Value.GetDecimal() :
+                                        kvp.Value.ValueKind == JsonValueKind.String ? (object?)kvp.Value.GetString() :
+                                        kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? (object)kvp.Value.GetBoolean() :
+                                        (object?)null)
+                            : null
+                })
+                .ToList();
 
+            foreach (var item in Resultado)
+            {
+                if (item.ValoresPrevios != null)
+                {
+                    foreach (var Elemento in item.ValoresPrevios)
+                    {
+                        if (item.PropsValoresPrevios == null)
+                        {
+                            item.PropsValoresPrevios = new string[] { Elemento.Key};
+                        }
+                        else
+                        {
+                            var lista = item.PropsValoresPrevios.ToList();
+                            lista.Add(Elemento.Key);
+                            item.PropsValoresPrevios = lista.ToArray();
+                        }
+                    }
+                }
 
+                if (item.ValoresNuevos != null)
+                {
+                    foreach (var Elemento in item.ValoresNuevos)
+                    {
+                        if (item.PropsValoresNuevos == null)
+                        {
+                            item.PropsValoresNuevos = new string[] { Elemento.Key };
+                        }
+                        else
+                        {
+                            var lista = item.PropsValoresNuevos.ToList();
+                            lista.Add(Elemento.Key);
+                            item.PropsValoresNuevos = lista.ToArray();
+                        }
+                    }
+                }
+
+            }    
+            
             return new JsonResult(Resultado);
         }
     }
