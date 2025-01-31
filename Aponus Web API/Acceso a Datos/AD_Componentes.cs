@@ -87,7 +87,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             var ComponentesProducto = AponusDbContext.Componentes_Productos
                     .Where(x => x.IdProducto == Producto.IdProducto)
                     .Join(AponusDbContext.ComponentesDetalles,
-                        _Componentes => _Componentes.IdComponente,
+                        _ComponentesProductos => _ComponentesProductos.IdComponente,
                         _DetalleComponentes => _DetalleComponentes.IdInsumo,
                         (_Componentes, _DetalleComponentes) => new
                         {
@@ -119,6 +119,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                             _Tolerancia = _JoinResult._DetComponentes._DetalleComponentes.Tolerancia ?? "",
                             _DiametroNominal = _JoinResult._DetComponentes._DetalleComponentes.DiametroNominal ?? null,
                             _Largo = _JoinResult._DetComponentes._Componentes.Longitud ?? null,
+                            _Peso = _JoinResult._DetComponentes._Componentes.Peso ?? null,
+
                             StockComponente = new DTOStockFormateado
                             {
                                 IdInsumo = _StockComponentes.IdInsumo,
@@ -171,7 +173,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         cp._Espesor,
                         cp._Largo,
                         cp._Diametro,
-                        cp._Tolerancia
+                        cp._Tolerancia,
+                        cp._Peso
                     })
                     .Select(group => new
                     {
@@ -186,6 +189,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         Diametro = group.Key._Diametro,
                         Espesor = group.Key._Espesor,
                         Tolerancia = group.Key._Tolerancia,
+                        Peso = group.Key._Peso,
                         StockComponente = group.Select(cp => cp.StockComponente).ToList(),
 
                     })
@@ -197,8 +201,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 .Select(x => new DTODetallesComponenteProducto()
                 {
                     idComponente = x.IdInsumo,
-                    idAlmacenamiento = x.IdAlmacenamiento,
-                    idFraccionamiento = x.IdFraccionamiento,
+                    idAlmacenamiento = AponusDbContext.ComponentesDescripcions.Where(y=>y.IdDescripcion==x.IdDescripcion).Select(x=>x.IdAlmacenamiento).First(),
+                    idFraccionamiento = AponusDbContext.ComponentesDescripcions.Where(y => y.IdDescripcion == x.IdDescripcion).Select(x => x.IdFraccionamiento).First(),
                     Altura = x.Altura,
                     Diametro = x.Diametro,
                     Espesor = x.Espesor,
@@ -259,6 +263,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     Diametro = cp.Diametro,
                     Espesor = cp.Espesor,
                     Tolerancia = cp.Tolerancia ?? "",
+                    
+                    
                     StockFormateado = cp.StockComponente
                 };
 
@@ -274,7 +280,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 producto.Largo = null;
                 producto.Diametro = null;
                 producto.Espesor = null;
-                producto.Tolerancia = "";
+                producto.Tolerancia = "";                
 
                 string? SiglaAlmacenamiento = PropiedadesComponentes
                     .Where(x => x.idComponente != null && x.idComponente.Contains(producto.IdComponente))
@@ -310,12 +316,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                     //Si el componente no tiene diametro, ni espesor, ni altura, ni DN, es decir si es una junta
                                     if (Componente?.Diametro == null && Componente?.Perfil != null && Componente.Espesor == null && Componente.Altura == null && Componente.DiametroNominal == null && !Regex.IsMatch(CantidadRequerida ?? "", "[a-zA-Z]"))
                                     {
-                                        var TotalInsumosStock = Decimal.Parse(item.Total ?? "", CultureInfo.InvariantCulture);
+                                        var TotalInsumosStock = Decimal.Parse(item.Total ?? "", CultureInfo.InvariantCulture); //Es la cantidad total sin contemplar la longitd, Ej: en rollos
                                         var LongitudInsumo = Componente.Longitud;
                                         var _CantidadRequerida = Decimal.Parse(CantidadRequerida ?? "", CultureInfo.InvariantCulture);
-                                        var LongitudNecesaria = _CantidadRequerida * Producto.Cantidad;
+                                        var LongitudNecesaria = _CantidadRequerida;
                                         var InsumosNecesarios = LongitudNecesaria / LongitudInsumo ?? 1;
-                                        var UnidadAlternativa = (Fraction)InsumosNecesarios;
+                                        var UnidadAlternativa = (Fraction)Math.Round(InsumosNecesarios,1);
 
                                         item.GetType()
                                             .GetProperty(propiedad.Name)?
@@ -334,7 +340,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                                         if (PesoComponente == null) PesoComponente = 0;
 
-                                        var UnidadAlternativa = ((Decimal.Parse(CantidadRequerida ?? "", CultureInfo.InvariantCulture) * PesoComponente) * Producto.Cantidad);
+                                        var UnidadAlternativa = (Decimal.Parse(CantidadRequerida ?? "", CultureInfo.InvariantCulture) * PesoComponente);
 
                                         UnidadAlternativa = UnidadAlternativa != null ? Math.Round((decimal)UnidadAlternativa, 1) : 0;
 
@@ -350,7 +356,6 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                             .SetValue(item, item.GetType().GetProperty(propiedad.Name)?.GetValue(item)
                                             + " " + SiglaFraccionamiento);
                                         }
-
                                     }
                                 }
                                 else
@@ -386,11 +391,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             };
             return new JsonResult(result);
         }
-
-        private string CalcularFaltantes(decimal Pintura, decimal Moldeado, decimal Recibido, decimal Proceso, decimal Granallado, decimal Pendiente, decimal requerido )
-        {
-            return "asd";
-        }
+   
 
         internal JsonResult? ListarProp(string[] propiedadesNulas, List<(string Nombre, string Valor)> propiedadesNoNulas)
         {

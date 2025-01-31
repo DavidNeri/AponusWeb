@@ -46,9 +46,9 @@ namespace Aponus_Web_API.Negocio
                     ? JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(a.ValoresNuevos)?
                         .ToDictionary(
                         kvp => kvp.Key,
-                        kvp => kvp.Value.ValueKind == JsonValueKind.Number ? (object)kvp.Value.GetDecimal() :
-                                        kvp.Value.ValueKind == JsonValueKind.String ? (object?)kvp.Value.GetString() :
-                                        kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? (object)kvp.Value.GetBoolean() :
+                        kvp => kvp.Value.ValueKind == JsonValueKind.Number ?$"{kvp.Key}; {(object)kvp.Value.GetDecimal()}" :
+                                        kvp.Value.ValueKind == JsonValueKind.String ? $"{kvp.Key}; {(object?)kvp.Value.GetString()}" :
+                                        kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? $"{kvp.Key}; {(object)kvp.Value.GetBoolean()}" :
                                         (object?)null)
                         : null,
 
@@ -56,51 +56,14 @@ namespace Aponus_Web_API.Negocio
                         ? JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(a.ValoresPrevios)?
                             .ToDictionary(
                                 kvp => kvp.Key,
-                                kvp => kvp.Value.ValueKind == JsonValueKind.Number ? (object)kvp.Value.GetDecimal() :
-                                        kvp.Value.ValueKind == JsonValueKind.String ? (object?)kvp.Value.GetString() :
-                                        kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? (object)kvp.Value.GetBoolean() :
+                                kvp => kvp.Value.ValueKind == JsonValueKind.Number ? $"{kvp.Key}; {(object)kvp.Value.GetDecimal()}" :
+                                        kvp.Value.ValueKind == JsonValueKind.String ? $"{kvp.Key}; {(object?)kvp.Value.GetString()}" :
+                                        kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? $"{kvp.Key}; {(object)kvp.Value.GetBoolean()}" :
                                         (object?)null)
                             : null
                 })
                 .ToList();
-
-            foreach (var item in Resultado)
-            {
-                if (item.ValoresPrevios != null)
-                {
-                    foreach (var Elemento in item.ValoresPrevios)
-                    {
-                        if (item.PropsValoresPrevios == null)
-                        {
-                            item.PropsValoresPrevios = new string[] { Elemento.Key};
-                        }
-                        else
-                        {
-                            var lista = item.PropsValoresPrevios.ToList();
-                            lista.Add(Elemento.Key);
-                            item.PropsValoresPrevios = lista.ToArray();
-                        }
-                    }
-                }
-
-                if (item.ValoresNuevos != null)
-                {
-                    foreach (var Elemento in item.ValoresNuevos)
-                    {
-                        if (item.PropsValoresNuevos == null)
-                        {
-                            item.PropsValoresNuevos = new string[] { Elemento.Key };
-                        }
-                        else
-                        {
-                            var lista = item.PropsValoresNuevos.ToList();
-                            lista.Add(Elemento.Key);
-                            item.PropsValoresNuevos = lista.ToArray();
-                        }
-                    }
-                }
-
-            }    
+            
             
             return new JsonResult(Resultado);
         }

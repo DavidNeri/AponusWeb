@@ -97,7 +97,9 @@ namespace Aponus_Web_API.Acceso_a_Datos
             Add(new ProductosTipo
             {
                 IdTipo = NuevaCategoria.IdTipo ?? "",
-                DescripcionTipo = NuevaCategoria.DescripcionTipo
+                DescripcionTipo = NuevaCategoria.DescripcionTipo,
+                IdEstado = 1,
+                IdEstadoNavigation = AponusDBContext.EstadosTiposProducto.First(x => x.IdEstado == 1)
             });
 
             AponusDBContext.SaveChanges();

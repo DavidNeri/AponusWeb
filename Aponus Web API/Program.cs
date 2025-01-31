@@ -121,7 +121,7 @@ builder.Services
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = "https://aponusweb.onrender.com/",
-            ValidAudience = "https://aponus-front.vercel.app/", //tu-dominio.com
+            ValidAudience = "https://aponus-front-sa.vercel.app/",
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key))
         };
     });
