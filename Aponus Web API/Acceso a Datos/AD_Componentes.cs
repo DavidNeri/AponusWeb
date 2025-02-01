@@ -321,7 +321,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                         var _CantidadRequerida = Decimal.Parse(CantidadRequerida ?? "", CultureInfo.InvariantCulture);
                                         var LongitudNecesaria = _CantidadRequerida;
                                         var InsumosNecesarios = LongitudNecesaria / LongitudInsumo ?? 1;
-                                        var UnidadAlternativa = (Fraction)Math.Round(InsumosNecesarios,1);
+                                        //var UnidadAlternativa = (Fraction)Math.Round(InsumosNecesarios,1);
 
                                         item.GetType()
                                             .GetProperty(propiedad.Name)?
@@ -330,7 +330,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                             .GetProperty(propiedad.Name)?
                                             .GetValue(item) +
                                             SiglaFraccionamiento + " - " +
-                                            UnidadAlternativa + " " +
+                                            Math.Round(InsumosNecesarios,1) + " " +
                                             SiglaAlmacenamiento);
 
                                     }
