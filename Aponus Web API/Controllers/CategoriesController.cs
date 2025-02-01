@@ -65,8 +65,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Descriptions/New")]
-        [RequiredPermission("PRODUCTOS_DESCRIPCION", "UPDATE")]
-        [RequiredPermission("PRODUCTOS_TIPOS_DESCRIPCION", "UPDATE")]
+        //[RequiredPermission("PRODUCTOS_DESCRIPCION", "UPDATE")]
+        //[RequiredPermission("PRODUCTOS_TIPOS_DESCRIPCION", "UPDATE")]
         public async Task<IActionResult> NuevaDescripcionProducto(DTOCategorias NuevaCategoria)
         {
             try

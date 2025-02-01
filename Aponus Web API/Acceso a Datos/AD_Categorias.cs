@@ -70,6 +70,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     {
                         IdDescripcion = IdDescripcion,
                         IdTipo = IdTipo,
+                        IdDescripcionNavigation = AponusDBContext.ProductosDescripcions.First(x => x.IdDescripcion == IdDescripcion),
+                        IdTipoNavigation = AponusDBContext.ProductosTipos.First(x=>x.IdTipo.Equals(IdTipo))
                     });
 
                     AponusDBContext.SaveChanges();
