@@ -25,19 +25,19 @@ namespace Aponus_Web_API.Utilidades
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append($"{descripcion}");
-                if (diametro != null)
+                if (diametro != "-" && diametro != null || !string.IsNullOrEmpty(diametro?.Trim()))
                     sb.Append($", Diametro:{diametro}mm");
-                if (longitud != null)
+                if (longitud != "-" && longitud != null || !string.IsNullOrEmpty(longitud?.Trim()))
                     sb.Append($", Longitud:{longitud}mm");
-                if (altura != null)
+                if (altura != "-" && altura != null || !string.IsNullOrEmpty(altura?.Trim()))
                     sb.Append($", Altura:{altura}mm");
-                if (espesor != null)
+                if (espesor != "-" && espesor != null || !string.IsNullOrEmpty(espesor?.Trim()))
                     sb.Append($", Espesor:{espesor}mm");
-                if (perfil != null)
-                    sb.Append($", Rol:{perfil}");
-                if (tolerancia != "")
+                if (perfil != "-" && perfil != null || !string.IsNullOrEmpty(perfil?.Trim()))
+                    sb.Append($", Perfil:{perfil}");
+                if (tolerancia != "-" && !string.IsNullOrEmpty(tolerancia?.Trim()))
                     sb.Append($", Tolerancia:{tolerancia}");
-                if (DiametroNominal != "")
+                if (DiametroNominal != "-" && !string.IsNullOrEmpty(DiametroNominal?.Trim()))
                     sb.Append($", DN:{DiametroNominal}mm");
 
                 SuministrosFormateados.Add(new()
@@ -46,16 +46,10 @@ namespace Aponus_Web_API.Utilidades
                     NombreFormateado = sb.ToString(),
                     Unidad = Unidad
                 });
-
-
-
             }
 
             return SuministrosFormateados;
         }
-
-
-
 
     }
 }

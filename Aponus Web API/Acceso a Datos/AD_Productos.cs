@@ -26,7 +26,14 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 DiametroNominal = producto.DiametroNominal,
                 Cantidad = Convert.ToInt32(producto.Cantidad),
                 PrecioLista = producto.PrecioLista,
-                Tolerancia = producto.Tolerancia
+                Tolerancia = producto.Tolerancia,
+                IdEstado = 1,
+                IdEstadoNavigation = AponusDBContext.EstadosProducto.First(x => x.IdEstado == 1),
+                IdDescripcionNavigation = AponusDBContext.ProductosDescripcions.First(x=>x.IdDescripcion == producto.IdDescripcion),
+                IdTipoNavigation = AponusDBContext.ProductosTipos.First(x => x.IdTipo== producto.IdTipo),                
+                PrecioFinal = producto.PrecioFinal,
+                PorcentajeGanancia = producto.PorcentajeGanancia  ?? producto.PrecioFinal ?? 0 - producto.PrecioLista ?? 0                
+
             });
 
             // ProcesarDatos los cambios en la base de datos
