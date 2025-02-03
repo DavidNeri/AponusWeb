@@ -365,6 +365,28 @@
         }
       }
     },
+    "/Aponus/Components/Delete/{IdInsumo}": {
+      "post": {
+        "tags": [
+          "Components"
+        ],
+        "parameters": [
+          {
+            "name": "IdInsumo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/Aponus/DashBoard/Dashboard": {
       "get": {
         "tags": [

@@ -175,6 +175,22 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.ComponentsController",
+    "Method": "EliminarComponente",
+    "RelativePath": "Aponus/Components/Delete/{IdInsumo}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdInsumo",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ComponentsController",
     "Method": "ObtenerAlmacenamientoComponentes",
     "RelativePath": "Aponus/Components/FetchUnities/{IdNombreComponente}",
     "HttpMethod": "GET",

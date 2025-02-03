@@ -70,15 +70,16 @@ namespace Aponus_Web_API.Negocio
                     {
                         IdSuministro = item.idComponente ?? string.Empty,
                         Descripcion = insumo.Descripcion,
-                        Altura = !string.IsNullOrEmpty(item.Altura) && !item.Altura.Contains('-') ? Convert.ToDecimal(item.Altura.Replace("mm", "")) : null,
-                        Diametro = !string.IsNullOrEmpty(item.Altura) && !item.Altura.Contains('-') ? Convert.ToDecimal(item.Diametro?.Replace("mm", "")) : null,
-                        DiametroNominal = !string.IsNullOrEmpty(item.DiametroNominal) && !item.DiametroNominal.Contains('-') ? Convert.ToInt32(item.DiametroNominal.Replace("mm", "")) : null,
-                        Espesor = !string.IsNullOrEmpty(item.Espesor) && !item.Espesor.Contains('-') ? Convert.ToDecimal(item.Espesor.Replace("mm", "")) : null,
-                        Longitud = !string.IsNullOrEmpty(item.Longitud) && !item.Longitud.Contains('-') ? Convert.ToDecimal(item.Longitud.Replace("mm", "")) : null,
-                        Perfil = !string.IsNullOrEmpty(item.Perfil) && !item.Perfil.Contains('-') ? Convert.ToInt32(item.Perfil) : null,
+                        Altura = !string.IsNullOrEmpty(item.Altura) && item.Altura!="-" ? Convert.ToDecimal(item.Altura.Replace("mm", "")) : null,
+                        Diametro = !string.IsNullOrEmpty(item.Diametro) && item.Diametro!="-" ? Convert.ToDecimal(item.Diametro?.Replace("mm", "")) : null,
+                        DiametroNominal = !string.IsNullOrEmpty(item.DiametroNominal) && item.DiametroNominal != "-" ? Convert.ToInt32(item.DiametroNominal.Replace("mm", "")) : null,
+                        Espesor = !string.IsNullOrEmpty(item.Espesor)  && item.Espesor!= "-" ? Convert.ToDecimal(item.Espesor.Replace("mm", "")) : null,
+                        Longitud = !string.IsNullOrEmpty(item.Longitud) && item.Longitud != "-" ? Convert.ToDecimal(item.Longitud.Replace("mm", "")) : null,
+                        Perfil = !string.IsNullOrEmpty(item.Perfil) && item.Perfil != "-" ? Convert.ToInt32(item.Perfil) : null,
                         Tolerancia = (item.Tolerancia?.Equals('-') ?? false) ? "" : item.Tolerancia,
                         UnidadAlmacenamiento = !string.IsNullOrEmpty(item.idAlmacenamiento) ? item.idAlmacenamiento : null,
-                        UnidadFraccionamiento = !string.IsNullOrEmpty(item.idFraccionamiento) ? item.idFraccionamiento : null,
+                        UnidadFraccionamiento = !string.IsNullOrEmpty(item.idFraccionamiento) ? item.idFraccionamiento : null
+                        
                     });
                 }
             };
