@@ -309,5 +309,25 @@ namespace Aponus_Web_API.Acceso_a_Datos
             return new JsonResult(Products);
                     
         }
+
+        internal async Task<Exception?> DeshabilitarProducto(Producto producto)
+        {
+            try
+            {
+                producto.IdEstado = 0;                
+                var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
+                producto.IdEstadoNavigation = AponusDBContext.EstadosProducto.First(x => x.IdEstado == 0);
+                AponusDBContext.Entry(producto).State = EntityState.Modified;
+                await AponusDBContext.SaveChangesAsync();
+                await transaccion.CommitAsync();
+
+                return null;
+                
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
     }
 }

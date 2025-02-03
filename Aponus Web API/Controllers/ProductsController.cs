@@ -135,5 +135,28 @@ namespace Aponus_Web_API.Controllers
                 };
             }
         }
+
+
+
+        [HttpPost]
+        [Route("Delete/{IdProducto}")]
+        [RequiredPermission("PRODUCTOS", "UPDATE")]
+        [RequiredPermission("PRODUCTOS_COMPONENTES", "DELETE")]
+        public async Task<IActionResult> EliminarProducto (string IdProducto)
+        {
+            try
+            {
+                return await BsProductos.ProcesarDatos(IdProducto);
+            }
+            catch (DbUpdateException ex)
+            {
+                return new ContentResult()
+                {
+                    Content = ex.InnerException?.Message ?? ex.Message,
+                    ContentType = "application/json",
+                    StatusCode = 400
+                };
+            }
+        }
     }
 }

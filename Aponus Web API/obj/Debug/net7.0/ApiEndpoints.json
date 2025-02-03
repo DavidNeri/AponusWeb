@@ -1291,6 +1291,22 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
+    "Method": "EliminarProducto",
+    "RelativePath": "Aponus/Products/Delete/{IdProducto}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdProducto",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
     "Method": "ListProducts",
     "RelativePath": "Aponus/Products/List/{TypeId}/{IdDescription}",
     "HttpMethod": "GET",

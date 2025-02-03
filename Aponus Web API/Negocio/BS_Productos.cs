@@ -268,5 +268,51 @@ namespace Aponus_Web_API.Negocio
                 .ToList());
 
         }
+
+        internal async Task<IActionResult> ProcesarDatos(string idProducto)
+        {
+            var Producto = AdProductos.BuscarProducto(idProducto);
+
+            if (Producto != null)
+            {
+                var error = await AdProductos.DeshabilitarProducto(Producto);
+
+                if(error != null)
+                    return new ContentResult()
+                    {
+                        Content = error.InnerException?.Message ?? error.Message,
+                        ContentType = "application/json",
+                        StatusCode = 400
+                    };
+
+                try
+                {
+                    AdProductos.EliminarComponentesProducto(idProducto);
+                }
+                catch (Exception ex )
+                {
+                    return new ContentResult()
+                    {
+                        Content = ex.InnerException?.Message ?? ex.Message,
+                        ContentType = "application/json",
+                        StatusCode = 400
+                    };
+                }
+
+                return new StatusCodeResult(200);
+            }
+            else
+            {
+                return new ContentResult()
+                {
+                    Content = "No se encontró el Producto",
+                    ContentType = "application/json",
+                    StatusCode = 400
+                };
+            }
+
+
+
+        }
     }
 }

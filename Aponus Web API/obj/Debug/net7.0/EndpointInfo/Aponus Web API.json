@@ -2118,6 +2118,28 @@
         }
       }
     },
+    "/Aponus/Products/Delete/{IdProducto}": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "IdProducto",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/Aponus/Purchase/Save": {
       "post": {
         "tags": [
