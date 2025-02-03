@@ -8,17 +8,17 @@ namespace Aponus_Web_API.Controllers
     [ApiController]
     public class ComponentsController : Controller
     {
-        private readonly BS_Componentes _BsComponents;
+        private readonly BS_Componentes _BsComponentes;
         public ComponentsController(BS_Componentes BsComponents)
         {
-            _BsComponents = BsComponents;
+            _BsComponentes = BsComponents;
         }
 
         [HttpGet]
         [Route("FetchUnities/{IdNombreComponente?}")]
         public async Task<IActionResult> ObtenerAlmacenamientoComponentes(int? IdNombreComponente)
         {
-            return await _BsComponents.MapeoDetalleNombreComponenteDTO(IdNombreComponente);
+            return await _BsComponentes.MapeoDetalleNombreComponenteDTO(IdNombreComponente);
         }
 
 
@@ -28,7 +28,7 @@ namespace Aponus_Web_API.Controllers
         {
             try
             {
-                return _BsComponents.ObtenerPropsComponentes();
+                return _BsComponentes.ObtenerPropsComponentes();
             }
             catch (DbUpdateException e)
             {
@@ -43,7 +43,15 @@ namespace Aponus_Web_API.Controllers
 
         public IActionResult ObtenerListarComponentes(int? IdDescripcion, string? idInsumo)
         {
-            return _BsComponents.MapeoComponentesDetalleDTO(IdDescripcion, idInsumo);
+            return _BsComponentes.MapeoComponentesDetalleDTO(IdDescripcion, idInsumo);
+        }
+
+
+        [HttpPost]
+        [Route("Delete/{IdInsumo}")]
+        public async Task<IActionResult> EliminarComponente(string IdInsumo)
+        {
+            return await _BsComponentes.ProcesarDatos(IdInsumo);
         }
     }
 }

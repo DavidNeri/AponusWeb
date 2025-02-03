@@ -4,6 +4,7 @@ using Fractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
@@ -589,9 +590,28 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 componentesDetalle.IdEstadoNavigation = AponusDbContext.EstadosComponentesDetalle.FirstOrDefault(x => x.IdEstado == componentesDetalle.IdEstado);
 
                 if (ExisteDetalleComponente == null)
+                {
+
                     AponusDbContext.ComponentesDetalles.Add(componentesDetalle);
+                }
                 else
+                {
+                    ExisteDetalleComponente.Altura = componentesDetalle.Altura;
+                    ExisteDetalleComponente.Longitud = componentesDetalle.Longitud;
+                    ExisteDetalleComponente.Diametro= componentesDetalle.Diametro;
+                    ExisteDetalleComponente.Tolerancia= componentesDetalle.Tolerancia;
+                    ExisteDetalleComponente.DiametroNominal= componentesDetalle.DiametroNominal;
+                    ExisteDetalleComponente.Espesor= componentesDetalle.Espesor;
+                    ExisteDetalleComponente.Perfil= componentesDetalle.Perfil;
+                    ExisteDetalleComponente.Peso= componentesDetalle.Peso;
+                    ExisteDetalleComponente.Perfil= componentesDetalle.Perfil;
+                    ExisteDetalleComponente.IdAlmacenamiento= componentesDetalle.IdAlmacenamiento;
+                    ExisteDetalleComponente.IdFraccionamiento= componentesDetalle.IdFraccionamiento;
+                    ExisteDetalleComponente.IdEstado = 0;
+                    ExisteDetalleComponente.IdEstadoNavigation = AponusDbContext.EstadosComponentesDetalle.First(x => x.IdEstado == 0);
+
                     AponusDbContext.Entry(ExisteDetalleComponente).CurrentValues.SetValues(componentesDetalle);
+                }
 
                 if (ExisteStockComponente == null)
                 {
@@ -603,7 +623,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         Pendiente = 0,
                         Pintura = 0,
                         Proceso = 0,
-                        Recibido = 0,
+                        Recibido = 0,                        
                     });
                 }
                 else
@@ -681,6 +701,37 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
             return new JsonResult(IdComponente);
 
+        }
+
+        internal async Task<Exception?> DeshabilitarComponente(string idInsumo)
+        {
+            try
+            {
+                var Componente = await AponusDbContext.ComponentesDetalles.FirstAsync(x => x.IdInsumo == idInsumo);
+                if (Componente != null)
+                {
+                    Componente.IdEstado = 0;
+                    Componente.IdEstadoNavigation = await AponusDbContext.EstadosComponentesDetalle.FirstAsync(X => X.IdEstado == 0);
+                    AponusDbContext.Entry(Componente).State = EntityState.Modified;                    
+
+                    var StockInsumo = AponusDbContext.stockInsumos.FirstAsync(x => x.IdInsumo == idInsumo);
+
+                    if (StockInsumo != null)
+                        AponusDbContext.Remove(StockInsumo);
+
+                    await AponusDbContext.SaveChangesAsync();
+                    return null;
+                }
+                else
+                {
+                    Exception ex = new ("No se encontro el Componente");
+                    return ex;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
     }
 }

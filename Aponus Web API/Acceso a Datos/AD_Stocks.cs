@@ -184,6 +184,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
 
             List<DTOTipoInsumos> tipoInsumosList = AponusDBContext.ComponentesDetalles
+                .Where(x=>x.IdEstado != 0)
                  .Join(AponusDBContext.ComponentesDescripcions,
                  Detalles => Detalles.IdDescripcion,
                  Descripciones => Descripciones.IdDescripcion,
@@ -219,13 +220,13 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                 }
                             } ?? new List<DTOComponenteFormateado>()
                         })
-
+                 
                  .GroupBy(Result => new
                  {
                      Result.IdDescripcion,
                      Result.Descripcion
                  })
-                 .Where(Filtros => (!IdDescripcion.HasValue || Filtros.Key.IdDescripcion == IdDescripcion.Value))
+                 .Where(Filtros => (!IdDescripcion.HasValue || Filtros.Key.IdDescripcion == IdDescripcion.Value)) 
                  .Select(group => new DTOTipoInsumos
                  {
                      IdDescripcion = group.Key.IdDescripcion,

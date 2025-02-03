@@ -2,6 +2,7 @@
 using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -55,9 +56,16 @@ namespace Aponus_Web_API.Negocio
 
         //}
         internal IActionResult ProcesarDatos(DTOProducto Producto)
-        {          
+        {
+            string IdProd = Producto.Componentes.Select(x=>x.IdProducto).First() ?? string.Empty;
 
-            if (Producto.IdProducto == null)
+            if (!string.IsNullOrEmpty(IdProd)) //Actualiar solo los componentes
+            {
+                ActualizarComponentes(Producto.Componentes);
+
+                return new JsonResult(IdProd);
+            } 
+            else if (Producto.IdProducto == null)
             {
                 if (Producto.IdTipo != null && Producto.IdDescripcion != null && Producto.DiametroNominal != null && Producto.Tolerancia != null)
                 {
@@ -96,22 +104,14 @@ namespace Aponus_Web_API.Negocio
                     };
                 }
             }
-            else
+
+            return new ContentResult()
             {
-                ActualizarProducto(Producto);
+                Content = "Faltan Datos",
+                ContentType = "application/json",
+                StatusCode = 400,
+            };
 
-                if (Producto.Componentes != null)
-                {
-                    foreach (var Componente in Producto.Componentes)
-                    {
-                        Componente.IdProducto = Producto.IdProducto;
-                    }
-
-                    ActualizarComponentes(Producto.Componentes);
-                }
-
-                return new JsonResult(Producto.IdProducto);
-            }
         }
 
         public string GenerarIdProd(DTOProducto Producto)

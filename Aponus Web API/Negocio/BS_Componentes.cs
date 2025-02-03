@@ -189,5 +189,20 @@ namespace Aponus_Web_API.Negocio
 
         }
 
+        internal async Task<IActionResult> ProcesarDatos(string idInsumo)
+        {
+            var Error = await _componentesProductos.DeshabilitarComponente(idInsumo);
+
+            if (Error != null)
+                return new ContentResult()
+                {
+                    Content = Error.InnerException?.Message,
+                    ContentType = "application/json",
+                    StatusCode=400
+                };
+
+            return new StatusCodeResult(200);
+
+        }
     }
 }
