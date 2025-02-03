@@ -57,15 +57,9 @@ namespace Aponus_Web_API.Negocio
         //}
         internal IActionResult ProcesarDatos(DTOProducto Producto)
         {
-            string IdProd = Producto.Componentes.Select(x=>x.IdProducto).First() ?? string.Empty;
+            
 
-            if (!string.IsNullOrEmpty(IdProd)) //Actualiar solo los componentes
-            {
-                ActualizarComponentes(Producto.Componentes);
-
-                return new JsonResult(IdProd);
-            } 
-            else if (Producto.IdProducto == null)
+            if (Producto.IdProducto == null)
             {
                 if (Producto.IdTipo != null && Producto.IdDescripcion != null && Producto.DiametroNominal != null && Producto.Tolerancia != null)
                 {
@@ -104,13 +98,17 @@ namespace Aponus_Web_API.Negocio
                     };
                 }
             }
-
-            return new ContentResult()
+            else
             {
-                Content = "Faltan Datos",
-                ContentType = "application/json",
-                StatusCode = 400,
-            };
+                foreach (var Componente in Producto.Componentes)
+                {
+                    Componente.IdProducto = Producto.IdProducto;
+                }
+
+                ActualizarComponentes(Producto.Componentes);
+                return new JsonResult(Producto.IdProducto);
+                
+            }            
 
         }
 
