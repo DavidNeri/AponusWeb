@@ -138,7 +138,16 @@ if (builder.Environment.IsProduction())
 var ConnectionString = builder.Environment.IsDevelopment() ? Environment.GetEnvironmentVariable("DATABASE_URL", EnvironmentVariableTarget.User) : Environment.GetEnvironmentVariable("DATABASE_URL");
 
 builder.Services.AddDbContext<AponusContext>(options => options.UseNpgsql(ConnectionString).EnableSensitiveDataLogging(false));
-
+var CorsPolicy = "permitirOrigenEspcifico";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: CorsPolicy, Policy =>
+    {
+        Policy.WithOrigins("https://aponus-front-sa.vercel.app/", "https://aponusweb.onrender.com/")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -149,7 +158,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("NuevaPolitca");
+
+
+app.UseCors(CorsPolicy);
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
