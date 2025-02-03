@@ -138,13 +138,14 @@ if (builder.Environment.IsProduction())
 var ConnectionString = builder.Environment.IsDevelopment() ? Environment.GetEnvironmentVariable("DATABASE_URL", EnvironmentVariableTarget.User) : Environment.GetEnvironmentVariable("DATABASE_URL");
 
 builder.Services.AddDbContext<AponusContext>(options => options.UseNpgsql(ConnectionString).EnableSensitiveDataLogging(false));
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        policy => policy.AllowAnyOrigin() // Permite cualquier frontend
-                        .AllowAnyMethod() // Permite cualquier método (GET, POST, etc.)
-                        .AllowAnyHeader()); // Permite cualquier encabezado
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowAll",
+//        policy => policy.AllowAnyOrigin() // Permite cualquier frontend
+//                        .AllowAnyMethod() // Permite cualquier método (GET, POST, etc.)
+//                        .AllowAnyHeader()
+//                        .AllowCredentials()); // Permite cualquier encabezado
+//});
 
 var app = builder.Build();
 
