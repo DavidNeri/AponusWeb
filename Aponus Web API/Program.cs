@@ -144,10 +144,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: CorsPolicy, Policy =>
     {
         Policy
-        .SetIsOriginAllowed(origin => new Uri(origin).Host == "aponus-front-sa.vercel.app")
-        .AllowAnyHeader()
+        .AllowAnyOrigin()
         .AllowAnyMethod()
-        .AllowCredentials();
+        .AllowAnyHeader();
     });
 });
 
