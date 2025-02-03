@@ -193,7 +193,7 @@ namespace Aponus_Web_API.Negocio
 
                 int? IdMovimiento = AdStocks.GuardarDatosMovimiento(AponusDbContext, new Stock_Movimientos
                 {
-                    CreadoUsuario = Movimiento.UsuarioCreacion ?? "ERROR",
+                    CreadoUsuario = Movimiento.UsuarioCreacion ?? "Desconocido",
                     ModificadoUsuario = Movimiento.UsuarioModificacion,
                     FechaHoraCreado = UTL_Fechas.ObtenerFechaHora(),
                     IdProveedor = Movimiento.IdProveedorDestino ?? 0,
