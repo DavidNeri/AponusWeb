@@ -3,6 +3,7 @@ using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
+using Z.EntityFramework.Plus;
 
 namespace Aponus_Web_API.Acceso_a_Datos
 {
@@ -88,10 +89,24 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 }).SingleOrDefault();
         }
-        internal void ActualizarDetallesProducto(Producto ProductUpdate)
+        internal void HabilitarProducto(Producto Producto)
         {
-            AponusDBContext.Entry(ProductUpdate).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            Producto.IdEstadoNavigation = AponusDBContext.EstadosProducto.FirstOrDefault(x => x.IdEstado == 1) ?? new EstadosProductos();
+            Producto.IdDescripcionNavigation = AponusDBContext.ProductosDescripcions.FirstOrDefault(x => x.IdDescripcion == Producto.IdDescripcion) ?? new ProductosDescripcion();
+            Producto.IdTipoNavigation = AponusDBContext.ProductosTipos.FirstOrDefault(x => x.IdTipo == Producto.IdTipo) ?? new ProductosTipo();
+
+            AponusDBContext.Productos.Update(Producto);
+
+            var Componentes = AponusDBContext.Componentes_Productos
+                .Where(x => x.IdProducto.Equals(Producto.IdProducto))
+                .ToList();
+
+            if (Componentes.Any())
+                AponusDBContext.Componentes_Productos.RemoveRange(Componentes);
+
             AponusDBContext.SaveChanges();
+
+
         }
         internal string? ObtenerValor(string prop, string IdProducto)
         {
@@ -130,12 +145,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             AponusDBContext.Componentes_Productos.UpdateRange(ProducComponentsUpdate);
             AponusDBContext.SaveChanges();
-        }
-        internal void ActualizarIdProd(string idAnterior, string nuevoId)
-        {
-            AponusDBContext.Productos.Where(x => x.IdProducto == idAnterior).UpdateFromQuery(x => new Producto { IdProducto = nuevoId });
-            AponusDBContext.SaveChanges();
-        }
+        }      
         public object Listar()
         {
 
@@ -192,7 +202,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     {
                         DescripcionProducto = x.DescripcionProducto,
                         Productos = x.Productos
-                            .Where(y => (typeId==null || y.IdTipo == typeId) && (IdDescription == null || y.IdDescripcion == IdDescription))
+                            .Where(y => (typeId==null || y.IdTipo == typeId) && (IdDescription == null || y.IdDescripcion == IdDescription) && y.IdEstado != 0)
                             .Select(producto => new
                             {
                                 nombre = $"{x.DescripcionProducto} DN:{producto.DiametroNominal} Tolerancia:{producto.Tolerancia}",
@@ -223,38 +233,38 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
 
         }
-        public JsonResult Listar(string? typeId, int? IdDescription, int? Dn)
-        {
-            try
-            {
+        //public JsonResult Listar(string? typeId, int? IdDescription, int? Dn)
+        //{
+        //    try
+        //    {
 
-                var Products = AponusDBContext.ProductosDescripcions
-              .Select(
-              x => new ProductosDescripcion
-              {
-                  DescripcionProducto = x.DescripcionProducto,
+        //        var Products = AponusDBContext.ProductosDescripcions
+        //      .Select(
+        //      x => new ProductosDescripcion
+        //      {
+        //          DescripcionProducto = x.DescripcionProducto,
 
-                  Productos = (ICollection<Producto>)x.Productos
-                               .Where(x => x.IdTipo == typeId && x.IdDescripcion == IdDescription && x.DiametroNominal == Dn)
-                               .ToList()
-                               .OrderBy(x => x.DiametroNominal)
+        //          Productos = (ICollection<Producto>)x.Productos
+        //                       .Where(x => x.IdTipo == typeId && x.IdDescripcion == IdDescription && x.DiametroNominal == Dn)
+        //                       .ToList()
+        //                       .OrderBy(x => x.DiametroNominal)
                                
 
-              }
-              ).AsEnumerable()
-              .Where(x => x.Productos.Count > 0);
+        //      }
+        //      ).AsEnumerable()
+        //      .Where(x => x.Productos.Count > 0);
 
-                return new JsonResult(Products.ToList());
+        //        return new JsonResult(Products.ToList());
 
 
-            }
-            catch (DbException e)
-            {
+        //    }
+        //    catch (DbException e)
+        //    {
 
-                return new JsonResult(e.Message);
-            }
+        //        return new JsonResult(e.Message);
+        //    }
 
-        }
+        //}
         public async Task<JsonResult> ListarDN(string typeId)
         {
             var DN = await AponusDBContext.Productos

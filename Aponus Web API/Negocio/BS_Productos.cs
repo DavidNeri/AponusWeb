@@ -48,14 +48,14 @@ namespace Aponus_Web_API.Negocio
 
 
         }
-        internal JsonResult ListarProductos(string? typeId, int? IdDescription, int? Dn)
-        {
+        //internal JsonResult ListarProductos(string? typeId, int? IdDescription, int? Dn)
+        //{
 
-            return AdProductos.Listar(typeId, IdDescription, Dn);
+        //    return AdProductos.Listar(typeId, IdDescription, Dn);
 
-        }
+        //}
         internal IActionResult ProcesarDatos(DTOProducto Producto)
-        {
+        {          
 
             if (Producto.IdProducto == null)
             {
@@ -64,7 +64,6 @@ namespace Aponus_Web_API.Negocio
 
                     Producto.IdProducto = GenerarIdProd(Producto); //Producto NuevoAcceso
                     Producto? _BuscarProducto = AdProductos.BuscarProducto(Producto.IdProducto);
-
 
                     if (_BuscarProducto == null) //Si no encontro el Producto despues de generar el ID, guarda el nuevo
                     {
@@ -99,7 +98,19 @@ namespace Aponus_Web_API.Negocio
             }
             else
             {
-                return ActualizarProducto(Producto);
+                ActualizarProducto(Producto);
+
+                if (Producto.Componentes != null)
+                {
+                    foreach (var Componente in Producto.Componentes)
+                    {
+                        Componente.IdProducto = Producto.IdProducto;
+                    }
+
+                    ActualizarComponentes(Producto.Componentes);
+                }
+
+                return new JsonResult(Producto.IdProducto);
             }
         }
 
@@ -122,108 +133,27 @@ namespace Aponus_Web_API.Negocio
             return IdProducto;
         }
 
-        internal IActionResult ActualizarProducto(DTOProducto ActualizarProducto)
+        internal IActionResult ActualizarProducto(DTOProducto producto)
         {
-            bool UpdateIdProd = false;
-
             try
-            {
-                Producto? ProductoOriginal = AdProductos.BuscarProducto(ActualizarProducto.IdProducto ?? "");
-                PropertyInfo[]? PropsActualizarProducto = ActualizarProducto.GetType().GetProperties().Where(prop => prop.GetValue(ActualizarProducto) != null).ToArray();
-
-                if (ProductoOriginal != null)
+            {  
+                Producto _producto = new()
                 {
-                    ProductoOriginal.IdEstado = 1;
+                    IdProducto = producto.IdProducto ?? "",
+                    IdDescripcion = producto.IdDescripcion ?? 0,
+                    IdTipo = producto.IdTipo ?? "",
+                    DiametroNominal = producto.DiametroNominal,
+                    Cantidad = 0,
+                    PrecioLista = producto.PrecioLista ?? 0,
+                    Tolerancia = producto.Tolerancia,
+                    IdEstado = 1,                    
+                    PrecioFinal = producto.PrecioFinal,
+                    PorcentajeGanancia = producto.PorcentajeGanancia ?? producto.PrecioFinal ?? 0 - producto.PrecioLista ?? 0
+                };
 
-                    foreach (PropertyInfo prop in PropsActualizarProducto)
-                    {
-                        //Modificar atributos del p existente
-                        PropertyInfo? _valorOriginal = ProductoOriginal.GetType().GetProperty(prop.Name);
+                AdProductos.HabilitarProducto(_producto);
 
-                        if (_valorOriginal != null)
-                        {
-                            var valorOriginal = _valorOriginal.GetValue(ProductoOriginal);
-                            var valorNuevo = prop.GetValue(ActualizarProducto);
-
-                            if (valorOriginal != null && !valorOriginal.Equals(valorNuevo) && prop.Name != "idProducto")
-                            {
-                                _valorOriginal.SetValue(ProductoOriginal, valorNuevo);
-                                if (prop.Name.Contains("IdDescripcion") || prop.Name.Contains("Tolerancia") || prop.Name.Contains("IdTipo"))
-                                {
-                                    if (valorNuevo == null)
-                                    {
-                                        //Si alguno de los campos necesarios para generar el NuevoAcceso ID es Nulo
-                                        return new ContentResult()
-                                        {
-                                            Content = "Faltan Datos, No se realizaron modificaciones",
-                                            ContentType = "application/json",
-                                            StatusCode = 400,
-                                        };
-                                    }
-                                    else
-                                    {
-                                        UpdateIdProd = true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    //Asignar nuevo Nombre  al objeto 'ProductoOriginal'
-                    Producto ProductoModificado = ProductoOriginal;
-
-
-                    //En caso de corresponder actualizar el IDProducto
-                    if (UpdateIdProd == true)
-                    {
-                        string IdAnterior = ActualizarProducto.IdProducto ?? "";
-
-                        string NuevoId = GenerarIdProd(new DTOProducto()
-                        {
-                            IdProducto = null,
-                            DiametroNominal = ProductoModificado.DiametroNominal,
-                            IdDescripcion = ProductoModificado.IdDescripcion,
-                            IdTipo = ProductoModificado.IdTipo,
-                            Tolerancia = ProductoModificado.Tolerancia
-                        });
-
-                        if (IdAnterior != NuevoId)
-                        {
-                            if (AdProductos.BuscarProducto(NuevoId) != null)
-                            {
-                                return new ContentResult()
-                                {
-                                    Content = "Producto existente, no se aplicaron los cambios",
-                                    ContentType = "application/json",
-                                    StatusCode = 400,
-
-                                };
-                            }
-
-                            AdProductos.ActualizarDetallesProducto(ProductoModificado);
-                            AdProductos.ActualizarIdProd(IdAnterior, NuevoId);
-
-                            return new JsonResult(NuevoId);
-                        }
-
-                    }
-                    else
-                    {
-                        if (ProductoModificado != null) AdProductos.ActualizarDetallesProducto(ProductoModificado);
-                    }
-
-                    return new JsonResult(ProductoModificado?.IdProducto ?? null);
-                }
-                else
-                {
-                    return new ContentResult()
-                    {
-                        Content = "No se encontró el Producto a Modificar",
-                        ContentType = "application/json",
-                        StatusCode = 404,
-
-                    };
-                }
+                return new JsonResult(producto.IdProducto);
 
             }
             catch (Exception)
