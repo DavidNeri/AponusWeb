@@ -143,9 +143,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: CorsPolicy, Policy =>
     {
-        Policy.WithOrigins("https://aponus-front-sa.vercel.app", "https://aponusweb.onrender.com")
+        Policy
+        .SetIsOriginAllowed(origin => new Uri(origin).Host == "aponus-front-sa.vercel.app")
         .AllowAnyHeader()
-        .AllowAnyMethod();
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
