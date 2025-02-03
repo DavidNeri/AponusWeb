@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using Z.EntityFramework.Plus;
+using static Aponus_Web_API.Acceso_a_Datos.AD_Stocks;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -181,14 +182,24 @@ namespace Aponus_Web_API.Negocio
             {
                 foreach (DTOSuministrosMovimientosStock suministro in Movimiento.Suministros ?? Enumerable.Empty<DTOSuministrosMovimientosStock>())
                 {
-                    if (!AdStocks.ActualizarStockInsumo(AponusDbContext, new DTOStockUpdate()
+                    DTOStockUpdate Insumo = new DTOStockUpdate()
                     {
                         Id = suministro.IdSuministro,
                         Origen = Movimiento.Origen,
                         Destino = Movimiento.Destino,
                         Cantidad = Convert.ToDecimal(suministro.Cantidad)
-                    }))
-                        Rollback = true;
+                    };
+
+                    if (!AdStocks.ActualizarStockInsumo(AponusDbContext,Insumo))
+                    {
+                        transaccion.Rollback();
+                        return new ContentResult()
+                        {
+                            Content=$"La cantidad disponible en {Movimiento.Origen} es inferior a {Insumo.Cantidad} para uno o mas Insumos",
+                            ContentType="application/Json",
+                            StatusCode = 400                            
+                        };
+                    }
                 }
 
                 int? IdMovimiento = AdStocks.GuardarDatosMovimiento(AponusDbContext, new Stock_Movimientos
@@ -232,23 +243,31 @@ namespace Aponus_Web_API.Negocio
 
                 if (Movimiento.Archivos != null && Movimiento.Archivos.Count > 0)
                 {
-                    List<(string Hash, string Path)> DatosArchivosMovimientoUpload = new UTL_Cloudinary().SubirArchivosCloudinary(Movimiento.Archivos,
-                    string.IsNullOrEmpty(NombreClave) ? NombreCompletoProveedor : NombreClave);
-
-                    if (DatosArchivosMovimientoUpload.Count == 0) Rollback = true;
-
-                    List<ArchivosMovimientosStock> DatosArchivosMovimiento = new List<ArchivosMovimientosStock>();
-
+                    List<(string Hash, string Path)> DatosArchivosMovimientoUpload = new UTL_Cloudinary()
+                        .SubirArchivosCloudinary(Movimiento.Archivos,
+                        string.IsNullOrEmpty(NombreClave) ? NombreCompletoProveedor : NombreClave);
 
                     Movimiento.IdMovimiento = IdMovimiento;
-                    DatosArchivosMovimientoUpload.ForEach(x=> DatosArchivosMovimiento.Add(new ArchivosMovimientosStock()
+                    List<ArchivosMovimientosStock> DatosArchivosMovimiento = new List<ArchivosMovimientosStock>();
+                    DatosArchivosMovimientoUpload.ForEach(x => DatosArchivosMovimiento.Add(new ArchivosMovimientosStock()
                     {
                         IdMovimiento = IdMovimiento ?? 0,
                         HashArchivo = x.Hash,
                         PathArchivo = x.Path
                     }));
-                    if (!AdStocks.GuardarDatosArchivosMovimiento(AponusDbContext, DatosArchivosMovimiento)) Rollback = true;
 
+                    bool RollBackGuardarUrlArchivos = AdStocks.GuardarDatosArchivosMovimiento(AponusDbContext, DatosArchivosMovimiento);
+
+                    if (DatosArchivosMovimientoUpload == null || DatosArchivosMovimientoUpload.Count == 0 || RollBackGuardarUrlArchivos)
+                    {
+                        transaccion.Rollback();
+                        return new ContentResult()
+                        {
+                            Content = $"Error al guardar los archivos, no se realizaron modificaciones",
+                            ContentType = "application/Json",
+                            StatusCode = 400
+                        };
+                    }
                 }
 
                 if (Rollback)
