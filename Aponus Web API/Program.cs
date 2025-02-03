@@ -138,17 +138,12 @@ if (builder.Environment.IsProduction())
 var ConnectionString = builder.Environment.IsDevelopment() ? Environment.GetEnvironmentVariable("DATABASE_URL", EnvironmentVariableTarget.User) : Environment.GetEnvironmentVariable("DATABASE_URL");
 
 builder.Services.AddDbContext<AponusContext>(options => options.UseNpgsql(ConnectionString).EnableSensitiveDataLogging(false));
-var CorsPolicy = "permitirOrigenEspcifico";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: CorsPolicy, Policy =>
-    {
-        Policy
-        .WithOrigins("https://aponus-front-sa.vercel.app")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
-    });
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin() // Permite cualquier frontend
+                        .AllowAnyMethod() // Permite cualquier método (GET, POST, etc.)
+                        .AllowAnyHeader()); // Permite cualquier encabezado
 });
 
 var app = builder.Build();
@@ -162,7 +157,7 @@ if (app.Environment.IsDevelopment())
 
 
 
-app.UseCors(CorsPolicy);
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
