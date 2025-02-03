@@ -48,7 +48,7 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpPost]
-        [Route("Products/Types/{TypeId}/Delete/")]
+        [Route("Products/Types/{IdTipo}/Delete")]
         [RequiredPermission("PRODUCTOS_TIPOS", "UPDATE")]
         public async Task<IActionResult> EliminarTipoProducto(string IdTipo)
         {
