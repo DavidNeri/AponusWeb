@@ -7,6 +7,7 @@ using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -138,14 +139,14 @@ if (builder.Environment.IsProduction())
 var ConnectionString = builder.Environment.IsDevelopment() ? Environment.GetEnvironmentVariable("DATABASE_URL", EnvironmentVariableTarget.User) : Environment.GetEnvironmentVariable("DATABASE_URL");
 
 builder.Services.AddDbContext<AponusContext>(options => options.UseNpgsql(ConnectionString).EnableSensitiveDataLogging(false));
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowAll",
-//        policy => policy.AllowAnyOrigin() // Permite cualquier frontend
-//                        .AllowAnyMethod() // Permite cualquier método (GET, POST, etc.)
-//                        .AllowAnyHeader()
-//                        .AllowCredentials()); // Permite cualquier encabezado
-//});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin() // Permite cualquier frontend
+                        .AllowAnyMethod() // Permite cualquier método (GET, POST, etc.)
+                        .AllowAnyHeader()
+                        .AllowCredentials()); // Permite cualquier encabezado
+});
 
 var app = builder.Build();
 
