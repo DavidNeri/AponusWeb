@@ -127,7 +127,7 @@
         }
       }
     },
-    "/Aponus/Categories/Products/Types/{TypeId}/Delete": {
+    "/Aponus/Categories/Products/Types/{IdTipo}/Delete": {
       "post": {
         "tags": [
           "Categories"
@@ -135,13 +135,6 @@
         "parameters": [
           {
             "name": "IdTipo",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "TypeId",
             "in": "path",
             "required": true,
             "schema": {

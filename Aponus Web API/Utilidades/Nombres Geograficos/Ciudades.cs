@@ -13,5 +13,8 @@ namespace Aponus_Web_API.Utilidades.Nombres_Geograficos
         [JsonProperty(PropertyName = "adminCode1", NullValueHandling = NullValueHandling.Ignore)]
         public string AdminCode1 { get; set; } = string.Empty;
 
+        [JsonProperty(PropertyName = "geonameId", NullValueHandling = NullValueHandling.Ignore)]
+        public string geonameId { get; set; } = string.Empty;
+
     }
 }

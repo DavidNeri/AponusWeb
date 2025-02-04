@@ -268,12 +268,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                             //Busco Los PRODUCTOS que pertenicen a esas duplas IdDescripcion/IDdescripcion
                             List<Producto>? Productos = await AponusDBContext.Productos
-                                .Where(x => ListaCategoriasProductos.Any(Lista => Lista.IdTIpo == x.IdTipo && Lista.IdDescripcion == x.IdDescripcion))
+                                .Where(x => x.IdTipoNavigation == TipoProducto)
                                 .Select(P => new Producto()
                                 {
                                     Cantidad = P.Cantidad,
                                     IdDescripcion = P.IdDescripcion,
-                                    IdEstado = 0,
+                                    IdEstado = P.IdEstado,
                                     IdTipo = P.IdTipo,
                                     DiametroNominal = P.DiametroNominal,
                                     IdProducto = P.IdProducto,
@@ -281,11 +281,22 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                     Tolerancia = P.Tolerancia,
                                     PrecioLista = P.PrecioLista,
                                     PorcentajeGanancia = P.PorcentajeGanancia,
+                                    IdDescripcionNavigation = P.IdDescripcionNavigation,
+                                    IdEstadoNavigation = P.IdEstadoNavigation,
+                                    IdTipoNavigation = P.IdTipoNavigation,
 
                                 }).ToListAsync();
 
                             //Cambio el estado a INACTIVO
-                            AponusDBContext.Productos.UpdateRange(Productos);
+
+                            Productos.ForEach(x =>
+                            {
+                                x.IdEstado = 0;
+                                x.IdEstadoNavigation = AponusDBContext.EstadosProducto.First(y => y.IdEstado == 0);
+
+                            });
+
+                            AponusDBContext.Entry(Productos).State = EntityState.Modified;
                             await AponusDBContext.SaveChangesAsync();
                             return (StatusCodes.Status200OK, null);
                         }

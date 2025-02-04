@@ -103,7 +103,7 @@
   {
     "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
     "Method": "EliminarTipoProducto",
-    "RelativePath": "Aponus/Categories/Products/Types/{TypeId}/Delete",
+    "RelativePath": "Aponus/Categories/Products/Types/{IdTipo}/Delete",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -111,11 +111,6 @@
       {
         "Name": "IdTipo",
         "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "TypeId",
-        "Type": "",
         "IsRequired": true
       }
     ],
