@@ -267,7 +267,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                             List<(string IdTIpo, int IdDescripcion)> ListaCategoriasProductos = DescripcionProdEliminar.Select(x => (TipoProducto.IdTipo, x.IdDescripcion)).ToList();
 
                             //Busco Los PRODUCTOS que pertenicen a esas duplas IdDescripcion/IDdescripcion
-                            List<Producto>? Productos = await AponusDBContext.Productos
+                            List<Producto>? Productos = AponusDBContext.Productos
                                 .Where(x => x.IdTipoNavigation == TipoProducto)
                                 .Select(P => new Producto()
                                 {
@@ -285,19 +285,21 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                     IdEstadoNavigation = P.IdEstadoNavigation,
                                     IdTipoNavigation = P.IdTipoNavigation,
 
-                                }).ToListAsync();
+                                }).ToList();
 
                             //Cambio el estado a INACTIVO
 
-                            Productos.ForEach(x =>
+                            Productos.ForEach(Producto =>
                             {
-                                x.IdEstado = 0;
-                                x.IdEstadoNavigation = AponusDBContext.EstadosProducto.First(y => y.IdEstado == 0);
+                                Producto.IdEstado = 0;
+                                Producto.IdEstadoNavigation = AponusDBContext.EstadosProducto.First(y => y.IdEstado == 0);
+                                AponusDBContext.Entry(Producto).State = EntityState.Modified;
 
                             });
 
-                            AponusDBContext.Entry(Productos).State = EntityState.Modified;
+                            
                             await AponusDBContext.SaveChangesAsync();
+                            await Transaccion.CommitAsync();
                             return (StatusCodes.Status200OK, null);
                         }
                     }
