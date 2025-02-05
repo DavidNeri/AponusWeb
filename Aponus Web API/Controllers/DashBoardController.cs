@@ -16,7 +16,7 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("Dashboard")]
+        [Route("Get")]
         public async Task<IActionResult> ObtenerDatosTablero()
         {
             return await BsDashboard.ProcesarDatosTablero();

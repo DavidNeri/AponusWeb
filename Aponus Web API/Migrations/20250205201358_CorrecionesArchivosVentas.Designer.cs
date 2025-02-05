@@ -3,6 +3,7 @@ using System;
 using Aponus_Web_API.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Aponus_Web_API.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20250205201358_CorrecionesArchivosVentas")]
+    partial class CorrecionesArchivosVentas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,7 +103,7 @@ namespace Aponus_Web_API.Migrations
                     b.ToTable("ARCHIVOS_VENTAS", null, t =>
                         {
                             t.Property("ID_VENTA")
-                                .HasColumnName("ID_VENTA1");
+                                .HasColumnName("ID_VENTA");
                         });
                 });
 

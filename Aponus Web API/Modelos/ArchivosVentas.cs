@@ -4,6 +4,7 @@ namespace Aponus_Web_API.Modelos
 {
     public class ArchivosVentas
     {
+        [ForeignKey("ID_VENTA")]
         public int IdVenta { get; set; }
         public int IdArchivo{ get; set; }
         public string HashArchivo { get; set; } = string.Empty;
@@ -11,7 +12,6 @@ namespace Aponus_Web_API.Modelos
         public string? MimeType { get; set; }
         public int IdEstado { get; set; } = 1;
 
-        [ForeignKey("IdCompra")]
         public virtual Ventas VentasNavigation{ get; set; } = new Ventas();
     }
 }

@@ -380,7 +380,7 @@
         }
       }
     },
-    "/Aponus/DashBoard/Dashboard": {
+    "/Aponus/DashBoard/Get": {
       "get": {
         "tags": [
           "DashBoard"
