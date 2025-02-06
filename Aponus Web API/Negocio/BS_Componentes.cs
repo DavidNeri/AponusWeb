@@ -244,7 +244,7 @@ namespace Aponus_Web_API.Negocio
                 Reporte.rowList.Add(new RowList()
                 {
                     idInsmo = x.IdInsumo,
-                    cellist = x.GetType().GetProperties()
+                    celList = x.GetType().GetProperties()
                     .Where(y => Columnas.Contains(y.Name))
                     .Select(h => new CelList()
                     {
@@ -252,15 +252,13 @@ namespace Aponus_Web_API.Negocio
                         value= h.GetValue(x)?.ToString() ?? "",
                         type = ObtenerTipoValor(h.PropertyType)
 
-                    }).ToList(),
-                     
-                });               
-                
+                    }).ToList(),                     
+                });                
             });
 
             Reporte.rowList.ForEach(reporte =>
             {
-                reporte.cellist.Add(new CelList()
+                reporte.celList.Add(new CelList()
                 {
                     header = "Acciones",
                     type = "button",
