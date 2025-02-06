@@ -358,6 +358,29 @@
         }
       }
     },
+    "/Aponus/Components/ListGrid/{IdDescripcion}": {
+      "get": {
+        "tags": [
+          "Components"
+        ],
+        "parameters": [
+          {
+            "name": "IdDescripcion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/Aponus/Components/Delete/{IdInsumo}": {
       "post": {
         "tags": [

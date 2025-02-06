@@ -46,6 +46,15 @@ namespace Aponus_Web_API.Controllers
             return _BsComponentes.MapeoComponentesDetalleDTO(IdDescripcion, idInsumo);
         }
 
+        [HttpGet]
+        [Route("ListGrid/{IdDescripcion}")]
+
+        public IActionResult ObtenerListarComponentes(int IdDescripcion)
+        {
+            return _BsComponentes.MapeoComponentesDetalleGrid(IdDescripcion);
+        }
+
+
 
         [HttpPost]
         [Route("Delete/{IdInsumo}")]

@@ -232,6 +232,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Aponus_Web_API.Controllers.ComponentsController",
+    "Method": "ObtenerListarComponentes",
+    "RelativePath": "Aponus/Components/ListGrid/{IdDescripcion}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdDescripcion",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Aponus_Web_API.Controllers.DashBoardController",
     "Method": "ObtenerDatosTablero",
     "RelativePath": "Aponus/DashBoard/Get",

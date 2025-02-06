@@ -1,8 +1,11 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
 using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Aponus_Web_API.Utilidades.ReportResult;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -202,6 +205,85 @@ namespace Aponus_Web_API.Negocio
                 };
 
             return new StatusCodeResult(200);
+
+        }
+
+        internal IActionResult MapeoComponentesDetalleGrid(int idDescripcion)
+        {
+            var (Listado, Ex) = _componentesProductos.ListarDetalleComponentes(idDescripcion, null);
+
+            if (Ex != null) return new ContentResult()
+            {
+                Content = Ex.InnerException?.Message ?? Ex.Message,
+                ContentType = "application/json",
+                StatusCode = 500
+            };
+
+            IReportResult Reporte = new();
+
+            var Propiedades = Listado!.FirstOrDefault()?.GetType().GetProperties();
+
+
+            var Columnas = Propiedades!.Where(prop => Listado!.All(x =>
+            {
+                var valor = prop.GetValue(x);
+                var nombre = prop.Name;
+                return 
+                (valor != null || nombre.Contains("IdFraccionamiento"))
+                && valor?.ToString() != "" 
+                && valor?.ToString() != "-"
+                && !nombre.Contains("IdEstado")
+                && !nombre.Contains("IdDescripcion")
+                && !nombre.Contains("ComprasNavigation");
+            }))
+                .Select(prop => prop.Name)
+                .ToList();
+
+            Listado!.ForEach(x =>
+            {
+                Reporte.rowList.Add(new RowList()
+                {
+                    idInsmo = x.IdInsumo,
+                    cellist = x.GetType().GetProperties()
+                    .Where(y => Columnas.Contains(y.Name))
+                    .Select(h => new CelList()
+                    {
+                        header = h.Name,
+                        value= h.GetValue(x)?.ToString() ?? "",
+                        type = ObtenerTipoValor(h.PropertyType)
+
+                    }).ToList(),
+                     
+                });               
+                
+            });
+
+            Reporte.rowList.ForEach(reporte =>
+            {
+                reporte.cellist.Add(new CelList()
+                {
+                    header = "Acciones",
+                    type = "button",
+                    value = reporte.idInsmo
+                });
+            });
+
+
+            return new JsonResult(Reporte);
+        }
+
+        private static string ObtenerTipoValor(Type Tipo)
+        {
+            Type? UnderlyingType = Nullable.GetUnderlyingType(Tipo) ?? Tipo;
+
+            return
+                UnderlyingType == typeof(string) ? "string" :
+                UnderlyingType == typeof(int)
+                    || UnderlyingType == typeof(decimal)
+                    || UnderlyingType == typeof(double)
+                    || UnderlyingType == typeof(float) ? "number" 
+                    : "string";
+                    
 
         }
     }
