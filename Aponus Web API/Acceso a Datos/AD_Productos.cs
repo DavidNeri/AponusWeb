@@ -146,7 +146,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             AponusDBContext.Componentes_Productos.UpdateRange(ProducComponentsUpdate);
             AponusDBContext.SaveChanges();
         }      
-        public object Listar()
+        public List<ProductosDescripcion> Listar()
         {
 
             var Products = AponusDBContext.ProductosDescripcions
@@ -155,7 +155,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 {
                     IdDescripcion = x.IdDescripcion,
                     DescripcionProducto = x.DescripcionProducto,
-                    Productos = x.Productos.Select(P => new Producto()
+                    Productos = x.Productos.Where(x=>x.IdEstado!=0)
+                    .Select(P => new Producto()
                     {
                         Cantidad = P.Cantidad,
                         DiametroNominal = P.DiametroNominal,
@@ -166,6 +167,9 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         PrecioLista = P.PrecioLista,
                         Tolerancia = P.Tolerancia,
                         PorcentajeGanancia = P.PorcentajeGanancia,
+                        IdDescripcionNavigation = P.IdDescripcionNavigation,
+                        IdTipoNavigation = P.IdTipoNavigation,
+                        
                         
                     }).ToList(),
                 })

@@ -126,7 +126,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 .Include(x => x.Cuotas)
                 .Include(x => x.Pagos)
                 .Include(Cli => Cli.Cliente)
-                .Include(X=>X.Archivos)
+                .Include(x=>x.Archivos)
+                .Include(x =>x.Estado)
                 .AsQueryable();
         }
 

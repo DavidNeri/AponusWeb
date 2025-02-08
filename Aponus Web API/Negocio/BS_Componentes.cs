@@ -270,7 +270,7 @@ namespace Aponus_Web_API.Negocio
             return new JsonResult(Reporte);
         }
 
-        private static string ObtenerTipoValor(Type Tipo)
+        public string ObtenerTipoValor(Type Tipo)
         {
             Type? UnderlyingType = Nullable.GetUnderlyingType(Tipo) ?? Tipo;
 

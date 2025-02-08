@@ -97,7 +97,7 @@ namespace Aponus_Web_API.Negocio
 
         }
 
-        internal async Task<object> ObentenerInsumosFaltantes()
+        internal async Task<List<DTOComponenteFormateado>> ObentenerInsumosFaltantes()
         {
             List<Modelos.StockInsumos> ListadoStockInsumos = await AdStocks.StockInsumos().ListarStockInsumos();
             var (ComponentesDetalle, error) = AdComponentes.ListarDetalleComponentes(null, null);
@@ -131,6 +131,7 @@ namespace Aponus_Web_API.Negocio
                 })
                 .Select(x => new DTOComponenteFormateado
                 {
+                    IdInsumo = x.SDet.stock.IdInsumo,
                     Nombre = x.Nombres.Descripcion,
                     Diametro = x.SDet.detalles.Diametro != null ? x.SDet.detalles.Diametro.ToString() : null,
                     Espesor = x.SDet.detalles.Espesor != null ? x.SDet.detalles.Espesor.ToString() : null,

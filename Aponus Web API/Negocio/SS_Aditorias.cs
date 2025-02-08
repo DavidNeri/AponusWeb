@@ -64,23 +64,8 @@ namespace Aponus_Web_API.Negocio
                             : null
                 })
                 .ToList();
-            
-            
+                        
             return new JsonResult(Resultado);
-        }
-
-        //private IReportResult CrearTabla(string JsonString)
-        //{
-        //    Dictionary<string, Object?> ParValorClave = new();
-
-        //    ParValorClave = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(JsonString)?
-        //        .ToDictionary(kvp => kvp.Key,
-        //                kvp => kvp.Value.ValueKind == JsonValueKind.Number ? $"{kvp.Key}; {(object)kvp.Value.GetDecimal()}" :
-        //                                kvp.Value.ValueKind == JsonValueKind.String ? $"{kvp.Key}; {(object?)kvp.Value.GetString()}" :
-        //                                kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? $"{kvp.Key}; {(object)kvp.Value.GetBoolean()}" :
-        //                                (object?)null);
-
-
-        //}
+        }       
     }
 }

@@ -4,6 +4,7 @@ using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Aponus_Web_API.Negocio
@@ -256,15 +257,21 @@ namespace Aponus_Web_API.Negocio
             return new JsonResult(Prod);
         }
 
-        internal async Task<object> ObtenerProductosFaltantes()
+        internal List<Producto> ObtenerProductosFaltantes()
         {
-            List<ProductosDescripcion> Productos =  AdProductos.Listar() 
-                as List<ProductosDescripcion> ?? new List<ProductosDescripcion>();          
+            List<ProductosDescripcion> Descripciones = AdProductos.Listar();
 
-            return(Productos
-                .Select(x => x.Productos.Where(x => x.Cantidad <= 100).ToList())
-                .ToList());
+            List<Producto> Productos = new();
 
+            foreach (var Descripcion in Descripciones)
+            {
+                foreach (var producto in Descripcion.Productos)
+                {
+                    Productos.Add(producto);   
+                }
+            }
+
+            return Productos;
         }
 
         internal async Task<IActionResult> ProcesarDatos(string idProducto)
