@@ -3,11 +3,8 @@ using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text.Json;
 using Z.EntityFramework.Plus;
-using static Aponus_Web_API.Acceso_a_Datos.AD_Stocks;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -102,7 +99,7 @@ namespace Aponus_Web_API.Negocio
             List<Modelos.StockInsumos> ListadoStockInsumos = await AdStocks.StockInsumos().ListarStockInsumos();
             var (ComponentesDetalle, error) = AdComponentes.ListarDetalleComponentes(null, null);
 
-            for (int i = ListadoStockInsumos.Count -1 ; i >=0;  i--)
+            for (int i = ListadoStockInsumos.Count - 1; i >= 0; i--)
             {
                 var insumo = ListadoStockInsumos[i];
 
@@ -138,12 +135,12 @@ namespace Aponus_Web_API.Negocio
                     Longitud = x.SDet.detalles.Longitud != null ? x.SDet.detalles.Longitud.ToString() : null,
                     Altura = x.SDet.detalles.Altura != null ? x.SDet.detalles.Altura.ToString() : null,
                     Perfil = x.SDet.detalles.Perfil != null ? x.SDet.detalles.Perfil.ToString() : null,
-                    Tolerancia = x.SDet.detalles.Tolerancia != null ? x.SDet.detalles.Tolerancia.ToString() : null,                 
+                    Tolerancia = x.SDet.detalles.Tolerancia != null ? x.SDet.detalles.Tolerancia.ToString() : null,
 
-                    DiametroNominal = x.SDet.detalles.DiametroNominal != null ? 
+                    DiametroNominal = x.SDet.detalles.DiametroNominal != null ?
                         $"{x.SDet.detalles.DiametroNominal.ToString()} mm" : null,
 
-                    Peso =  x.SDet.detalles.Peso != null ?
+                    Peso = x.SDet.detalles.Peso != null ?
                         $"{x.SDet.detalles.Peso} Kg" : null,
 
                     Granallado = x.SDet.stock.Granallado != null ?
@@ -163,10 +160,10 @@ namespace Aponus_Web_API.Negocio
 
                     Recibido = x.SDet.stock.Recibido != null ?
                         $"{x.SDet.stock.Recibido} {x.Nombres.IdFraccionamiento ?? x.Nombres.IdAlmacenamiento}" : null,
-                  
+
                 })
                 .ToList();
-                   
+
 
             return InsumosFaltantes;
         }
@@ -191,14 +188,14 @@ namespace Aponus_Web_API.Negocio
                         Cantidad = Convert.ToDecimal(suministro.Cantidad)
                     };
 
-                    if (!AdStocks.ActualizarStockInsumo(AponusDbContext,Insumo))
+                    if (!AdStocks.ActualizarStockInsumo(AponusDbContext, Insumo))
                     {
                         transaccion.Rollback();
                         return new ContentResult()
                         {
-                            Content=$"La cantidad disponible en {Movimiento.Origen} es inferior a {Insumo.Cantidad} para uno o mas Insumos",
-                            ContentType="application/Json",
-                            StatusCode = 400                            
+                            Content = $"La cantidad disponible en {Movimiento.Origen} es inferior a {Insumo.Cantidad} para uno o mas Insumos",
+                            ContentType = "application/Json",
+                            StatusCode = 400
                         };
                     }
                 }
@@ -230,7 +227,7 @@ namespace Aponus_Web_API.Negocio
                 if (!AdStocks.GuardarSuministrosMovimiento(AponusDbContext, Suministros)) Rollback = true;
 
                 //Obtener el Nombre del IdProveedorNavigation de Destino
-                IActionResult Proveedores = BsEntidades.MapeoEntidadesDTO(0,0, Movimiento.IdProveedorDestino ?? 0);
+                IActionResult Proveedores = BsEntidades.MapeoEntidadesDTO(0, 0, Movimiento.IdProveedorDestino ?? 0);
                 DTOEntidades? proveedor = new DTOEntidades();
 
                 if (Proveedores is JsonResult jsonProveedores && jsonProveedores.Value != null && jsonProveedores.Value is IEnumerable<DTOEntidades> ProveedoresList)
@@ -313,10 +310,10 @@ namespace Aponus_Web_API.Negocio
                     Producto StockProductoDB = new Producto()
                     {
                         IdProducto = !string.IsNullOrEmpty(DTOStockProducto.IdProducto) ? DTOStockProducto.IdProducto : "",
-                        Cantidad  = !string.IsNullOrEmpty(DTOStockProducto.Cantidad) ? Convert.ToInt32(DTOStockProducto.Cantidad) : 0,
+                        Cantidad = !string.IsNullOrEmpty(DTOStockProducto.Cantidad) ? Convert.ToInt32(DTOStockProducto.Cantidad) : 0,
                         PrecioLista = !string.IsNullOrEmpty(DTOStockProducto.PrecioLista) ? Convert.ToDecimal(DTOStockProducto.PrecioLista) : 0,
-                        PrecioFinal= !string.IsNullOrEmpty(DTOStockProducto.PrecioFinal) ? Convert.ToDecimal(DTOStockProducto.PrecioFinal) : 0,
-                    };                   
+                        PrecioFinal = !string.IsNullOrEmpty(DTOStockProducto.PrecioFinal) ? Convert.ToDecimal(DTOStockProducto.PrecioFinal) : 0,
+                    };
 
                     bool Resultado = await AdStocks.StockProductos().Actualizar(StockProductoDB);
 
@@ -536,7 +533,7 @@ namespace Aponus_Web_API.Negocio
 
                     foreach (var PropDTO in PropsDTOStockInsumo)
                         foreach (var PropObjDB in PropsObjStockInsumosDB)
-                            if (PropObjDB.Name.ToLower().Contains(PropDTO.Name.ToLower()) &&                                
+                            if (PropObjDB.Name.ToLower().Contains(PropDTO.Name.ToLower()) &&
                                 PropDTO.GetValue(DtoStockInsumo) != null)
 
                                 PropObjDB.SetValue(ObjStockInsumosDB, PropDTO.GetValue(DtoStockInsumo));

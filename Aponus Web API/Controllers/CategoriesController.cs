@@ -1,5 +1,4 @@
-﻿using Aponus_Web_API.Modelos;
-using Aponus_Web_API.Negocio;
+﻿using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +33,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Types/New")]
-        [RequiredPermission("PRODUCTOS_TIPOS","INSERT")]
+        [RequiredPermission("PRODUCTOS_TIPOS", "INSERT")]
         public JsonResult AgregarTipoProducto(DTOCategorias NuevaCategoria)
         {
             try

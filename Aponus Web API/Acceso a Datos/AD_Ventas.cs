@@ -1,7 +1,6 @@
 ﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Z.EntityFramework.Plus;
@@ -25,16 +24,16 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             var roolbackResult = false;
             using var transaccion = AponusDBContext.Database.BeginTransaction();
-            var ProductosVenta= Venta.DetallesVenta;
+            var ProductosVenta = Venta.DetallesVenta;
 
-            var pagosVenta= Venta.Pagos;
-            var CuotasVenta= Venta.Cuotas;
+            var pagosVenta = Venta.Pagos;
+            var CuotasVenta = Venta.Cuotas;
 
             //Venta.Pagos = null;
             //Venta.Cuotas= null;
 
-            var estadoVenta= AponusDBContext.estadosVentas.First(x => x.IdEstado == Venta.IdEstadoVenta) ?? new EstadosVentas();
-            
+            var estadoVenta = AponusDBContext.estadosVentas.First(x => x.IdEstado == Venta.IdEstadoVenta) ?? new EstadosVentas();
+
             Venta.Estado = estadoVenta;
 
             var UsuarioHttpContext = Context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -55,9 +54,9 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     {
                         IdExistencia = Prod.IdProducto,
                         Cantidad = Prod.Cantidad,
-                    });                    
+                    });
                 }
-            }  
+            }
 
             foreach (var item in ProductosVenta)
             {
@@ -67,7 +66,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     IdExistencia = item.IdProducto,
                     Cantidad = item.Cantidad,
                 }, AponusDBContext);
-            }                      
+            }
 
             await AponusDBContext.ventas.AddAsync(Venta);
             await AponusDBContext.SaveChangesAsync();
@@ -115,7 +114,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 await AponusDBContext.DisposeAsync();
                 return null;
             }
-            
+
         }
 
         public IQueryable<Modelos.Ventas> ListarVentas()
@@ -126,8 +125,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 .Include(x => x.Cuotas)
                 .Include(x => x.Pagos)
                 .Include(Cli => Cli.Cliente)
-                .Include(x=>x.Archivos)
-                .Include(x =>x.Estado)
+                .Include(x => x.Archivos)
+                .Include(x => x.Estado)
                 .AsQueryable();
         }
 
@@ -137,7 +136,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                .Include(x => x.DetallesVenta)
                .Include(x => x.Cliente)
                .Include(x => x.Pagos)
-               .Include(x=>x.Archivos)
+               .Include(x => x.Archivos)
                .FirstOrDefaultAsync(x => x.IdVenta == idVenta);
 
             return venta;
@@ -155,7 +154,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
         }
 
-        internal async Task<(int? Resultado, Exception? error)> GuardarArchivos (List<ArchivosVentas> archivosVentas)
+        internal async Task<(int? Resultado, Exception? error)> GuardarArchivos(List<ArchivosVentas> archivosVentas)
         {
             using var Transaccion = await AponusDBContext.Database.BeginTransactionAsync();
             try
@@ -227,7 +226,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
             try
             {
-                if (pago.IdCuota != null &&  pago.IdCuota != 0 )
+                if (pago.IdCuota != null && pago.IdCuota != 0)
                 {
                     pago.Cuota = AponusDBContext.cuotasVentas.First(x => x.IdCuota == pago.IdCuota);
                 }
@@ -235,7 +234,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 pago.EntidadPago = AponusDBContext.entidadespago.First(x => x.IdEntidad == pago.IdEntidadPago);
                 pago.MedioPago = AponusDBContext.MediosPagos.First(x => x.IdMedioPago == pago.IdMedioPago);
                 pago.Venta = AponusDBContext.ventas.First(x => x.IdVenta == pago.IdVenta);
-                
+
                 if (pago?.IdPago != null && pago.IdPago != 0)
                 {
                     AponusDBContext.pagosVentas.Update(pago);
@@ -243,7 +242,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 }
                 else
                 {
-                    AponusDBContext.pagosVentas.Add(pago!);    
+                    AponusDBContext.pagosVentas.Add(pago!);
                 }
 
                 AponusDBContext.SaveChanges();
@@ -258,7 +257,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 return (null, ex);
             }
-            
+
         }
     }
 }

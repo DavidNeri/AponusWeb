@@ -11,7 +11,7 @@ namespace Aponus_Web_API.Modelos
         public int IdCuota { get; set; }
 
         [ForeignKey("ID_COMPRA")]
-        public int IdCompra { get; set; }    
+        public int IdCompra { get; set; }
 
         [Column("NUMERO_CUOTA")]
         public int NumeroCuota { get; set; }

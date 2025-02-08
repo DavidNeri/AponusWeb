@@ -92,10 +92,10 @@ namespace Aponus_Web_API.Negocio
                         IdUsuarioRegistro = x.IdUsuarioRegistro,
                         IdTipo = x.IdTipo,
                         IdCategoria = x.IdCategoria,
-                        Tipo = new DTOEntidadesTipos { IdTipo = x.TipoEntidad.IdTipo , Nombre = x.TipoEntidad.NombreTipo},
-                        Categoria = new DTOEntidadesCategorias {IdCategoria = x.CategoriaEntidad.IdCategoria, NombreCategoria = x.CategoriaEntidad.NombreCategoria }                      
+                        Tipo = new DTOEntidadesTipos { IdTipo = x.TipoEntidad.IdTipo, Nombre = x.TipoEntidad.NombreTipo },
+                        Categoria = new DTOEntidadesCategorias { IdCategoria = x.CategoriaEntidad.IdCategoria, NombreCategoria = x.CategoriaEntidad.NombreCategoria }
 
-                        
+
                     })
                     .ToList();
                 return new JsonResult(Listado);

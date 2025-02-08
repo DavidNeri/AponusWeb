@@ -2,7 +2,7 @@
 {
     public class IReportResult
     {
-        public List<RowList> rowList  = new();
+        public List<RowList> rowList = new();
 
     }
 }

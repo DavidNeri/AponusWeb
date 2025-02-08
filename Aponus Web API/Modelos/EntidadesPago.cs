@@ -7,8 +7,8 @@
         public string Descripcion { get; set; } = string.Empty;
         public string Emisor { get; set; } = string.Empty;
 
-        public ICollection<PagosVentas> pagosVentas { get; set; }  = new HashSet<PagosVentas>();
-        public ICollection<PagosCompras> pagosCompras{ get; set; } = new HashSet<PagosCompras>();
+        public ICollection<PagosVentas> pagosVentas { get; set; } = new HashSet<PagosVentas>();
+        public ICollection<PagosCompras> pagosCompras { get; set; } = new HashSet<PagosCompras>();
 
 
     }

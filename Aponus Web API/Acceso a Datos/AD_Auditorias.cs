@@ -1,14 +1,11 @@
 ﻿
 using Aponus_Web_API.Modelos;
-using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace Aponus_Web_API.Acceso_a_Datos
 {
     public class AD_Auditorias
     {
-		private AponusContext aponusContext;
+        private AponusContext aponusContext;
 
         public AD_Auditorias(AponusContext _aponusContext)
         {
@@ -17,8 +14,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
         internal async Task<(IEnumerable<Auditorias>?, Exception? error)> Listar()
         {
-			try
-			{
+            try
+            {
                 IEnumerable<Auditorias> QueryAuditorias = aponusContext.Auditorias
                     .Select(x => new Auditorias()
                     {
@@ -34,12 +31,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     .AsEnumerable();
 
                 return (QueryAuditorias, null);
-			}
-			catch (Exception ex)
-			{
+            }
+            catch (Exception ex)
+            {
 
-				return (null, ex);
-			}
+                return (null, ex);
+            }
         }
     }
 }

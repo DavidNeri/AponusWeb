@@ -1,5 +1,4 @@
-﻿using Aponus_Web_API.Modelos;
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 
 namespace Aponus_Web_API.Utilidades

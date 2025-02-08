@@ -1,14 +1,9 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
-using Aponus_Web_API.Migrations;
 using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
-using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using ArchivosVentas = Aponus_Web_API.Modelos.ArchivosVentas;
 
@@ -110,16 +105,16 @@ namespace Aponus_Web_API.Negocio
                 Ventas NuevaVenta = new()
                 {
                     IdCliente = Venta.IdCliente,
-                    
+
                     IdUsuario = Venta.IdUsuario,
                     FechaHora = UTL_Fechas.ObtenerFechaHora(),
-                    Cliente = new Entidades { IdEntidad = Venta.IdCliente},
-                    Usuario = new Usuarios {  Usuario = Venta.IdUsuario },                    
+                    Cliente = new Entidades { IdEntidad = Venta.IdCliente },
+                    Usuario = new Usuarios { Usuario = Venta.IdUsuario },
                     MontoTotal = Venta.MontoTotal,
                     SaldoPendiente = Venta.SaldoPendiente ?? 0,
                     IdEstadoVenta = 1,
 
-                    DetallesVenta = Venta.DetallesVenta.Select(vta=> new VentasDetalles()
+                    DetallesVenta = Venta.DetallesVenta.Select(vta => new VentasDetalles()
                     {
                         IdProducto = vta.IdProducto,
                         Cantidad = vta.Cantidad,
@@ -129,8 +124,8 @@ namespace Aponus_Web_API.Negocio
 
                     }).ToList(),
                 };
-              
-                
+
+
                 if (Venta.Pagos != null)
                 {
                     foreach (var vtaPagos in Venta.Pagos)
@@ -189,7 +184,7 @@ namespace Aponus_Web_API.Negocio
                         Venta.IdVenta = _IdVenta;
                     }
                 }
-                
+
 
                 int? IdVenta = await AdVentas.Guardar(NuevaVenta);
 
@@ -344,8 +339,8 @@ namespace Aponus_Web_API.Negocio
                     }).ToList(),
 
                     infoArchivos = x.Archivos
-                                        .Where(x=>x.IdEstado != 0)
-                                        .Select(y=> new DTOArchivosVentas()
+                                        .Where(x => x.IdEstado != 0)
+                                        .Select(y => new DTOArchivosVentas()
                                         {
                                             HashArchivo = y.HashArchivo,
                                             IdArchivo = y.IdArchivo,
@@ -377,16 +372,16 @@ namespace Aponus_Web_API.Negocio
 
         internal async Task<IActionResult> MapeoDTOPagosVenta(DTOPagosVentas Pago)
         {
-           PagosVentas pago = new PagosVentas()
-           {
-               Fecha = Pago.Fecha ?? UTL_Fechas.ObtenerFechaHora(),
-               IdCuota = Pago.IdCuota ?? null,
-               IdEntidadPago = Pago.IdEntidadPago, 
-               IdMedioPago = Pago.IdMedioPago,
-               IdVenta = Pago.IdVenta, 
-               IdPago = Pago.IdPago,
-               Monto = Pago.Monto,
-           };
+            PagosVentas pago = new PagosVentas()
+            {
+                Fecha = Pago.Fecha ?? UTL_Fechas.ObtenerFechaHora(),
+                IdCuota = Pago.IdCuota ?? null,
+                IdEntidadPago = Pago.IdEntidadPago,
+                IdMedioPago = Pago.IdMedioPago,
+                IdVenta = Pago.IdVenta,
+                IdPago = Pago.IdPago,
+                Monto = Pago.Monto,
+            };
 
             var (Resultado, ex) = await AdVentas.GuardarPago(pago);
 
@@ -418,7 +413,7 @@ namespace Aponus_Web_API.Negocio
                 {
                     InfoArchivosVentas.Add(new ArchivosVentas()
                     {
-                        HashArchivo =  Archivo.Hash,
+                        HashArchivo = Archivo.Hash,
                         IdVenta = ArchivosVenta.IdVenta ?? 0,
                         IdEstado = 1,
                         PathArchivo = Archivo.Path,
@@ -451,10 +446,10 @@ namespace Aponus_Web_API.Negocio
         {
             IQueryable<Ventas> QueryVentas = AdVentas.ListarVentas();
 
-            List<Ventas> ListadoVentas =await QueryVentas.Where(x=>x.IdEstadoVenta==1).ToListAsync();
+            List<Ventas> ListadoVentas = await QueryVentas.Where(x => x.IdEstadoVenta == 1).ToListAsync();
 
             int ProductosEntregados = 0;
-            List<int> IdVentasPendientes = new List<int>(); 
+            List<int> IdVentasPendientes = new List<int>();
 
             foreach (Ventas venta in ListadoVentas)
             {
@@ -470,14 +465,14 @@ namespace Aponus_Web_API.Negocio
                 {
                     IdVentasPendientes.Add(venta.IdVenta);
                 }
-                
+
             }
             var ListadoVentasPendientes = QueryVentas.Where(x => IdVentasPendientes.Contains(x.IdVenta)).ToList();
 
 
             return ListadoVentasPendientes;
 
-                
+
         }
 
         internal async Task<IActionResult> ListarProductos()

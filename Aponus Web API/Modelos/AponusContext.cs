@@ -1,11 +1,8 @@
-﻿using Aponus_Web_API.Acceso_a_Datos;
-using Aponus_Web_API.Utilidades;
+﻿using Aponus_Web_API.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Aponus_Web_API.Modelos;
 
@@ -88,7 +85,7 @@ public partial class AponusContext : DbContext
         {
             var Tabla = cambio.Entity.GetType().Name;
             var IdRegistro = ObtenerClavePrimaria(cambio);
-           
+
             var usuario = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Desconocido";
 
             Auditorias auditoria = new()
@@ -121,7 +118,7 @@ public partial class AponusContext : DbContext
 
             }
 
-            auditorias.Add(auditoria);            
+            auditorias.Add(auditoria);
         }
         Auditorias.AddRange(auditorias);
     }
@@ -134,9 +131,9 @@ public partial class AponusContext : DbContext
         var NombrePropPK = PK.Properties.FirstOrDefault();
 
         if (NombrePropPK == null) return "0";
-        
+
         return Entrada?.Property(NombrePropPK.Name)?.CurrentValue?.ToString() ?? "0";
-       
+
     }
 
 
@@ -149,8 +146,8 @@ public partial class AponusContext : DbContext
             entity.ToTable("ARCHIVOS_VENTAS");
 
             entity.HasKey(p => p.IdArchivo)
-            .HasName("PK_ARCHIVOS_VENTAS_ID_ARCHIVO");  
-            
+            .HasName("PK_ARCHIVOS_VENTAS_ID_ARCHIVO");
+
             entity.HasIndex(p => p.IdArchivo)
             .HasDatabaseName("IX_ARCHIVOS_VENTAS_ID_ARCHIVO");
 
@@ -222,8 +219,8 @@ public partial class AponusContext : DbContext
         {
             entity.HasNoKey();
             entity.ToView("role_table_grants", "information_schema");
-            
-            entity.Property(p =>p.Otorgante)
+
+            entity.Property(p => p.Otorgante)
             .HasColumnName("grantor");
 
             entity.Property(p => p.Beneficiario)
@@ -262,7 +259,7 @@ public partial class AponusContext : DbContext
             entity.Property(p => p.IdRegistro)
             .HasColumnName("ID_REGISTRO")
             .HasColumnType("text");
-           
+
             entity.Property(p => p.Accion)
            .HasColumnName("ACCION")
            .HasColumnType("text");
@@ -325,9 +322,9 @@ public partial class AponusContext : DbContext
             .HasPrincipalKey(pk => pk.IdEstadoCuota)
             .HasForeignKey(fk => fk.IdEstadoCuota)
             .HasConstraintName("FK_CUOTAS_COMPRAS_ESTADOS_CUOTAS_COMPRAS_ID_ESTADO_CUOTA");
-            
 
-          
+
+
 
 
         });
@@ -369,7 +366,7 @@ public partial class AponusContext : DbContext
             .HasColumnType("varchar(100)")
             .HasColumnName("DESCRIPCION");
 
-       
+
 
 
 
@@ -737,7 +734,7 @@ public partial class AponusContext : DbContext
             entity.Property(p => p.IdCuota)
            .HasColumnName("ID_CUOTA")
            .HasColumnType("integer")
-           .IsRequired(false)           
+           .IsRequired(false)
            .HasDefaultValue(null);
 
             entity.HasOne(p => p.MedioPago)
@@ -756,13 +753,13 @@ public partial class AponusContext : DbContext
            .HasForeignKey(FK => FK.IdEntidadPago)
            .HasConstraintName("FK_PAGOS_COMPRAS_ENTIDADES_PAGO_ID_ENTIDAD_PAGO");
 
-            
+
             entity.HasOne(p => p.Cuota)
             .WithMany(c => c.Pagos)
             .HasForeignKey(p => p.IdCuota)
-            .HasPrincipalKey(P=>P.IdCuota)
+            .HasPrincipalKey(P => P.IdCuota)
             .HasConstraintName("FK_PAGOS_COMPRAS_CUOTAS_COMPRAS_ID_CUOTA")
-            .IsRequired(false); 
+            .IsRequired(false);
 
 
         });
@@ -810,7 +807,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(p => p.IdUsuario)
             .HasColumnName("ID_USUARIO")
-            .HasColumnType("varchar(50)");        
+            .HasColumnType("varchar(50)");
 
             entity.Property(p => p.IdEstadoCompra)
             .HasColumnName("ID_ESTADO_COMPRA")
@@ -841,7 +838,7 @@ public partial class AponusContext : DbContext
             .HasForeignKey(p => p.IdProveedor)
             .HasPrincipalKey(p => p.IdEntidad)
             .OnDelete(DeleteBehavior.NoAction);
-            
+
             entity.HasMany(p => p.Pagos)
             .WithOne(p => p.Compra)
             .HasForeignKey(p => p.IdCompra);
@@ -1019,7 +1016,7 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.Descripcion)
             .HasColumnType("text")
             .HasColumnName("DESCRIPCION");
-   
+
         });
 
         modelBuilder.Entity<EstadosProductosComponentes>(entity =>
@@ -1033,7 +1030,7 @@ public partial class AponusContext : DbContext
             entity.Property(e => e.Descripcion)
             .HasColumnType("text")
             .HasColumnName("DESCRIPCION");
-            
+
         });
 
         modelBuilder.Entity<EstadosProductos>(entity =>
@@ -1226,7 +1223,7 @@ public partial class AponusContext : DbContext
             .HasPrincipalKey(pk => pk.IdEstado)
             .HasForeignKey(p => p.IdEstado)
             .HasConstraintName("FK_COMPONENTES_DETALLE_ESTADOS_COMPONENTES_DETALLES_ID_ESTADO");
-            
+
 
         });
 
@@ -1441,7 +1438,7 @@ public partial class AponusContext : DbContext
 
             entity.Property(e => e.FechaHoraUltimaModificacion)
             .HasColumnName("FECHA_HORA_ULTIMA_MODIFICACION")
-            .HasColumnType("timestamp");      
+            .HasColumnType("timestamp");
 
             entity.Property(e => e.IdProveedor)
             .HasColumnName("ID_PROVEEDOR")

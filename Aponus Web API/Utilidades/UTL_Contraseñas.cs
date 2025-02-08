@@ -32,5 +32,5 @@ namespace Aponus_Web_API.Utilidades
 
             return HashContraseña == HashContraseñaDB;
         }
-    } 
+    }
 }

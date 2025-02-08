@@ -3,7 +3,6 @@ using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -23,21 +22,21 @@ namespace Aponus_Web_API.Negocio
         }
         internal IActionResult MapeoDTOtoDB(DTODetallesComponenteProducto componente)
         {
-            var(resultado, error) = Componentes.GuardarComponente(new ComponentesDetalle()
+            var (resultado, error) = Componentes.GuardarComponente(new ComponentesDetalle()
             {
-                IdInsumo          = componente.idComponente ?? "",
-                Diametro          = componente.Diametro,
-                Altura            = componente.Altura,
-                IdDescripcion     = componente.IdDescripcion ?? 0 ,
-                DiametroNominal   = componente.DiametroNominal,
-                Espesor           = componente.Espesor,
-                IdAlmacenamiento  = componente.idAlmacenamiento,
+                IdInsumo = componente.idComponente ?? "",
+                Diametro = componente.Diametro,
+                Altura = componente.Altura,
+                IdDescripcion = componente.IdDescripcion ?? 0,
+                DiametroNominal = componente.DiametroNominal,
+                Espesor = componente.Espesor,
+                IdAlmacenamiento = componente.idAlmacenamiento,
                 IdFraccionamiento = componente.idFraccionamiento,
-                Longitud          = componente.Longitud,
-                Perfil            = componente.Perfil,
-                Peso              = componente.Peso,
-                Tolerancia        = componente.Tolerancia,
-                IdEstado          = 1
+                Longitud = componente.Longitud,
+                Perfil = componente.Perfil,
+                Peso = componente.Peso,
+                Tolerancia = componente.Tolerancia,
+                IdEstado = 1
             });
 
             if (error != null) return new ContentResult()
@@ -47,7 +46,7 @@ namespace Aponus_Web_API.Negocio
                 StatusCode = 400
             };
 
-            return new StatusCodeResult((int)resultado!);           
+            return new StatusCodeResult((int)resultado!);
 
         }
         internal IActionResult ListarNombresFormateados()
@@ -70,16 +69,16 @@ namespace Aponus_Web_API.Negocio
                     {
                         IdSuministro = item.idComponente ?? string.Empty,
                         Descripcion = insumo.Descripcion,
-                        Altura = !string.IsNullOrEmpty(item.Altura) && item.Altura!="-" ? Convert.ToDecimal(item.Altura.Replace("mm", "")) : null,
-                        Diametro = !string.IsNullOrEmpty(item.Diametro) && item.Diametro!="-" ? Convert.ToDecimal(item.Diametro?.Replace("mm", "")) : null,
+                        Altura = !string.IsNullOrEmpty(item.Altura) && item.Altura != "-" ? Convert.ToDecimal(item.Altura.Replace("mm", "")) : null,
+                        Diametro = !string.IsNullOrEmpty(item.Diametro) && item.Diametro != "-" ? Convert.ToDecimal(item.Diametro?.Replace("mm", "")) : null,
                         DiametroNominal = !string.IsNullOrEmpty(item.DiametroNominal) && item.DiametroNominal != "-" ? Convert.ToInt32(item.DiametroNominal.Replace("mm", "")) : null,
-                        Espesor = !string.IsNullOrEmpty(item.Espesor)  && item.Espesor!= "-" ? Convert.ToDecimal(item.Espesor.Replace("mm", "")) : null,
+                        Espesor = !string.IsNullOrEmpty(item.Espesor) && item.Espesor != "-" ? Convert.ToDecimal(item.Espesor.Replace("mm", "")) : null,
                         Longitud = !string.IsNullOrEmpty(item.Longitud) && item.Longitud != "-" ? Convert.ToDecimal(item.Longitud.Replace("mm", "")) : null,
                         Perfil = !string.IsNullOrEmpty(item.Perfil) && item.Perfil != "-" ? Convert.ToInt32(item.Perfil) : null,
                         Tolerancia = (item.Tolerancia?.Equals('-') ?? false) ? "" : item.Tolerancia,
                         UnidadAlmacenamiento = !string.IsNullOrEmpty(item.idAlmacenamiento) ? item.idAlmacenamiento : null,
                         UnidadFraccionamiento = !string.IsNullOrEmpty(item.idFraccionamiento) ? item.idFraccionamiento : null
-                        
+
                     });
                 }
             };

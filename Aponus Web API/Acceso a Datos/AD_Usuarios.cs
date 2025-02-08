@@ -1,5 +1,4 @@
 ﻿using Aponus_Web_API.Modelos;
-using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -71,7 +70,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             {
 
                 var _Usuario = AponusDBContext.Usuarios
-                    .Include(x=>x.Rol)
+                    .Include(x => x.Rol)
                     .FirstOrDefault(x => x.Usuario.ToUpper().Equals(usuario.Usuario.ToUpper()) || x.Correo.ToUpper().Equals(usuario.Correo.ToUpper()));
 
                 if (_Usuario != null)
@@ -94,23 +93,23 @@ namespace Aponus_Web_API.Acceso_a_Datos
             try
             {
                 return (AponusDBContext.asignacionRoles
-                                .Where(x => x.EsquemaTabla =="public" && x.Beneficiario ==rol)
+                                .Where(x => x.EsquemaTabla == "public" && x.Beneficiario == rol)
                                 .Select(x => new AsignacionPermisosRoles()
-                                {                                    
+                                {
                                     NombreTabla = x.NombreTabla,
                                     Atributo = x.Atributo
                                 })
                                 .ToList(),
                         null);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return (null, ex);
-                
+
             }
         }
 
-        internal async Task<(List<RolesUsuarios>? Roles, Exception? ex )> ListaRoles()
+        internal async Task<(List<RolesUsuarios>? Roles, Exception? ex)> ListaRoles()
         {
             try
             {
@@ -118,9 +117,9 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
             catch (Exception ex)
             {
-                return (null, ex)  ;
+                return (null, ex);
             }
-            
+
         }
     }
 }

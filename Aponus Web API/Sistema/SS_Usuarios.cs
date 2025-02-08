@@ -3,8 +3,8 @@ using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Mail;
 using System.Net;
+using System.Net.Mail;
 using System.Text;
 
 namespace Aponus_Web_API.Systema
@@ -22,9 +22,9 @@ namespace Aponus_Web_API.Systema
 
         internal async Task<IActionResult> MapeoRolesDTO()
         {
-            var(Roles, ex) = await AdUsuarios.ListaRoles();
+            var (Roles, ex) = await AdUsuarios.ListaRoles();
 
-            if (ex!= null) return new ContentResult()
+            if (ex != null) return new ContentResult()
             {
                 Content = ex.InnerException?.Message ?? ex.Message,
                 ContentType = "application/json",
@@ -112,15 +112,15 @@ namespace Aponus_Web_API.Systema
                 }
             }
 
-            var (StatusCode200OK, ex) = await AdUsuarios.Nuevo(_Usuario, Usuario.Contraseña ?? "");           
-            
-            if(ex != null)return new ContentResult()
+            var (StatusCode200OK, ex) = await AdUsuarios.Nuevo(_Usuario, Usuario.Contraseña ?? "");
+
+            if (ex != null) return new ContentResult()
             {
                 Content = ex.InnerException?.Message ?? ex.Message,
                 ContentType = "application/json",
                 StatusCode = 400
             };
-            
+
             return new StatusCodeResult((int)StatusCode200OK!);
         }
 
@@ -138,14 +138,14 @@ namespace Aponus_Web_API.Systema
             };
 
             string contraseña = GenerarContraseña();
-            
+
             var (HasContraseña, Sal) = UTL_Contraseñas.HashContraseña(contraseña);
             Usuario!.HashContraseña = HasContraseña;
             Usuario.Sal = Sal;
 
 
 
-            var (resultado, error ) = await AdUsuarios.ResetearContraseña(Usuario!);
+            var (resultado, error) = await AdUsuarios.ResetearContraseña(Usuario!);
 
             if (error != null) return new ContentResult()
             {
@@ -183,8 +183,8 @@ namespace Aponus_Web_API.Systema
             return Contraseña.ToString();
         }
 
-        private (string? Mensaje, Exception? ) Enviar_Correo(string Correo, string Usuario,string Contraseña)
-        {     
+        private (string? Mensaje, Exception?) Enviar_Correo(string Correo, string Usuario, string Contraseña)
+        {
             try
             {
                 System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -193,9 +193,9 @@ namespace Aponus_Web_API.Systema
                 {
                     EnableSsl = true,
                     Credentials = new NetworkCredential("davidcneri@gmail.com", "pqix uhbp goye yddw"),
-                    
+
                     DeliveryMethod = SmtpDeliveryMethod.Network
-                };                
+                };
 
                 _client.SendAsync(new MailMessage(
                     "davidcneri@gmail.com",
@@ -213,7 +213,7 @@ namespace Aponus_Web_API.Systema
             }
 
         }
-       
+
 
     }
 }

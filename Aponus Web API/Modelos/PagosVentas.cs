@@ -14,7 +14,7 @@ namespace Aponus_Web_API.Modelos
         public int IdVenta { get; set; }
 
         [ForeignKey("ID_CUOTA")]
-        public int? IdCuota { get; set; }        
+        public int? IdCuota { get; set; }
 
         [ForeignKey("ID_MEDIO_PAGO")]
         public int IdMedioPago { get; set; }
@@ -26,7 +26,7 @@ namespace Aponus_Web_API.Modelos
         public DateTime? Fecha { get; set; }
 
         [ForeignKey("ID_ENTIDAD_PAGO")]
-        public int IdEntidadPago { get; set; }   
+        public int IdEntidadPago { get; set; }
 
         public virtual MediosPago MedioPago { get; set; } = new();
         public virtual Ventas Venta { get; set; } = new();

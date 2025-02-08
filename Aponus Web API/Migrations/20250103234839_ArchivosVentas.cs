@@ -52,4 +52,4 @@ namespace Aponus_Web_API.Migrations
                 name: "ARCHIVOS_VENTAS");
         }
     }
-} 
+}

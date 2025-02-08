@@ -40,7 +40,7 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
-        
+
         [HttpGet]
         [Route("List")]
         public async Task<IActionResult> Listar(UTL_FiltrosMovimientos? Filtros)

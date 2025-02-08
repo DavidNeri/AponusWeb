@@ -67,7 +67,7 @@ namespace Aponus_Web_API.Controllers
         public IActionResult EliminarEstadoVenta(int Id)
         {
             return BsVentas.EstadosVentas().Eliminar(Id);
-        }        
+        }
 
         [HttpPost]
         [Route("Save")]

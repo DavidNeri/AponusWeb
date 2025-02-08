@@ -1,10 +1,8 @@
-﻿using Aponus_Web_API.Modelos;
-using Aponus_Web_API.Negocio;
+﻿using Aponus_Web_API.Negocio;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -142,7 +140,7 @@ namespace Aponus_Web_API.Controllers
         [Route("Delete/{IdProducto}")]
         [RequiredPermission("PRODUCTOS", "UPDATE")]
         [RequiredPermission("PRODUCTOS_COMPONENTES", "DELETE")]
-        public async Task<IActionResult> EliminarProducto (string IdProducto)
+        public async Task<IActionResult> EliminarProducto(string IdProducto)
         {
             try
             {

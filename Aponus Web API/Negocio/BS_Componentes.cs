@@ -4,8 +4,6 @@ using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades.ReportResult;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
-using System.Reflection;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -47,7 +45,7 @@ namespace Aponus_Web_API.Negocio
                     catch (DbUpdateException)
                     {
                         return new ContentResult { Content = "Error al actualizar la Base de Datos", ContentType = "text/plan", StatusCode = 400 };
-                    }                    
+                    }
                     catch (InvalidOperationException)
                     {
                         return new ContentResult { Content = "Operacion Invalida", ContentType = "text/plan", StatusCode = 400 };
@@ -201,7 +199,7 @@ namespace Aponus_Web_API.Negocio
                 {
                     Content = Error.InnerException?.Message,
                     ContentType = "application/json",
-                    StatusCode=400
+                    StatusCode = 400
                 };
 
             return new StatusCodeResult(200);
@@ -228,9 +226,9 @@ namespace Aponus_Web_API.Negocio
             {
                 var valor = prop.GetValue(x);
                 var nombre = prop.Name;
-                return 
+                return
                 (valor != null || nombre.Contains("IdFraccionamiento"))
-                && valor?.ToString() != "" 
+                && valor?.ToString() != ""
                 && valor?.ToString() != "-"
                 && !nombre.Contains("IdEstado")
                 && !nombre.Contains("IdDescripcion")
@@ -249,11 +247,11 @@ namespace Aponus_Web_API.Negocio
                     .Select(h => new CelList()
                     {
                         header = h.Name,
-                        value= h.GetValue(x)?.ToString() ?? "",
+                        value = h.GetValue(x)?.ToString() ?? "",
                         type = ObtenerTipoValor(h.PropertyType)
 
-                    }).ToList(),                     
-                });                
+                    }).ToList(),
+                });
             });
 
             Reporte.rowList.ForEach(reporte =>
@@ -279,9 +277,9 @@ namespace Aponus_Web_API.Negocio
                 UnderlyingType == typeof(int)
                     || UnderlyingType == typeof(decimal)
                     || UnderlyingType == typeof(double)
-                    || UnderlyingType == typeof(float) ? "number" 
+                    || UnderlyingType == typeof(float) ? "number"
                     : "string";
-                    
+
 
         }
     }

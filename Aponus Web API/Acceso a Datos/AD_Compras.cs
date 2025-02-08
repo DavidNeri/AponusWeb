@@ -1,6 +1,5 @@
 ﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Utilidades;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Z.EntityFramework.Plus;
@@ -53,14 +52,14 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
             foreach (var item in DetallesInsumosCompras)
             {
-                var Insumo =  aponusContext.ComponentesDetalles.First(x => x.IdInsumo.Equals(item.IdInsumo));
+                var Insumo = aponusContext.ComponentesDetalles.First(x => x.IdInsumo.Equals(item.IdInsumo));
 
                 item.DetallesInsumo = aponusContext.ComponentesDetalles.Where(x => x.IdInsumo.Equals(item.IdInsumo)).First();
                 item.DetallesInsumo.IdEstado = Insumo.IdEstado;
                 item.DetallesInsumo.IdEstadoNavigation = Insumo.IdEstadoNavigation;
             }
-           
-            
+
+
 
             try
             {
@@ -71,7 +70,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     await aponusContext.Compra.AddAsync(compra);
                 }
                 else
-                {                    
+                {
                     aponusContext.Entry(CompraExistente).CurrentValues.SetValues(compra);
                     aponusContext.Entry(CompraExistente).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 }
@@ -100,12 +99,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
                             PagoCuotaCompra.MedioPago = aponusContext.MediosPagos.Single(x => x.IdMedioPago == PagoCuotaCompra.IdMedioPago);
                             PagoCuotaCompra.entidadPago = aponusContext.entidadespago.Single(x => x.IdEntidad == PagoCuotaCompra.IdEntidadPago);
                             PagoCuotaCompra.IdCompra = compra.IdCompra;
-                        }                       
+                        }
                     }
 
                     await aponusContext.AddRangeAsync(CuotasCompra);
                 }
-                
+
 
                 await aponusContext.SaveChangesAsync();
 
@@ -125,10 +124,10 @@ namespace Aponus_Web_API.Acceso_a_Datos
             try
             {
                 IQueryable<Compras> compras = aponusContext.Compra
-                    .Include(x=>x.DetallesCompra)
-                    .Include(x=>x.Pagos).ThenInclude(x=>x.MedioPago)
-                    .Include(x=>x.IdProveedorNavigation)
-                    .Include(c=>c.CuotasCompra).ThenInclude(x=>x.Pagos)
+                    .Include(x => x.DetallesCompra)
+                    .Include(x => x.Pagos).ThenInclude(x => x.MedioPago)
+                    .Include(x => x.IdProveedorNavigation)
+                    .Include(c => c.CuotasCompra).ThenInclude(x => x.Pagos)
                     .AsQueryable();
 
                 if (Filtros != null)

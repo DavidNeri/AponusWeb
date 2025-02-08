@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
@@ -34,6 +33,6 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public string[]? PropsValoresPrevios { get; set; }
 
         [JsonPropertyName("PropsValoresNuevos")]
-        public string[]? PropsValoresNuevos{ get; set; }
+        public string[]? PropsValoresNuevos { get; set; }
     }
 }

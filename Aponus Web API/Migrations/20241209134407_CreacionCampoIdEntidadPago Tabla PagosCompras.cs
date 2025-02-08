@@ -30,7 +30,7 @@ namespace Aponus_Web_API.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_PAGOS_CUOTAS_VENTAS_PAGOS_VENTAS_ID_PAGO",
                 table: "PAGOS_CUOTAS_VENTAS");
-        
+
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_PAGOS_CUOTAS_VENTAS",
@@ -46,7 +46,7 @@ namespace Aponus_Web_API.Migrations
 
             migrationBuilder.DropIndex(
                 name: "IX_PAGOS_CUOTAS_COMPRAS_IdCuota",
-                table: "PAGOS_CUOTAS_COMPRAS"); 
+                table: "PAGOS_CUOTAS_COMPRAS");
 
 
             migrationBuilder.RenameColumn(
@@ -59,7 +59,7 @@ namespace Aponus_Web_API.Migrations
                table: "PAGOS_CUOTAS_COMPRAS",
                newName: "ID_PAGO");
 
-       
+
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_PAGOS_CUOTAS_VENTAS",

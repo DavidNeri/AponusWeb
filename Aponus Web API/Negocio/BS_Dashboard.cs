@@ -1,8 +1,6 @@
 ﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Utilidades.ReportResult;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -25,38 +23,38 @@ namespace Aponus_Web_API.Negocio
         {
             List<Ventas> VentasPendientes = await BsVentas.ObtenerVentasPendientesEntrega();
             List<IReportResult> Insumos = new();
-            var InsumosFaltantes =  await BsStocks.ObentenerInsumosFaltantes();
+            var InsumosFaltantes = await BsStocks.ObentenerInsumosFaltantes();
             var ProductosFaltantes = BsProductos.ObtenerProductosFaltantes();
             var InsumosAgrupados = InsumosFaltantes.GroupBy(x => x.Nombre).ToList();
 
             var Ventas = VentasPendientes.Select(x => new
             {
-               cliente = !string.IsNullOrEmpty(x.Cliente.NombreClave) ? x.Cliente.NombreClave : $"{x.Cliente.Apellido}, {x.Cliente.Nombre}",
-               fecha = x.FechaHora,
-               usuario = x.Usuario,
-               montoTotal = x.MontoTotal,
-               saldoPendiente = x.SaldoPendiente,
-               estado =x.Estado.Descripcion              
+                cliente = !string.IsNullOrEmpty(x.Cliente.NombreClave) ? x.Cliente.NombreClave : $"{x.Cliente.Apellido}, {x.Cliente.Nombre}",
+                fecha = x.FechaHora,
+                usuario = x.Usuario,
+                montoTotal = x.MontoTotal,
+                saldoPendiente = x.SaldoPendiente,
+                estado = x.Estado.Descripcion
 
-            }).ToList();     
+            }).ToList();
 
             var Productos = ProductosFaltantes
                 .Where(x => x.Cantidad <= 100)
-                .Select(y=> new
+                .Select(y => new
                 {
                     cantidad = y.Cantidad,
                     tolerancia = y.Tolerancia,
                     precioLista = y.PrecioLista,
-                    diametroNominal= y.DiametroNominal,
+                    diametroNominal = y.DiametroNominal,
                     tipo = y.IdTipoNavigation.DescripcionTipo,
-                    descripcion = y.IdDescripcionNavigation.DescripcionProducto                    
+                    descripcion = y.IdDescripcionNavigation.DescripcionProducto
                 }).ToList();
 
 
             foreach (var insumo in InsumosAgrupados)
             {
                 IReportResult GrupoInsumosRowList = new();
-                
+
                 var GrupoInsumos = InsumosFaltantes.Where(x => x.Nombre == insumo.Key).ToList();
                 var PropidadesGrupoInsumos = GrupoInsumos.FirstOrDefault()?.GetType().GetProperties();
 
@@ -106,7 +104,7 @@ namespace Aponus_Web_API.Negocio
                 });
 
                 Insumos.Add(GrupoInsumosRowList);
-            }           
+            }
 
             return new JsonResult(new
             {

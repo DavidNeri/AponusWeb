@@ -108,7 +108,7 @@ namespace Aponus_Web_API.Negocio
 
             List<int?> MovimientosIds = ListaMovimientos.Select(m => m.IdMovimiento).Distinct().ToList();
 
-            List<DTODatosArchivosMovimientosStock> InfoArchivosMovimientos = await _movimientosStock.InfoArchivos(MovimientosIds); 
+            List<DTODatosArchivosMovimientosStock> InfoArchivosMovimientos = await _movimientosStock.InfoArchivos(MovimientosIds);
 
 
             foreach (DTOMovimientosStock Movimiento in ListaMovimientos)
@@ -241,7 +241,7 @@ namespace Aponus_Web_API.Negocio
                             List<(string Hash, string Path)> DatosArchivosUpload = new UTL_Cloudinary().SubirArchivosCloudinary(ArchivosMovimiento.Archivos,
                                 !string.IsNullOrEmpty(proveedor?.NombreClave) ? proveedor.NombreClave : proveedor?.Apellido + "_" + proveedor?.Nombre);
 
-                            List<ArchivosMovimientosStock> DatosArchivos = new List<ArchivosMovimientosStock>();                      
+                            List<ArchivosMovimientosStock> DatosArchivos = new List<ArchivosMovimientosStock>();
 
                             DatosArchivosUpload.ForEach(x => DatosArchivos.Add(new ArchivosMovimientosStock()
                             {

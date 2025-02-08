@@ -2,7 +2,6 @@
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Aponus_Web_API.Controllers
 {
@@ -49,8 +48,8 @@ namespace Aponus_Web_API.Controllers
         [RequiredPermission("STOCK_INSUMOS", "INSERT")]
         [RequiredPermission("STOCK_INSUMOS", "UPDATE")]
         public IActionResult GuardarInsumoProducto(DTODetallesComponenteProducto InsumoProducto)
-        {            
-            return BsSupplies.MapeoDTOtoDB(InsumoProducto);           
+        {
+            return BsSupplies.MapeoDTOtoDB(InsumoProducto);
         }
 
         [HttpPost]

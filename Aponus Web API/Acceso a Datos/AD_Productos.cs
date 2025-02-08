@@ -30,17 +30,17 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 Tolerancia = producto.Tolerancia,
                 IdEstado = 1,
                 IdEstadoNavigation = AponusDBContext.EstadosProducto.First(x => x.IdEstado == 1),
-                IdDescripcionNavigation = AponusDBContext.ProductosDescripcions.First(x=>x.IdDescripcion == producto.IdDescripcion),
-                IdTipoNavigation = AponusDBContext.ProductosTipos.First(x => x.IdTipo== producto.IdTipo),                
+                IdDescripcionNavigation = AponusDBContext.ProductosDescripcions.First(x => x.IdDescripcion == producto.IdDescripcion),
+                IdTipoNavigation = AponusDBContext.ProductosTipos.First(x => x.IdTipo == producto.IdTipo),
                 PrecioFinal = producto.PrecioFinal,
-                PorcentajeGanancia = producto.PorcentajeGanancia  ?? producto.PrecioFinal ?? 0 - producto.PrecioLista ?? 0                
+                PorcentajeGanancia = producto.PorcentajeGanancia ?? producto.PrecioFinal ?? 0 - producto.PrecioLista ?? 0
 
             });
 
             // ProcesarDatos los cambios en la base de datos
             AponusDBContext.SaveChanges();
         }
-       
+
         internal void GuardarComponentes(List<DTOComponentesProducto> Componentes)
         {
             bool ChkIdProd = Componentes.All(x => x.IdProducto != null);
@@ -145,17 +145,17 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             AponusDBContext.Componentes_Productos.UpdateRange(ProducComponentsUpdate);
             AponusDBContext.SaveChanges();
-        }      
+        }
         public List<ProductosDescripcion> Listar()
         {
 
             var Products = AponusDBContext.ProductosDescripcions
-                .Where(x=>x.IdEstado != 0)
+                .Where(x => x.IdEstado != 0)
                 .Select(x => new ProductosDescripcion
                 {
                     IdDescripcion = x.IdDescripcion,
                     DescripcionProducto = x.DescripcionProducto,
-                    Productos = x.Productos.Where(x=>x.IdEstado!=0)
+                    Productos = x.Productos.Where(x => x.IdEstado != 0)
                     .Select(P => new Producto()
                     {
                         Cantidad = P.Cantidad,
@@ -169,8 +169,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         PorcentajeGanancia = P.PorcentajeGanancia,
                         IdDescripcionNavigation = P.IdDescripcionNavigation,
                         IdTipoNavigation = P.IdTipoNavigation,
-                        
-                        
+
+
                     }).ToList(),
                 })
                 .ToList();
@@ -206,7 +206,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     {
                         DescripcionProducto = x.DescripcionProducto,
                         Productos = x.Productos
-                            .Where(y => (typeId==null || y.IdTipo == typeId) && (IdDescription == null || y.IdDescripcion == IdDescription) && y.IdEstado != 0)
+                            .Where(y => (typeId == null || y.IdTipo == typeId) && (IdDescription == null || y.IdDescripcion == IdDescription) && y.IdEstado != 0)
                             .Select(producto => new
                             {
                                 nombre = $"{x.DescripcionProducto} DN:{producto.DiametroNominal} Tolerancia:{producto.Tolerancia}",
@@ -252,7 +252,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         //                       .Where(x => x.IdTipo == typeId && x.IdDescripcion == IdDescription && x.DiametroNominal == Dn)
         //                       .ToList()
         //                       .OrderBy(x => x.DiametroNominal)
-                               
+
 
         //      }
         //      ).AsEnumerable()
@@ -311,14 +311,14 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 })
                 .ToListAsync();
             return new JsonResult(Products);
-                    
+
         }
 
         internal async Task<Exception?> DeshabilitarProducto(Producto producto)
         {
             try
             {
-                producto.IdEstado = 0;                
+                producto.IdEstado = 0;
                 var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
                 producto.IdEstadoNavigation = AponusDBContext.EstadosProducto.First(x => x.IdEstado == 0);
                 AponusDBContext.Entry(producto).State = EntityState.Modified;
@@ -326,7 +326,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 await transaccion.CommitAsync();
 
                 return null;
-                
+
             }
             catch (Exception ex)
             {

@@ -2,10 +2,7 @@
 using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -58,7 +55,7 @@ namespace Aponus_Web_API.Negocio
         //}
         internal IActionResult ProcesarDatos(DTOProducto Producto)
         {
-            
+
 
             if (Producto.IdProducto == null)
             {
@@ -108,8 +105,8 @@ namespace Aponus_Web_API.Negocio
 
                 ActualizarComponentes(Producto.Componentes);
                 return new JsonResult(Producto.IdProducto);
-                
-            }            
+
+            }
 
         }
 
@@ -135,7 +132,7 @@ namespace Aponus_Web_API.Negocio
         internal IActionResult ActualizarProducto(DTOProducto producto)
         {
             try
-            {  
+            {
                 Producto _producto = new()
                 {
                     IdProducto = producto.IdProducto ?? "",
@@ -145,7 +142,7 @@ namespace Aponus_Web_API.Negocio
                     Cantidad = 0,
                     PrecioLista = producto.PrecioLista ?? 0,
                     Tolerancia = producto.Tolerancia,
-                    IdEstado = 1,                    
+                    IdEstado = 1,
                     PrecioFinal = producto.PrecioFinal,
                     PorcentajeGanancia = producto.PorcentajeGanancia ?? producto.PrecioFinal ?? 0 - producto.PrecioLista ?? 0
                 };
@@ -186,7 +183,7 @@ namespace Aponus_Web_API.Negocio
                         IdComponente = componente.IdComponente ?? "",
                         IdProducto = componente.IdProducto ?? "",
                         Longitud = componente.Largo,
-                        Peso = componente.Peso                    
+                        Peso = componente.Peso
                     });
                 }
 
@@ -239,7 +236,7 @@ namespace Aponus_Web_API.Negocio
         internal JsonResult MapeoDTOProducto(string idProducto)
         {
             DTOProducto Prod = new();
-            Producto? p = AdProductos.BuscarProducto(idProducto);            
+            Producto? p = AdProductos.BuscarProducto(idProducto);
 
             if (p != null)
             {
@@ -251,7 +248,7 @@ namespace Aponus_Web_API.Negocio
                 Prod.PorcentajeGanancia = p.PorcentajeGanancia;
                 Prod.PrecioFinal = p.PrecioFinal;
                 Prod.PrecioLista = p.PrecioLista;
-                Prod.Tolerancia = p.Tolerancia;                
+                Prod.Tolerancia = p.Tolerancia;
             }
 
             return new JsonResult(Prod);
@@ -267,7 +264,7 @@ namespace Aponus_Web_API.Negocio
             {
                 foreach (var producto in Descripcion.Productos)
                 {
-                    Productos.Add(producto);   
+                    Productos.Add(producto);
                 }
             }
 
@@ -282,7 +279,7 @@ namespace Aponus_Web_API.Negocio
             {
                 var error = await AdProductos.DeshabilitarProducto(Producto);
 
-                if(error != null)
+                if (error != null)
                     return new ContentResult()
                     {
                         Content = error.InnerException?.Message ?? error.Message,
@@ -294,7 +291,7 @@ namespace Aponus_Web_API.Negocio
                 {
                     AdProductos.EliminarComponentesProducto(idProducto);
                 }
-                catch (Exception ex )
+                catch (Exception ex)
                 {
                     return new ContentResult()
                     {

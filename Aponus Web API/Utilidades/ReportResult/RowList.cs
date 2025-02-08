@@ -1,15 +1,9 @@
-﻿
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-namespace Aponus_Web_API.Utilidades.ReportResult
+﻿namespace Aponus_Web_API.Utilidades.ReportResult
 {
     public class RowList
-    {       
-        public string idInsmo{ get; set; }
-        public List<CelList> cellList = new();     
-        
-      
-    }
+    {
+        public string idInsmo { get; set; }
+        public List<CelList> cellList = new();
 
-    
+    }
 }

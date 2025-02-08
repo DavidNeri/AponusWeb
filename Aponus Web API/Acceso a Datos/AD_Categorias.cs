@@ -71,7 +71,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         IdDescripcion = IdDescripcion,
                         IdTipo = IdTipo,
                         IdDescripcionNavigation = AponusDBContext.ProductosDescripcions.First(x => x.IdDescripcion == IdDescripcion),
-                        IdTipoNavigation = AponusDBContext.ProductosTipos.First(x=>x.IdTipo.Equals(IdTipo))
+                        IdTipoNavigation = AponusDBContext.ProductosTipos.First(x => x.IdTipo.Equals(IdTipo))
                     });
 
                     AponusDBContext.SaveChanges();
@@ -135,7 +135,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         AponusDBContext.Database.ExecuteSqlInterpolated($"UPDATE \"PRODUCTOS_TIPOS\" SET \"ID_TIPO\" = {idTipo} WHERE \"ID_TIPO\" = {_idTipo}");
                         AponusDBContext.ChangeTracker.Clear();
                     }
-                    
+
                     AponusDBContext.SaveChanges();
                 }
             }
@@ -297,7 +297,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                             });
 
-                            
+
                             await AponusDBContext.SaveChangesAsync();
                             await Transaccion.CommitAsync();
                             return (StatusCodes.Status200OK, null);

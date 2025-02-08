@@ -11,7 +11,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public string? Contraseña { get; set; }
 
         [JsonProperty(PropertyName = "correo", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Correo { get; set; } 
+        public string? Correo { get; set; }
 
         [JsonProperty(PropertyName = "idRol", NullValueHandling = NullValueHandling.Ignore)]
         public int? idRol { get; set; }

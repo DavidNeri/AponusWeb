@@ -35,7 +35,7 @@ namespace Aponus_Web_API.Migrations
                 name: "SAL",
                 table: "USUARIOS",
                 oldNullable: true,
-                nullable : false);
+                nullable: false);
 
             migrationBuilder.AddColumn<string>(
                 name: "NOMBRE_ROL",

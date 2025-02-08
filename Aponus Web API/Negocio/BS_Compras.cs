@@ -47,16 +47,16 @@ namespace Aponus_Web_API.Negocio
                         IdEstadoCompra = x.Estado.IdEstadoCompra
                     },
 
-                    DetallesCompra = x.DetallesCompra.Select(y=> new DTOComprasDetalles()
+                    DetallesCompra = x.DetallesCompra.Select(y => new DTOComprasDetalles()
                     {
                         IdCompra = y.IdCompra,
                         Cantidad = y.Cantidad,
                         IdInsumo = y.IdInsumo,
 
-                    }).ToList(),                   
+                    }).ToList(),
 
-                    Pagos = x.Pagos.Select(y=>new DTOPagosCompras()
-                    {                        
+                    Pagos = x.Pagos.Select(y => new DTOPagosCompras()
+                    {
                         IdCompra = y.IdCompra,
                         Fecha = y.Fecha,
                         IdMedioPago = y.IdMedioPago,
@@ -77,15 +77,15 @@ namespace Aponus_Web_API.Negocio
                         }
                     }).ToList(),
 
-                    Cuotas = x.CuotasCompra.Select(c=>new DTOCuotasCompras()
+                    Cuotas = x.CuotasCompra.Select(c => new DTOCuotasCompras()
                     {
                         IdCompra = c.IdCompra,
                         Monto = c.Monto,
                         FechaPago = c.FechaPago,
                         FechaVencimiento = c.FechaVencimiento,
                         IdEstadoCuota = c.IdEstadoCuota,
-                        NumeroCuota = c.NumeroCuota,                        
-                        
+                        NumeroCuota = c.NumeroCuota,
+
                         EstadoCuota = new DTOEstadosCuotasCompras()
                         {
                             Descripcion = c.EstadoCuotaCompra.Descripcion,
@@ -93,7 +93,7 @@ namespace Aponus_Web_API.Negocio
                             IdEstado = c.EstadoCuotaCompra.IdEstado,
                         },
 
-                        Pagos = c.Pagos.Select(x=>new DTOPagosCompras()
+                        Pagos = c.Pagos.Select(x => new DTOPagosCompras()
                         {
                             IdCompra = x.IdCompra,
                             Fecha = x.Fecha,
@@ -115,8 +115,8 @@ namespace Aponus_Web_API.Negocio
                         IdEntidad = x.IdProveedorNavigation.IdEntidad,
                         Apellido = x.IdProveedorNavigation.Apellido,
                         Nombre = x.IdProveedorNavigation.Nombre,
-                        NombreClave = x.IdProveedorNavigation.NombreClave,                        
-                    }                    
+                        NombreClave = x.IdProveedorNavigation.NombreClave,
+                    }
 
                 }).ToListAsync();
 
@@ -138,7 +138,7 @@ namespace Aponus_Web_API.Negocio
                 };
             }
             else
-            {                
+            {
 
                 Compras compra = new()
                 {
@@ -156,7 +156,7 @@ namespace Aponus_Web_API.Negocio
                         Cantidad = dc.Cantidad,
                         IdInsumo = dc.IdInsumo,
                         IdCompra = dc.IdCompra,
-                        DetallesInsumo = new ComponentesDetalle { IdInsumo = dc.IdInsumo}                        
+                        DetallesInsumo = new ComponentesDetalle { IdInsumo = dc.IdInsumo }
 
                     }).ToList(),
 
@@ -167,12 +167,12 @@ namespace Aponus_Web_API.Negocio
                         IdMedioPago = p.IdMedioPago,
                         IdEntidadPago = p.IdEntidadPago,
                         MedioPago = new MediosPago() { IdMedioPago = p.IdMedioPago },
-                        entidadPago = new EntidadesPago() { IdEntidad= p.IdEntidadPago},
+                        entidadPago = new EntidadesPago() { IdEntidad = p.IdEntidadPago },
                         IdPago = p.IdPago,
                         Monto = p.Monto,
 
                     }).ToList(),
-                   
+
                 };
 
                 if (Compra.Cuotas != null || Compra?.Cuotas?.Count > 0)
@@ -190,15 +190,15 @@ namespace Aponus_Web_API.Negocio
                             IdEstadoCuota = cuota.FechaPago != null ? 2 : 1,
                             NumeroCuota = cuota.NumeroCuota,
                             Monto = cuota.Monto,
-                            Pagos = cuota.Pagos.Select(x=> new PagosCompras()
+                            Pagos = cuota.Pagos.Select(x => new PagosCompras()
                             {
-                                IdCuota = x.IdCuota ?? 0 ,
+                                IdCuota = x.IdCuota ?? 0,
                                 IdMedioPago = x.IdMedioPago,
                                 Monto = x.Monto,
                                 Fecha = x.Fecha,
                                 IdEntidadPago = x.IdEntidadPago,
                                 Compra = null,
-                                
+
                             }).ToList(),
                         });
                     }

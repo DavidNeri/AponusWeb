@@ -52,9 +52,9 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                             Producto.PrecioLista = (Producto.PrecioLista != 0 && Producto.PrecioLista != null) ? Producto.PrecioLista : Existe.PrecioLista;
 
-                            Producto.PrecioFinal= (Producto.PrecioFinal != 0 && Producto.PrecioFinal != null) ? Producto.PrecioFinal : Existe.PrecioFinal;
+                            Producto.PrecioFinal = (Producto.PrecioFinal != 0 && Producto.PrecioFinal != null) ? Producto.PrecioFinal : Existe.PrecioFinal;
 
-                            Producto.PorcentajeGanancia??= Existe.PorcentajeGanancia;
+                            Producto.PorcentajeGanancia ??= Existe.PorcentajeGanancia;
 
                             Producto.IdDescripcion = Existe.IdDescripcion;
                             Producto.IdTipo = Existe.IdTipo;
@@ -68,7 +68,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         {
                             await AponusDBContext.Productos.AddAsync(Producto);
                         }
-                           
+
 
                         await AponusDBContext.SaveChangesAsync();
                         await transaccion.CommitAsync();
@@ -100,7 +100,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         if (Existe != null)
                         {
 
-                            stockInsumo.Granallado = stockInsumo.Granallado ?? Existe?.Granallado ??0;
+                            stockInsumo.Granallado = stockInsumo.Granallado ?? Existe?.Granallado ?? 0;
                             stockInsumo.Pintura = stockInsumo.Pintura ?? Existe?.Pintura ?? 0;
                             stockInsumo.Proceso = stockInsumo.Proceso ?? Existe?.Proceso ?? 0;
                             stockInsumo.Recibido = stockInsumo.Recibido ?? Existe?.Recibido ?? 0;
@@ -131,7 +131,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             {
                 return await AponusDBContext.stockInsumos.ToListAsync();
             }
-            
+
         }
 
         internal bool IncrementarStockProducto(DTOStockUpdate Actualizacion)
@@ -184,7 +184,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
 
             List<DTOTipoInsumos> tipoInsumosList = AponusDBContext.ComponentesDetalles
-                .Where(x=>x.IdEstado != 0)
+                .Where(x => x.IdEstado != 0)
                  .Join(AponusDBContext.ComponentesDescripcions,
                  Detalles => Detalles.IdDescripcion,
                  Descripciones => Descripciones.IdDescripcion,
@@ -220,13 +220,13 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                 }
                             } ?? new List<DTOComponenteFormateado>()
                         })
-                 
+
                  .GroupBy(Result => new
                  {
                      Result.IdDescripcion,
                      Result.Descripcion
                  })
-                 .Where(Filtros => (!IdDescripcion.HasValue || Filtros.Key.IdDescripcion == IdDescripcion.Value)) 
+                 .Where(Filtros => (!IdDescripcion.HasValue || Filtros.Key.IdDescripcion == IdDescripcion.Value))
                  .Select(group => new DTOTipoInsumos
                  {
                      IdDescripcion = group.Key.IdDescripcion,
@@ -261,7 +261,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                          espec.Granallado = espec.Granallado != null && !espec.Granallado.Equals("-") ? espec.Granallado + unidad.Unidad : espec.Granallado;
                          espec.Proceso = espec.Proceso != null && !espec.Proceso.Equals("-") ? espec.Proceso + unidad.Unidad : espec.Proceso;
                          espec.Moldeado = espec.Moldeado != null && !espec.Moldeado.Equals("-") ? espec.Moldeado + unidad.Unidad : espec.Moldeado;
-                         espec.Pendiente= espec.Pendiente!= null && !espec.Pendiente.Equals("-") ? espec.Pendiente + unidad.Unidad : espec.Pendiente;
+                         espec.Pendiente = espec.Pendiente != null && !espec.Pendiente.Equals("-") ? espec.Pendiente + unidad.Unidad : espec.Pendiente;
                          espec.Recibido = espec.Recibido != null && !espec.Recibido.Equals("-") ? espec.Recibido + unidad.Unidad : espec.Recibido;
 
                          return tipoInsumosList;
@@ -372,7 +372,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         }
 
 
-      
+
 
         internal string? CrearDirectorioMovimientos_Local(string Proveedor)
         {

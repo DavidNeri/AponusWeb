@@ -86,7 +86,7 @@ namespace Aponus_Web_API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-         
+
 
             migrationBuilder.CreateIndex(
                 name: "IX_PAGOS_CUOTAS_COMPRAS_IdCuota",

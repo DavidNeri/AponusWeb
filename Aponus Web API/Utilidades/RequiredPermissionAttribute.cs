@@ -2,8 +2,6 @@
 using Aponus_Web_API.Modelos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace Aponus_Web_API.Utilidades
 {
@@ -12,7 +10,7 @@ namespace Aponus_Web_API.Utilidades
     public class RequiredPermissionAttribute : Attribute, IAuthorizationFilter
     {
         private readonly string _tabla;
-        private readonly string _Atributo;  
+        private readonly string _Atributo;
 
         public RequiredPermissionAttribute(string tabla, string atributo)
         {

@@ -1,5 +1,4 @@
-﻿using Aponus_Web_API.Modelos;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
 {
@@ -12,6 +11,6 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public string NombreRol { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "descripcion", NullValueHandling = NullValueHandling.Ignore)]
-        public string Descripcion { get; set; } = string.Empty;        
+        public string Descripcion { get; set; } = string.Empty;
     }
 }
