@@ -249,12 +249,38 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.DashBoardController",
-    "Method": "ObtenerDatosTablero",
-    "RelativePath": "Aponus/DashBoard/Get",
+    "Method": "ObtenerDatosVentasPendientesTablero",
+    "RelativePath": "Aponus/DashBoard/PendingSales",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.DashBoardController",
+    "Method": "ObtenerDatosProductosTablero",
+    "RelativePath": "Aponus/DashBoard/Products",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.DashBoardController",
+    "Method": "ObtenerDatosInsumosTablero",
+    "RelativePath": "Aponus/DashBoard/Supplies/{IdDescripcion}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdDescripcion",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

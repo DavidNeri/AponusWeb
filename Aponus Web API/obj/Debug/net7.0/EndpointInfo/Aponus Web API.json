@@ -403,7 +403,42 @@
         }
       }
     },
-    "/Aponus/DashBoard/Get": {
+    "/Aponus/DashBoard/PendingSales": {
+      "get": {
+        "tags": [
+          "DashBoard"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/DashBoard/Supplies/{IdDescripcion}": {
+      "get": {
+        "tags": [
+          "DashBoard"
+        ],
+        "parameters": [
+          {
+            "name": "IdDescripcion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Aponus/DashBoard/Products": {
       "get": {
         "tags": [
           "DashBoard"

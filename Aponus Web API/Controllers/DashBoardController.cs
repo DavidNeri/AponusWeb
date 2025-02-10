@@ -16,10 +16,26 @@ namespace Aponus_Web_API.Controllers
         }
 
         [HttpGet]
-        [Route("Get")]
-        public async Task<IActionResult> ObtenerDatosTablero()
+        [Route("PendingSales")]
+        public async Task<IActionResult> ObtenerDatosVentasPendientesTablero()
         {
-            return await BsDashboard.ProcesarDatosTablero();
+            return await BsDashboard.ProcesarVentasPendientesTablero();
         }
+
+
+        [HttpGet]
+        [Route("Supplies/{IdDescripcion}")]
+        public async Task<IActionResult> ObtenerDatosInsumosTablero(int IdDescripcion)
+        {
+            return await BsDashboard.ProcesarInsumosFaltantesTablero(IdDescripcion);
+        }
+
+        [HttpGet]
+        [Route("Products")]
+        public IActionResult ObtenerDatosProductosTablero()
+        {
+            return  BsDashboard.ProcesarProductosFaltantesTablero();
+        }
+
     }
 }

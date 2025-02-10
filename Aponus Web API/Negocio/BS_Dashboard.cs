@@ -19,25 +19,62 @@ namespace Aponus_Web_API.Negocio
             BsComponentes = _BsComponentes;
         }
 
-        internal async Task<IActionResult> ProcesarDatosTablero()
+        internal async Task<IActionResult> ProcesarInsumosFaltantesTablero(int idDescripcion)
         {
-            List<Ventas> VentasPendientes = await BsVentas.ObtenerVentasPendientesEntrega();
-            List<IReportResult> Insumos = new();
-            var InsumosFaltantes = await BsStocks.ObentenerInsumosFaltantes();
-            var ProductosFaltantes = BsProductos.ObtenerProductosFaltantes();
-            var InsumosAgrupados = InsumosFaltantes.GroupBy(x => x.Nombre).ToList();
-
-            var Ventas = VentasPendientes.Select(x => new
+            var InsumosFaltantes = await BsStocks.ObentenerInsumosFaltantes(idDescripcion);
+            IReportResult InsumosRowList = new();
+            
+            var PropidadesInsumos = InsumosFaltantes.FirstOrDefault()?.GetType().GetProperties();
+            
+            var Columnas = PropidadesInsumos?.Where(p => InsumosFaltantes.All(x =>
             {
-                cliente = !string.IsNullOrEmpty(x.Cliente.NombreClave) ? x.Cliente.NombreClave : $"{x.Cliente.Apellido}, {x.Cliente.Nombre}",
-                fecha = x.FechaHora,
-                usuario = x.Usuario,
-                montoTotal = x.MontoTotal,
-                saldoPendiente = x.SaldoPendiente,
-                estado = x.Estado.Descripcion
+                var valor = p.GetValue(x);
+                var nombre = p.Name;
+                return
+                    valor != null
+                    && !nombre.Contains("IdFraccionamiento")
+                    && !nombre.Contains("IdAlmacenamiento")
+                    && !nombre.Contains("IdEstado")
+                    && !nombre.Contains("IdDescripcion")
+                    && !nombre.Contains("Navigation");
 
-            }).ToList();
+            }))
+            .Select(p => p.Name)
+            .ToList();
 
+            InsumosFaltantes.ForEach(insumo =>
+            {
+                InsumosRowList.rowList.Add(new RowList()
+                {
+                    idInsmo = insumo.IdInsumo ?? "",
+                    cellList = insumo.GetType().GetProperties()
+                    .Where(y => Columnas == null || Columnas.Contains(y.Name))
+                    .Select(p => new CelList()
+                    {
+                        header = p.Name,
+                        type = BsComponentes.ObtenerTipoValor(p.PropertyType),
+                        value = p.GetValue(insumo)?.ToString() ?? ""
+                    }).ToList()
+
+                });
+            });
+
+            InsumosRowList.rowList.ForEach(row =>
+            {
+                row.cellList.Add(new CelList()
+                {
+                    type = "button",
+                    value = row.idInsmo,
+                    header = "Acciones"
+                });
+            });
+            
+            return new JsonResult(InsumosRowList);
+        }
+
+        internal IActionResult ProcesarProductosFaltantesTablero()
+        {
+            var ProductosFaltantes = BsProductos.ObtenerProductosFaltantes();
             var Productos = ProductosFaltantes
                 .Where(x => x.Cantidad <= 100)
                 .Select(y => new
@@ -50,68 +87,26 @@ namespace Aponus_Web_API.Negocio
                     descripcion = y.IdDescripcionNavigation.DescripcionProducto
                 }).ToList();
 
+            return new JsonResult(Productos);
 
-            foreach (var insumo in InsumosAgrupados)
+        }
+
+        internal async Task<IActionResult> ProcesarVentasPendientesTablero()
+        {
+            List<Ventas> VentasPendientes = await BsVentas.ObtenerVentasPendientesEntrega();
+            
+            var Ventas = VentasPendientes.Select(x => new
             {
-                IReportResult GrupoInsumosRowList = new();
+                cliente = !string.IsNullOrEmpty(x.Cliente.NombreClave) ? x.Cliente.NombreClave : $"{x.Cliente.Apellido}, {x.Cliente.Nombre}",
+                fecha = x.FechaHora,
+                usuario = x.Usuario.Usuario,
+                montoTotal = x.MontoTotal,
+                saldoPendiente = x.SaldoPendiente,
+                estado = x.Estado.Descripcion
 
-                var GrupoInsumos = InsumosFaltantes.Where(x => x.Nombre == insumo.Key).ToList();
-                var PropidadesGrupoInsumos = GrupoInsumos.FirstOrDefault()?.GetType().GetProperties();
+            }).ToList();
 
-                var Columnas = PropidadesGrupoInsumos?.Where(p => GrupoInsumos.All(x =>
-                {
-                    var valor = p.GetValue(x);
-                    var nombre = p.Name;
-                    return
-                        valor != null
-                        && !nombre.Contains("IdFraccionamiento")
-                        && !nombre.Contains("IdAlmacenamiento")
-                        && !nombre.Contains("IdEstado")
-                        && !nombre.Contains("IdDescripcion")
-                        && !nombre.Contains("Navigation");
-
-                }))
-                .Select(p => p.Name)
-                .ToList();
-
-
-
-                GrupoInsumos.ForEach(insumo =>
-                {
-                    GrupoInsumosRowList.rowList.Add(new RowList()
-                    {
-                        idInsmo = insumo.IdInsumo ?? "",
-                        cellList = insumo.GetType().GetProperties()
-                        .Where(y => Columnas == null || Columnas.Contains(y.Name))
-                        .Select(p => new CelList()
-                        {
-                            header = p.Name,
-                            type = BsComponentes.ObtenerTipoValor(p.PropertyType),
-                            value = p.GetValue(insumo)?.ToString() ?? ""
-                        }).ToList()
-
-                    });
-                });
-
-                GrupoInsumosRowList.rowList.ForEach(row =>
-                {
-                    row.cellList.Add(new CelList()
-                    {
-                        type = "button",
-                        value = row.idInsmo,
-                        header = "Acciones"
-                    });
-                });
-
-                Insumos.Add(GrupoInsumosRowList);
-            }
-
-            return new JsonResult(new
-            {
-                Ventas,
-                Insumos,
-                Productos,
-            });
+            return new JsonResult(Ventas);
 
         }
     }
