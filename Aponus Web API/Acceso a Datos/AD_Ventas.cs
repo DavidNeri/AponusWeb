@@ -29,8 +29,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
             var pagosVenta = Venta.Pagos;
             var CuotasVenta = Venta.Cuotas;
 
-            //Venta.Pagos = null;
-            //Venta.Cuotas= null;
+            Venta.Pagos = null;
+            Venta.Cuotas= null;
 
             var estadoVenta = AponusDBContext.estadosVentas.First(x => x.IdEstado == Venta.IdEstadoVenta) ?? new EstadosVentas();
 

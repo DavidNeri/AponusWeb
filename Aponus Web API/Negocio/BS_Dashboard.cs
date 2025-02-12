@@ -1,6 +1,8 @@
-﻿using Aponus_Web_API.Modelos;
+﻿using Aponus_Web_API.Acceso_a_Datos;
+using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Utilidades.ReportResult;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -10,13 +12,15 @@ namespace Aponus_Web_API.Negocio
         private readonly BS_Stocks BsStocks;
         private readonly BS_Productos BsProductos;
         private readonly BS_Componentes BsComponentes;
+        private readonly AD_Ventas ADVentas;
 
-        public BS_Dashboard(BS_Ventas _BsVentas, BS_Stocks _BsStocks, BS_Productos _BSProductos, BS_Componentes _BsComponentes)
+        public BS_Dashboard(BS_Ventas _BsVentas, BS_Stocks _BsStocks, BS_Productos _BSProductos, BS_Componentes _BsComponentes, AD_Ventas _AdVentas)
         {
             BsVentas = _BsVentas;
             BsStocks = _BsStocks;
             BsProductos = _BSProductos;
             BsComponentes = _BsComponentes;
+            ADVentas = _AdVentas;
         }
 
         internal async Task<IActionResult> ProcesarInsumosFaltantesTablero(int idDescripcion)
@@ -89,6 +93,51 @@ namespace Aponus_Web_API.Negocio
 
             return new JsonResult(Productos);
 
+        }
+
+        internal IActionResult ProcesarVentasMensuales()
+        {
+            IQueryable<Ventas> QueryVentas = ADVentas.ListarVentas();
+            List<Ventas> ListaVentas = QueryVentas.ToList();
+            IReportResult reportResult = new();
+      
+            
+            var Agrupadas = ListaVentas
+                .GroupBy(x=> new
+                {
+                    Mes = x.FechaHora.ToString("MMMM"),
+                    x.FechaHora.Month,
+                    x.FechaHora.Year,
+
+                })
+                .OrderByDescending(x => x.Key.Year)
+                .ThenByDescending(x => x.Key.Month)
+                .Select(x=>new
+                {
+                    x.Key.Mes,
+                    Año = x.Key.Year,
+                    montoTotal= x.Sum(y=>y.MontoTotal),
+                    cantidad = x.Count()
+
+                })
+                .ToList();           
+            
+            foreach (var x in Agrupadas)
+            {
+                reportResult.rowList.Add(new RowList()
+                {
+                    cellList = x.GetType().GetProperties().Select(p => new CelList()
+                    {
+                        header = p.Name,
+                        type = BsComponentes.ObtenerTipoValor(p.PropertyType),
+                        value = p.GetValue(x)?.ToString() ?? ""
+                    }).ToList()
+                });
+            }
+
+            
+
+            return new JsonResult(reportResult);
         }
 
         internal async Task<IActionResult> ProcesarVentasPendientesTablero()

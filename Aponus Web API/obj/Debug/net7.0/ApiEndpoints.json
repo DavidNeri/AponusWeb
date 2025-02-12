@@ -269,6 +269,16 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.DashBoardController",
+    "Method": "ObtenerVentasMensualesTablero",
+    "RelativePath": "Aponus/DashBoard/SalesAvg",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.DashBoardController",
     "Method": "ObtenerDatosInsumosTablero",
     "RelativePath": "Aponus/DashBoard/Supplies/{IdDescripcion}",
     "HttpMethod": "GET",

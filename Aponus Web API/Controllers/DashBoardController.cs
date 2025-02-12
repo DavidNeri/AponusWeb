@@ -24,6 +24,15 @@ namespace Aponus_Web_API.Controllers
 
 
         [HttpGet]
+        [Route("SalesAvg")]
+        public IActionResult ObtenerVentasMensualesTablero()
+        {
+            return BsDashboard.ProcesarVentasMensuales();
+        }
+
+
+
+        [HttpGet]
         [Route("Supplies/{IdDescripcion}")]
         public async Task<IActionResult> ObtenerDatosInsumosTablero(int IdDescripcion)
         {

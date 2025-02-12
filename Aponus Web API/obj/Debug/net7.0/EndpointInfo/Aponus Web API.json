@@ -415,6 +415,18 @@
         }
       }
     },
+    "/Aponus/DashBoard/SalesAvg": {
+      "get": {
+        "tags": [
+          "DashBoard"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/Aponus/DashBoard/Supplies/{IdDescripcion}": {
       "get": {
         "tags": [
@@ -2546,8 +2558,7 @@
             "multipart/form-data": {
               "schema": {
                 "required": [
-                  "IdCliente",
-                  "IdUsuario"
+                  "IdCliente"
                 ],
                 "type": "object",
                 "properties": {
@@ -4471,8 +4482,7 @@
       },
       "DTOVentas": {
         "required": [
-          "idCliente",
-          "idUsuario"
+          "idCliente"
         ],
         "type": "object",
         "properties": {
@@ -4491,7 +4501,8 @@
             "nullable": true
           },
           "idUsuario": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "montoTotal": {
             "type": "number",

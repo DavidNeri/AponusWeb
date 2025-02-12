@@ -86,6 +86,27 @@ public partial class AponusContext : DbContext
             var Tabla = cambio.Entity.GetType().Name;
             var IdRegistro = ObtenerClavePrimaria(cambio);
 
+            var valoresOriginales = cambio.OriginalValues.ToObject();
+            var valoresNuevos= cambio.CurrentValues.ToObject();
+
+            if (Tabla == "Usuarios")
+            {
+                var HashContraseña = cambio.Entity.GetType().GetProperty("HashContraseña");
+                var sal = cambio.Entity.GetType().GetProperty("Sal");
+
+                if (HashContraseña != null)
+                {
+                    HashContraseña.SetValue(valoresNuevos, "***");
+                    HashContraseña.SetValue(valoresOriginales, "***");
+                }
+
+                if (sal != null)
+                {
+                    sal.SetValue(valoresOriginales, "***");
+                    sal.SetValue(valoresNuevos, "***");
+                }
+            }
+
             var usuario = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Desconocido";
 
             Auditorias auditoria = new()
@@ -101,18 +122,18 @@ public partial class AponusContext : DbContext
                 case EntityState.Added:
                     auditoria.Accion = "CREACION";
                     auditoria.ValoresPrevios = "";
-                    auditoria.ValoresNuevos = JsonConvert.SerializeObject(cambio.CurrentValues.ToObject());
+                    auditoria.ValoresNuevos = JsonConvert.SerializeObject(valoresNuevos);
                     break;
 
                 case EntityState.Modified:
                     auditoria.Accion = "ACTUALIZACION";
-                    auditoria.ValoresPrevios = JsonConvert.SerializeObject(cambio.OriginalValues.ToObject());
-                    auditoria.ValoresNuevos = JsonConvert.SerializeObject(cambio.CurrentValues.ToObject());
+                    auditoria.ValoresPrevios = JsonConvert.SerializeObject(valoresOriginales);
+                    auditoria.ValoresNuevos = JsonConvert.SerializeObject(valoresNuevos);
                     break;
 
                 case EntityState.Deleted:
                     auditoria.Accion = "ELIMINACION";
-                    auditoria.ValoresPrevios = JsonConvert.SerializeObject(cambio.OriginalValues.ToObject());
+                    auditoria.ValoresPrevios = JsonConvert.SerializeObject(valoresOriginales);
                     auditoria.ValoresNuevos = null;
                     break;
 
@@ -126,13 +147,15 @@ public partial class AponusContext : DbContext
     {
         var PK = Entrada.Metadata.FindPrimaryKey();
 
-        if (PK == null) return "0";
+        if (PK == null || !PK.Properties.Any()) return "0";
 
         var NombrePropPK = PK.Properties.FirstOrDefault();
 
         if (NombrePropPK == null) return "0";
 
-        return Entrada?.Property(NombrePropPK.Name)?.CurrentValue?.ToString() ?? "0";
+        var valorPK = Entrada.Property(NombrePropPK.Name)?.CurrentValue;
+
+        return valorPK?.ToString() ?? "0";
 
     }
 
