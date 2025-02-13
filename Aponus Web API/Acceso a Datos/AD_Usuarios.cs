@@ -88,26 +88,26 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
         }
 
-        public (List<AsignacionPermisosRoles>? permisosRol, Exception? ex) ListarPermisosRol(string rol)
-        {
-            try
-            {
-                return (AponusDBContext.asignacionRoles
-                                .Where(x => x.EsquemaTabla == "public" && x.Beneficiario == rol)
-                                .Select(x => new AsignacionPermisosRoles()
-                                {
-                                    NombreTabla = x.NombreTabla,
-                                    Atributo = x.Atributo
-                                })
-                                .ToList(),
-                        null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex);
+        //public (List<AsignacionPermisosRoles>? permisosRol, Exception? ex) ListarPermisosRol(string rol)
+        //{
+        //    try
+        //    {
+        //        return (AponusDBContext.asignacionRoles
+        //                        .Where(x => x.EsquemaTabla == "public" && x.Beneficiario == rol)
+        //                        .Select(x => new AsignacionPermisosRoles()
+        //                        {
+        //                            NombreTabla = x.NombreTabla,
+        //                            Atributo = x.Atributo
+        //                        })
+        //                        .ToList(),
+        //                null);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return (null, ex);
 
-            }
-        }
+        //    }
+        //}
 
         internal async Task<(List<RolesUsuarios>? Roles, Exception? ex)> ListaRoles()
         {

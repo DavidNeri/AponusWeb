@@ -32,10 +32,10 @@ namespace Aponus_Web_API.Utilidades
 
         public string GenerarToken(Usuarios _usuario)
         {
-            var (permisos, error) = AdUsuarios.ListarPermisosRol(_usuario.Rol.NombreRol);
+            //var (permisos, error) = AdUsuarios.ListarPermisosRol(_usuario.Rol.NombreRol);
 
-            if (error != null)
-                return "Error al obtener los privilegios del usuario";
+            //if (error != null)
+            //    return "Error al obtener los privilegios del usuario";
 
             var claims = new List<Claim>
             {

@@ -24,7 +24,7 @@ namespace Aponus_Web_API.Controllers
 
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("Quotation")]
         public IActionResult GenerarCuotas(UTL_ParametrosCuotas Parametros)
         {
