@@ -1779,7 +1779,7 @@
     "ContainingType": "Aponus_Web_API.Controllers.SalesController",
     "Method": "GenerarCuotas",
     "RelativePath": "Aponus/Sales/Quotation",
-    "HttpMethod": "GET",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [

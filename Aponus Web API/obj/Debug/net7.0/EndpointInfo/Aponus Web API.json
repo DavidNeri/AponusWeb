@@ -2370,7 +2370,7 @@
       }
     },
     "/Aponus/Sales/Quotation": {
-      "get": {
+      "post": {
         "tags": [
           "Sales"
         ],

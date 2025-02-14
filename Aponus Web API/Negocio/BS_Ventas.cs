@@ -91,7 +91,7 @@ namespace Aponus_Web_API.Negocio
         {
             decimal saldoPendiente = Venta.MontoTotal;
 
-            if (Venta.DetallesVenta == null || (Venta.Pagos == null && Venta.Cuotas != null) || Venta.Cuotas == null && Venta.Pagos == null)
+            if (Venta.DetallesVenta == null || (Venta.Cuotas == null && Venta.Pagos == null))
             {
                 return new ContentResult()
                 {
