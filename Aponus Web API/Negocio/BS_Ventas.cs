@@ -376,9 +376,10 @@ namespace Aponus_Web_API.Negocio
                 {
                     foreach (var Producto in venta.DetallesVenta ?? Enumerable.Empty<DTOVentasDetalles>())
                     {
-                        Producto.NombreProducto = NombresProductosVenta?
-                        .Where(x => x.IdProducto == null || ProductosId.Contains(x.IdProducto))
-                        .Select(x => x.Nombre)?.First()?.ToString() ?? "";
+                         Producto.NombreProducto = NombresProductosVenta?
+                        .Where(x => x.IdProducto == Producto.IdProducto)
+                        .Select(x => x.Nombre)
+                        .FirstOrDefault() ?? "";
                     }
                 });
 
