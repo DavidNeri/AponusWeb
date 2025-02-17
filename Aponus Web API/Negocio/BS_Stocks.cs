@@ -259,9 +259,9 @@ namespace Aponus_Web_API.Negocio
                         PathArchivo = x.Path
                     }));
 
-                    bool RollBackGuardarUrlArchivos = AdStocks.GuardarDatosArchivosMovimiento(AponusDbContext, DatosArchivosMovimiento);
+                    bool ResultadoGuardarArchivos = AdStocks.GuardarDatosArchivosMovimiento(AponusDbContext, DatosArchivosMovimiento);
 
-                    if (DatosArchivosMovimientoUpload == null || DatosArchivosMovimientoUpload.Count == 0 || RollBackGuardarUrlArchivos)
+                    if (DatosArchivosMovimientoUpload == null || DatosArchivosMovimientoUpload.Count == 0 || !ResultadoGuardarArchivos)
                     {
                         transaccion.Rollback();
                         return new ContentResult()
