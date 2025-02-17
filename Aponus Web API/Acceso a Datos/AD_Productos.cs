@@ -288,29 +288,31 @@ namespace Aponus_Web_API.Acceso_a_Datos
             return new JsonResult(DN);
         }
 
-        internal async Task<IActionResult> ListarProdVentas()
+        internal List<DTOProducto> ListarProdVentas(List<string>? IdProductos)
         {
-            var Products = await AponusDBContext.Productos
+            List<DTOProducto> Products = AponusDBContext.Productos
                 .Join(AponusDBContext.ProductosDescripcions, Prod => Prod.IdDescripcion, Desc => Desc.IdDescripcion, (prod, Desc) => new
                 {
                     prod,
                     Desc
                 })
-                .Select(x => new
+                .Where(x => IdProductos == null || IdProductos.Contains(x.prod.IdProducto))
+                .Select(x => new DTOProducto
                 {
-                    nombre = $"{x.Desc.DescripcionProducto} DN:{x.prod.DiametroNominal} Tolerancia:{x.prod.Tolerancia}",
-                    x.prod.IdProducto,
-                    x.prod.DiametroNominal,
-                    x.prod.IdDescripcion,
-                    x.prod.IdTipo,
-                    x.prod.Tolerancia,
-                    x.prod.Cantidad,
-                    x.prod.PrecioFinal,
-                    x.prod.PrecioLista,
-                    x.prod.PorcentajeGanancia,
+                    Nombre = $"{x.Desc.DescripcionProducto} DN:{x.prod.DiametroNominal} Tolerancia:{x.prod.Tolerancia}",
+                    IdProducto = x.prod.IdProducto,
+                    DiametroNominal = x.prod.DiametroNominal,
+                    IdDescripcion = x.prod.IdDescripcion,
+                    IdTipo = x.prod.IdTipo,
+                    Tolerancia = x.prod.Tolerancia,
+                    Cantidad = x.prod.Cantidad,
+                    PrecioFinal = x.prod.PrecioFinal,
+                    PrecioLista = x.prod.PrecioLista,
+                    PorcentajeGanancia = x.prod.PorcentajeGanancia,
+                    Componentes = null
                 })
-                .ToListAsync();
-            return new JsonResult(Products);
+                .ToList();
+            return Products;
 
         }
 

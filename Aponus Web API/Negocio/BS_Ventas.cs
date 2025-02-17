@@ -4,6 +4,7 @@ using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Dynamic;
 using System.Text.RegularExpressions;
 using ArchivosVentas = Aponus_Web_API.Modelos.ArchivosVentas;
 
@@ -274,7 +275,6 @@ namespace Aponus_Web_API.Negocio
         {
             try
             {
-
                 IQueryable<Ventas> QueryVentas = AdVentas.ListarVentas();
 
                 if (filtros?.IdEntidad != null)
@@ -284,7 +284,8 @@ namespace Aponus_Web_API.Negocio
                 if (filtros?.Hasta != null)
                     QueryVentas = QueryVentas.Where(X => X.FechaHora >= filtros.Hasta);
 
-                List<DTOVentas> ListadoVentas = QueryVentas.Select(x => new DTOVentas()
+
+                List <DTOVentas> ListadoVentas = QueryVentas.Select(x => new DTOVentas()
                 {
                     IdVenta = x.IdVenta,
                     IdCliente = x.IdCliente,
@@ -295,6 +296,7 @@ namespace Aponus_Web_API.Negocio
                     SaldoPendiente = x.SaldoPendiente,
                     DetallesVenta = x.DetallesVenta.Select(y => new DTOVentasDetalles()
                     {
+                        
                         Cantidad = y.Cantidad,
                         IdProducto = y.IdProducto,
                         IdVenta = y.IdVenta,
@@ -351,6 +353,34 @@ namespace Aponus_Web_API.Negocio
                                         }).ToList()
 
                 }).ToList();
+
+                var IdProdTodasVentas = ListadoVentas.Select(x => x.DetallesVenta?.Select(y=>y.IdProducto).ToList()).ToList();
+                List<string> ProductosId = new List<string>();
+
+                foreach (var venta in IdProdTodasVentas)
+                {
+                    var i = 0;
+
+                    while (i < venta?.Count)
+                    {
+                        var IdVenta = venta[i];
+
+                        ProductosId.Add(IdVenta);
+                        i++;
+                    }                    
+                }
+
+                List<DTOProducto> NombresProductosVenta = AdProductos.ListarProdVentas(ProductosId);
+
+                ListadoVentas.ForEach(venta =>
+                {
+                    foreach (var Producto in venta.DetallesVenta ?? Enumerable.Empty<DTOVentasDetalles>())
+                    {
+                        Producto.NombreProducto = NombresProductosVenta?
+                        .Where(x => x.IdProducto == null || ProductosId.Contains(x.IdProducto))
+                        .Select(x => x.Nombre)?.First()?.ToString() ?? "";
+                    }
+                });
 
 
                 return new JsonResult(ListadoVentas);
@@ -477,7 +507,9 @@ namespace Aponus_Web_API.Negocio
 
         internal async Task<IActionResult> ListarProductos()
         {
-            return await AdProductos.ListarProdVentas();
+            var Productos = AdProductos.ListarProdVentas(null);
+
+            return new JsonResult(Productos);
         }
     }
 }

@@ -4214,6 +4214,10 @@
             "type": "string",
             "nullable": true
           },
+          "nombre": {
+            "type": "string",
+            "nullable": true
+          },
           "idDescripcion": {
             "type": "integer",
             "format": "int32",
@@ -4572,6 +4576,10 @@
           "idVenta": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "nombreProducto": {
+            "type": "string",
             "nullable": true
           },
           "idProducto": {
