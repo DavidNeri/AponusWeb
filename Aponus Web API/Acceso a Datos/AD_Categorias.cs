@@ -175,7 +175,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             try
             {
                 var Exists = AponusDBContext.ComponentesDescripcions
-                    .FirstOrDefaultAsync(x => x.Descripcion != null && x.Descripcion.Equals(Componente.Descripcion));
+                    .First(x => x.Descripcion == null || x.Descripcion.Equals(Componente.Descripcion));
 
                 if (Exists == null)
                 {
@@ -211,6 +211,23 @@ namespace Aponus_Web_API.Acceso_a_Datos
             {
                 await transaccion.RollbackAsync();
                 return (null, error);
+            }
+        }
+
+        internal async Task<(int? Resultado, Exception? Error)> CambiarEstadoDescripcionComponentes(int idDescripcion)
+        {
+            try
+            {
+                List<ComponentesDescripcion> Listado = await AponusDBContext.ComponentesDescripcions
+                    .Where(x => x.IdDescripcion == idDescripcion)
+                    .ToListAsync();
+                return (null, null);
+                //Listado.ForEach(x => x.ide
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 

@@ -126,5 +126,14 @@ namespace Aponus_Web_API.Controllers
             return await BsCategorias.MapeoComponenteBD(Componente);
         }
 
+        [HttpPost]
+        [Route("Supplies/Descriptions/{idDescripcion}/Delete")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "UPDATE")]
+        public async Task<IActionResult> EliminarDescripcionComponente(int idDescripcion)
+        {
+            return await BsCategorias.RegistrarCambioEstadoDescripcionComponente(idDescripcion);
+        }
+
+
     }
 }

@@ -292,6 +292,29 @@
         }
       }
     },
+    "/Aponus/Categories/Supplies/Descriptions/{idDescripcion}/Delete": {
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "parameters": [
+          {
+            "name": "idDescripcion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/Aponus/Components/FetchUnities/{IdNombreComponente}": {
       "get": {
         "tags": [

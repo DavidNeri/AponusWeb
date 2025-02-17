@@ -144,6 +144,22 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
+    "Method": "EliminarDescripcionComponente",
+    "RelativePath": "Aponus/Categories/Supplies/Descriptions/{idDescripcion}/Delete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idDescripcion",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.CategoriesController",
     "Method": "ListarNombreComponentes",
     "RelativePath": "Aponus/Categories/Supplies/Descriptions/List",
     "HttpMethod": "GET",

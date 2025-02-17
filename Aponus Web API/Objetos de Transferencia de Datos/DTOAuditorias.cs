@@ -16,23 +16,18 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         [JsonPropertyName("Accion")]
         public string Accion { get; set; } = "";
 
-        [JsonPropertyName("Usuario")]
+        [JsonPropertyName("usuario")]
         public string Usuario { get; set; } = "";
 
-        [JsonPropertyName("Fecha")]
+        [JsonPropertyName("fecha")]
         public DateTime Fecha { get; set; }
 
-        [JsonPropertyName("ValoresPrevios")]
-        public Dictionary<string, object?>? ValoresPrevios { get; set; }
+        [JsonPropertyName("valoresPrevios")]
+        public string? ValoresPrevios { get; set; }
 
-        [JsonPropertyName("ValoresNuevos")]
-        public Dictionary<string, object?>? ValoresNuevos { get; set; }
+        [JsonPropertyName("valoresNuevos")]
+        public string? ValoresNuevos { get; set; }
 
-        [JsonPropertyName("PropsValoresPrevios")]
-
-        public string[]? PropsValoresPrevios { get; set; }
-
-        [JsonPropertyName("PropsValoresNuevos")]
-        public string[]? PropsValoresNuevos { get; set; }
+      
     }
 }

@@ -347,5 +347,10 @@ namespace Aponus_Web_API.Negocio
 
             return new JsonResult(DTOTiposProducto);
         }
+
+        internal async Task<IActionResult> RegistrarCambioEstadoDescripcionComponente(int idDescripcion)
+        {
+            return null;
+        }
     }
 }

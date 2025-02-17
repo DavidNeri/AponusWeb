@@ -288,10 +288,10 @@ D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets\msbuild.build.Aponu
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.Aponus Web API.props
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.Aponus Web API.props
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets.pack.json
-D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets.upToDateCheck.txt
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus W.47C72FA3.Up2Date
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\refint\Aponus Web API.dll
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.pdb
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\Aponus Web API.genruntimeconfig.cache
 D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\ref\Aponus Web API.dll
+D:\Aponus SA\Aponus Web API\obj\Debug\net7.0\staticwebassets.upToDateCheck.txt

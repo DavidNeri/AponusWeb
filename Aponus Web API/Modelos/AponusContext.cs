@@ -1270,6 +1270,11 @@ public partial class AponusContext : DbContext
             .HasColumnName("ID_ALMACENAMIENTO")
             .IsRequired();
 
+            entity.Property(p => p.IdEstado)
+            .HasColumnType("int")
+            .HasColumnName("ID_ESTADO")
+            .HasDefaultValueSql("1");
+
             entity.Property(p => p.IdFraccionamiento)
             .HasColumnName("ID_FRACCIONAMIENTO")
             .HasColumnType("varchar(50)");

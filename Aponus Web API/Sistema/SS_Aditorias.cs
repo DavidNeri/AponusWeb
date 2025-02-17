@@ -39,25 +39,27 @@ namespace Aponus_Web_API.Sistema
                     IdRegistro = a.IdRegistro,
                     Tabla = a.Tabla,
                     Usuario = a.Usuario,
-                    ValoresNuevos = !string.IsNullOrEmpty(a.ValoresNuevos)
-                    ? JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(a.ValoresNuevos)?
-                        .ToDictionary(
-                        kvp => kvp.Key,
-                        kvp => kvp.Value.ValueKind == JsonValueKind.Number ? $"{kvp.Key}; {kvp.Value.GetDecimal()}" :
-                                        kvp.Value.ValueKind == JsonValueKind.String ? $"{kvp.Key}; {kvp.Value.GetString()}" :
-                                        kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? $"{kvp.Key}; {kvp.Value.GetBoolean()}" :
-                                        (object?)null)
-                        : null,
+                    ValoresNuevos = a.ValoresNuevos ?? "",
+                    ValoresPrevios = a.ValoresPrevios ?? "",
+                    //ValoresNuevos = !string.IsNullOrEmpty(a.ValoresNuevos)
+                    //? JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(a.ValoresNuevos)?
+                    //    .ToDictionary(
+                    //    kvp => kvp.Key,
+                    //    kvp => kvp.Value.ValueKind == JsonValueKind.Number ? $"{kvp.Key}; {kvp.Value.GetDecimal()}" :
+                    //                    kvp.Value.ValueKind == JsonValueKind.String ? $"{kvp.Key}; {kvp.Value.GetString()}" :
+                    //                    kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? $"{kvp.Key}; {kvp.Value.GetBoolean()}" :
+                    //                    (object?)null)
+                    //    : null,
 
-                    ValoresPrevios = !string.IsNullOrEmpty(a.ValoresPrevios)
-                        ? JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(a.ValoresPrevios)?
-                            .ToDictionary(
-                                kvp => kvp.Key,
-                                kvp => kvp.Value.ValueKind == JsonValueKind.Number ? $"{kvp.Key}; {kvp.Value.GetDecimal()}" :
-                                        kvp.Value.ValueKind == JsonValueKind.String ? $"{kvp.Key}; {kvp.Value.GetString()}" :
-                                        kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? $"{kvp.Key}; {kvp.Value.GetBoolean()}" :
-                                        (object?)null)
-                            : null
+                    //ValoresPrevios = !string.IsNullOrEmpty(a.ValoresPrevios)
+                    //    ? JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(a.ValoresPrevios)?
+                    //        .ToDictionary(
+                    //            kvp => kvp.Key,
+                    //            kvp => kvp.Value.ValueKind == JsonValueKind.Number ? $"{kvp.Key}; {kvp.Value.GetDecimal()}" :
+                    //                    kvp.Value.ValueKind == JsonValueKind.String ? $"{kvp.Key}; {kvp.Value.GetString()}" :
+                    //                    kvp.Value.ValueKind == JsonValueKind.True || kvp.Value.ValueKind == JsonValueKind.False ? $"{kvp.Key}; {kvp.Value.GetBoolean()}" :
+                    //                    (object?)null)
+                    //        : null
                 })
                 .ToList();
 

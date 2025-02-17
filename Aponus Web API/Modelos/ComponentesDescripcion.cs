@@ -11,6 +11,7 @@ public partial class ComponentesDescripcion
     public string IdAlmacenamiento { get; set; } = string.Empty;
 
     public string? IdFraccionamiento { get; set; }
+    public  int IdEstado { get; set; }
 
 
 }

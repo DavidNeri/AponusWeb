@@ -396,9 +396,6 @@ namespace Aponus_Web_API.Negocio
                     StatusCode = 400
                 };
             }
-
-
-
         }
 
         internal async Task<IActionResult> MapeoDTOPagosVenta(DTOPagosVentas Pago)
