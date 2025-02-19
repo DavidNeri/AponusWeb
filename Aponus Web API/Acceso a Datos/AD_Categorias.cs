@@ -214,22 +214,37 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
         }
 
-        internal async Task<(int? Resultado, Exception? Error)> CambiarEstadoDescripcionComponentes(int idDescripcion)
+        internal async Task<(List<string>? Componentes, Exception? Error)> CambiarEstadoDescripcionComponentes(int idDescripcion)
         {
             try
             {
                 List<ComponentesDescripcion> Listado = await AponusDBContext.ComponentesDescripcions
                     .Where(x => x.IdDescripcion == idDescripcion)
                     .ToListAsync();
-                return (null, null);
-                //Listado.ForEach(x => x.ide
-            }
-            catch (Exception)
-            {
 
-                throw;
+
+                Listado.ForEach(x =>
+                {
+                    x.IdEstado = 0;
+                    AponusDBContext.Entry(x).State = EntityState.Modified;
+                });
+                
+                await  AponusDBContext.SaveChangesAsync();
+
+                List<string> Componentes = await AponusDBContext.ComponentesDetalles
+                    .Where(x=>x.IdDescripcion==idDescripcion)
+                    .Select(x=>x.IdInsumo)
+                    .ToListAsync();                   
+
+
+                return (Componentes, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex);
             }
         }
+
 
         public class Productos
         {

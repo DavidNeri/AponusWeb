@@ -18,6 +18,37 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             AponusDbContext = _AponusDbContext;
         }
+
+        internal async Task<(int? ResultadoOK, Exception? Error)> CambiarEstadoComponentes(int IdDescripcion)
+        {
+            try
+            {
+                List<ComponentesDetalle>? Listado = await AponusDbContext.ComponentesDetalles
+                    .Where(x => x.IdDescripcion == IdDescripcion)
+                    .ToListAsync();
+
+                if (Listado != null)
+                {
+                    Listado.ForEach(x =>
+                    {
+                        x.IdEstado = 0;
+                        AponusDbContext.Entry(x).State = EntityState.Modified;
+
+                    });
+
+                    await AponusDbContext.SaveChangesAsync();
+                }
+                
+                return (StatusCodes.Status200OK, null);
+                
+            }
+            catch (Exception ex)
+            {
+
+                return (null, ex); 
+            }
+        }
+
         internal List<(string Id, int IdDescripcion, decimal? Longitud, decimal? Peso)> ListarIdDescripcionComponentesProducto(string[] Componentes)
         {
             List<(string, int, decimal?, decimal?)> ComponentesDetalle = AponusDbContext.ComponentesDetalles
@@ -38,6 +69,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         internal List<ComponentesDescripcion>? ListarNombresComponentes()
         {
             List<ComponentesDescripcion>? DescripcionesComponentes = AponusDbContext.ComponentesDescripcions
+                .Where(x=>x.IdEstado != 0)
                 .Select(x => new ComponentesDescripcion()
                 {
                     IdDescripcion = x.IdDescripcion,
@@ -93,7 +125,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                             _Componentes,
                             _DetalleComponentes
                         })
-
+                    .Where(x=>x._DetalleComponentes.IdEstado != 0)
                     .Join(AponusDbContext.ComponentesDescripcions,
                         _DetComponentes => _DetComponentes._DetalleComponentes.IdDescripcion,
                         _NombreComponentes => _NombreComponentes.IdDescripcion,

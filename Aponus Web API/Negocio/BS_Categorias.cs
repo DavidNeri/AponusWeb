@@ -4,6 +4,7 @@ using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace Aponus_Web_API.Negocio
@@ -11,12 +12,14 @@ namespace Aponus_Web_API.Negocio
     public class BS_Categorias
     {
         private readonly AD_Categorias AdCategorias;
-        private readonly AD_Componentes _ComponentesProductos;
+        private readonly AD_Componentes AdComponentes;
+        private readonly AD_Stocks AdStocks;
 
-        public BS_Categorias(AD_Categorias _AdCategorias, AD_Componentes componentesProductos)
+        public BS_Categorias(AD_Categorias _AdCategorias, AD_Componentes _AdComponentes, AD_Stocks _AdStocks)
         {
             AdCategorias = _AdCategorias;
-            _ComponentesProductos = componentesProductos;
+            AdComponentes = _AdComponentes;
+            AdStocks = _AdStocks;
         }
         internal async Task<IActionResult> NormalizarDescripcionProducto(DTOCategorias NuevaCategoria)
         {
@@ -209,7 +212,7 @@ namespace Aponus_Web_API.Negocio
         }
         internal IActionResult MapearNombresComponentesDTO()
         {
-            List<ComponentesDescripcion>? NombresComponentes = _ComponentesProductos.ListarNombresComponentes();
+            List<ComponentesDescripcion>? NombresComponentes = AdComponentes.ListarNombresComponentes();
 
             try
             {
@@ -350,7 +353,23 @@ namespace Aponus_Web_API.Negocio
 
         internal async Task<IActionResult> RegistrarCambioEstadoDescripcionComponente(int idDescripcion)
         {
-            return null;
+            var (Componentes, Error) = await AdCategorias.CambiarEstadoDescripcionComponentes(idDescripcion);
+
+            if (Error!= null)
+                return new ContentResult()
+                {
+                    Content = Error.InnerException?.Message ?? Error.Message,
+                };
+            var (_, error) = await AdComponentes.CambiarEstadoComponentes(idDescripcion);
+
+            if (error != null)
+                return new ContentResult()
+                {
+                    Content = error.InnerException?.Message ?? error.Message,
+                };
+
+
+            return new StatusCodeResult(200);
         }
     }
 }
