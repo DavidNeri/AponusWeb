@@ -210,7 +210,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         .Select(x => x.IdCategoriaEntidad)
                         .ToListAsync();
 
-                    QueryCategorias = QueryCategorias.Where(x => IdCategorias.ToList().Equals(x.IdCategoria));
+                    QueryCategorias = QueryCategorias.Where(x => IdCategorias.Contains(x.IdCategoria));
                 }
 
                 List<EntidadesCategorias> LstCategoriasEntidades = await QueryCategorias.ToListAsync();

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Aponus Web API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+85d5dafe98445630ae5f232a7656fc051af7a6d3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5e1712929f8fc110d162bdbf182d54afc8c72c46")]
 [assembly: System.Reflection.AssemblyProductAttribute("Aponus Web API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Aponus Web API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
