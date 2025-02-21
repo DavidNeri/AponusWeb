@@ -31,7 +31,7 @@ namespace Aponus_Web_API.Controllers
         [HttpGet]
         [Route("List")]
         [RequiredPermission("COMPRAS", "SELECT")]
-        [RequiredPermission("COMPRAS_DETALLES", "SELECT")]
+        [RequiredPermission("COMPRAS_DETALLE", "SELECT")]
         [RequiredPermission("PAGOS_COMPRAS", "SELECT")]
         [RequiredPermission("MEDIOS_PAGO", "SELECT")]
         [RequiredPermission("CUOTAS_COMPRAS", "SELECT")]
