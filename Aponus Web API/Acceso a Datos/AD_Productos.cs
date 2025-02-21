@@ -296,7 +296,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     prod,
                     Desc
                 })
-                .Where(x => IdProductos == null || IdProductos.Contains(x.prod.IdProducto))
+                .Where(x => (IdProductos == null || IdProductos.Contains(x.prod.IdProducto)) && x.prod.IdEstado != 0)
                 .Select(x => new DTOProducto
                 {
                     Nombre = $"{x.Desc.DescripcionProducto} DN:{x.prod.DiametroNominal} Tolerancia:{x.prod.Tolerancia}",

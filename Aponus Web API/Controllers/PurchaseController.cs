@@ -30,6 +30,12 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List")]
+        [RequiredPermission("COMPRAS", "SELECT")]
+        [RequiredPermission("COMPRAS_DETALLES", "SELECT")]
+        [RequiredPermission("PAGOS_COMPRAS", "SELECT")]
+        [RequiredPermission("MEDIOS_PAGO", "SELECT")]
+        [RequiredPermission("CUOTAS_COMPRAS", "SELECT")]
+        [RequiredPermission("ENTIDADES", "SELECT")]
         public async Task<IActionResult> Listar(UTL_FiltrosComprasVentas? Filtros)
         {
             return await BsCompras.Listar(Filtros);
@@ -44,8 +50,6 @@ namespace Aponus_Web_API.Controllers
         {
             return await BsCompras.MapeoDTOPagosCompra(Pago);
         }
-
-        //Modiicar Stock cunado se elimina o modifica una compra
 
     }
 }

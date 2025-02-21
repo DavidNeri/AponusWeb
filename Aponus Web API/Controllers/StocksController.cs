@@ -17,6 +17,10 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Supplies/List/{idDescription?}")]
+        [RequiredPermission("COMPONENTES_DETALLE","SELECT")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
+        [RequiredPermission("STOCK_INSUMOS", "SELECT")]
+
         public IActionResult NewListar(int? idDescription)
         {
             return BsStocks.ObtenerDatosInsumos(idDescription);
@@ -24,6 +28,10 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Products/List/{TypeId}/{IdDescription}")]
+        [RequiredPermission("PRODUCTOS", "SELECT")]
+        [RequiredPermission("PRODUCTOS_TIPO_DESCRIPCION", "SELECT")]
+        [RequiredPermission("PRODUCTOS_TIPO", "SELECT")]
+        [RequiredPermission("PRODUCTOS_DESCRIPCION", "SELECT")]
         public JsonResult ListProducts(string TypeId, int IdDescription)
         {
             try
@@ -64,10 +72,6 @@ namespace Aponus_Web_API.Controllers
         public async Task<IActionResult> Incrementar(DTOProducto Producto)
         {
             return await BsStocks.OperacionesStockProductos().Incrementar(Producto);
-
         }
-
-
-
     }
 }

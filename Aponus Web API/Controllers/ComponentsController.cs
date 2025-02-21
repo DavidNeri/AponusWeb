@@ -1,4 +1,5 @@
 ﻿using Aponus_Web_API.Negocio;
+using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,7 +41,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List/{IdDescripcion?}/{idInsumo?}")]
-
+        [RequiredPermission("COMPONENTES_DETALLE","SELECT")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
         public IActionResult ObtenerListarComponentes(int? IdDescripcion, string? idInsumo)
         {
             return _BsComponentes.MapeoComponentesDetalleDTO(IdDescripcion, idInsumo);
@@ -48,16 +50,16 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListGrid/{IdDescripcion}")]
-
+        [RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
         public IActionResult ObtenerListarComponentes(int IdDescripcion)
         {
             return _BsComponentes.MapeoComponentesDetalleGrid(IdDescripcion);
         }
 
-
-
         [HttpPost]
         [Route("Delete/{IdInsumo}")]
+        [RequiredPermission("COMPONENTES_DETALLE", "UPDATE")]
         public async Task<IActionResult> EliminarComponente(string IdInsumo)
         {
             return await _BsComponentes.ProcesarDatos(IdInsumo);

@@ -19,6 +19,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List/{TypeId?}/{IdDescription?}")]
+        [RequiredPermission("PRODUCTOS_DESCRIPCION","SELECT")]
+        [RequiredPermission("PRODUCTOS","SELECT")]
         public JsonResult ListProducts(string? TypeId, int? IdDescription)
         {
             try
@@ -33,6 +35,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListProducts/{IdProducto}")]
+        [RequiredPermission("PRODUCTOS", "SELECT")]
         public JsonResult ListProducts(string IdProducto)
         {
             try
@@ -47,6 +50,11 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("NewListComponents")]
+        [RequiredPermission("PRODUCTOS", "SELECT")]
+        [RequiredPermission("PRODUCTOS_COMPONENTES", "SELECT")]
+        [RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
+        [RequiredPermission("STOCK_INSUMOS", "SELECT")]
         public JsonResult NewListComponents(DTOProducto Producto)
         {
             try
@@ -62,6 +70,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListDN/{TypeId}")]
+        [RequiredPermission("PRODUCTOS", "SELECT")]
         public async Task<JsonResult> ListarDN(string? TypeId)
         {
             try
@@ -77,6 +86,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListDN/{TypeId}/{IdDescription}")]
+        [RequiredPermission("PRODUCTOS", "SELECT")]
         public async Task<JsonResult> ListarDN(string? TypeId, int? IdDescription)
         {
             try

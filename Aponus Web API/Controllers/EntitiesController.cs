@@ -17,6 +17,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Types/List")]
+        [RequiredPermission("ENTIDADES_TIPOS", "SELECT")]
+
         public async Task<IActionResult> ListarTiposEntidades()
         {
             return await BSEntidades.TiposEntidades().MapeoTiposEntidadesDTO();
@@ -46,7 +48,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Categories/List/{IdTipo?}")]
-
+        [RequiredPermission("ENTIDADES_CATEGORIAS", "SELECT")]
+        [RequiredPermission("ENTIDADES_TIPOS_CATEGORIAS", "SELECT")]
         public async Task<IActionResult> ListarCategoriasEntidades(int? IdTipo)
         {
             return await BSEntidades.CategoriasEntidades().MapeoEntidadesCategoriasDTO(IdTipo);
@@ -112,6 +115,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List/{typeId=0}/{CategoryId=0}/{EntityId=0}")]
+        [RequiredPermission("ENTIDADES", "SELECT")]
+        [RequiredPermission("ENTIDADES_TIPOS", "SELECT")]
+        [RequiredPermission("ENTIDADES_CATEGORIAS", "SELECT")]
         public IActionResult Listar(int TypeId, int CategoryId, int EntityId)
         {
             return BSEntidades.MapeoEntidadesDTO(TypeId, CategoryId, EntityId);
@@ -127,6 +133,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Billing/List")]
+        [RequiredPermission("ENTIDADES_PAGO", "SELECT")]
         public async Task<IActionResult> ObtenerEntidadesPago()
         {
             return await BSEntidades.MapeoEntidadesPagoDTO();

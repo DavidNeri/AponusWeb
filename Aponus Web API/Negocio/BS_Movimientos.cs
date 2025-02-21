@@ -194,7 +194,7 @@ namespace Aponus_Web_API.Negocio
 
         public Estados EstadosMovimientos()
         {
-            return new Estados(AponusDbContext);
+            return new Estados(AponusDbContext, _movimientosStock);
         }
 
         public class Archivos
@@ -371,14 +371,16 @@ namespace Aponus_Web_API.Negocio
         public class Estados
         {
             private readonly AponusContext AponusDbContext;
-            public Estados(AponusContext aponusDbContext)
+            private readonly AD_Movimientos AdMovimientos;
+            public Estados(AponusContext aponusDbContext, AD_Movimientos adMovimientos)
             {
                 AponusDbContext = aponusDbContext;
+                AdMovimientos = adMovimientos;
             }
 
             public IActionResult Listar()
             {
-                var Listado = AD_Movimientos.Estados.Listar(AponusDbContext);
+                var Listado = AdMovimientos.EstadosMovimientos().Listar();
                 return new JsonResult(Listado);
             }
 

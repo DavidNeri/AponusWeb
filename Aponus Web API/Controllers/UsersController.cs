@@ -1,5 +1,6 @@
 ﻿using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Systema;
+using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aponus_Web_API.Controllers
@@ -43,7 +44,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("roles/list")]
-
+        [RequiredPermission("USUARIOS_ROLES", "SELECT")]
         public async Task<IActionResult> ObtenerPerfiles()
         {
             return await _Usuarios.MapeoRolesDTO();

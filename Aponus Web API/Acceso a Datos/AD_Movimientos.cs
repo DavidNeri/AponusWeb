@@ -34,7 +34,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 AponusDbContext = aponusDbContext;
             }
 
-            internal static List<EstadosMovimientosStock> Listar(AponusContext AponusDbContext)
+            internal List<EstadosMovimientosStock> Listar()
             {
                 return AponusDbContext.EstadoMovimientosStock.Where(x => x.IdEstado != 0 && !x.Descripcion.ToUpper().Contains("ELIMINADO")).ToList();
 

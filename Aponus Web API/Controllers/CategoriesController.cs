@@ -18,6 +18,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Products/Types/List")]
+        [RequiredPermission("PRODUCTOS_TIPOS", "SELECT")]
         public JsonResult ListarTiposProductos()
         {
             return BsCategorias.MapearTiposProductosDTO();
@@ -25,6 +26,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Products/Descriptions/List/{idTipo}")]
+        [RequiredPermission("PRODUCTOS_DESCRIPCION","SELECT")]
         public IActionResult ListarDescripcionesProductos(string IdTipo)
         {
             return BsCategorias.MapearDescripcionesProductosDTO(IdTipo);
@@ -112,6 +114,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Supplies/Descriptions/List")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION","SELECT")]
         public IActionResult ListarNombreComponentes()
         {
             return BsCategorias.MapearNombresComponentesDTO();
@@ -133,7 +136,6 @@ namespace Aponus_Web_API.Controllers
         {
             return await BsCategorias.RegistrarCambioEstadoDescripcionComponente(idDescripcion);
         }
-
 
     }
 }

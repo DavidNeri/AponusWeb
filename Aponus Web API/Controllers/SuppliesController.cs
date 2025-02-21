@@ -21,6 +21,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("new-id/{sypplyName}/")]
+        [RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
         public JsonResult GenerarIdInsumo(string? sypplyName)
         {
             try
@@ -36,6 +37,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListFormatted")]
+        [RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
+        [RequiredPermission("STOCK_INSUMOS", "SELECT")]
         public IActionResult ListarInsumosFormateados()
         {
             return BsSupplies.ListarNombresFormateados();
@@ -62,6 +66,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("GetId")]
+        [RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
         public JsonResult? ObtenerId(DTODetallesComponenteProducto Especificaciones)
         {
             return BsComponents.ObtenerIdComponente(Especificaciones);
@@ -75,7 +80,6 @@ namespace Aponus_Web_API.Controllers
         public IActionResult? GuardarComponentesProducto(List<DTOComponentesProducto> ComponentesProd)
         {
             return BsComponents.GuardarComponentesProducto(ComponentesProd);
-
         }
     }
 }

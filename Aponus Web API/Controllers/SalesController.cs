@@ -18,6 +18,12 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List")]
+        [RequiredPermission("VENTAS", "SELECT")]
+        [RequiredPermission("ESTADOS_VENTAS", "SELECT")]
+        [RequiredPermission("VENTAS_DETALLES", "SELECT")]
+        [RequiredPermission("CUOTAS_VENTAS", "SELECT")]
+        [RequiredPermission("PAGOS_VENTAS", "SELECT")]
+        [RequiredPermission("ARCHIVOS_VENTAS", "SELECT")]        
         public IActionResult List(UTL_FiltrosComprasVentas? Filtros)
         {
             return BsVentas.Filtrar(Filtros);
@@ -47,6 +53,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Products/List")]
+        [RequiredPermission("PRODUCTOS", "SELECT")]
+        [RequiredPermission("PRODUCTOS_DESCRIPCION", "SELECT")]
         public async Task<IActionResult> ListarProductosVentas()
         {
             return await BsVentas.ListarProductos();
