@@ -308,6 +308,8 @@ namespace Aponus_Web_API.Negocio
                         FechaVencimiento = Cuotas.FechaVencimiento,
                         NumeroCuota = Cuotas.NumeroCuota,
                         Monto = Cuotas.Monto,
+                        IdCuota = Cuotas.IdCuota,
+                        IdVenta = Cuotas.IdVenta,   
                         EstadoCuota = new DTOEstadosCuotasVentas()
                         {
                             Descripcion = Cuotas.EstadoCuota.Descripcion,

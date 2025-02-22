@@ -200,7 +200,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             using var transaccion = await AponusDBContext.Database.BeginTransactionAsync();
             try
-            {            
+            {
                 AponusDBContext.ComponentesDescripcions.Update(descripcion);
                 await AponusDBContext.SaveChangesAsync();
                 await transaccion.CommitAsync();

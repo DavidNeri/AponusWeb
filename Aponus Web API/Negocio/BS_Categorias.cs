@@ -258,12 +258,13 @@ namespace Aponus_Web_API.Negocio
 
             if (Componente?.IdDescripcion != 0)
             {
+
                 componente.IdDescripcion = Componente!.IdDescripcion;
                 componente.IdEstado = 1;
                 var (statusCode, _error) = await AdCategorias.ModificarDescripcionComponente(componente);
                 if (_error != null) return new ContentResult()
                 {
-                    StatusCode = 500,
+                    StatusCode = 400,
                     Content = _error.InnerException?.Message ?? _error.Message,
                     ContentType = "text/plain"
                 };
@@ -275,7 +276,7 @@ namespace Aponus_Web_API.Negocio
                 var (StatusCode, error) = await AdCategorias.AgregarDescripcionCompoente(componente);
                 if (error != null) return new ContentResult()
                 {
-                    StatusCode = 500,
+                    StatusCode = 400,
                     Content = error.InnerException?.Message ?? error.Message,
                     ContentType = "text/plain"
                 };
