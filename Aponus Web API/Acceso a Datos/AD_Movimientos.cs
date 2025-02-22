@@ -89,7 +89,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     UsuarioModificacion = x.ModificadoUsuario,
 
 
-                    DatosArchivos = AponusDBContext.ArchivosStock
+                    InfoArchivos = AponusDBContext.ArchivosStock
                     .Where(x => x.IdMovimiento == x.IdMovimiento && x.IdEstado == 1)
                     .Select(x => new DTODatosArchivosMovimientosStock()
                     {
@@ -103,7 +103,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 .FirstOrDefault();
 
 
-            foreach (DTODatosArchivosMovimientosStock Archivo in Movimiento?.DatosArchivos ?? Enumerable.Empty<DTODatosArchivosMovimientosStock>())
+            foreach (DTODatosArchivosMovimientosStock Archivo in Movimiento?.InfoArchivos ?? Enumerable.Empty<DTODatosArchivosMovimientosStock>())
             {
                 if (Archivo != null)
                 {
@@ -155,6 +155,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 (Mov_Prov_Sum_Det, Estados) => new { Mov_Prov_Sum_Det, Estados })
 
             .Where(x => x.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.IdEstadoMovimiento != 0)
+            .Distinct()
             .Select(result => new DTOMovimientosStock()
             {
                 IdMovimiento = result.Mov_Prov_Sum_Det.Movimientos_Proveedores_Suministros.movimiento_proveedor.Movimiento.IdMovimiento,
@@ -174,7 +175,8 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         s.Cantidad.ToString() + (result.Mov_Prov_Sum_Det.SuministrosDetalle.IdFraccionamiento ?? result.Mov_Prov_Sum_Det.SuministrosDetalle.IdAlmacenamiento) :
                         0.00.ToString() + (result.Mov_Prov_Sum_Det.SuministrosDetalle.IdFraccionamiento ?? result.Mov_Prov_Sum_Det.SuministrosDetalle.IdAlmacenamiento),
                 })
-                .ToList(),
+                .ToList()
+                ,
 
                 Proveedor = new DTOEntidades()
                 {
@@ -185,7 +187,6 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 }
             });
             return await IQMovimientos.ToListAsync();
-
         }
         internal async Task<List<DTODatosArchivosMovimientosStock>> InfoArchivos(List<int?> ListaMovimientos)
         {

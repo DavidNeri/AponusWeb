@@ -2,7 +2,7 @@
 {
     public class RowList
     {
-        public string idInsmo { get; set; }
+        public string idInsumo { get; set; }
         public List<CelList> cellList = new();
 
     }

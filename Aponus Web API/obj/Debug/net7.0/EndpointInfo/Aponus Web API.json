@@ -1075,7 +1075,7 @@
                       "$ref": "#/components/schemas/DTOSuministrosMovimientosStock"
                     }
                   },
-                  "DatosArchivos": {
+                  "InfoArchivos": {
                     "type": "array",
                     "items": {
                       "$ref": "#/components/schemas/DTODatosArchivosMovimientosStock"
@@ -1293,7 +1293,7 @@
                 "Suministros": {
                   "style": "form"
                 },
-                "DatosArchivos": {
+                "InfoArchivos": {
                   "style": "form"
                 },
                 "Archivos": {
@@ -1639,7 +1639,7 @@
                       "$ref": "#/components/schemas/DTOSuministrosMovimientosStock"
                     }
                   },
-                  "DatosArchivos": {
+                  "InfoArchivos": {
                     "type": "array",
                     "items": {
                       "$ref": "#/components/schemas/DTODatosArchivosMovimientosStock"
@@ -1857,7 +1857,7 @@
                 "Suministros": {
                   "style": "form"
                 },
-                "DatosArchivos": {
+                "InfoArchivos": {
                   "style": "form"
                 },
                 "Archivos": {
@@ -4118,7 +4118,7 @@
             },
             "nullable": true
           },
-          "datosArchivos": {
+          "infoArchivos": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DTODatosArchivosMovimientosStock"

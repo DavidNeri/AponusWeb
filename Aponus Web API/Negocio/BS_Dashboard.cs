@@ -50,7 +50,7 @@ namespace Aponus_Web_API.Negocio
             {
                 InsumosRowList.rowList.Add(new RowList()
                 {
-                    idInsmo = insumo.IdInsumo ?? "",
+                    idInsumo = insumo.IdInsumo ?? "",
                     cellList = insumo.GetType().GetProperties()
                     .Where(y => Columnas == null || Columnas.Contains(y.Name))
                     .Select(p => new CelList()
@@ -68,7 +68,7 @@ namespace Aponus_Web_API.Negocio
                 row.cellList.Add(new CelList()
                 {
                     type = "button",
-                    value = row.idInsmo,
+                    value = row.idInsumo,
                     header = "Acciones"
                 });
             });

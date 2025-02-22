@@ -44,7 +44,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public List<DTOSuministrosMovimientosStock>? Suministros { get; set; }
 
         [JsonProperty(PropertyName = "infoArchivos", NullValueHandling = NullValueHandling.Ignore)]
-        public List<DTODatosArchivosMovimientosStock>? DatosArchivos { get; set; } = new List<DTODatosArchivosMovimientosStock>();
+        public List<DTODatosArchivosMovimientosStock>? InfoArchivos { get; set; } = new List<DTODatosArchivosMovimientosStock>();
 
         [JsonProperty(PropertyName = "archivos", NullValueHandling = NullValueHandling.Ignore)]
         public List<IFormFile>? Archivos { get; set; }

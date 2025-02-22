@@ -241,7 +241,7 @@ namespace Aponus_Web_API.Negocio
             {
                 Reporte.rowList.Add(new RowList()
                 {
-                    idInsmo = x.IdInsumo,
+                    idInsumo = x.IdInsumo,
                     cellList = x.GetType().GetProperties()
                     .Where(y => Columnas.Contains(y.Name))
                     .Select(h => new CelList()
@@ -260,7 +260,7 @@ namespace Aponus_Web_API.Negocio
                 {
                     header = "Acciones",
                     type = "button",
-                    value = reporte.idInsmo
+                    value = reporte.idInsumo
                 });
             });
 

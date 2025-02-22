@@ -88,6 +88,7 @@ namespace Aponus_Web_API.Negocio
         internal async Task<IActionResult> Listar(UTL_FiltrosMovimientos? Filtros)
         {
             List<DTOMovimientosStock> ListaMovimientos = await _movimientosStock.Listar(Filtros);
+            ListaMovimientos = ListaMovimientos.DistinctBy(X => X.IdMovimiento).ToList();
 
             List<string> SuministrosId = ListaMovimientos.SelectMany(x => x.Suministros != null ? x.Suministros.Select(s => s.IdSuministro) : Enumerable.Empty<string>()).ToList();
             List<(string IdSuministro, string NombreFormateado, string? Unidad)> SuministrosFormateados = _obtenerInsumos.ObtenerDetalles(SuministrosId);
@@ -112,9 +113,9 @@ namespace Aponus_Web_API.Negocio
 
 
             foreach (DTOMovimientosStock Movimiento in ListaMovimientos)
-                Movimiento.DatosArchivos = InfoArchivosMovimientos?.Where(x => x.IdMovimiento == Movimiento.IdMovimiento).ToList();
+                Movimiento.InfoArchivos = InfoArchivosMovimientos?.Where(x => x.IdMovimiento == Movimiento.IdMovimiento).ToList();
 
-            ListaMovimientos = ListaMovimientos.Distinct().ToList();
+            ListaMovimientos = ListaMovimientos.ToList();
             return new JsonResult(ListaMovimientos);
 
         }
@@ -315,13 +316,13 @@ namespace Aponus_Web_API.Negocio
 
                 bool Rollback = false;
 
-                if (Movimiento.DatosArchivos != null)
+                if (Movimiento.InfoArchivos != null)
                 {
                     using (var transaccion = AponusDbContext.Database.BeginTransaction())
                     {
                         try
                         {
-                            if (!ArchivosMovimientos.Eliminar(AponusDbContext, Movimiento?.IdMovimiento ?? -1, Movimiento?.DatosArchivos?.Select(x => x.NombreArchivo ?? "").First() ?? "")) Rollback = true;
+                            if (!ArchivosMovimientos.Eliminar(AponusDbContext, Movimiento?.IdMovimiento ?? -1, Movimiento?.InfoArchivos?.Select(x => x.NombreArchivo ?? "").First() ?? "")) Rollback = true;
                             if (!_movimientosStock.RegistrarModificacion(AponusDbContext, Movimiento ?? new DTOMovimientosStock())) Rollback = true;
 
 
