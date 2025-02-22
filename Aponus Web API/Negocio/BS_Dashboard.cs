@@ -146,6 +146,7 @@ namespace Aponus_Web_API.Negocio
             
             var Ventas = VentasPendientes.Select(x => new
             {
+                id =  x.IdVenta,
                 cliente = !string.IsNullOrEmpty(x.Cliente.NombreClave) ? x.Cliente.NombreClave : $"{x.Cliente.Apellido}, {x.Cliente.Nombre}",
                 fecha = x.FechaHora,
                 usuario = x.Usuario.Usuario,

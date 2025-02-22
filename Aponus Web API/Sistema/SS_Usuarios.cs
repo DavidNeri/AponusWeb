@@ -78,7 +78,6 @@ namespace Aponus_Web_API.Systema
                 rol = Usuario?.Rol.NombreRol
             };
 
-
             return new JsonResult(Respuesta);
 
         }
