@@ -42,7 +42,7 @@ namespace Aponus_Web_API.Controllers
 
 
         [HttpGet]
-        [Route("List/")]
+        [Route("List")]
         [RequiredPermission("STOCK_MOVIMIENTOS", "SELECT")]
         [RequiredPermission("ARCHIVOS_STOCK", "SELECT")]
         [RequiredPermission("ESTADOS_MOVIMIENTOS_STOCK", "SELECT")]
