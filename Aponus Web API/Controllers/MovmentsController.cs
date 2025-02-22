@@ -43,13 +43,13 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("List/")]
-        //[RequiredPermission("STOCK_MOVIMIENTOS", "SELECT")]
-        //[RequiredPermission("ARCHIVOS_STOCK", "SELECT")]
-        //[RequiredPermission("ESTADOS_MOVIMIENTOS_STOCK", "SELECT")]
-        //[RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
-        //[RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
-        //[RequiredPermission("ENTIDADES", "SELECT")]
-        //[RequiredPermission("SUMINISTROS_MOVIMIENTOS_STOCK", "SELECT")]
+        [RequiredPermission("STOCK_MOVIMIENTOS", "SELECT")]
+        [RequiredPermission("ARCHIVOS_STOCK", "SELECT")]
+        [RequiredPermission("ESTADOS_MOVIMIENTOS_STOCK", "SELECT")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
+        [RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
+        [RequiredPermission("ENTIDADES", "SELECT")]
+        [RequiredPermission("SUMINISTROS_MOVIMIENTOS_STOCK", "SELECT")]
         public async Task<IActionResult> Listar(UTL_FiltrosMovimientos? Filtros)
         {
             return await BsMovimientos.Listar(Filtros);

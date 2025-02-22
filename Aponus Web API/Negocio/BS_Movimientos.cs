@@ -237,7 +237,7 @@ namespace Aponus_Web_API.Negocio
                             .FirstOrDefault();
 
                         //Copiar los archivos 
-                        if (ArchivosMovimiento.Archivos != null && proveedor != null)
+                        if (ArchivosMovimiento.Archivos != null && proveedor != null) // Que es esto?
                         {
                             List<(string Hash, string Path)> DatosArchivosUpload = new UTL_Cloudinary().SubirArchivosCloudinary(ArchivosMovimiento.Archivos,
                                 !string.IsNullOrEmpty(proveedor?.NombreClave) ? proveedor.NombreClave : proveedor?.Apellido + "_" + proveedor?.Nombre);
