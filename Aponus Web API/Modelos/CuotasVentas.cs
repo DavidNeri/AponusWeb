@@ -25,6 +25,9 @@ namespace Aponus_Web_API.Modelos
         [ForeignKey("ID_ESTADO_CUOTA")]
         public int IdEstadoCuota { get; set; }
 
+        [Column("ID_ENTIDAD")]
+        public int IdEntidad{ get; set; }
+
         [Column("FECHA_PAGO")]
         public DateTime? FechaPago { get; set; }
         public virtual Ventas Venta { get; set; } = new Ventas();

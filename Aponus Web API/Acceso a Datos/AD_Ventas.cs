@@ -1,5 +1,6 @@
 ﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using Aponus_Web_API.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -258,6 +259,44 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 return (null, ex);
             }
 
+        }
+
+        internal async Task<Exception?> RegistrarPagoCuota(int IdVenta, int IdCuota)
+        {
+            try
+            {
+                CuotasVentas? Cuota = await AponusDBContext.cuotasVentas.FindAsync(new { IdVenta, IdCuota });
+
+                if (Cuota != null)
+                {
+                    Cuota.FechaPago = UTL_Fechas.ObtenerFechaHora();
+                    Cuota.IdEstadoCuota = 2;
+                    Cuota.EstadoCuota = AponusDBContext.estadosCuotasVentas.First(x => x.IdEstadoCuota == 2);
+                    AponusDBContext.Entry(Cuota).State = EntityState.Modified;                    
+
+                    AponusDBContext.pagosVentas.Add(new PagosVentas()
+                    {
+                        IdCuota = IdCuota,
+                        IdVenta = IdVenta,
+                        Monto = Cuota.Monto,
+                        Fecha = Cuota.FechaPago,
+                        IdMedioPago = 1,
+                        IdEntidadPago = Cuota.IdEntidad
+                    });
+
+                    await AponusDBContext.SaveChangesAsync();
+                    return null;
+                }
+                else
+                {
+                    return new Exception("No se encontró la cuota");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return ex;
+            }
         }
     }
 }

@@ -71,7 +71,15 @@ namespace Aponus_Web_API.Systema
                 };
 
             string Token = JsonWebToken.GenerarToken(Usuario!);
-            return new JsonResult(Token);
+
+            var Respuesta = new
+            {
+                token= Token,
+                rol = Usuario?.Rol.NombreRol
+            };
+
+
+            return new JsonResult(Respuesta);
 
         }
 

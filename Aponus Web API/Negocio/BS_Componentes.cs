@@ -248,15 +248,13 @@ namespace Aponus_Web_API.Negocio
                     .Where(y => Columnas.Contains(y.Name))
                     .Select(h => new CelList()
                     {
-                        header = h.Name,
+                        header = h.Name.Contains("IdAlmacenamiento") ? "Tipo Almacenamiento" : h.Name.Contains("IdFraccionamiento") ? "Tipo Fraccionamiento" : h.Name,
                         value = h.GetValue(x)?.ToString() ?? "",
                         type = ObtenerTipoValor(h.PropertyType)
 
                     }).ToList(),
                 });
             });
-
-            int i = 1;
             Reporte.rowList.ForEach(reporte =>
             {
                 reporte.cellList.Add(new CelList()
@@ -265,15 +263,6 @@ namespace Aponus_Web_API.Negocio
                     type = "button",
                     value = reporte.idInsumo
                 });
-
-                reporte.cellList.Add(new CelList()
-                {
-                    header = "Orden",
-                    type = "number",
-                    value = i.ToString()
-                });
-
-                i++;
             });
 
 

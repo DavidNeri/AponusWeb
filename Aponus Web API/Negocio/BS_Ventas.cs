@@ -402,18 +402,8 @@ namespace Aponus_Web_API.Negocio
 
         internal async Task<IActionResult> MapeoDTOPagosVenta(DTOPagosVentas Pago)
         {
-            PagosVentas pago = new PagosVentas()
-            {
-                Fecha = Pago.Fecha ?? UTL_Fechas.ObtenerFechaHora(),
-                IdCuota = Pago.IdCuota ?? null,
-                IdEntidadPago = Pago.IdEntidadPago,
-                IdMedioPago = Pago.IdMedioPago,
-                IdVenta = Pago.IdVenta,
-                IdPago = Pago.IdPago,
-                Monto = Pago.Monto,
-            };
 
-            var (Resultado, ex) = await AdVentas.GuardarPago(pago);
+            var ex = await AdVentas.RegistrarPagoCuota(Pago.IdVenta,Pago.IdCuota ?? 0);
 
             if (ex != null) return new ContentResult()
             {
@@ -422,7 +412,7 @@ namespace Aponus_Web_API.Negocio
                 StatusCode = 400
             };
 
-            return new StatusCodeResult((int)Resultado!);
+            return new StatusCodeResult(200);
         }
 
         internal async Task<IActionResult> ProcesarArchivos(DTOVentas ArchivosVenta)
