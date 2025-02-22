@@ -14,5 +14,8 @@ namespace Aponus_Web_API.Utilidades
         [JsonProperty(PropertyName = "interes", NullValueHandling = NullValueHandling.Ignore)]
         public decimal Interes { get; set; } = 0;
 
+        [JsonProperty(PropertyName = "idEntidad", NullValueHandling = NullValueHandling.Ignore)]
+        public int IdEntidad { get; set; } = 0;
+
     }
 }

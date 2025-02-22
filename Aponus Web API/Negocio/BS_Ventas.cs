@@ -263,7 +263,10 @@ namespace Aponus_Web_API.Negocio
                         _ => MontoCuota,
                     },
 
-                    FechaVencimiento = Vencimiento
+                    FechaVencimiento = Vencimiento,
+                    IdEntidad = Parametros.IdEntidad,
+
+
 
                 });
             }
@@ -307,6 +310,7 @@ namespace Aponus_Web_API.Negocio
                         FechaPago = Cuotas.FechaPago,
                         FechaVencimiento = Cuotas.FechaVencimiento,
                         NumeroCuota = Cuotas.NumeroCuota,
+                        IdEntidad = Cuotas.IdEntidad,
                         Monto = Cuotas.Monto,
                         IdCuota = Cuotas.IdCuota,
                         IdVenta = Cuotas.IdVenta,   
