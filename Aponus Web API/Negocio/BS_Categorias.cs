@@ -253,11 +253,13 @@ namespace Aponus_Web_API.Negocio
                 Descripcion = Regex.Replace(Componente.NombreDescripcion, @"\s+", " ").Trim().ToUpper(),
                 IdAlmacenamiento = Componente.IdAlmacenamiento ?? "",
                 IdFraccionamiento = Componente?.IdFraccionamiento ?? "",
+                
             };
 
             if (Componente?.IdDescripcion != 0)
             {
                 componente.IdDescripcion = Componente!.IdDescripcion;
+                componente.IdEstado = 1;
                 var (statusCode, _error) = await AdCategorias.ModificarDescripcionComponente(componente);
                 if (_error != null) return new ContentResult()
                 {
