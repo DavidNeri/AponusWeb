@@ -2,6 +2,7 @@
 using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades.ReportResult;
+using MessagePack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -242,7 +243,7 @@ namespace Aponus_Web_API.Negocio
             {
                 Reporte.rowList.Add(new RowList()
                 {
-                    idInsumo = "4",
+                    idInsumo = "x.IdInsumo",
                     cellList = x.GetType().GetProperties()
                     .Where(y => Columnas.Contains(y.Name))
                     .Select(h => new CelList()
@@ -255,6 +256,7 @@ namespace Aponus_Web_API.Negocio
                 });
             });
 
+            int i = 1;
             Reporte.rowList.ForEach(reporte =>
             {
                 reporte.cellList.Add(new CelList()
@@ -263,6 +265,15 @@ namespace Aponus_Web_API.Negocio
                     type = "button",
                     value = reporte.idInsumo
                 });
+
+                reporte.cellList.Add(new CelList()
+                {
+                    header = "Orden",
+                    type = "number",
+                    value = i.ToString()
+                });
+
+                i++;
             });
 
 
