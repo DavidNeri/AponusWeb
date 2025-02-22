@@ -114,7 +114,7 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Supplies/Descriptions/List")]
-        [RequiredPermission("COMPONENTES_DESCRIPCION","SELECT")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
         public IActionResult ListarNombreComponentes()
         {
             return BsCategorias.MapearNombresComponentesDTO();

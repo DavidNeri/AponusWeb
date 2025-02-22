@@ -243,7 +243,7 @@ namespace Aponus_Web_API.Negocio
             {
                 Reporte.rowList.Add(new RowList()
                 {
-                    idInsumo = "x.IdInsumo",
+                    idInsumo = x.IdInsumo,
                     cellList = x.GetType().GetProperties()
                     .Where(y => Columnas.Contains(y.Name))
                     .Select(h => new CelList()
