@@ -50,8 +50,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("ListGrid/{IdDescripcion}")]
-        //[RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
-        //[RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
+        [RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
+        [RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
         public IActionResult ObtenerListarComponentes(int IdDescripcion)
         {
             return _BsComponentes.MapeoComponentesDetalleGrid(IdDescripcion);
