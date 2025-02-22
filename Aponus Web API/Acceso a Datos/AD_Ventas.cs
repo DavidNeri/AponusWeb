@@ -265,7 +265,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             try
             {
-                CuotasVentas? Cuota = await AponusDBContext.cuotasVentas.FindAsync(new { IdVenta, IdCuota });
+                CuotasVentas? Cuota = await AponusDBContext.cuotasVentas.FirstAsync( x=>x.IdVenta == IdVenta && x.IdCuota == IdCuota );
 
                 if (Cuota != null)
                 {
