@@ -112,8 +112,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Bills/new")]
-        [RequiredPermission("PAGOS_VENTAS", "INSERT")]
-        [RequiredPermission("PAGOS_VENTAS", "UPDATE")]
+        //[RequiredPermission("PAGOS_VENTAS", "INSERT")]
+        //[RequiredPermission("PAGOS_VENTAS", "UPDATE")]
         public async Task<IActionResult> RegistrarPago(DTOPagosVentas Pago)
         {
             try

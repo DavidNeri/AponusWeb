@@ -3582,6 +3582,11 @@
             "format": "int32",
             "nullable": true
           },
+          "idEntidad": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "numeroCuota": {
             "type": "integer",
             "format": "int32"
@@ -4704,6 +4709,10 @@
           "interes": {
             "type": "number",
             "format": "double"
+          },
+          "idEntidad": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

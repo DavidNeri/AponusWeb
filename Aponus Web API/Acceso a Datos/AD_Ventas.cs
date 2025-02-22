@@ -272,7 +272,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     Cuota.FechaPago = UTL_Fechas.ObtenerFechaHora();
                     Cuota.IdEstadoCuota = 2;
                     Cuota.EstadoCuota = AponusDBContext.estadosCuotasVentas.First(x => x.IdEstadoCuota == 2);
-                    AponusDBContext.Entry(Cuota).State = EntityState.Modified;                    
+                    AponusDBContext.Entry(Cuota).State = EntityState.Modified;
 
                     AponusDBContext.pagosVentas.Add(new PagosVentas()
                     {
@@ -281,7 +281,11 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         Monto = Cuota.Monto,
                         Fecha = Cuota.FechaPago,
                         IdMedioPago = 1,
-                        IdEntidadPago = Cuota.IdEntidad
+                        IdEntidadPago = Cuota.IdEntidad,
+                        Cuota = Cuota,
+                        EntidadPago = AponusDBContext.entidadespago.First(x => x.IdEntidad == Cuota.IdEntidad),
+                        MedioPago = AponusDBContext.MediosPagos.First(x => x.IdMedioPago == 1),
+                        
                     });
 
                     await AponusDBContext.SaveChangesAsync();
