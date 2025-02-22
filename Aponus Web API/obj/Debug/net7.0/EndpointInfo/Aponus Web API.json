@@ -3511,6 +3511,10 @@
             "type": "string",
             "nullable": true
           },
+          "nombreInsumo": {
+            "type": "string",
+            "nullable": true
+          },
           "cantidad": {
             "type": "integer",
             "format": "int32"

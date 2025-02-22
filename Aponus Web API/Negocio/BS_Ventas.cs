@@ -330,7 +330,7 @@ namespace Aponus_Web_API.Negocio
                     Pagos = x.Pagos.Select(Pagos => new DTOPagosVentas()
                     {
                         IdMedioPago = Pagos.IdMedioPago,
-                        IdPago = Pagos.IdPago,
+                        IdPago = Pagos.IdPago,                        
                         IdVenta = Pagos.IdVenta,
                         Monto = Pagos.Monto,
                         MedioPago = new DTOMediosPago()

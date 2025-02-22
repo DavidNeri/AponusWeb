@@ -10,15 +10,17 @@ namespace Aponus_Web_API.Negocio
     public class BS_Compras
     {
         private readonly AD_Compras AdCompras;
+        private readonly AD_Suministros AdSuministros;
 
-        public BS_Compras(AD_Compras _adCompras)
+        public BS_Compras(AD_Compras _adCompras, AD_Suministros _adSuministros)
         {
             AdCompras = _adCompras;
+            AdSuministros = _adSuministros;
         }
 
         internal async Task<IActionResult> Listar(UTL_FiltrosComprasVentas? Filtros)
         {
-            var (QueryCompras, error) = AdCompras.ObtenerDatos(Filtros);
+            var (QueryCompras, error) = AdCompras.ObtenerDatos(Filtros);         
 
             if (error != null)
             {
@@ -31,7 +33,7 @@ namespace Aponus_Web_API.Negocio
             }
             else
             {
-                ICollection<DTOCompras> Compras = await QueryCompras!
+                ICollection<DTOCompras> compras = await QueryCompras!
                 .Select(x => new DTOCompras()
                 {
                     FechaHora = x.FechaHora,
@@ -120,7 +122,32 @@ namespace Aponus_Web_API.Negocio
 
                 }).ToListAsync();
 
-                return new JsonResult(Compras);
+                List<string> InsumosCompra = new();
+
+                foreach (DTOCompras compra in compras)
+                {
+
+                    foreach (DTOComprasDetalles Insumo in compra.DetallesCompra)
+                    {
+                        InsumosCompra.Add(Insumo.IdInsumo);
+                    }
+                    
+                }
+
+                List<(string Id,string Nombre,string? Unidad)> NombreInsumos = AdSuministros.ObtenerDetalles(InsumosCompra);
+
+                foreach (DTOCompras compra in compras)
+                {
+
+                    foreach (DTOComprasDetalles Insumo in compra.DetallesCompra)
+                    {
+                        Insumo.NombreInsumo = NombreInsumos.First(x => x.Id.Contains(Insumo.IdInsumo)).Nombre;    
+                    }
+
+                }
+
+
+                return new JsonResult(compras);
 
             }
 
