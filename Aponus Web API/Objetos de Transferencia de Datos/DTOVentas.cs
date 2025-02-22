@@ -18,7 +18,7 @@ namespace Aponus_Web_API.Objetos_de_Transferencia_de_Datos
         public string? IdUsuario { get; set; } = string.Empty;
 
         [JsonProperty(PropertyName = "montoTotal", NullValueHandling = NullValueHandling.Ignore)]
-        public decimal MontoTotal { get; set; } = 0;
+        public decimal MontoTotal { get; set; } = 0;      
 
         [JsonProperty(PropertyName = "saldoPendiente", NullValueHandling = NullValueHandling.Ignore)]
         public decimal? SaldoPendiente { get; set; }

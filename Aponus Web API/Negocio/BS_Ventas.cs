@@ -105,8 +105,7 @@ namespace Aponus_Web_API.Negocio
             {
                 Ventas NuevaVenta = new()
                 {
-                    IdCliente = Venta.IdCliente,
-
+                    IdCliente = Venta.IdCliente,                    
                     IdUsuario = Venta.IdUsuario,
                     FechaHora = UTL_Fechas.ObtenerFechaHora(),
                     Cliente = new Entidades { IdEntidad = Venta.IdCliente },
@@ -155,6 +154,7 @@ namespace Aponus_Web_API.Negocio
                         {
                             IdCuota = Cuota.IdCuota ?? 0,
                             FechaVencimiento = Cuota.FechaVencimiento,
+                            IdEntidad = Cuota.IdEntidad ?? 0,
                             FechaPago = Cuota.FechaPago,
                             IdEstadoCuota = Cuota.FechaPago != null ? 1 : 2,
                             NumeroCuota = Cuota.NumeroCuota,
