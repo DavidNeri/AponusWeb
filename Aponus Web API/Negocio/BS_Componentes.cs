@@ -232,7 +232,8 @@ namespace Aponus_Web_API.Negocio
                 && valor?.ToString() != "-"
                 && !nombre.Contains("IdEstado")
                 && !nombre.Contains("IdDescripcion")
-                && !nombre.Contains("ComprasNavigation");
+                && !nombre.Contains("ComprasNavigation")
+                && !nombre.Contains("IdInsumo");
             }))
                 .Select(prop => prop.Name)
                 .ToList();
@@ -241,7 +242,7 @@ namespace Aponus_Web_API.Negocio
             {
                 Reporte.rowList.Add(new RowList()
                 {
-                    idInsumo = x.IdInsumo,
+                    idInsumo = "4",
                     cellList = x.GetType().GetProperties()
                     .Where(y => Columnas.Contains(y.Name))
                     .Select(h => new CelList()

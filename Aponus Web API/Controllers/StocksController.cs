@@ -17,9 +17,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Supplies/List/{idDescription?}")]
-        [RequiredPermission("COMPONENTES_DETALLE","SELECT")]
-        [RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
-        [RequiredPermission("STOCK_INSUMOS", "SELECT")]
+        //[RequiredPermission("COMPONENTES_DETALLE","SELECT")]
+        //[RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
+        //[RequiredPermission("STOCK_INSUMOS", "SELECT")]
 
         public IActionResult NewListar(int? idDescription)
         {

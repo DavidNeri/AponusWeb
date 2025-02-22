@@ -1,6 +1,7 @@
 ﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
 using Aponus_Web_API.Utilidades;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -209,12 +210,12 @@ namespace Aponus_Web_API.Acceso_a_Datos
                                     Peso= JoinResult.Detalles.Peso != null ? $"{JoinResult.Detalles.Peso}g" : "-",
                                     Altura = JoinResult.Detalles.Altura != null ? $"{JoinResult.Detalles.Altura}mm" : "-",
                                     Tolerancia = JoinResult.Detalles.Tolerancia != null ? JoinResult.Detalles.Tolerancia : "-",
-                                    Recibido = Stock.Recibido != null ? Stock.Recibido.ToString() : "-",
-                                    Granallado = Stock.Granallado != null ? Stock.Granallado.ToString() : "-",
-                                    Pintura = Stock.Pintura != null ? Stock.Pintura.ToString() : "-",
-                                    Proceso = Stock.Proceso != null ? Stock.Proceso.ToString() : "-",
-                                    Moldeado = Stock.Moldeado != null ? Stock.Moldeado.ToString() : "-",
-                                    Pendiente = Stock.Pendiente != null ? Stock.Pendiente.ToString(): "-",
+                                    Recibido = Stock.Recibido != null ? Stock.Recibido.ToString() : "0.00",
+                                    Granallado = Stock.Granallado != null ? Stock.Granallado.ToString() : "0.00",
+                                    Pintura = Stock.Pintura != null ? Stock.Pintura.ToString() : "0.00",
+                                    Proceso = Stock.Proceso != null ? Stock.Proceso.ToString() : "0.00",
+                                    Moldeado = Stock.Moldeado != null ? Stock.Moldeado.ToString() : "0.00",
+                                    Pendiente = Stock.Pendiente != null ? Stock.Pendiente.ToString(): "0.00",
                                     DiametroNominal = JoinResult.Detalles.DiametroNominal  != null ? JoinResult.Detalles.DiametroNominal.ToString() : "-",
 
                                 }
@@ -235,10 +236,54 @@ namespace Aponus_Web_API.Acceso_a_Datos
                  })
                  .OrderBy(x => x.Descripcion)
                  .AsEnumerable()
-                 .ToList()
-                 ;
+                 .ToList();
 
 
+
+            List<UTL_FormatoSuministros> Lista = new();
+            foreach (var insumo in tipoInsumosList)
+            {
+
+                foreach (var espec in insumo.especificacionesFormato ?? Enumerable.Empty<DTOComponenteFormateado>())
+                {
+                    bool parseSuccessA = decimal.TryParse(espec?.Altura?.Replace("mm", "").Replace("-", ""), out decimal altura);
+                    bool parseSuccessB = decimal.TryParse(espec?.Diametro?.Replace("mm", "").Replace("-", ""), out decimal diametro);
+                    bool parseSuccessC = int.TryParse(espec?.DiametroNominal, out int diametroNominal);
+                    bool parseSuccessD = decimal.TryParse(espec?.Espesor?.Replace("mm", "").Replace("-", ""), out decimal espesor);
+                    bool parseSuccessE = decimal.TryParse(espec?.Longitud?.Replace("mm", "").Replace("-", ""), out decimal longitud);
+                    bool parseSuccessF = int.TryParse(espec?.Perfil?.Replace("-",""), out int perfil);
+                    bool parseSuccessG = decimal.TryParse(espec?.Peso?.Replace("g", "").Replace("-", ""), out decimal peso);
+
+                    Lista.Add(new UTL_FormatoSuministros()
+                    {
+                        Altura = parseSuccessA ? altura : (decimal?)null,
+                        Descripcion = insumo.Descripcion,
+                        Diametro = parseSuccessB ? diametro : (decimal?)null,
+                        DiametroNominal = parseSuccessC ? diametroNominal : (int?)null,
+                        Espesor = parseSuccessD ? espesor : (decimal?)null,
+                        IdSuministro = espec?.idComponente ?? "",
+                        Longitud = parseSuccessE ? longitud : (decimal?)null,
+                        Perfil = parseSuccessF ? perfil : (int?)null,
+                        Tolerancia = espec?.Tolerancia,
+                        UnidadAlmacenamiento = espec?.idAlmacenamiento,
+                        UnidadFraccionamiento = espec?.idFraccionamiento
+
+                    });
+                }
+                
+            }
+
+            List<(string id, string nombre, string? unidad)> nombresSuministros =  new UTL_NombresSuministros().formatearNombres(Lista);
+
+            tipoInsumosList.ForEach(x =>
+            {
+                x.especificacionesFormato?.ForEach(x =>
+                {
+                    x.NombreInsumo = x.idComponente != null ? nombresSuministros.Where(l => l.id.Contains(x.idComponente)).Select(l => l.nombre).First() : string.Empty;
+                });
+            });            
+                
+            
             List<(string IdSuministro, string? Unidad)> Unidades = ObtenerUnidadesAlmacenamiento(tipoInsumosList
                 .SelectMany(x => x.especificacionesFormato.Select(y => y.idComponente))
                 .ToList());
