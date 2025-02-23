@@ -83,6 +83,7 @@ namespace Aponus_Web_API.Negocio
                 .Where(x => x.Cantidad <= 100)
                 .Select(y => new
                 {
+                    id= y.IdProducto,
                     cantidad = y.Cantidad,
                     tolerancia = y.Tolerancia,
                     precioLista = y.PrecioLista,
@@ -149,7 +150,7 @@ namespace Aponus_Web_API.Negocio
                 id =  x.IdVenta,
                 cliente = !string.IsNullOrEmpty(x.Cliente.NombreClave) ? x.Cliente.NombreClave : $"{x.Cliente.Apellido}, {x.Cliente.Nombre}",
                 fecha = x.FechaHora,
-                usuario = x.Usuario.Usuario,
+                usuario = x.IdUsuario,
                 montoTotal = x.MontoTotal,
                 saldoPendiente = x.SaldoPendiente,
                 estado = x.Estado.Descripcion
