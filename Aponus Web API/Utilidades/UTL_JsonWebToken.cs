@@ -80,6 +80,7 @@ namespace Aponus_Web_API.Utilidades
             {
                 var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
                 return principal;
+
             }
             catch (Exception ex)
             {
