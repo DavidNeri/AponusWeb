@@ -512,5 +512,34 @@ namespace Aponus_Web_API.Negocio
 
             return new JsonResult(Productos);
         }
+
+        internal async Task<IActionResult> ProcesarEstadoVenta(int id)
+        {
+            var Venta = await AdVentas.BuscarVenta(id);
+
+            if (Venta == null)
+                return new ContentResult()
+                {
+                    Content = "No se encontró la venta",
+                    ContentType = "application/json",
+                    StatusCode = 400
+                };
+
+            Venta.IdEstadoVenta = 2;
+
+            Exception? Error = await AdVentas.CambiarEstado(Venta);
+
+            if (Error != null)
+                return new ContentResult()
+                {
+                    Content = Error.InnerException?.Message ?? Error.Message,
+                    ContentType = "application/json",
+                    StatusCode = 400
+                };
+
+            return new StatusCodeResult(200);
+
+
+        }
     }
 }

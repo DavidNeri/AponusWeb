@@ -2499,6 +2499,29 @@
         }
       }
     },
+    "/Aponus/Sales/State/{Id}/Update": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/Aponus/Sales/Save": {
       "post": {
         "tags": [
@@ -2718,11 +2741,16 @@
                       "$ref": "#/components/schemas/DTOCuotasVentas"
                     }
                   },
-                  "Estado": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/DTOEstadosVentas"
-                    }
+                  "Estado.IdEstadoVenta": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Estado.Descripcion": {
+                    "type": "string"
+                  },
+                  "Estado.IdEstado": {
+                    "type": "integer",
+                    "format": "int32"
                   },
                   "Archivos": {
                     "type": "array",
@@ -2851,7 +2879,13 @@
                 "Cuotas": {
                   "style": "form"
                 },
-                "Estado": {
+                "Estado.IdEstadoVenta": {
+                  "style": "form"
+                },
+                "Estado.Descripcion": {
+                  "style": "form"
+                },
+                "Estado.IdEstado": {
                   "style": "form"
                 },
                 "Archivos": {
@@ -4614,11 +4648,7 @@
             "nullable": true
           },
           "estado": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DTOEstadosVentas"
-            },
-            "nullable": true
+            "$ref": "#/components/schemas/DTOEstadosVentas"
           },
           "archivos": {
             "type": "array",

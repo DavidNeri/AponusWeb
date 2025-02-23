@@ -1748,8 +1748,18 @@
         "IsRequired": false
       },
       {
-        "Name": "Estado",
-        "Type": "System.Collections.Generic.ICollection\u00601[[Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOEstadosVentas, Aponus Web API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Name": "Estado.IdEstadoVenta",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Estado.Descripcion",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Estado.IdEstado",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
@@ -1818,6 +1828,22 @@
       {
         "Name": "Venta",
         "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOVentas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SalesController",
+    "Method": "ActualizarEstadoVenta",
+    "RelativePath": "Aponus/Sales/State/{Id}/Update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

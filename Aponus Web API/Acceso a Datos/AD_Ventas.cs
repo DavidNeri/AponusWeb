@@ -143,6 +143,23 @@ namespace Aponus_Web_API.Acceso_a_Datos
             return venta;
         }
 
+        internal async Task<Exception?> CambiarEstado(Ventas venta)
+        {
+
+            try
+            {
+                venta.Estado = AponusDBContext.estadosVentas.First(x => x.IdEstadoVenta == venta.IdEstadoVenta);
+                AponusDBContext.Entry(venta).State = EntityState.Modified;
+                await AponusDBContext.SaveChangesAsync();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+             
+        }
+
         internal void EliminarEstado(EstadosVentas EstadoVenta)
         {
             var Estado = AponusDBContext.estadosVentas.Find(typeof(EstadosVentas), EstadoVenta.IdEstadoVenta);

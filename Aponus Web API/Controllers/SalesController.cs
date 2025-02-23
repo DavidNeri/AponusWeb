@@ -77,6 +77,17 @@ namespace Aponus_Web_API.Controllers
             return BsVentas.EstadosVentas().Eliminar(Id);
         }
 
+
+        [HttpPost]
+        [Route("{Id}/State/Update")]
+        [RequiredPermission("VENTAS", "UPDATE")]
+        public async Task<IActionResult> ActualizarEstadoVenta(int Id)
+        {
+            return await BsVentas.ProcesarEstadoVenta(Id);
+        }
+
+
+
         [HttpPost]
         [Route("Save")]
         [RequiredPermission("VENTAS", "INSERT")]
