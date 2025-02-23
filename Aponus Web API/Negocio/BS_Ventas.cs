@@ -242,7 +242,7 @@ namespace Aponus_Web_API.Negocio
             ICollection<DTOCuotasVentas> NvaVtaCuotas = new List<DTOCuotasVentas>();
             DateTime Vencimiento = UTL_Fechas.ObtenerFechaHora();
 
-            decimal MontoCuota = (Parametros.MontoVenta + (Parametros.MontoVenta * Parametros.Interes)) / Parametros.CantidadCuotas;
+            decimal MontoCuota = Parametros.MontoVenta / Parametros.CantidadCuotas + (Parametros.MontoVenta * Parametros.Interes / Parametros.CantidadCuotas);
             decimal Resto = Parametros.MontoVenta % Parametros.CantidadCuotas;
 
             for (int i = 1; i <= Parametros.CantidadCuotas; i++)

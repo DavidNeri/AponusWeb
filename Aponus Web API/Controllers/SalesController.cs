@@ -90,8 +90,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Save")]
-        //[RequiredPermission("VENTAS", "INSERT")]
-        //[RequiredPermission("PRODUCTOS", "UPDATE")]
+        [RequiredPermission("VENTAS", "INSERT")]
+        [RequiredPermission("PRODUCTOS", "UPDATE")]
         public async Task<IActionResult> Guardar(DTOVentas Venta)
         {
 
