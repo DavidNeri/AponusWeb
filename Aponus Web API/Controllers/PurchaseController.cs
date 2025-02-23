@@ -51,5 +51,6 @@ namespace Aponus_Web_API.Controllers
             return await BsCompras.MapeoDTOPagosCompra(Pago);
         }
 
+
     }
 }

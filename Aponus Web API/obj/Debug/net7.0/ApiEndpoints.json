@@ -2032,6 +2032,22 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.UsersController",
+    "Method": "CambiarContrase\u00F1a",
+    "RelativePath": "Aponus/Users/changePassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Usuario",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOUsuarios",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.UsersController",
     "Method": "IniciarSesion",
     "RelativePath": "Aponus/Users/logIn",
     "HttpMethod": "POST",

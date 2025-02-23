@@ -303,6 +303,7 @@ namespace Aponus_Web_API.Negocio
                         Cantidad = y.Cantidad,
                         IdProducto = y.IdProducto,
                         IdVenta = y.IdVenta,
+                        Precio = y.Precio
                     })
                     .ToList(),
                     Cuotas = x.Cuotas.Select(Cuotas => new DTOCuotasVentas()
