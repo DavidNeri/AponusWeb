@@ -201,7 +201,7 @@ namespace Aponus_Web_API.Systema
                 var _client = new SmtpClient("smtp.gmail.com", 587)
                 {
                     EnableSsl = true,
-                    Credentials = new NetworkCredential("davidcneri@gmail.com", "pqix uhbp goye yddw"),
+                    Credentials = new NetworkCredential("davidcneri@gmail.com", "vdqc ndly cfad pgoz"),
 
                     DeliveryMethod = SmtpDeliveryMethod.Network
                 };
@@ -220,7 +220,6 @@ namespace Aponus_Web_API.Systema
             {
                 return (null, ex);
             }
-
         }
 
         internal async Task<IActionResult> ProcesarDatosCambiarContraseña(DTOUsuarios usuario)
