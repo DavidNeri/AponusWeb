@@ -4,6 +4,7 @@ using Aponus_Web_API.Utilidades;
 using Aponus_Web_API.Utilidades.ReportResult;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
 
 namespace Aponus_Web_API.Negocio
 {
@@ -114,7 +115,6 @@ namespace Aponus_Web_API.Negocio
                     x.FechaHora.Year,
 
                 })
-                .Where(x=>x.Key.Year.ToString() == año)
                 .OrderByDescending(x => x.Key.Year)
                 .ThenByDescending(x => x.Key.Month)
                 .Select(x=>new
@@ -132,14 +132,14 @@ namespace Aponus_Web_API.Negocio
              foreach (var item in Agrupadas)
                 {
                     ListadoCatidadVentas.Add((
-                        mes: item.Mes,
+                        mes: $"{item.Mes} {item.Año}",
                         cantidad: item.cantidad.ToString()
                     ));
                 }
 
             var resultado = ListadoCatidadVentas.Select(x => new
             {
-                Month = x.mes,
+                Month = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(x.mes),
                 Ventas = x.cantidad
             }).ToList();
 
