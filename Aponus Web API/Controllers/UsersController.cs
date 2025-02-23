@@ -41,6 +41,14 @@ namespace Aponus_Web_API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("changePassword")]
+        public async Task<IActionResult> CambiarContraseña(DTOUsuarios Usuario)
+        {
+            return await _Usuarios.ProcesarDatosCambiarContraseña(Usuario);
+        }
+
+
 
         [HttpGet]
         [Route("roles/list")]

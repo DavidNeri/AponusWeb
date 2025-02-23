@@ -21,8 +21,9 @@ namespace Aponus_Web_API.Utilidades
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var RolUsuario = context.HttpContext.User.FindFirst("Rol")?.Value;
+            var CambiarContraseña = context.HttpContext.User.FindFirst("CambiarContraseña")?.Value;
 
-            if (string.IsNullOrEmpty(RolUsuario))
+            if (string.IsNullOrEmpty(RolUsuario) || (CambiarContraseña != null && CambiarContraseña.Equals("True")))
             {
                 context.Result = new UnauthorizedResult();
                 return;

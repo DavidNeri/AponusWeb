@@ -1,6 +1,7 @@
 ﻿using Aponus_Web_API.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Z.EntityFramework.Plus;
 
 
 namespace Aponus_Web_API.Acceso_a_Datos
@@ -47,21 +48,35 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
         }
 
-        public async Task<(int? Resultado, Exception? ex)> ResetearContraseña(Usuarios usuario)
+        //public async Task<(int? Resultado, Exception? ex)> ResetearContraseña(Usuarios usuario)
+        //{
+        //    try
+        //    {
+        //        AponusDBContext.Usuarios.Update(usuario);
+        //        await AponusDBContext.SaveChangesAsync();
+
+        //        return (StatusCodes.Status200OK, null);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return (null, ex);
+        //    }
+        //}
+        internal async Task<Exception?> Actualizar(Usuarios usuario)
         {
             try
             {
                 AponusDBContext.Usuarios.Update(usuario);
                 await AponusDBContext.SaveChangesAsync();
 
-                return (StatusCodes.Status200OK, null);
+                return null;
             }
             catch (Exception ex)
             {
-                return (null, ex);
+                return ex;
             }
-        }
 
+        }
 
 
         public (Usuarios? Usuario, Exception? Error) ObtenerDatosUsuario(Usuarios usuario)
@@ -70,7 +85,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             {
 
                 var _Usuario = AponusDBContext.Usuarios
-                    .Include(x => x.Rol)
+                    .Include(x => x.Rol)                    
                     .FirstOrDefault(x => x.Usuario.ToUpper().Equals(usuario.Usuario.ToUpper()) || x.Correo.ToUpper().Equals(usuario.Correo.ToUpper()));
 
                 if (_Usuario != null)
@@ -121,5 +136,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
 
         }
+
+       
     }
 }

@@ -93,7 +93,8 @@ namespace Aponus_Web_API.Systema
                 IdRol = Usuario.idRol ?? 0,
                 Correo = Usuario.Correo ?? "",
                 HashContraseña = HasContraseña,
-                Sal = Sal
+                Sal = Sal,
+                CambiarContraseña = true
             };
             var (UsuarioExistente, _) = AdUsuarios.ObtenerDatosUsuario(_Usuario);
 
@@ -149,10 +150,10 @@ namespace Aponus_Web_API.Systema
             var (HasContraseña, Sal) = UTL_Contraseñas.HashContraseña(contraseña);
             Usuario!.HashContraseña = HasContraseña;
             Usuario.Sal = Sal;
+            Usuario.CambiarContraseña = true;
 
 
-
-            var (resultado, error) = await AdUsuarios.ResetearContraseña(Usuario!);
+            var  error = await AdUsuarios.Actualizar(Usuario!);
 
             if (error != null) return new ContentResult()
             {
@@ -221,6 +222,34 @@ namespace Aponus_Web_API.Systema
 
         }
 
+        internal async Task<IActionResult> ProcesarDatosCambiarContraseña(DTOUsuarios usuario)
+        {
+            var (Usuario, ex) = AdUsuarios.ObtenerDatosUsuario(new Usuarios { Usuario = usuario.Usuario ?? "", Correo = usuario.Correo ?? "" });
 
+            var (HasContraseña, Sal) = UTL_Contraseñas.HashContraseña(usuario.Contraseña ?? "");
+
+            if (ex != null) return new ContentResult()
+            {
+                Content = ex.InnerException?.Message ?? ex.Message,
+                ContentType = "application/json",
+                StatusCode = 400
+            };
+
+            Usuario!.HashContraseña = HasContraseña;
+            Usuario.Sal = Sal;  
+            Usuario.CambiarContraseña = false;
+
+            var err =  await AdUsuarios.Actualizar(Usuario);
+
+            if (err != null) return new ContentResult()
+            {
+                Content = err.InnerException?.Message ?? err.Message,
+                ContentType = "application/json",
+                StatusCode = 400
+            };
+
+            return new StatusCodeResult(200);
+
+        }
     }
 }

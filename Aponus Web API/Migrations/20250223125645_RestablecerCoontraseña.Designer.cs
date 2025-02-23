@@ -3,6 +3,7 @@ using System;
 using Aponus_Web_API.Modelos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Aponus_Web_API.Migrations
 {
     [DbContext(typeof(AponusContext))]
-    partial class AponusContextModelSnapshot : ModelSnapshot
+    [Migration("20250223125645_RestablecerCoontraseña")]
+    partial class RestablecerCoontraseña
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1349,12 +1352,6 @@ namespace Aponus_Web_API.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("USUARIO");
 
-                    b.Property<bool?>("CambiarContraseña")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasColumnName("CBIOCONTRASENA")
-                        .HasDefaultValueSql("true");
-
                     b.Property<string>("Correo")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
@@ -1373,6 +1370,12 @@ namespace Aponus_Web_API.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("SAL");
+
+                    b.Property<bool>("restablecido")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasColumnName("RESTABLECIDO")
+                        .HasDefaultValueSql("true");
 
                     b.HasKey("Usuario");
 

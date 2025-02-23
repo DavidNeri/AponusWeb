@@ -7,6 +7,7 @@
         public string Correo { get; set; } = "";
         public string Sal { get; set; } = "";
         public int IdRol { get; set; }
+        public bool? CambiarContraseña { get; set; }
 
         public virtual ICollection<Entidades> IdUsuarioRegistroNavigation { get; set; } = new HashSet<Entidades>();
         public virtual ICollection<Compras> Compras { get; set; } = new HashSet<Compras>();

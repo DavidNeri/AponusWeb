@@ -42,7 +42,8 @@ namespace Aponus_Web_API.Utilidades
                 new (ClaimTypes.NameIdentifier, _usuario.Usuario.ToString()),
                 new (ClaimTypes.Email, _usuario.Correo),
                 new ("Rol", _usuario.Rol.NombreRol),
-                new ("TokenId",Guid.NewGuid().ToString())
+                new ("TokenId",Guid.NewGuid().ToString()),
+                new ("CambiarContraseña", _usuario.CambiarContraseña?.ToString() ?? string.Empty)
             };
 
 

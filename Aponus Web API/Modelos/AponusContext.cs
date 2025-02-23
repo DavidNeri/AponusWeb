@@ -1429,6 +1429,10 @@ public partial class AponusContext : DbContext
             .HasColumnName("SAL")
             .HasColumnType("text");
 
+            entity.Property(p => p.CambiarContraseña)
+                .HasColumnName("CBIOCONTRASENA")
+                .HasDefaultValueSql("true");
+
             entity.HasMany(e => e.IdUsuarioRegistroNavigation)
             .WithOne(u => u.UsuarioRegistro)
             .HasForeignKey(e => e.IdUsuarioRegistro);
