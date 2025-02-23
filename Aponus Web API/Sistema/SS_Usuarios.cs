@@ -76,7 +76,8 @@ namespace Aponus_Web_API.Systema
             {
                 token= Token,
                 rol = Usuario?.Rol.NombreRol,
-                ChangePassword = Usuario?.CambiarContraseña
+                ChangePassword = Usuario?.CambiarContraseña,
+                user = Usuario?.Usuario  
             };
 
             return new JsonResult(Respuesta);
