@@ -1,5 +1,6 @@
 ﻿using Aponus_Web_API.Acceso_a_Datos;
 using Aponus_Web_API.Modelos;
+using Aponus_Web_API.Utilidades;
 using Aponus_Web_API.Utilidades.ReportResult;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -101,8 +102,10 @@ namespace Aponus_Web_API.Negocio
             IQueryable<Ventas> QueryVentas = ADVentas.ListarVentas();
             List<Ventas> ListaVentas = QueryVentas.ToList();
             IReportResult reportResult = new();
-      
-            
+
+            DateTime FechaACtual = UTL_Fechas.ObtenerFechaHora();
+            string año = FechaACtual.Year.ToString();
+
             var Agrupadas = ListaVentas
                 .GroupBy(x=> new
                 {
@@ -111,6 +114,7 @@ namespace Aponus_Web_API.Negocio
                     x.FechaHora.Year,
 
                 })
+                .Where(x=>x.Key.Year.ToString() == año)
                 .OrderByDescending(x => x.Key.Year)
                 .ThenByDescending(x => x.Key.Month)
                 .Select(x=>new
@@ -121,24 +125,41 @@ namespace Aponus_Web_API.Negocio
                     cantidad = x.Count()
 
                 })
-                .ToList();           
-            
-            foreach (var x in Agrupadas)
-            {
-                reportResult.rowList.Add(new RowList()
+                .ToList();
+
+            List<(string mes , string cantidad)> ListadoCatidadVentas = new();
+         
+             foreach (var item in Agrupadas)
                 {
-                    cellList = x.GetType().GetProperties().Select(p => new CelList()
-                    {
-                        header = p.Name,
-                        type = BsComponentes.ObtenerTipoValor(p.PropertyType),
-                        value = p.GetValue(x)?.ToString() ?? ""
-                    }).ToList()
-                });
-            }
+                    ListadoCatidadVentas.Add((
+                        mes: item.Mes,
+                        cantidad: item.cantidad.ToString()
+                    ));
+                }
 
-            
+            var resultado = ListadoCatidadVentas.Select(x => new
+            {
+                Month = x.mes,
+                Ventas = x.cantidad
+            }).ToList();
 
-            return new JsonResult(reportResult);
+
+            //foreach (var x in Agrupadas)
+            //{
+            //    reportResult.rowList.Add(new RowList()
+            //    {
+            //        cellList = x.GetType().GetProperties().Select(p => new CelList()
+            //        {
+            //            header = p.Name,
+            //            type = BsComponentes.ObtenerTipoValor(p.PropertyType),
+            //            value = p.GetValue(x)?.ToString() ?? ""
+            //        }).ToList()
+            //    });
+            //}
+
+
+
+            return new JsonResult(resultado);
         }
 
         internal async Task<IActionResult> ProcesarVentasPendientesTablero()
