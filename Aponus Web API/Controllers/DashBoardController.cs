@@ -34,13 +34,13 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("SalesAvg")]
-        //[RequiredPermission("VENTAS", "SELECT")]
-        //[RequiredPermission("VENTAS_DETALLES", "SELECT")]
-        //[RequiredPermission("CUOTAS_VENTAS", "SELECT")]
-        //[RequiredPermission("PAGOS_VENTAS", "SELECT")]
-        //[RequiredPermission("ENTIDADES", "SELECT")]
-        //[RequiredPermission("ARCHIVOS_VENTAS", "SELECT")]
-        //[RequiredPermission("ESTADOS_VENTAS", "SELECT")]
+        [RequiredPermission("VENTAS", "SELECT")]
+        [RequiredPermission("VENTAS_DETALLES", "SELECT")]
+        [RequiredPermission("CUOTAS_VENTAS", "SELECT")]
+        [RequiredPermission("PAGOS_VENTAS", "SELECT")]
+        [RequiredPermission("ENTIDADES", "SELECT")]
+        [RequiredPermission("ARCHIVOS_VENTAS", "SELECT")]
+        [RequiredPermission("ESTADOS_VENTAS", "SELECT")]
         public IActionResult ObtenerVentasMensualesTablero()
         {
             return BsDashboard.ProcesarVentasMensuales();

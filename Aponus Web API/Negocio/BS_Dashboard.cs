@@ -102,10 +102,7 @@ namespace Aponus_Web_API.Negocio
         {
             IQueryable<Ventas> QueryVentas = ADVentas.ListarVentas();
             List<Ventas> ListaVentas = QueryVentas.ToList();
-            IReportResult reportResult = new();
-
-            DateTime FechaACtual = UTL_Fechas.ObtenerFechaHora();
-            string año = FechaACtual.Year.ToString();
+            //IReportResult reportResult = new();
 
             var Agrupadas = ListaVentas
                 .GroupBy(x=> new
@@ -115,8 +112,8 @@ namespace Aponus_Web_API.Negocio
                     x.FechaHora.Year,
 
                 })
-                .OrderByDescending(x => x.Key.Year)
-                .ThenByDescending(x => x.Key.Month)
+                .OrderBy(x => x.Key.Year)
+                .ThenBy(x => x.Key.Month)
                 .Select(x=>new
                 {
                     x.Key.Mes,
