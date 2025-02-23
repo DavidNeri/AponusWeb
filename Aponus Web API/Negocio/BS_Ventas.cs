@@ -357,7 +357,13 @@ namespace Aponus_Web_API.Negocio
                                             PathArchivo = y.PathArchivo,
                                             MimeType = y.MimeType,
                                             IdEstado = y.IdEstado
-                                        }).ToList()
+                                        }).ToList(),
+
+                    Estado = new DTOEstadosVentas()
+                    {
+                        Descripcion = x.Estado.Descripcion,
+                        IdEstado = x.Estado.IdEstadoVenta,
+                    }
 
                 }).ToList();
 
