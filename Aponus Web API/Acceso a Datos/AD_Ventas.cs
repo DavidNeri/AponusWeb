@@ -101,11 +101,11 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 await AponusDBContext.AddRangeAsync(CuotasVenta);
             }
 
-            if (roolbackResult)
+            if (!roolbackResult)
             {
                 await AponusDBContext.SaveChangesAsync();
                 await transaccion.CommitAsync();
-                await AponusDBContext.DisposeAsync();
+                //await AponusDBContext.DisposeAsync();
                 return Venta.IdVenta;
 
             }

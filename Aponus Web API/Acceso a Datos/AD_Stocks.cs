@@ -137,7 +137,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
         internal bool IncrementarStockProducto(DTOStockUpdate Actualizacion)
         {
-            bool resultado = true;
+            bool resultado = false;
             try
             {
                 AponusDBContext.Productos
@@ -150,7 +150,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             catch (Exception)
             {
 
-                resultado = false;
+                resultado = true;
             }
             return resultado;
 
@@ -160,7 +160,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
         {
             AponusDBContext ??= this.AponusDBContext;
 
-            bool resultado = true;
+            bool resultado = false;
             try
             {
                 AponusDBContext.Productos
@@ -172,7 +172,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
             catch (Exception)
             {
-                resultado = false;
+                resultado = true;
             }
             finally
             {

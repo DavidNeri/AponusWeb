@@ -2499,7 +2499,7 @@
         }
       }
     },
-    "/Aponus/Sales/State/{Id}/Update": {
+    "/Aponus/Sales/{Id}/State/Update": {
       "post": {
         "tags": [
           "Sales"

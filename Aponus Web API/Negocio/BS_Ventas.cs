@@ -189,7 +189,7 @@ namespace Aponus_Web_API.Negocio
 
                 int? IdVenta = await AdVentas.Guardar(NuevaVenta);
 
-                if (Venta?.Archivos != null)
+                if (Venta?.Archivos != null && Venta.Archivos.Count>0)
                 {
                     IQueryable<Entidades> Entidades = AdEntidades.ListarEntidades();
                     var DatosCliente = Entidades.SingleOrDefault(x => x.IdEntidad == Venta.IdCliente);
@@ -265,7 +265,7 @@ namespace Aponus_Web_API.Negocio
 
                     FechaVencimiento = Vencimiento,
                     IdEntidad = Parametros.IdEntidad,
-
+                    IdEstadoCuota = 1
 
 
                 });

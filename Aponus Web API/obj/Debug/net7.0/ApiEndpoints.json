@@ -1540,6 +1540,22 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.SalesController",
+    "Method": "ActualizarEstadoVenta",
+    "RelativePath": "Aponus/Sales/{Id}/State/Update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.SalesController",
     "Method": "RegistrarPago",
     "RelativePath": "Aponus/Sales/Bills/new",
     "HttpMethod": "POST",
@@ -1828,22 +1844,6 @@
       {
         "Name": "Venta",
         "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOVentas",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Aponus_Web_API.Controllers.SalesController",
-    "Method": "ActualizarEstadoVenta",
-    "RelativePath": "Aponus/Sales/State/{Id}/Update",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Id",
-        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
