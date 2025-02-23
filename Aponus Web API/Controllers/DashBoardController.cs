@@ -18,14 +18,6 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("PendingSales")]
-        [RequiredPermission("VENTAS", "SELECT")]
-        [RequiredPermission("VENTAS_DETALLES", "SELECT")]
-        [RequiredPermission("CUOTAS_VENTAS", "SELECT")]
-        [RequiredPermission("PAGOS_VENTAS", "SELECT")]
-        [RequiredPermission("ENTIDADES", "SELECT")]
-        [RequiredPermission("ARCHIVOS_VENTAS", "SELECT")]
-        [RequiredPermission("ESTADOS_VENTAS", "SELECT")]
-
         public async Task<IActionResult> ObtenerDatosVentasPendientesTablero()
         {
             return await BsDashboard.ProcesarVentasPendientesTablero();
@@ -34,13 +26,13 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("SalesAvg")]
-        [RequiredPermission("VENTAS", "SELECT")]
-        [RequiredPermission("VENTAS_DETALLES", "SELECT")]
-        [RequiredPermission("CUOTAS_VENTAS", "SELECT")]
-        [RequiredPermission("PAGOS_VENTAS", "SELECT")]
-        [RequiredPermission("ENTIDADES", "SELECT")]
-        [RequiredPermission("ARCHIVOS_VENTAS", "SELECT")]
-        [RequiredPermission("ESTADOS_VENTAS", "SELECT")]
+        //[RequiredPermission("VENTAS", "SELECT")]
+        //[RequiredPermission("VENTAS_DETALLES", "SELECT")]
+        //[RequiredPermission("CUOTAS_VENTAS", "SELECT")]
+        //[RequiredPermission("PAGOS_VENTAS", "SELECT")]
+        //[RequiredPermission("ENTIDADES", "SELECT")]
+        //[RequiredPermission("ARCHIVOS_VENTAS", "SELECT")]
+        //[RequiredPermission("ESTADOS_VENTAS", "SELECT")]
         public IActionResult ObtenerVentasMensualesTablero()
         {
             return BsDashboard.ProcesarVentasMensuales();
@@ -50,9 +42,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Supplies/{IdDescripcion}")]
-        [RequiredPermission("STOCK_INSUMOS", "SELECT")]
-        [RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
-        [RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
+        //[RequiredPermission("STOCK_INSUMOS", "SELECT")]
+        //[RequiredPermission("COMPONENTES_DETALLE", "SELECT")]
+        //[RequiredPermission("COMPONENTES_DESCRIPCION", "SELECT")]
         public async Task<IActionResult> ObtenerDatosInsumosTablero(int IdDescripcion)
         {
             return await BsDashboard.ProcesarInsumosFaltantesTablero(IdDescripcion);
@@ -60,9 +52,9 @@ namespace Aponus_Web_API.Controllers
 
         [HttpGet]
         [Route("Products")]
-        [RequiredPermission("PRODUCTOS", "SELECT")]
-        [RequiredPermission("PRODUCTOS_DESCRIPCION", "SELECT")]
-        [RequiredPermission("PRODUCTOS_TIPOS", "SELECT")]
+        //[RequiredPermission("PRODUCTOS", "SELECT")]
+        //[RequiredPermission("PRODUCTOS_DESCRIPCION", "SELECT")]
+        //[RequiredPermission("PRODUCTOS_TIPOS", "SELECT")]
 
         public IActionResult ObtenerDatosProductosTablero()
         {

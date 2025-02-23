@@ -128,6 +128,7 @@ namespace Aponus_Web_API.Negocio
          
              foreach (var item in Agrupadas)
                 {
+                
                     ListadoCatidadVentas.Add((
                         mes: $"{item.Mes} {item.Año}",
                         cantidad: item.cantidad.ToString()

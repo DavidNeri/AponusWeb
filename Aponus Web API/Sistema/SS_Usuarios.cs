@@ -96,7 +96,7 @@ namespace Aponus_Web_API.Systema
                 Correo = Usuario.Correo ?? "",
                 HashContraseña = HasContraseña,
                 Sal = Sal,
-                CambiarContraseña = true
+                CambiarContraseña = false
             };
             var (UsuarioExistente, _) = AdUsuarios.ObtenerDatosUsuario(_Usuario);
 
