@@ -334,7 +334,16 @@ namespace Aponus_Web_API.Negocio
                 if (Resultado == 200) return new StatusCodeResult((int)Resultado);
             }
 
-            return new JsonResult(null);
+            var Ex = AdCategorias.CambiarEstadoDescripcionProducto(idDescription);
+            if(Ex != null) return new ContentResult()
+            {
+                Content = Ex.InnerException?.Message ?? Ex.Message,
+                ContentType = "application/json",
+                StatusCode = 400
+            };
+
+
+            return new StatusCodeResult(200);
         }
 
         internal JsonResult MapearTiposProductosDTO()

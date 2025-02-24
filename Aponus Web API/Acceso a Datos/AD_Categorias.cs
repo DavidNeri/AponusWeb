@@ -245,6 +245,25 @@ namespace Aponus_Web_API.Acceso_a_Datos
             }
         }
 
+        internal Exception? CambiarEstadoDescripcionProducto(int idDescription)
+        {
+            try
+            {
+                var Descripcion = AponusDBContext.ProductosDescripcions.First(x => x.IdDescripcion == idDescription);
+                Descripcion.IdEstado = 0;
+                Descripcion.IdEstadoNavigation = AponusDBContext.EstadosProductosDescripcione.First(x => x.IdEstado == 0);
+                AponusDBContext.Entry(Descripcion).State = EntityState.Modified;
+                AponusDBContext.SaveChanges();
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                return ex;
+            }
+            }
+
+        }
 
         public class Productos
         {
