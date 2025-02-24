@@ -29,7 +29,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     if (Existente != null)
                     {
 
-                        Existente.NombreClave = Entidad.NombreClave ?? Existente.NombreClave;
+                        Existente.NombreClave = Entidad.NombreClave ?? $"{Existente.Nombre} {Existente.Apellido}";
                         Existente.Pais = Entidad.Pais ?? Existente.Pais;
                         Existente.Localidad = Entidad.Localidad ?? Existente.Localidad;
                         Existente.Calle = Entidad.Calle ?? Existente.Calle;
@@ -67,7 +67,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                     string UsuarioContext = Context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
                     Entidades NuevaEntidad = new()
                     {
-                        NombreClave = Entidad.Nombre ?? "",
+                        NombreClave = string.IsNullOrEmpty(Entidad.NombreClave) ? $"{Entidad.Nombre} {Entidad.Apellido}" : Entidad.NombreClave,
                         Nombre = !string.IsNullOrEmpty(Entidad.Nombre) ? Entidad.Nombre.Trim().ToUpper().Replace(" ", "") : null,
                         Apellido = !string.IsNullOrEmpty(Entidad.Apellido) ? Entidad.Apellido.Trim().ToUpper().Replace(" ", "") : null,
                         Pais = !string.IsNullOrEmpty(Entidad.Pais) ? Entidad.Pais.Trim().ToUpper().Replace(" ", "") : null,

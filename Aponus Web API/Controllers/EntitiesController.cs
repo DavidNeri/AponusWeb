@@ -106,8 +106,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Save")]
-        [RequiredPermission("ENTIDADES", "INSERT")]
-        [RequiredPermission("ENTIDADES", "UPDATE")]
+        //[RequiredPermission("ENTIDADES", "INSERT")]
+        //[RequiredPermission("ENTIDADES", "UPDATE")]
         public IActionResult Nuevo(DTOEntidades Entidad)
         {
             return BSEntidades.ValidaryNormalizarDatos(Entidad);
