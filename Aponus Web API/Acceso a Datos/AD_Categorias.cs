@@ -29,9 +29,11 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         {
                             _idTipo = _Tipo.IdTipo,
                             _Descripciones.IdDescripcion,
-                            _Descripciones.DescripcionProducto
+                            _Descripciones.DescripcionProducto,
+                            _Descripciones.IdEstado,
+                            
 
-                        }).Where(Tipo => Tipo._idTipo == idTipo || string.IsNullOrEmpty(idTipo))
+                        }).Where(Tipo => Tipo._idTipo == idTipo || string.IsNullOrEmpty(idTipo) && Tipo.IdEstado != 0)
                         .Select(x => new ProductosDescripcion()
                         {
                             IdDescripcion = x.IdDescripcion,

@@ -87,8 +87,8 @@ namespace Aponus_Web_API.Controllers
 
         [HttpPost]
         [Route("Products/Descriptions/{IdDescription}/Delete")]
-        //[RequiredPermission("PRODUCTOS", "UPDATE")]
-        //[RequiredPermission("PRODUCTOS_DESCRIPCION", "UPDATE")]
+        [RequiredPermission("PRODUCTOS", "UPDATE")]
+        [RequiredPermission("PRODUCTOS_DESCRIPCION", "UPDATE")]
         public async Task<IActionResult> EliminarDescripcionProducto(int IdDescription)
         {
             return await BsCategorias.RegistrarCambioEstadoDescripcionProducto(IdDescription);
