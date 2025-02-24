@@ -1,5 +1,6 @@
 ﻿using Aponus_Web_API.Modelos;
 using Aponus_Web_API.Objetos_de_Transferencia_de_Datos;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
@@ -16,6 +17,34 @@ namespace Aponus_Web_API.Acceso_a_Datos
             AponusDBContext = _aponusDbContext;
             componentesProductos = _componentesProductos;
         }
+
+        internal async Task<Exception?> ActualizarPrecioProducto(Producto producto)
+        {           
+            try
+            {
+                var Existente = AponusDBContext.Productos
+               .Where(x => x.IdProducto == producto.IdProducto)
+               .First();
+
+                if (Existente != null)
+                {
+                    Existente.PrecioLista = producto.PrecioLista;
+                    producto.PrecioFinal = producto.PrecioFinal;
+                    AponusDBContext.Productos.Update(Existente);
+                    AponusDBContext.Entry(Existente).State = EntityState.Modified;
+                    await AponusDBContext.SaveChangesAsync();
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                return ex;
+            }
+
+        }
+
         internal void GuardarProducto(DTOProducto producto)
         {
             //AGregar NuevoAcceso Producto 

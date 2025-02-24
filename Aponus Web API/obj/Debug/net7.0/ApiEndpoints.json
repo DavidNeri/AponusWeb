@@ -1476,6 +1476,22 @@
   },
   {
     "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
+    "Method": "ActualizarPrecios",
+    "RelativePath": "Aponus/Products/Prices/Update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Producto",
+        "Type": "Aponus_Web_API.Objetos_de_Transferencia_de_Datos.DTOProducto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Aponus_Web_API.Controllers.ProductsController",
     "Method": "Guardar",
     "RelativePath": "Aponus/Products/Save",
     "HttpMethod": "POST",

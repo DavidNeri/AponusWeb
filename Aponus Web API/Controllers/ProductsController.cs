@@ -47,6 +47,21 @@ namespace Aponus_Web_API.Controllers
                 return Json(e);
             }
         }
+        [HttpPost]
+        [Route("Prices/Update")]
+        [RequiredPermission("PRODUCTOS", "UPDATE")]
+        public async Task<IActionResult> ActualizarPrecios(DTOProducto Producto)
+        {
+            try
+            {
+                return await BsProductos.ValidarDatosActualizarPrecios(Producto);
+            }
+            catch (Exception e)
+            {
+                return Json(e);
+            }
+        }
+
 
         [HttpPost]
         [Route("NewListComponents")]
