@@ -77,7 +77,14 @@ namespace Aponus_Web_API.Negocio
                         Perfil = !string.IsNullOrEmpty(item.Perfil) && item.Perfil != "-" ? Convert.ToInt32(item.Perfil) : null,
                         Tolerancia = (item.Tolerancia?.Equals('-') ?? false) ? "" : item.Tolerancia,
                         UnidadAlmacenamiento = !string.IsNullOrEmpty(item.idAlmacenamiento) ? item.idAlmacenamiento : null,
-                        UnidadFraccionamiento = !string.IsNullOrEmpty(item.idFraccionamiento) ? item.idFraccionamiento : null
+                        UnidadFraccionamiento = !string.IsNullOrEmpty(item.idFraccionamiento) ? item.idFraccionamiento : null,
+                        Granallado = item.Granallado,
+                        Pintura = item.Pintura,
+                        Moldeado = item.Moldeado,
+                        Pendiente = item.Pendiente,
+                        Proceso = item.Proceso,
+                        Recibido = item.Recibido,
+
 
                     });
                 }
@@ -87,10 +94,21 @@ namespace Aponus_Web_API.Negocio
             ListaInusumos = ListaInusumos.OrderBy(x => x.Nombre).ToList();
 
             List<Dictionary<string, string>> InsumosFormateados = ListaInusumos
-                .Select(item => new Dictionary<string, string>()
+                .Select(item =>
                 {
-                    { "idInsumo", item.IdSuministro},
-                    { "nombre", item.Nombre}
+                    var id = item.IdSuministro;
+                    return new Dictionary<string, string>
+                    {
+                        { "idInsumo", id },
+                        { "nombre", item.Nombre },
+                        { "granallado", InsumosDesagrupados.First(x=>x.IdSuministro==id).Granallado  ?? "0.00"},
+                        { "recibido", InsumosDesagrupados.First(x=>x.IdSuministro==id).Recibido  ?? "0.00"},
+                        { "pintura", InsumosDesagrupados.First(x=>x.IdSuministro==id).Pintura  ?? "0.00"},
+                        { "proceso", InsumosDesagrupados.First(x=>x.IdSuministro==id).Proceso  ?? "0.00"},
+                        { "moldeado", InsumosDesagrupados.First(x=>x.IdSuministro==id).Moldeado  ?? "0.00"},
+                        { "pendiente", InsumosDesagrupados.First(x=>x.IdSuministro==id).Pendiente  ?? "0.00"},
+                    };
+
                 })
                 .ToList();
 
@@ -99,3 +117,4 @@ namespace Aponus_Web_API.Negocio
         }
     }
 }
+

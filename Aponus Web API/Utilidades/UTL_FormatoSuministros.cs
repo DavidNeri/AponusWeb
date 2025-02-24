@@ -12,6 +12,14 @@
         public decimal? Altura { get; set; }
         public int? Perfil { get; set; }
         public decimal? Valor { get; set; }
+        public string? Granallado { get; set; }
+        public string? Recibido { get; set; }
+        public string? Pintura{ get; set; }
+        public string? Proceso{ get; set; }
+        public string? Moldeado{ get; set; }
+        public string? Pendiente { get; set; }
+
+
         public string? UnidadAlmacenamiento { get; set; }
         public string? UnidadFraccionamiento { get; set; }
 

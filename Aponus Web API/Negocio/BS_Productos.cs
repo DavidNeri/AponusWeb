@@ -100,6 +100,7 @@ namespace Aponus_Web_API.Negocio
             }
             else
             {
+                ActualizarProducto(Producto);
                 foreach (var Componente in Producto.Componentes)
                 {
                     Componente.IdProducto = Producto.IdProducto;
@@ -137,16 +138,16 @@ namespace Aponus_Web_API.Negocio
             {
                 Producto _producto = new()
                 {
-                    IdProducto = producto.IdProducto ?? "",
-                    IdDescripcion = producto.IdDescripcion ?? 0,
-                    IdTipo = producto.IdTipo ?? "",
-                    DiametroNominal = producto.DiametroNominal,
+                    //IdProducto = producto.IdProducto ?? "",
+                    //IdDescripcion = producto.IdDescripcion ?? 0,
+                    //IdTipo = producto.IdTipo ?? "",
+                    //DiametroNominal = producto.DiametroNominal,
                     Cantidad = 0,
                     PrecioLista = producto.PrecioLista ?? 0,
-                    Tolerancia = producto.Tolerancia,
+                    //Tolerancia = producto.Tolerancia,
                     IdEstado = 1,
                     PrecioFinal = producto.PrecioFinal,
-                    PorcentajeGanancia = producto.PorcentajeGanancia ?? producto.PrecioFinal ?? 0 - producto.PrecioLista ?? 0
+                    //PorcentajeGanancia = producto.PorcentajeGanancia ?? producto.PrecioFinal ?? 0 - producto.PrecioLista ?? 0
                 };
 
                 AdProductos.HabilitarProducto(_producto);
