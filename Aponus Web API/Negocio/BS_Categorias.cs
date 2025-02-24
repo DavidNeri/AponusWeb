@@ -291,8 +291,7 @@ namespace Aponus_Web_API.Negocio
             ProductosTipo? TipoProducto = AdCategorias.ObtenerTipo(idTipo);
 
             if (TipoProducto != null)
-            {
-                TipoProducto.IdEstado = 0;
+            {                
                 var (statusCode, error) = await AdCategorias.MetodosProductos().DesactivarTipoProductoyRelaciones(TipoProducto);
                 if (error != null)
                     return new ContentResult()
@@ -303,6 +302,8 @@ namespace Aponus_Web_API.Negocio
                     };
                 if (statusCode == 200) return new StatusCodeResult((int)statusCode);
             }
+
+
             return new JsonResult(null);
 
         }

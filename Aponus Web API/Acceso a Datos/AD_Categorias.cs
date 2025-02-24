@@ -276,7 +276,10 @@ namespace Aponus_Web_API.Acceso_a_Datos
                 var Transaccion = await AponusDBContext.Database.BeginTransactionAsync();
                 try
                 {
-                    AponusDBContext.ProductosTipos.Update(TipoProducto);
+                    TipoProducto.IdEstado= 0;
+                    TipoProducto.IdEstadoNavigation = AponusDBContext.EstadosTiposProducto.FirstOrDefault(x => x.IdEstado == 0)!;
+                    AponusDBContext.Entry(TipoProducto).State = EntityState.Modified;
+                    await AponusDBContext.SaveChangesAsync();
 
                     //Buscar los Id NombreDescripcion relacionados al IdDescripcion
                     var IdDescripcionesEliminar = await AponusDBContext.Producto_Tipo_Descripcion
@@ -289,7 +292,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         .Where(x => IdDescripcionesEliminar.Contains(x.IdDescripcion))
                         .ToListAsync();
 
-                    if (DescripcionProdEliminar != null)
+                    if (DescripcionProdEliminar != null && DescripcionProdEliminar.Count > 0)
                     {
                         DescripcionProdEliminar?.ForEach(x => x.IdEstado = 0);
                         AponusDBContext.ProductosDescripcions.UpdateRange(DescripcionProdEliminar ?? Enumerable.Empty<ProductosDescripcion>());
@@ -301,23 +304,7 @@ namespace Aponus_Web_API.Acceso_a_Datos
                             //Busco Los PRODUCTOS que pertenicen a esas duplas IdDescripcion/IDdescripcion
                             List<Producto>? Productos = AponusDBContext.Productos
                                 .Where(x => x.IdTipoNavigation == TipoProducto)
-                                .Select(P => new Producto()
-                                {
-                                    Cantidad = P.Cantidad,
-                                    IdDescripcion = P.IdDescripcion,
-                                    IdEstado = P.IdEstado,
-                                    IdTipo = P.IdTipo,
-                                    DiametroNominal = P.DiametroNominal,
-                                    IdProducto = P.IdProducto,
-                                    PrecioFinal = P.PrecioFinal,
-                                    Tolerancia = P.Tolerancia,
-                                    PrecioLista = P.PrecioLista,
-                                    PorcentajeGanancia = P.PorcentajeGanancia,
-                                    IdDescripcionNavigation = P.IdDescripcionNavigation,
-                                    IdEstadoNavigation = P.IdEstadoNavigation,
-                                    IdTipoNavigation = P.IdTipoNavigation,
-
-                                }).ToList();
+                                .ToList();
 
                             //Cambio el estado a INACTIVO
 
@@ -331,11 +318,11 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
 
                             await AponusDBContext.SaveChangesAsync();
-                            await Transaccion.CommitAsync();
-                            return (StatusCodes.Status200OK, null);
+                            
                         }
                     }
-                    return (null, null);
+                    await Transaccion.CommitAsync();
+                    return (StatusCodes.Status200OK, null);
                 }
                 catch (Exception error)
                 {
