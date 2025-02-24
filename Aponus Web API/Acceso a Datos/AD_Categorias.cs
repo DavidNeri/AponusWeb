@@ -261,7 +261,6 @@ namespace Aponus_Web_API.Acceso_a_Datos
 
                 return ex;
             }
-            }
 
         }
 
@@ -373,7 +372,6 @@ namespace Aponus_Web_API.Acceso_a_Datos
                         }).ToListAsync();
 
                     // Cambio el estado de los PRODUCTOS a INACTIVO
-                    AponusDBContext.ProductosDescripcions.Update(Descripcion);
                     if (Productos.Any()) AponusDBContext.Productos.UpdateRange(Productos);
 
                     await AponusDBContext.SaveChangesAsync();

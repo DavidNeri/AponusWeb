@@ -329,9 +329,7 @@ namespace Aponus_Web_API.Negocio
                     Content = error.InnerException?.Message ?? error.Message,
                     ContentType = "application/json",
                     StatusCode = 500
-                };
-
-                if (Resultado == 200) return new StatusCodeResult((int)Resultado);
+                };               
             }
 
             var Ex = AdCategorias.CambiarEstadoDescripcionProducto(idDescription);
