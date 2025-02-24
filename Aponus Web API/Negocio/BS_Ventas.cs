@@ -239,21 +239,22 @@ namespace Aponus_Web_API.Negocio
         }
         public static ICollection<DTOCuotasVentas> CalcularCuotas(UTL_ParametrosCuotas Parametros)
         {
+
             ICollection<DTOCuotasVentas> NvaVtaCuotas = new List<DTOCuotasVentas>();
             DateTime Vencimiento = UTL_Fechas.ObtenerFechaHora();
+            decimal Interes = Parametros.Interes / 100;
 
-            // Calcular el monto total con interés
-            decimal MontoTotalConInteres = Parametros.MontoVenta * (1 + Parametros.Interes);
-            decimal MontoCuota = MontoTotalConInteres / Parametros.CantidadCuotas;
-            decimal Resto = MontoTotalConInteres % Parametros.CantidadCuotas;
+
+            decimal MontoTotalConInteres = Parametros.MontoVenta * Interes;
+            decimal TotalPagar = MontoTotalConInteres + Parametros.MontoVenta;
+
+            decimal MontoCuota = TotalPagar / Parametros.CantidadCuotas;
+
+            decimal Resto = TotalPagar % Parametros.CantidadCuotas;
 
             for (int i = 1; i <= Parametros.CantidadCuotas; i++)
             {
-                Vencimiento = i switch
-                {
-                    1 => Vencimiento,
-                    _ => Vencimiento.AddDays(30)
-                };
+                Vencimiento = Vencimiento.AddMonths(1);
 
                 NvaVtaCuotas.Add(new DTOCuotasVentas()
                 {
@@ -270,6 +271,8 @@ namespace Aponus_Web_API.Negocio
                     IdEstadoCuota = 1
                 });
             }
+            
+      
 
             return NvaVtaCuotas;
         }
